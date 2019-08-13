@@ -42,5 +42,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.mockito:mockito-junit-jupiter'
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.4.2"
+    testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 

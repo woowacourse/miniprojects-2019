@@ -16,16 +16,18 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class User extends BaseEntity {
 
-    @NotBlank
     @Email
+    @NotBlank
     @Column(unique = true)
     private String email;
 
     @NotBlank
+    @Column
     @Pattern(regexp = "^([A-Za-z가-힣]{2,10})$")
     private String name;
 
     @NotBlank
+    @Column
     @Pattern(regexp = "^([a-zA-Z0-9!@#$%^&*]{8,})$")
     private String password;
 
