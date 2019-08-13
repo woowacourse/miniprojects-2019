@@ -12,15 +12,19 @@ import javax.validation.constraints.Pattern;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
+    public static final String ERROR_EMAIL = "올바른 email 형식이 아닙니다.";
+    public static final String ERROR_PASSWORD = "올바른 비밀번호 형식이 아닙니다.";
+    public static final String PATTERN_PASSWORD = ".*(?=^.{8,}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email
+    @Email(message = ERROR_EMAIL)
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Pattern(regexp = "^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]{8,}$")
+    @Pattern(regexp = PATTERN_PASSWORD, message = ERROR_PASSWORD)
     @Column(nullable = false)
     private String password;
 

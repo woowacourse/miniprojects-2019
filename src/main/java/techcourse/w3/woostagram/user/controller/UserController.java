@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.service.UserService;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("users")
 public class UserController {
@@ -28,9 +30,8 @@ public class UserController {
     }
 
     @PostMapping("signup")
-    public String create(UserDto userDto) {
+    public String create(@Valid UserDto userDto) {
         userService.create(userDto);
         return "redirect:/login/form";
     }
-
 }

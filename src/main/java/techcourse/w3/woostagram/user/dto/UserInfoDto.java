@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import techcourse.w3.woostagram.user.domain.User;
-import techcourse.w3.woostagram.user.domain.UserContents;
 
 @Getter
 @Setter
