@@ -1,7 +1,10 @@
 package techcourse.w3.woostagram.user.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserRepository;
+import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
@@ -21,7 +24,13 @@ public class UserService {
     }
 
     public String authUser(UserDto userDto) {
-        return userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())
+        return userRepository.findUserByEmailAndPassword(userDto.getEmail(), userDto.getPassword())
                 .orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND)).getEmail();
+    }
+
+    @Transactional
+    public void update(UserContentsDto userContentsDto, String email) {
+        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND));
+        user.contentsUpdated(userContentsDto.toEntity());
     }
 }

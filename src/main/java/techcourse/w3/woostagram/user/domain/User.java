@@ -37,4 +37,8 @@ public class User {
         this.password = password;
         this.userContents = userContents;
     }
+
+    public void contentsUpdated(UserContents userContents) {
+        this.userContents = userContents;
+    }
 }

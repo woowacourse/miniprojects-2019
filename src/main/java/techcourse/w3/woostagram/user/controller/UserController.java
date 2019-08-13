@@ -3,7 +3,9 @@ package techcourse.w3.woostagram.user.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.service.UserService;
 
@@ -40,6 +42,13 @@ public class UserController {
     public String login(UserDto userDto, HttpSession httpSession) {
         String email = userService.authUser(userDto);
         httpSession.setAttribute("email", email);
-        return "index";
+        return "redirect:/index";
+    }
+
+    @PutMapping
+    public String update(UserContentsDto userContentsDto, HttpSession httpSession) {
+        String email = (String) httpSession.getAttribute("email");
+        userService.update(userContentsDto, email);
+        return "mypage";
     }
 }

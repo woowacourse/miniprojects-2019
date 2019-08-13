@@ -30,4 +30,13 @@ public class UserContentsDto {
                 .contents(userContents.getContents())
                 .profile(userContents.getProfile()).build();
     }
+
+    public UserContents toEntity() {
+        return UserContents.builder()
+                .userName(userName)
+                .name(name)
+                .contents(contents)
+                .profile(profile)
+                .build();
+    }
 }
