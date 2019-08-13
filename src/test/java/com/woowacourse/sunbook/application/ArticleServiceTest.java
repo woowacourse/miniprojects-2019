@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 public class ArticleServiceTest {
@@ -50,5 +51,11 @@ public class ArticleServiceTest {
         given(articleRepository.findById(ARTICLE_ID)).willReturn(Optional.of(article));
 
         assertEquals(updatedArticleFeature, articleService.modify(ARTICLE_ID, updatedArticleFeature));
+    }
+
+    @Test
+    void 게시글_정상_삭제() {
+        articleService.remove(ARTICLE_ID);
+        verify(articleRepository).deleteById(ARTICLE_ID);
     }
 }

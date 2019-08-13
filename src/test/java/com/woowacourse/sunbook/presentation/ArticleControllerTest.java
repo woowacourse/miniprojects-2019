@@ -80,4 +80,13 @@ public class ArticleControllerTest {
                 .jsonPath("$..videoUrl").isEqualTo(UPDATE_VIDEO_URL)
                 ;
     }
+
+    @Test
+    void 게시글_정상_삭제() {
+        webTestClient.delete().uri("/articles/3")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                ;
+    }
 }

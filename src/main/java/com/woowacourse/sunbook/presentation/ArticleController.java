@@ -30,4 +30,9 @@ public class ArticleController {
     public ArticleFeature modify(@PathVariable long articleId, @RequestBody ArticleFeature articleFeature) {
         return articleService.modify(articleId, articleFeature);
     }
+
+    @DeleteMapping("/{articleId}")
+    public void remove(@PathVariable long articleId) {
+        articleService.remove(articleId);
+    }
 }

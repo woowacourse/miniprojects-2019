@@ -37,4 +37,8 @@ public class ArticleService {
                 .collect(Collectors.toList())
                 ;
     }
+
+    public void remove(long articleId) {
+        articleRepository.deleteById(articleId);
+    }
 }
