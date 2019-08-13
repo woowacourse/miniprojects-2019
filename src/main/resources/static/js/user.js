@@ -42,8 +42,6 @@ const USER_APP = (() => {
                     if (response.status === 201) {
                         window.location.href = '/login';
                     }
-                debugger;
-                    return response.json();
                 })
                 .catch(error => {
                     alert(error);
