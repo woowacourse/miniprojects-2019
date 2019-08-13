@@ -1,32 +1,33 @@
 package com.woowacourse.sunbook.presentation;
 
-import com.woowacourse.sunbook.domain.Article;
+import com.woowacourse.sunbook.application.ArticleService;
 import com.woowacourse.sunbook.domain.ArticleFeature;
-import com.woowacourse.sunbook.domain.ArticleRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequestMapping("/articles")
 @RestController
 public class ArticleController {
 
-    private final ArticleRepository articleRepository;
+    private final ArticleService articleService;
 
-    public ArticleController(ArticleRepository articleRepository) {
-        this.articleRepository = articleRepository;
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
+    @GetMapping
+    public List<ArticleFeature> show() {
+        return articleService.findAll();
     }
 
     @PostMapping
-    public List<ArticleFeature> save(@RequestBody ArticleFeature articleFeature) {
-        articleRepository.save(new Article(articleFeature.getContents(), articleFeature.getImageUrl(), articleFeature.getVideoUrl()));
-        return articleRepository.findAll().stream()
-                .map(Article::getArticleFeature)
-                .collect(Collectors.toList())
-                ;
+    public ArticleFeature save(@RequestBody ArticleFeature articleFeature) {
+        return articleService.save(articleFeature);
+    }
+
+    @PutMapping("/{articleId}")
+    public ArticleFeature modify(@PathVariable long articleId, @RequestBody ArticleFeature articleFeature) {
+        return articleService.modify(articleId, articleFeature);
     }
 }
