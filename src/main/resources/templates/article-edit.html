@@ -1,112 +1,134 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorator="~{layout/article-layout}"
-      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <title>우스타그램</title>
-    <link href="/css/index.css" rel="stylesheet">
-    <link href="/css/article-edit.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <title>woostagram</title>
+    <meta name="robots" content="index, follow">
+
+    <meta name="keyword" content="우아한테크코스, 프로그래밍, 개발자, 백엔드, 프론트엔드, Backend, Frontend, IOS, Android">
+    <meta name="description" id="metaDesc" content="woostagram">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="우아한테크코스">
+    <meta property="og:description" id="metaOgDesc" content="woostagram">
+    <meta property="og:image" content="images/logo/logo-thumnail-bg.jpg">
+    <meta property="og:url" content="https://woowacourse.github.io/">
+
+    <meta name="twitter:card" content="website">
+    <meta name="twitter:title" content="우아한테크코스">
+    <meta name="twitter:description" id="metaTwitterDesc" content="woostagram">
+    <meta name="twitter:image" content="images/logo/logo-thumnail-bg.jpg">
+    <meta name="twitter:domain" content="https://woowacourse.github.io/">
+
+    <link rel="shortcut icon" href="images/logo/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amiri:400,400i|Source+Sans+Pro:400,400i,600,700'">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 <div>
-    <th:block layout:fragment="content">
-        <form accept-charset="utf-8" method="post"
-              th:action="${articleId == null} ? '/articles/' : '/articles/'+${articleId}">
-            <div class="about-cover card no-border">
-                <div class="cover-img overlay-dark bg" style="background-image: url('/images/pages/index/study.jpg')">
-                    <div class="height-300px vertical-center pdd-horizon-50">
-                        <div class="width-80">
-                            <input name="id" th:value="${articleId != null} ? ${articleId} : 0" type="hidden"/>
-                            <input autocomplete="off"
-                                   class="text-center bg-transparent no-border font-size-30 width-60 mx-auto d-block text-white border bottom"
-                                   name="title"
-                                   placeholder="제목을 입력해주세요" th:value="${article != null} ? ${article.title} : ''"
-                                   type="text">
-                            <input autocomplete="off"
-                                   class="text-center bg-transparent no-border font-size-16 width-30 mx-auto d-block text-light text-white border bottom pdd-top-20"
-                                   name="coverUrl"
-                                   placeholder="배경 url을 입력해주세요" th:value="${article != null} ? ${article.coverUrl} : ''"
-                                   type="text">
-                            <input class="text-center bg-transparent no-border font-size-30 width-60 mx-auto d-block text-white border bottom"
-                                   placeholder="파일을 입력해주세요"
-                                   type="file">
+    <header id="header" class="header navbar">
+        <div class="header-container max-width-lg mx-auto">
+            <ul class="nav-left mrg-left-0 padding-15">
+                <li>
+                    <img class="logo desktop-view" src="images/logo/instgram_logo.png">
+                    <div class="width-40px mobile-view overflow-hidden">
+                        <img class="logo" src="images/logo/instgram_logo.png">
+                    </div>
+                </li>
+                <li class="search-box mrg-left-20 desktop-view">
+                    <a class="search-toggle no-pdd-right" href=";">
+                        <i class="search-icon ti-search pdd-right-10 font-size-25"></i>
+                        <i class="search-icon-close ti-close pdd-right-10 font-size-25"></i>
+                    </a>
+                </li>
+                <li class="search-input desktop-view">
+                    <input class="form-control mrg-top-0" type="text" placeholder="Search...">
+                    <div class="advanced-search">
+                        <div class="search-wrapper">
+                            <div class="pdd-vertical-10">
+                                <ul class="list-unstyled list-info">
+                                    <li class="search-result-item">
+                                        <a href="" class="text-dark">#우테코 1기</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </li>
+            </ul>
+            <ul class="nav-right padding-15">
 
-            <div class="container-fluid max-width-lg mx-auto mrg-btm-30">
+                <li class="">
+                    <a class="pointer">
+                        <i class="ti-eye"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="pointer">
+                        <i class="ti-heart"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="pointer">
+                        <i class="ti-user"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="page-container mrg-top-120">
+        <div class="main-content">
+            <div class="container-fluid max-width-lg mx-auto">
                 <div class="row">
-                    <div class="col-lg-1 col-md-1"></div>
-                    <div class="col-lg-10 col-md-10 col-sm-10">
-                        <input id="article-contents" name="contents" type="hidden">
-                        <div id="editSection"></div>
-                    </div>
-                    <div class="col-lg-1 col-md-1">
-                        <div class="btn-group btn-group-vertical">
-                            <button class="btn btn-default" id="save-btn" type="submit">
-                                <i class="ti-save"></i>
-                            </button>
-                            <a class="btn btn-default" href="/" th:if="${articleId == null}">
-                                <i class="ti-close"></i>
-                            </a>
-                            <button class="btn btn-default" id="remove-btn" th:unless="${articleId == null}"
-                                    type="button">
-                                <i class="ti-close"></i>
-                            </button>
-                        </div>
+                    <div class="col-lg-7 mx-auto">
+                        <form method="post" action="/articles" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="file">파일 업로드</label>
+                                <input type="file" name="file" id="file">
+                            </div>
+                            <button type="submit">저장</button>
+                        </form>
                     </div>
                 </div>
             </div>
-            <input name="_method" th:if="${articleId != null}" type="hidden" value="put"/>
-        </form>
-    </th:block>
+        </div>
+    </div>
 </div>
 
-<th:block layout:fragment="addScript">
-    <script src="https://uicdn.toast.com/tui-editor/latest/tui-editor-Editor-full.js"></script>
-    <script th:if="${article != null}" th:inline="javascript">
+<script></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl" crossorigin="anonymous"></script>
+<script>
+    document.querySelector('.search-toggle').addEventListener('click', toggleSearchInput)
+    document.querySelector(".search-input input").addEventListener("keyup", showSearchedList)
 
-        const initValue = [[ ${article.contents}]];
+    function toggleSearchInput(event) {
+        event.preventDefault();
+        document.querySelector('.search-box').classList.toggle('active')
+        document.querySelector(".search-input").classList.toggle("active")
+        document.querySelector(".search-input input").focus()
+    }
 
-        const editor = new tui.Editor({
-            el: document.querySelector('#editSection'),
-            initialEditType: 'markdown',
-            previewStyle: 'vertical',
-            events: {
-                change: function () {
-                    document.getElementById('article-contents').setAttribute('value', editor.getMarkdown())
-                }
-            },
-            height: 'calc(100vh - 360px)',
-            initialValue: initValue
-        });
-
-        document.getElementById('remove-btn').addEventListener('click', function () {
-            document.querySelector('input[name="_method"]').value = 'delete';
-            document.querySelector('form[name="article"]').submit();
-        });
-    </script>
-    <script th:inline="javascript" th:unless="${article != null}">
-        const editor = new tui.Editor({
-            el: document.querySelector('#editSection'),
-            initialEditType: 'markdown',
-            previewStyle: 'vertical',
-            events: {
-                change: function () {
-                    document.getElementById('article-contents').setAttribute('value', editor.getMarkdown())
-                }
-            },
-            height: 'calc(100vh - 360px)'
-        });
-    </script>
-    <script th:if="${articleError != null}" th:inline="javascript">
-        /* <![CDATA[ */
-        const error = [[ ${articleError}]];
-        alert(error)
-        /* ]]> */
-    </script>
-</th:block>
-
+    function showSearchedList(event) {
+        if(event.target.value.length > 0) {
+            document.querySelector(".advanced-search").classList.add("active")
+        } else {
+            document.querySelector(".advanced-search").classList.remove("active")
+            $('.advanced-search').removeClass("active");
+        }
+    }
+</script>
 </body>
 </html>
