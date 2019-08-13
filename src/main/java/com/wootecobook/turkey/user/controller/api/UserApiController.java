@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserRestController {
+public class UserApiController {
 
     private UserService userService;
 
-    public UserRestController(UserService userService) {
+    public UserApiController(UserService userService) {
         this.userService = userService;
     }
 
