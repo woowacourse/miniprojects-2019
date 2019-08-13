@@ -18,6 +18,7 @@ class UserControllerTest {
     private static final String TEST_EMAIL = "test@test.com";
     private static final String TEST_EMAIL2 = "test2@test.com";
     private static final String TEST_EMAIL3 = "test3@test.com";
+    private static final String TEST_EMAIL4 = "test4@test.com";
     private static final String TEST_PASSWORD = "Aa1234!!";
     private static final String JSESSIONID = "JSESSIONID";
 
@@ -71,7 +72,23 @@ class UserControllerTest {
         webTestClient.put().uri("/users")
                 .cookie(JSESSIONID, getResponseCookie(TEST_EMAIL3, TEST_PASSWORD).getValue())
                 .body(fromFormData("contents", "gggg")
-                .with("userName","abc"))
+                        .with("userName", "abc"))
+                .exchange()
+                .expectStatus()
+                .isOk();
+    }
+
+    @Test
+    void delete_userdata_isOk() {
+        webTestClient.post().uri("/users/signup")
+                .body(fromFormData(EMAIL, TEST_EMAIL4)
+                        .with(PASSWORD, TEST_PASSWORD))
+                .exchange()
+                .expectStatus()
+                .isFound();
+
+        webTestClient.delete().uri("users")
+                .cookie(JSESSIONID, getResponseCookie(TEST_EMAIL4, TEST_PASSWORD).getValue())
                 .exchange()
                 .expectStatus()
                 .isOk();

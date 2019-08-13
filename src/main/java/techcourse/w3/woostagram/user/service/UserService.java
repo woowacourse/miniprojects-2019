@@ -33,4 +33,9 @@ public class UserService {
         User user = userRepository.findUserByEmail(email).orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND));
         user.contentsUpdated(userContentsDto.toEntity());
     }
+
+    public void delete(String email) {
+        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND));
+        userRepository.delete(user);
+    }
 }

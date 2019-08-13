@@ -1,10 +1,7 @@
 package techcourse.w3.woostagram.user.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -50,5 +47,13 @@ public class UserController {
         String email = (String) httpSession.getAttribute("email");
         userService.update(userContentsDto, email);
         return "mypage";
+    }
+
+    @DeleteMapping
+    public String delete(HttpSession httpSession) {
+        String email = (String) httpSession.getAttribute("email");
+        userService.delete(email);
+        //TODO : 로그인 안한 사람이 보는 페이지 만들기
+        return "index";
     }
 }
