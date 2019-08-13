@@ -18,8 +18,8 @@ public class Post extends BaseEntity {
     @Embedded
     private Contents contents;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_post_to_user"))
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_post_to_user"))
     private User author;
 
     public Post(final Contents contents, final User author) {
