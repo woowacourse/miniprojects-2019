@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URISyntaxException;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserApiController {
@@ -22,8 +20,8 @@ public class UserApiController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> signUp(@RequestBody UserBasicInfo userBasicInfo) throws URISyntaxException {
+    public ResponseEntity signUp(@RequestBody UserBasicInfo userBasicInfo) {
         userService.save(userBasicInfo);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 }
