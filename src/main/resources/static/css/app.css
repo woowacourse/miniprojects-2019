@@ -780,7 +780,7 @@ button.disabled,button:disabled{opacity:.5;cursor:not-allowed}
 .modal-fs .modal-close:focus,.modal-fs .modal-close:hover{color:#333;text-decoration:none;border:1px solid #333}
 button,input,textarea{outline:none}
 .form-group{margin-bottom:25px}
-.form-control{border:1px solid #e6ecf5;border-radius:2px;box-shadow:none;height:42px;font-size:14px;color:#333;transition:all .2s ease-in;-webkit-transition:all .2s ease-in;-moz-transition:all .2s ease-in;-o-transition:all .2s ease-in;-ms-transition:all .2s ease-in}
+.form-control{border-radius:2px;box-shadow:none;height:42px;font-size:14px;color:#333;transition:all .2s ease-in;-webkit-transition:all .2s ease-in;-moz-transition:all .2s ease-in;-o-transition:all .2s ease-in;-ms-transition:all .2s ease-in}
 .form-control::-webkit-input-placeholder{color:#e0e2e9}
 .form-control:-moz-placeholder,.form-control::-moz-placeholder{color:#e0e2e9}
 .form-control:-ms-input-placeholder{color:#e0e2e9}
@@ -799,7 +799,7 @@ textarea.form-control{min-height:175px}
 .input-icon{position:relative}
 .input-icon i{position:absolute;left:10px;top:15px;color:#e0e2e9}
 .input-icon .form-control{padding-left:40px}
-.input-group-text{background-color:transparent;border:1px solid #e6ecf5;color:#e0e2e9;border-radius:0;border-right:0;line-height:1.8}
+.input-group-text{background-color:transparent;}
 .input-group-text .btn{margin:0;padding:0;background-color:transparent}
 .timepicker-input .input-group-text{cursor:pointer}
 .checkbox{padding:7px 0;min-height:auto}
