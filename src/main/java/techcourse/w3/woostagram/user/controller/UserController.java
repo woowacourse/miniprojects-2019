@@ -28,7 +28,7 @@ public class UserController {
     public String login(UserDto userDto, HttpSession httpSession) {
         String email = userService.authUser(userDto);
         httpSession.setAttribute("email", email);
-        return "redirect:/index";
+        return "index";
     }
 
     @GetMapping("signup/form")
@@ -39,7 +39,7 @@ public class UserController {
     @PostMapping("signup")
     public String create(@Valid UserDto userDto) {
         userService.create(userDto);
-        return "redirect:/login/form";
+        return "redirect:/users/login/form";
     }
 
     @GetMapping("mypage")
@@ -49,14 +49,14 @@ public class UserController {
 
     @GetMapping("mypage-edit/form")
     public String updateForm() {
-        return "mypage-eidt";
+        return "mypage-edit";
     }
 
     @PutMapping
     public String update(UserContentsDto userContentsDto, HttpSession httpSession) {
         String email = (String) httpSession.getAttribute("email");
         userService.update(userContentsDto, email);
-        return "redirect:/mypage";
+        return "redirect:/users/mypage";
     }
 
     @DeleteMapping
