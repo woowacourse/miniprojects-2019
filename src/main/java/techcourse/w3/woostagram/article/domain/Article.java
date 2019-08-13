@@ -18,11 +18,11 @@ public class Article {
     @Column(length = 1000)
     private String contents;
     @Column(nullable = false, length = 1000)
-    private String image;
+    private String imageUrl;
 
     @Builder
-    public Article(String contents, String image) {
+    public Article(String contents, String imageUrl) {
         this.contents = contents;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 }
