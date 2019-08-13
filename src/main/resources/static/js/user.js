@@ -1,27 +1,68 @@
+const USER_APP = (() => {
+    'use strict';
 
+    const UserController = function () {
+        const userService = new UserService();
+        const signUp = () => {
+            const signUpButton = document.getElementById('signup');
+            signUpButton.addEventListener('click', userService.saveUser);
+        };
 
-document.getElementById('signup').addEventListener('click', function (event) {
-    event.preventDefault();
-    const userBasicInfo = {
-        email: document.getElementById('email').value,
-        nickName: document.getElementById('nickName').value,
-        userName: document.getElementById('userName').value,
-        password: document.getElementById('password').value
+        const init = () => {
+            signUp();
+        };
+
+        return {
+            init: init
+        }
     };
-    postData('/api/users', userBasicInfo)
-})
 
-function postData(url, data) {
-    return fetch(url, {
-        method: "POST",
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: JSON.stringify(data)
-    })
-        .then(response => {
-            if(response.status === 200) {
-                window.location.href = "/login"
-            }
-        })
-        .catch(error => alert(error))
-}
+    const UserService = function () {
+        const email = document.getElementById('email');
+        const nickName = document.getElementById('nickName');
+        const userName = document.getElementById('userName');
+        const password = document.getElementById('password');
 
+        const saveUser = function (event) {
+            event.preventDefault();
+
+            let userBasicInfo = {
+                email: email.value,
+                nickName: nickName.value,
+                userName: userName.value,
+                password: password.value,
+            };
+
+            fetch('/api/users', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json; charset=UTF-8'},
+                body: JSON.stringify(userBasicInfo)
+            })
+                .then(response => {
+                    if (response.status === 201) {
+                        window.location.href = '/login';
+                    }
+                debugger;
+                    return response.json();
+                })
+                .catch(error => {
+                    alert(error);
+                });
+        };
+
+        return {
+            saveUser: saveUser
+        }
+    };
+
+    const init = () => {
+        const userController = new UserController();
+        userController.init();
+    };
+
+    return {
+        init: init
+    }
+})();
+
+USER_APP.init();
