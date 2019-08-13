@@ -34,7 +34,7 @@ class UserServiceTest {
         User user = userRequestDto.toEntity();
         given(userRepository.save(user)).willReturn(user);
 
-        User savedUser = userService.save(userRequestDto);
+        User savedUser = userService.add(userRequestDto);
         verify(userRepository, times(1)).save(savedUser);
     }
 }

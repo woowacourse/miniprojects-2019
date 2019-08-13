@@ -1,6 +1,7 @@
 package com.woowacourse.zzinbros.user;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
@@ -96,6 +97,11 @@ public class User {
         this.name = updatedUser.name;
         this.email = updatedUser.email;
         this.password = updatedUser.password;
+    }
+
+    public boolean isAuthor(User another) {
+        return this.email.equals(another.email)
+                && this.password.equals(another.password);
     }
 
     @Override
