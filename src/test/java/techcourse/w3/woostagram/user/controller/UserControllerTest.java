@@ -15,6 +15,7 @@ class UserControllerTest {
     private static final String PASSWORD = "password";
 
     private static final String TEST_EMAIL = "test@test.com";
+    private static final String TEST_EMAIL2 = "test2@test.com";
     private static final String TEST_PASSWORD = "Aa1234!!";
 
 
@@ -36,5 +37,22 @@ class UserControllerTest {
                 .exchange()
                 .expectStatus()
                 .isFound();
+    }
+
+    @Test
+    void login_correct_isOk() {
+        webTestClient.post().uri("/users/signup")
+                .body(fromFormData(EMAIL, TEST_EMAIL2)
+                        .with(PASSWORD, TEST_PASSWORD))
+                .exchange()
+                .expectStatus()
+                .isFound();
+
+        webTestClient.post().uri("/users/login")
+                .body(fromFormData(EMAIL, TEST_EMAIL2)
+                        .with(PASSWORD, TEST_PASSWORD))
+                .exchange()
+                .expectStatus()
+                .isOk();
     }
 }

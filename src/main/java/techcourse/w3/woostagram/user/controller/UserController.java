@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.service.UserService;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -33,5 +34,12 @@ public class UserController {
     public String create(@Valid UserDto userDto) {
         userService.create(userDto);
         return "redirect:/login/form";
+    }
+
+    @PostMapping("login")
+    public String login(UserDto userDto, HttpSession httpSession) {
+        String email = userService.authUser(userDto);
+        httpSession.setAttribute("email", email);
+        return "index";
     }
 }
