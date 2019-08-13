@@ -3,8 +3,10 @@ package com.wootecobook.turkey.user.service.dto;
 import com.wootecobook.turkey.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class UserRequest {
 
     private String email;
@@ -25,4 +27,5 @@ public class UserRequest {
                 .password(password)
                 .build();
     }
+
 }

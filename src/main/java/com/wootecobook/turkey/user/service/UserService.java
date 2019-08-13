@@ -25,11 +25,11 @@ public class UserService {
         return UserResponse.from(findById(id));
     }
 
-    public User save(UserRequest userRequest) {
+    public UserResponse save(UserRequest userRequest) {
         try {
-            return userRepository.save(userRequest.toEntity());
+            return UserResponse.from(userRepository.save(userRequest.toEntity()));
         } catch (Exception e) {
-            throw new SignUpException(e.getMessage());
+            throw new SignUpException();
         }
     }
 

@@ -2,10 +2,10 @@ package com.wootecobook.turkey.user.service.exception;
 
 public class SignUpException extends RuntimeException {
 
-    private static final String SIGN_UP_FAIL_MESSAGE = "Sign Up Fail Message : ";
+    public static final String SIGN_UP_FAIL_MESSAGE = "회원가입에 실패했습니다.!";
 
-    public SignUpException(String message) {
-        super(SIGN_UP_FAIL_MESSAGE + message);
+    public SignUpException() {
+        super(SIGN_UP_FAIL_MESSAGE);
     }
 
 }

@@ -1,13 +1,10 @@
 package com.wootecobook.turkey.user.controller.api;
 
 import com.wootecobook.turkey.user.service.UserService;
+import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -23,4 +20,10 @@ public class UserApiController {
     public ResponseEntity<UserResponse> show(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findUserResponseById(id));
     }
+
+    @PostMapping
+    public ResponseEntity<UserResponse> create(@RequestBody UserRequest userRequest) {
+        return ResponseEntity.ok(userService.save(userRequest));
+    }
+
 }
