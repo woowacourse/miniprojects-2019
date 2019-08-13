@@ -1,4 +1,7 @@
 package com.wootecobook.turkey.user.domain;
 
-public class User {
+import com.wootecobook.turkey.commons.BaseEntity;
+
+public class User extends BaseEntity {
+
 }

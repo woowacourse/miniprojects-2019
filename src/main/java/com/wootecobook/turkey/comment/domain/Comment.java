@@ -1,4 +1,7 @@
 package com.wootecobook.turkey.comment.domain;
 
-public class Comment {
+import com.wootecobook.turkey.commons.BaseEntity;
+
+public class Comment extends BaseEntity {
+
 }

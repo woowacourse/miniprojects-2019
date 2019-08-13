@@ -1,4 +1,7 @@
 package com.wootecobook.turkey.post.domain;
 
-public class Post {
+import com.wootecobook.turkey.commons.BaseEntity;
+
+public class Post extends BaseEntity {
+    
 }
