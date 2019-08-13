@@ -2,13 +2,19 @@ package com.woowacourse.zzazanstagram.model.member.vo;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Password {
     private static final String PASSWORD_REGEX = ".*(?=^.{8,}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*";
 
-    private final String password;
+    private String password;
 
     private Password(final String password) {
         this.password = validatePassword(password);
+    }
+
+    private Password() {
     }
 
     public static Password of(final String password) {

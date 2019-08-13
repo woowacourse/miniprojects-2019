@@ -1,14 +1,18 @@
 package com.woowacourse.zzazanstagram.model.member.vo;
 
+import javax.persistence.Embeddable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Embeddable
 public class Profile {
-    private final String url;
+    private String url;
 
     private Profile(final String url) {
-        validateUrl(url);
         this.url = validateUrl(url);
+    }
+
+    private Profile() {
     }
 
     public static Profile of(final String url) {

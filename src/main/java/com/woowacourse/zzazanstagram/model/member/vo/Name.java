@@ -1,12 +1,18 @@
 package com.woowacourse.zzazanstagram.model.member.vo;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Name {
     private static final String NAME_REGEX = "[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣]{2,10}";
 
-    private final String name;
+    private String name;
 
     private Name(final String name) {
         this.name = validateName(name);
+    }
+
+    private Name() {
     }
 
     public static Name of(final String name) {

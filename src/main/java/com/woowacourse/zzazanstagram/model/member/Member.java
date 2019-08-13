@@ -1,13 +1,40 @@
 package com.woowacourse.zzazanstagram.model.member;
 
+import com.woowacourse.zzazanstagram.model.common.BaseEntity;
 import com.woowacourse.zzazanstagram.model.member.vo.*;
 
-public class Member {
+import javax.persistence.Entity;
+
+@Entity
+public class Member extends BaseEntity {
     private NickName nickName;
     private Name name;
     private Email email;
     private Password password;
     private Profile profile;
+
+    private Member() {
+    }
+
+    public NickName getNickName() {
+        return nickName;
+    }
+
+    public Name getName() {
+        return name;
+    }
+
+    public Email getEmail() {
+        return email;
+    }
+
+    public Password getPassword() {
+        return password;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
 
     public static final class MemberBuilder {
         private NickName nickName;
