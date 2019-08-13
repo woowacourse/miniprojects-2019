@@ -20,19 +20,8 @@ public class UserController {
     }
 
     @GetMapping("login/form")
-    public String show() {
+    public String loginForm() {
         return "login";
-    }
-
-    @GetMapping("signup/form")
-    public String createFrom() {
-        return "signup";
-    }
-
-    @PostMapping("signup")
-    public String create(@Valid UserDto userDto) {
-        userService.create(userDto);
-        return "redirect:/login/form";
     }
 
     @PostMapping("login")
@@ -42,11 +31,32 @@ public class UserController {
         return "redirect:/index";
     }
 
+    @GetMapping("signup/form")
+    public String createForm() {
+        return "signup";
+    }
+
+    @PostMapping("signup")
+    public String create(@Valid UserDto userDto) {
+        userService.create(userDto);
+        return "redirect:/login/form";
+    }
+
+    @GetMapping("mypage")
+    public String show() {
+        return "mypage";
+    }
+
+    @GetMapping("mypage-edit/form")
+    public String updateForm() {
+        return "mypage-eidt";
+    }
+
     @PutMapping
     public String update(UserContentsDto userContentsDto, HttpSession httpSession) {
         String email = (String) httpSession.getAttribute("email");
         userService.update(userContentsDto, email);
-        return "mypage";
+        return "redirect:/mypage";
     }
 
     @DeleteMapping
