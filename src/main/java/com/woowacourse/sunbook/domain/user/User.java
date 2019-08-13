@@ -26,8 +26,8 @@ public class User {
     @Embedded
     private UserName name;
 
-    public User(UserEmail userEmail, UserPassword password, UserName name) {
-        this.userEmail = userEmail;
+    public User(UserEmail email, UserPassword password, UserName name) {
+        this.userEmail = email;
         this.password = password;
         this.name = name;
     }
