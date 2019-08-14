@@ -13,7 +13,7 @@ import java.util.List;
 @EnableJpaAuditing
 public class WebConfig implements WebMvcConfigurer {
 
-    private final List<String> excludePatterns = Arrays.asList("/signup", "/members", "/login");
+    private final List<String> excludePatterns = Arrays.asList("/signup", "/members", "/login", "/css/**", "/images/**");
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
