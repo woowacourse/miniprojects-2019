@@ -39,10 +39,7 @@
         <div class="header-container max-width-lg mx-auto">
             <ul class="nav-left mrg-left-0 padding-15">
                 <li>
-                    <img class="logo desktop-view" src="/images/logo/instgram_logo.png">
-                    <div class="width-40px mobile-view overflow-hidden">
-                        <img class="logo" src="/images/logo/instgram_logo.png">
-                    </div>
+                    <img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png">
                 </li>
             </ul>
             <ul class="nav-right padding-15">
@@ -138,9 +135,7 @@
     function goBackToIndexPage(event) {
         event.preventDefault();
     
-        console.log("asdf");
         if (confirm("작성하신 게시물을 취소하고 돌아가시겠습니까?") == true) {
-            console.log("adfasdjfkajskdfjk");
             articleForm.setAttribute("method", "get");
             articleForm.setAttribute("action", "/");
             articleFormMethod.remove();
