@@ -1,9 +1,12 @@
 package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.User;
-import com.woowacourse.dsgram.domain.UserBasicInfo;
 import com.woowacourse.dsgram.domain.UserRepository;
+import com.woowacourse.dsgram.service.assembler.UserAssembler;
+import com.woowacourse.dsgram.service.dto.SignUpUserDto;
+import com.woowacourse.dsgram.service.dto.UserDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -13,9 +16,23 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void save(UserBasicInfo userBasicInfo) {
-        userRepository.save(User.of(userBasicInfo));
+    public void save(SignUpUserDto signUpUserDto) {
+        userRepository.save(UserAssembler.toEntity(signUpUserDto));
     }
 
+    public UserDto findUserInfoById(long userId) {
+        return UserAssembler.toDto(findById(userId));
+    }
 
+    private User findById(long userId) {
+        // TODO: 2019-08-14 Exception
+        return userRepository.findById(userId)
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Transactional
+    public void update(long userId, UserDto userDto) {
+        User user = findById(userId);
+        user.update(UserAssembler.toEntity(userDto));
+    }
 }

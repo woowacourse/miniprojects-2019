@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -87,7 +86,7 @@
 </header>
 <div>
     <div class="page-container mrg-top-80">
-        <form action="/users/mypage/edit" method="post">
+        <form>
             <input name="_method" type="hidden" value="put"/>
             <div class="container-fluid max-width-lg mx-auto mrg-btm-30 padding-30">
                 <div class="row">
@@ -105,7 +104,7 @@
                                         </label>
                                     </div>
                                     <div class="col-md-5">
-                                        <div class="font-size-20"><b>imkimheejoo</b></div>
+                                        <div class="font-size-20"><b th:text="${user.nickName}">Nick Name</b></div>
                                         <label class="mrg-top-5 pointer text-bold" for="img-upload" style="color:dodgerblue;">프로필 사진 바꾸기</label>
                                         <input class="d-none" id="img-upload" multiple name="uploadedimages0"
                                                type="file">
@@ -117,8 +116,7 @@
                                         <label class="mrg-top-10 text-dark"><b>이름</b></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control text-bold" name="name"
-                                               value="김희주">
+                                        <input id="userName" class="form-control text-bold" name="name" th:value="${user.userName}">
                                     </div>
                                 </div>
                                 <hr>
@@ -127,8 +125,7 @@
                                         <label class="mrg-top-10 text-dark"><b>사용자 이름</b></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control text-bold" name="nickname" type="text"
-                                               value="imkimheejoo">
+                                        <input id="nickName" class="form-control text-bold" name="nickname" type="text" th:value="${user.nickName}">
                                     </div>
                                 </div>
                                 <hr>
@@ -137,8 +134,8 @@
                                         <label class="mrg-top-10 text-dark"><b>웹 사이트</b></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control text-bold" name="usersite" type="text"
-                                               value="https://github.com/imkimheejoo">
+                                        <input id="webSite" class="form-control text-bold" name="usersite" type="text"
+                                               th:value="${user.webSite}">
                                     </div>
                                 </div>
                                 <hr>
@@ -147,31 +144,22 @@
                                         <label class="mrg-top-10 text-dark"><b>소개</b></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <textarea class="form-control text-bold" name="intro" type="text"
-                                                  value="김희주의 인스타입니다."></textarea>
+                                        <textarea id="intro" class="form-control text-bold" name="intro" type="text" th:text="${user.intro}"></textarea>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <label class="mrg-top-10 text-dark"><b>이메일</b></label>
+                                        <label class="mrg-top-10 text-dark"><b>비밀번호</b></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control text-bold" name="email" type="text"
-                                               value="abc@github.com">
+                                        <input id="password" class="form-control text-bold" name="password" type="text"
+                                               th:value="${user.password}">
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label class="mrg-top-10 text-dark"><b>전화번호</b></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input class="form-control text-bold" name="phonenumber" type="text"
-                                               value="010-1234-5678">
-                                    </div>
-                                </div>
-                                <button class="btn btn-info mrg-top-20 relative bottom-5" type="submit">수정</button>
+                                <input type="hidden" id="userId" th:value="${user.id}">
+                                <button id="editButton" class="btn btn-info mrg-top-20 relative bottom-5">수정</button>
                             </div>
                         </div>
                     </div>
@@ -180,7 +168,7 @@
         </form>
     </div>
 </div>
-<script></script>
+<script src="/js/user-edit.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
