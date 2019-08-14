@@ -4,8 +4,10 @@ import com.wootecobook.turkey.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @NoArgsConstructor
 public class UserResponse {
 
@@ -26,15 +28,6 @@ public class UserResponse {
                 .name(user.getName())
                 .id(user.getId())
                 .build();
-    }
-
-    @Override
-    public String toString() {
-        return "UserResponse{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                '}';
     }
 
 }
