@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/videos")
 public class VideoController {
-
+    private static final String DATE = "date";
     private VideoService videoService;
 
     public VideoController(VideoService videoService) {
@@ -26,7 +26,7 @@ public class VideoController {
 
     @GetMapping
     public ResponseEntity<List<VideoInfoResponse>> findVideosByFilter(@RequestParam String filter, @RequestParam int page, @RequestParam int limit) {
-        if ("date".equals(filter)) {
+        if (DATE.equals(filter)) {
             return new ResponseEntity<>(videoService.findVideosByDate(page, limit), HttpStatus.OK);
         }
         return new ResponseEntity<>(videoService.findVideosByViewNumbers(page, limit), HttpStatus.OK);
