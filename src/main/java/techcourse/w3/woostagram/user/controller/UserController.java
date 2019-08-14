@@ -72,7 +72,6 @@ public class UserController {
     public String delete(HttpSession httpSession) {
         String email = (String) httpSession.getAttribute("email");
         userService.delete(email);
-        //TODO : 로그인 안한 사람이 보는 페이지 만들기
-        return "index";
+        return "redirect:/users/login/form";
     }
 }

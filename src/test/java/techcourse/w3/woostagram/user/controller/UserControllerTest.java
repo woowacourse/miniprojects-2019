@@ -61,7 +61,7 @@ class UserControllerTest {
     }
 
     @Test
-    void update_correct_isOk() {
+    void update_correct_isRedirect() {
         webTestClient.post().uri("/users/signup")
                 .body(fromFormData(EMAIL, TEST_EMAIL3)
                         .with(PASSWORD, TEST_PASSWORD))
@@ -75,11 +75,11 @@ class UserControllerTest {
                         .with("userName", "abc"))
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .is3xxRedirection();
     }
 
     @Test
-    void delete_userdata_isOk() {
+    void delete_userdata_isRedirect() {
         webTestClient.post().uri("/users/signup")
                 .body(fromFormData(EMAIL, TEST_EMAIL4)
                         .with(PASSWORD, TEST_PASSWORD))
@@ -87,11 +87,11 @@ class UserControllerTest {
                 .expectStatus()
                 .isFound();
 
-        webTestClient.delete().uri("users")
+        webTestClient.delete().uri("/users")
                 .cookie(JSESSIONID, getResponseCookie(TEST_EMAIL4, TEST_PASSWORD).getValue())
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isFound();
     }
 
     protected ResponseCookie getResponseCookie(String email, String password) {
