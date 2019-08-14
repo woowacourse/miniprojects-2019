@@ -3,6 +3,7 @@ package com.wootecobook.turkey.comment.controller.api;
 import com.wootecobook.turkey.comment.service.CommentService;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
+import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.commons.resolver.UserSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +41,11 @@ public class CommentApiController {
 
     @PostMapping
     public ResponseEntity<CommentResponse> create(@RequestBody CommentCreate commentCreate,
-                                                  @PathVariable Long postId) {
+                                                  @PathVariable Long postId,
+                                                  UserSession userSession) {
         log.info("postId : {}", postId);
         commentCreate.setPostId(postId);
-//        commentCreate.setUserId(userSession.getId());
+        commentCreate.setUserId(userSession.getId());
 
         final CommentResponse commentResponse = commentService.save(commentCreate);
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
@@ -60,6 +62,19 @@ public class CommentApiController {
 
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
         return ResponseEntity.noContent().location(uri).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CommentResponse> update(@RequestBody CommentUpdate commentUpdate,
+                                                  @PathVariable Long id,
+                                                  UserSession userSession) {
+        log.info("id : {}", id);
+
+        commentUpdate.setUserId(userSession.getId());
+        commentUpdate.setId(id);
+        CommentResponse commentResponse = commentService.update(commentUpdate);
+
+        return ResponseEntity.ok(commentResponse);
     }
 }
 

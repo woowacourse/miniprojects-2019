@@ -3,6 +3,7 @@ package com.wootecobook.turkey.comment.controller.api;
 import com.wootecobook.turkey.comment.service.CommentService;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
+import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +20,6 @@ import java.io.IOException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -91,5 +91,21 @@ class CommentApiControllerTests {
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectHeader().valueMatches("Location", ".*" + BASE_URI);
+    }
+
+    @Test
+    void 댓글_수정_성공() {
+        // given
+        final CommentUpdate commentUpdate = mock(CommentUpdate.class);
+
+        // when
+        final EntityExchangeResult<byte[]> result = webTestClient.put().uri(BASE_URI + "/{id}", COMMENT_ID)
+                .body(Mono.just(commentUpdate), CommentUpdate.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody().returnResult();
+        // then
+
     }
 }

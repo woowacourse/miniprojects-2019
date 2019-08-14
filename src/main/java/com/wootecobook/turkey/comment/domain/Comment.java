@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.comment.domain;
 
+import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.commons.BaseEntity;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;
@@ -42,5 +43,9 @@ public class Comment extends BaseEntity {
             return true;
         }
         throw new CommentAuthException();
+    }
+
+    public void update(final Comment other) {
+        this.contents = other.getContents();
     }
 }

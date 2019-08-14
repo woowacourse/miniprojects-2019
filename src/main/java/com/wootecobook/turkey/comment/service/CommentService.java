@@ -4,6 +4,7 @@ import com.wootecobook.turkey.comment.domain.Comment;
 import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
+import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.comment.service.exception.CommentDeleteException;
 import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
 import com.wootecobook.turkey.comment.service.exception.CommentSaveException;
@@ -31,6 +32,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public Page<CommentResponse> findCommentResponsesByPostId(final Long postId, final Pageable pageable) {
+
         final Post post = postService.findById(postId);
         return commentRepository.findAllByPost(post, pageable)
                 .map(CommentResponse::from);
@@ -61,5 +63,12 @@ public class CommentService {
         } catch (IllegalArgumentException e) {
             throw new CommentDeleteException(e.getMessage());
         }
+    }
+
+    public CommentResponse update(final CommentUpdate commentUpdate) {
+        Comment comment = findById(commentUpdate.getId());
+        comment.isWrittenBy(commentUpdate.getUserId());
+        comment.update(commentUpdate.toEntity());
+        return CommentResponse.from(comment);
     }
 }
