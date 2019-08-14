@@ -1,6 +1,5 @@
 package techcourse.w3.woostagram.article.controller;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +23,7 @@ public class ArticleController {
 
     @PostMapping
     public String create(ArticleDto articleDto) {
-        articleService.save(articleDto);
-        return "redirect:/articles/form";
+        return "redirect:/articles/" + articleService.save(articleDto);
     }
 
     @GetMapping("/{articleId}")
@@ -38,5 +36,18 @@ public class ArticleController {
     @ResponseBody
     public ResponseEntity<ArticleDto> read(@PathVariable Long articleId) {
         return ResponseEntity.ok(articleService.get(articleId));
+    }
+
+    @PutMapping
+    @ResponseBody
+    public ResponseEntity<ArticleDto> update(@RequestBody ArticleDto articleDto) {
+        articleService.update(articleDto);
+        return ResponseEntity.ok(null);
+    }
+
+    @DeleteMapping("/{articleId}")
+    public String delete(@PathVariable Long articleId) {
+        articleService.remove(articleId);
+        return "redirect:/";
     }
 }

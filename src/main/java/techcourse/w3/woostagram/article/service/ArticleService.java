@@ -26,7 +26,7 @@ public class ArticleService {
     }
 
     @Transactional
-    public void save(ArticleDto articleDto) {
+    public Long save(ArticleDto articleDto) {
         String fullPath = String.join(".", UPLOAD_PATH + UUID.randomUUID().toString(),
                 FilenameUtils.getExtension(articleDto.getImageFile().getOriginalFilename()));
         Article article = ArticleAssembler.toArticle(articleDto, fullPath.split("miniprojects-2019")[1]);
@@ -35,6 +35,7 @@ public class ArticleService {
             file.createNewFile();
             articleRepository.save(article);
             articleDto.getImageFile().transferTo(file);
+            return article.getId();
         } catch(Exception e) {
             file.delete();
             throw new FileSaveFailException("서버에 정적 파일을 업로드 하는 데 실패했습니다.");
@@ -43,5 +44,15 @@ public class ArticleService {
 
     public ArticleDto get(Long articleId) {
         return ArticleAssembler.toArticleDto(articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new));
+    }
+
+    @Transactional
+    public void update(ArticleDto articleDto) {
+        Article article = articleRepository.findById(articleDto.getId()).orElseThrow(ArticleNotFoundException::new);
+        article.update(articleDto.getContents());
+    }
+
+    public void remove(Long articleId) {
+        articleRepository.deleteById(articleId);
     }
 }

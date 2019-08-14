@@ -3,6 +3,7 @@
     <th:block th:replace = "common-head :: common-head"></th:block>
     <link rel="stylesheet" href = "/css/app.css">
     <link rel="stylesheet" href = "/css/article-detail.css">
+    <script src="../static/js/article-detail.js"></script>
 </head>
 <body>
     <div id="detail-con">
@@ -12,15 +13,24 @@
             </div>
             <div class="text-con">
                 <div class="author-con">
+                    <button id = "modal-btn" type ="button">get modify button</button>
                 </div>
                 <div class="contents-con">
-                    <p id = "contents-para"></p>
+                    <p id = "contents-para" ></p>
+                    <input id = "contents-input" class="pace-inactive" type = "text"/>
+                    <button id = "contents-modify-btn" class="pace-inactive" type = "button" >modify</button>
+                    <button id = "contents-remove-btn"  type = "button" >remove</button>
+
                 </div>
 
                 <div class="social-con">
 
                 </div>
             </div>
+            <div id = "detail-modal">
+
+            </div>
+
         </div>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

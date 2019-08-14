@@ -25,4 +25,8 @@ public class Article {
         this.contents = contents;
         this.imageUrl = imageUrl;
     }
+
+    public void update(String contents) {
+        this.contents = contents;
+    }
 }
