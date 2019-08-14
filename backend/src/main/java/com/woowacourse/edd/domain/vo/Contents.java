@@ -1,21 +1,24 @@
 package com.woowacourse.edd.domain.vo;
 
+import com.woowacourse.edd.exceptions.InvalidTitleException;
+
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Lob;
+import java.util.Objects;
 
 @Embeddable
 public class Contents {
 
+    @Column
+    @Lob
     private String contents;
 
-    public Contents(){
+    private Contents() {
     }
 
-    private Contents(final String contents) {
+    public Contents(String contents) {
         this.contents = contents;
-    }
-
-    public static Contents of(final String contents) {
-        return new Contents(contents);
     }
 
     public String getContents() {

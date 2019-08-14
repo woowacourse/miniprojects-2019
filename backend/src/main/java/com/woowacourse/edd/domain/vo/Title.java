@@ -1,21 +1,29 @@
 package com.woowacourse.edd.domain.vo;
 
+import com.woowacourse.edd.exceptions.InvalidTitleException;
+
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 public class Title {
 
+    @Column(nullable = false, length = 100)
     private String title;
 
-    public Title(){
+    private Title() {
     }
 
-    private Title(final String title) {
+    public Title(String title) {
+        checkTitle(title);
         this.title = title;
     }
 
-    public static Title of(final String title) {
-        return new Title(title);
+    private void checkTitle(String title) {
+        if (Objects.isNull(title) || title.trim().isEmpty()) {
+            throw new InvalidTitleException();
+        }
     }
 
     public String getTitle() {

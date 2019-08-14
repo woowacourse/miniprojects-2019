@@ -1,4 +1,5 @@
 package com.woowacourse.edd.service;
 
-public class k {
+public class VideoServiceTests {
+
 }
