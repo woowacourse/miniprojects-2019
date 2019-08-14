@@ -1,26 +1,28 @@
 package techcourse.w3.woostagram.article.controller;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import techcourse.w3.woostagram.AbstractControllerTests;
 
-@AutoConfigureWebTestClient
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ArticleControllerTest {
-    @Autowired
-    private WebTestClient webTestClient;
+import static org.assertj.core.api.Assertions.assertThat;
 
+class ArticleControllerTest extends AbstractControllerTests {
     @Test
     void createForm_noState_isOk() {
-        webTestClient.get()
-                .uri("/articles/form")
-                .exchange()
-                .expectStatus()
-                .isOk();
+        assertThat(getRequest("/articles/form").getStatus().is2xxSuccessful()).isTrue();
+    }
+
+    @Test
+    void show_correctArticleId_isOk() {
+        assertThat(getRequest("/articles/1").getStatus().is2xxSuccessful()).isTrue();
+    }
+
+    @Test
+    void delete_correctArticleId_isOk() {
+        assertThat(deleteRequest("/articles/1").getStatus().is3xxRedirection()).isTrue();
+    }
+
+    @Test
+    void delete_incorrectArticleId_isNotFound() {
+        assertThat(deleteRequest("/articles/2").getStatus().is4xxClientError()).isTrue();
     }
 }

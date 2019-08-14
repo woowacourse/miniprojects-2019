@@ -2,13 +2,10 @@ package techcourse.w3.woostagram;
 
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -21,15 +18,13 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureWebTestClient
-@ExtendWith(SpringExtension.class)
-@TestPropertySource("classpath:application_test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AbstractControllerTests {
     @Autowired
     private WebTestClient webTestClient;
     private String cookie;
-    private static final String TEST_EMAIL = "abc@hi.com";
-    private static final String TEST_PW = "abcdEFGH123!@#";
+    private static final String TEST_EMAIL = "a@naver.com";
+    private static final String TEST_PW = "Aa1234!!";
 
     @BeforeEach
     void setUp() {
