@@ -5,7 +5,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
 import techcourse.w3.woostagram.user.exception.UserUpdateException;
