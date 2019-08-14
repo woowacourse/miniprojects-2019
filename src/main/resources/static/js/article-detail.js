@@ -29,7 +29,7 @@ const Detail = (function () {
 
     const DetailService = function(){
         const createContents = () =>
-            axios.get('/articles/' + articleId + "/api")
+            axios.get('/api/articles/' + articleId)
                 .then(response => {
                     console.log(response);
                     document.getElementById("pic").src = response.data.imageUrl;
@@ -43,7 +43,7 @@ const Detail = (function () {
 
         const modify = ()=>{
             let contents = document.getElementById("contents-input").value;
-            axios.put('/articles',{
+            axios.put('/api/articles',{
                 id: articleId,
                 contents:contents
             })

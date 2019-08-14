@@ -32,19 +32,6 @@ public class ArticleController {
         return "article-detail";
     }
 
-    @GetMapping("/{articleId}/api")
-    @ResponseBody
-    public ResponseEntity<ArticleDto> read(@PathVariable Long articleId) {
-        return ResponseEntity.ok(articleService.get(articleId));
-    }
-
-    @PutMapping
-    @ResponseBody
-    public ResponseEntity<ArticleDto> update(@RequestBody ArticleDto articleDto) {
-        articleService.update(articleDto);
-        return ResponseEntity.ok(null);
-    }
-
     @DeleteMapping("/{articleId}")
     public String delete(@PathVariable Long articleId) {
         articleService.remove(articleId);
