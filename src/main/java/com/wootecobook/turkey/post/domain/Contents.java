@@ -3,6 +3,7 @@ package com.wootecobook.turkey.post.domain;
 import com.wootecobook.turkey.post.domain.exception.InvalidContentException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -10,10 +11,9 @@ import javax.persistence.Lob;
 
 @Embeddable
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Contents {
-
-    private static final String EMPTY_CONTENTS_ERROR_MESSAGE = "내용이 없습니다.";
 
     @Lob
     @Column(nullable = false)
@@ -26,7 +26,7 @@ public class Contents {
 
     private void validate(String contents) {
         if (contents == null || contents.trim().equals("")) {
-            throw new InvalidContentException(EMPTY_CONTENTS_ERROR_MESSAGE);
+            throw new InvalidContentException();
         }
     }
 }
