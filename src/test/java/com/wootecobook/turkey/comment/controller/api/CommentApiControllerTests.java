@@ -1,6 +1,5 @@
 package com.wootecobook.turkey.comment.controller.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wootecobook.turkey.comment.service.CommentService;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
@@ -20,13 +19,16 @@ import java.io.IOException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentApiControllerTests {
-    private static final String BASE_URI = "/api/posts/{postId}/comments";
     private static final Long POST_ID = 1L;
+    private static final Long COMMENT_ID = 1L;
+    private static final String BASE_URI = linkTo(CommentApiController.class, POST_ID).toUri().toString();
 
     @Autowired
     private WebTestClient webTestClient;
@@ -44,7 +46,7 @@ class CommentApiControllerTests {
                 .thenReturn(commentResponses);
 
         // when
-        final EntityExchangeResult<byte[]> result = webTestClient.get().uri(BASE_URI + "?size={size}&page={page}", POST_ID, pageable.getPageSize(), pageable.getPageNumber())
+        final EntityExchangeResult<byte[]> result = webTestClient.get().uri(BASE_URI + "?size={size}&page={page}", pageable.getPageSize(), pageable.getPageNumber())
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
@@ -66,7 +68,7 @@ class CommentApiControllerTests {
         when(commentService.save(any()))
                 .thenReturn(commentResponse);
         // when
-        final EntityExchangeResult<byte[]> result = webTestClient.post().uri(BASE_URI, POST_ID)
+        final EntityExchangeResult<byte[]> result = webTestClient.post().uri(BASE_URI)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(commentCreate), CommentCreate.class)
                 .exchange()
@@ -80,4 +82,14 @@ class CommentApiControllerTests {
         // then
     }
 
+    @Test
+    void 댓글_삭제_성공() {
+        // given
+
+        // when & then
+        webTestClient.delete().uri(BASE_URI + "/{id}", COMMENT_ID)
+                .exchange()
+                .expectStatus().isNoContent()
+                .expectHeader().valueMatches("Location", ".*" + BASE_URI);
+    }
 }

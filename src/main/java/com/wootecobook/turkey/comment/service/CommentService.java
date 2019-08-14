@@ -4,6 +4,7 @@ import com.wootecobook.turkey.comment.domain.Comment;
 import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
+import com.wootecobook.turkey.comment.service.exception.CommentDeleteException;
 import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
 import com.wootecobook.turkey.comment.service.exception.CommentSaveException;
 import com.wootecobook.turkey.post.domain.Post;
@@ -50,5 +51,15 @@ public class CommentService {
     @Transactional(readOnly = true)
     public Comment findById(final Long id) {
         return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
+    }
+
+    public void delete(final Long id, final Long userId) {
+        Comment comment = findById(id);
+        comment.isWrittenBy(userId);
+        try {
+            commentRepository.delete(comment);
+        } catch (IllegalArgumentException e) {
+            throw new CommentDeleteException(e.getMessage());
+        }
     }
 }

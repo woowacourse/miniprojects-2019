@@ -38,6 +38,9 @@ public class Comment extends BaseEntity {
     }
 
     public boolean isWrittenBy(Long userId) {
-        return this.user.getId().equals(userId);
+        if(this.user.getId().equals(userId)){
+            return true;
+        }
+        throw new CommentAuthException();
     }
 }

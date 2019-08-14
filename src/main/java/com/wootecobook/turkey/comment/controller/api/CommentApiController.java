@@ -50,5 +50,16 @@ public class CommentApiController {
         return ResponseEntity.created(uri).body(commentResponse);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id,
+                                 @PathVariable Long postId,
+                                 UserSession userSession) {
+        log.info("id : {}", id);
+
+        commentService.delete(id, userSession.getId());
+
+        final URI uri = linkTo(CommentApiController.class, postId).toUri();
+        return ResponseEntity.noContent().location(uri).build();
+    }
 }
 
