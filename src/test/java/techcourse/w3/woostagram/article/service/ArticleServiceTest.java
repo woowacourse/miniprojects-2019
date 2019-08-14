@@ -39,7 +39,7 @@ class ArticleServiceTest {
                 .build();
 
         when(articleRepository.save(article)).thenReturn(article);
-        articleService.save(articleDto, email);
+//        articleService.save(articleDto);
         verify(articleRepository).save(article);
     }
 
