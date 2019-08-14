@@ -1,11 +1,10 @@
 package com.woowacourse.dsgram.web.controller;
 
+import com.woowacourse.dsgram.service.dto.ArticleRequest;
 import com.woowacourse.dsgram.service.exception.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -13,6 +12,12 @@ import java.io.IOException;
 
 @Controller
 public class ArticleController {
+
+    @GetMapping("/articles/writing")
+    public String moveToWritePage() {
+        return "article-edit";
+    }
+
     private static final String UPLOAD_FOLDER_PATH = "/articles/files";
     private static final String TOMCAT_PATH = "/work/Tomcat/localhost/ROOT";
 

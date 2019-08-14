@@ -66,3 +66,10 @@ header ul.nav-right li, header ul.nav-left li {
 .search-input .advanced-search .search-wrapper .search-result-item {
     height: 40px;
 }
+
+#write-article-button {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    z-index: 1000;
+}

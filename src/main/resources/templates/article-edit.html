@@ -97,22 +97,19 @@
                 <div class="row">
                     <div class="col-lg-7 mx-auto">
                         <div class="card widget-feed no-pdd mrg-btm-70">
-                            <form method="post" action="/articles" id="card" enctype="multipart/form-data">
+                            <form method="post" action="/articles" id="saveForm" name="saveForm" enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <label for="title">제목</label>
-                                    <input type="text" name="title" size="50" id="title" >
-                                    <br>
                                     <label for="hashtag">해시태그</label>
                                     <input type="text" name="hashtag" size ="50" id="hashtag">
                                     <br>
-                                    <label for="content">내용</label>
-                                    <textarea cols="50" rows="10" name="content" id="content" form="card"></textarea>
+                                    <label for="contents">내용</label>
+                                    <input type="text" name="contents" id="contents" />
                                     <br>
                                     <label for="file">파일 업로드</label>
                                     <input type="file" name="file" id="file">
                                     <br>
                                 </div>
-                                <button type="submit">저장</button>
+                                <button id="save-button" type="button">저장</button>
                             </form>
 
                         </div>
@@ -124,6 +121,7 @@
 </div>
 
 <script></script>
+<script src="js/article-edit.js"/>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
