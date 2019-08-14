@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.post.controller;
 
+import com.wootecobook.turkey.post.controller.exception.PostBadRequestException;
 import com.wootecobook.turkey.post.service.PostService;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
@@ -9,7 +10,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -22,7 +26,11 @@ public class PostApiController {
     }
 
     @PostMapping
-    public ResponseEntity<PostResponse> create(@RequestBody PostRequest postRequest) {
+    public ResponseEntity<PostResponse> create(@RequestBody @Valid PostRequest postRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new PostBadRequestException("글이 비어있으면 안됩니다.");
+        }
+
         PostResponse postResponse = postService.save(postRequest);
         return new ResponseEntity<>(postResponse, HttpStatus.CREATED);
     }
