@@ -38,7 +38,6 @@
             background-image: url("https://www.instagram.com/static/images/homepage/home-phones@2x.png/9364675fb26a.png");
             background-repeat:no-repeat;
             background-size: contain;
-            /*background-position: center center;*/
             width: 454px;
             height: 618px;
         }
@@ -71,12 +70,12 @@
                         </div>
 	                    
                         <div class="card" style="width: 350px; display: inline-block; position: absolute;">
-                            <div class="card-title" style="margin: 30px 0 0 80px;">
-                                <img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png">
+                            <div class="card-title" style="margin-top: 30px;">
+                                <img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png" style="margin-left: 85px;">
+                                <h5 style="margin: 20px 0 0 40px;">친구들의 사진을 보려면 가입하세요 :)</h5>
                             </div>
-                            <div class="card-body">
-                                <h5 class="card-title" style="margin: 10px 0 0 30px;">친구들의 사진을 보려면 가입하세요 :)</h5>
-                                <form action="/members" method="post" class="form-horizontal mrg-top-40">
+                            <div class="card-body" style="padding-top: 0">
+                                <form id="signup-form" action="/members" method="post" class="form-horizontal mrg-top-40">
                                     <div class="form-group row">
                                         <div class="col-md-12">
                                             <input type="email" name="email" class="form-control" id="form-1-1" placeholder="이메일" required>
@@ -107,7 +106,7 @@
                             </div>
                         </div>
     
-                        <div class="card" style="width: 350px; display: inline-block; position: absolute; margin-top: 530px;">
+                        <div class="card" style="width: 350px; display: inline-block; position: absolute; margin-top: 590px;">
                             <div class="card-body" style="padding-left: 90px;">
                                 <form action="/login" method="get">
                                     <text class="card-title">계정이 있으신가요?</text>
