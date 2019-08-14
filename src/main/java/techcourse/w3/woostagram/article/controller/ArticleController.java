@@ -1,6 +1,6 @@
 package techcourse.w3.woostagram.article.controller;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +36,12 @@ public class ArticleController {
     @DeleteMapping("/{articleId}")
     public String delete(@PathVariable Long articleId) {
         articleService.remove(articleId);
+        return "redirect:/";
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleRuntimeException() {
         return "redirect:/";
     }
 }

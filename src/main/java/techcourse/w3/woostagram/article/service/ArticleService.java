@@ -9,13 +9,14 @@ import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.article.exception.FileSaveFailException;
+import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
 import techcourse.w3.woostagram.user.domain.User;
-import techcourse.w3.woostagram.user.dto.UserDto;
-import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -25,6 +26,7 @@ public class ArticleService {
     private static final String UPLOAD_PATH = "/home/yumin/Codes/WoowaTech/Level2/miniprojects-2019/uploads/";
     private final ArticleRepository articleRepository;
     private final UserService userService;
+    private List<String> validExtensions = Arrays.asList("jpg", "jpeg", "png");
 
     public ArticleService(final ArticleRepository articleRepository, final UserService userService) {
         this.articleRepository = articleRepository;
@@ -33,10 +35,13 @@ public class ArticleService {
 
     @Transactional
     public Long save(ArticleDto articleDto, String email) {
-        User user = userService.findEntityByEmail(email);
+        String fileExtension = FilenameUtils.getExtension(articleDto.getImageFile().getOriginalFilename());
+        if (fileExtension == null || !validExtensions.contains(fileExtension.toLowerCase())) {
+            throw new InvalidExtensionException();
+        }
 
-        String fullPath = String.join(".", UPLOAD_PATH + UUID.randomUUID().toString(),
-                FilenameUtils.getExtension(articleDto.getImageFile().getOriginalFilename()));
+        User user = userService.findEntityByEmail(email);
+        String fullPath = String.join(".", UPLOAD_PATH + UUID.randomUUID().toString(), fileExtension);
         Article article = ArticleAssembler.toArticle(articleDto, fullPath.split("miniprojects-2019")[1], user);
         File file = new File(fullPath);
         try {
@@ -46,7 +51,7 @@ public class ArticleService {
             return article.getId();
         } catch(Exception e) {
             file.delete();
-            throw new FileSaveFailException("서버에 정적 파일을 업로드 하는 데 실패했습니다.");
+            throw new FileSaveFailException();
         }
     }
 

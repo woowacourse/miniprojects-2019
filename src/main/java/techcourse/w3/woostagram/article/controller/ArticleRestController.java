@@ -24,4 +24,9 @@ public class ArticleRestController {
         articleService.update(articleDto);
         return ResponseEntity.ok(null);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity handleRuntimeException() {
+        return ResponseEntity.notFound().build();
+    }
 }
