@@ -1,11 +1,13 @@
 package com.woowacourse.zzazanstagram.model.member.vo;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class NickName {
     private static final String NICK_NAME_REGEX = "[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣]{2,10}";
 
+    @Column(name = "nickname")
     private String nickName;
 
     private NickName(final String name) {

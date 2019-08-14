@@ -16,6 +16,10 @@ public class Member extends BaseEntity {
     private Member() {
     }
 
+    public boolean isMatchPassword(String password) {
+        return this.password.isMatch(password);
+    }
+
     public NickName getNickName() {
         return nickName;
     }

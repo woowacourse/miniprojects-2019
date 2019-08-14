@@ -13,7 +13,8 @@ public class MemberService {
 
     public MemberResponse find(MemberLoginRequest request) {
         Member member = memberRepository.findByEmail(Email.of(request.getEmail()))
-                .orElseThrow(() -> new IllegalArgumentException("user가 없습니다"));
+                .filter(m -> m.isMatchPassword(request.getPassword()))
+                .orElseThrow(() -> new IllegalArgumentException("로그인 정보가 올바르지 않습니다."));
         return MemberAssembler.assemble(member);
     }
 

@@ -6,15 +6,19 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableJpaAuditing
 public class WebConfig implements WebMvcConfigurer {
+
+    private final List<String> excludePatterns = Arrays.asList("/signup", "/members", "/login");
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/signup")
-                .excludePathPatterns("/members")
-                .excludePathPatterns("/login");
+                .excludePathPatterns(excludePatterns);
     }
 }
