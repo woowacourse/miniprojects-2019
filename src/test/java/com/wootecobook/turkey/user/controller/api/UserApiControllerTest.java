@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import static com.wootecobook.turkey.user.service.exception.NotFoundUserException.NOT_FOUND_USER_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.UserDeleteException.USER_DELETE_FAIL_MESSAGE;
 
@@ -106,6 +107,34 @@ class UserApiControllerTest extends BaseControllerTest {
                 .jsonPath("$.errorMessage").isNotEmpty()
                 .jsonPath("$.errorMessage").isEqualTo(SIGN_UP_FAIL_MESSAGE);
     }
+
+    @Test
+    void 유저_조회() {
+        Long id = addUser("show", "show@show.show", VALID_PASSWORD);
+
+        webTestClient.get()
+                .uri("/api/users/" + id)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(id)
+                .jsonPath("$.email").isEqualTo("show@show.show")
+                .jsonPath("$.name").isEqualTo("show");
+    }
+
+    @Test
+    void 없는_유저_조회() {
+        webTestClient.get()
+                .uri("/api/users/" + Long.MAX_VALUE)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody()
+                .jsonPath("$.errorMessage").isNotEmpty()
+                .jsonPath("$.errorMessage").isEqualTo(NOT_FOUND_USER_MESSAGE);
+    }
+
 
     @Test
     void 유저_삭제() {
