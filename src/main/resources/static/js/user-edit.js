@@ -48,7 +48,7 @@ const USER_EDIT_APP = (() => {
             }).then(response => {
                 if (response.status === 200) {
                     // TODO 슬로스꺼ㄹ로 이동
-                    window.location.href = '/user/edit/' + userId.value;
+                    window.location.href = '/user/' + userId.value + '/edit';
                 }
 
                 if (response.status === 400) {

@@ -29,7 +29,7 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/user/edit/{userId}")
+    @GetMapping("/users/{userId}/edit")
     public String showUserEdit(@PathVariable long userId,
                                Model model,
                                @UserSession LoginUserDto loginUserDto) {
