@@ -2,17 +2,19 @@ package com.woowacourse.zzazanstagram.model.article.dto;
 
 import javax.persistence.Column;
 import javax.persistence.Lob;
+import javax.validation.constraints.NotBlank;
 
 public class ArticleRequest {
 
-    @Column(name = "imageUrl", nullable = false)
+    @NotBlank
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
     @Lob
     @Column(name = "contents")
     private String contents;
 
-    @Column(name = "hashTag")
+    @Column(name = "hash_tag")
     private String hashTag;
 
     public ArticleRequest() {

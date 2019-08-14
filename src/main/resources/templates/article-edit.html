@@ -92,10 +92,10 @@
                                                 <i class="ti-image font-size-22"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control" required placeholder="이미지 URL을 입력해 주세요!" aria-label="Username" aria-describedby="basic-addon1">
+                                        <input type="text" name="imageUrl" class="form-control" required placeholder="이미지 URL을 입력해 주세요!" aria-label="Username" aria-describedby="basic-addon1">
                                     </div>
                                     <div class="info pdd-vertical-5">
-                                        <textarea rows="1" class="form-control text-dark padding-15" placeholder="사진에 대해 친구들에게 알려주세요 :)"></textarea>
+                                        <textarea rows="1" name="contents" class="form-control text-dark padding-15" placeholder="사진에 대해 친구들에게 알려주세요 :)"></textarea>
                                     </div>
                                 </div>
                                 <div class="feed-footer">
@@ -107,7 +107,7 @@
                                                         <i class="ti-tag font-size-22"></i>
                                                     </span>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="해쉬태그를 쉼표(,)로 구분해서 추가해 주세요!" aria-label="Username" aria-describedby="basic-addon1">
+                                                <input type="text" name="hashTag" class="form-control" placeholder="해쉬태그를 쉼표(,)로 구분해서 추가해 주세요!" aria-label="Username" aria-describedby="basic-addon1">
                                             </div>
                                             <div class="top-5 right-0" style="float: right;">
                                                 <button onclick="goBackToIndexPage(event)" class="btn btn-default no-border text-gray">취소</button>
@@ -152,7 +152,7 @@
     function submitArticle(event) {
         event.preventDefault();
         
-        
+        articleForm.submit();
     }
 </script>
 </body>

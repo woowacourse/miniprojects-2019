@@ -6,17 +6,21 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class ImageUrl {
 
-    @Column(name = "imageUrl", nullable = false)
-    private String imageUrl;
+    @Column(name = "image_url", nullable = false)
+    private String url;
 
-    public ImageUrl() {
+    private ImageUrl() {
     }
 
-    public ImageUrl(final String imageUrl) {
-        this.imageUrl = imageUrl;
+    private ImageUrl(final String url) {
+        this.url = url;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public static ImageUrl of(final String imageUrl) {
+        return new ImageUrl(imageUrl);
+    }
+
+    public String getUrl() {
+        return url;
     }
 }
