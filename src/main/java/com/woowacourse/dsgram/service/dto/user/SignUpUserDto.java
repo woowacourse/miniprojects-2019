@@ -1,4 +1,4 @@
-package com.woowacourse.dsgram.service.dto;
+package com.woowacourse.dsgram.service.dto.user;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,16 +13,16 @@ import javax.validation.constraints.Size;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SignUpUserDto {
-    @Size(min = 2, max = 10)
+    @Size(min = 2, max = 10, message = "닉네임은 2~10자")
     private String nickName;
 
-    @Size(min = 2, max = 10)
+    @Size(min = 2, max = 10, message = "이름은 2~10자")
     private String userName;
 
-    @Size(min = 4, max = 16)
+    @Size(min = 4, max = 16, message = "비밀번호는 4~16자")
     private String password;
 
-    @Email
+    @Email(message = "이메일 양식")
     private String email;
 
     @Builder

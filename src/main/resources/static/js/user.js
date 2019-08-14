@@ -41,12 +41,18 @@ const USER_APP = (() => {
                 body: JSON.stringify(userBasicInfo)
             })
                 .then(response => {
-                    if (response.status === 201) {
+                    if (response.status === 200) {
                         window.location.href = '/login';
+                    }
+                    if (response.status === 400) {
+                        throw response;
                     }
                 })
                 .catch(error => {
-                    alert(error);
+                    error.json()
+                        .then(exception => {
+                            alert(exception.message)
+                        });
                 });
         };
 

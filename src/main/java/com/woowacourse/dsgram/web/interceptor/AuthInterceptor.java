@@ -1,6 +1,6 @@
 package com.woowacourse.dsgram.web.interceptor;
 
-import com.woowacourse.dsgram.service.dto.LoginUserDto;
+import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;

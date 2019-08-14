@@ -1,10 +1,9 @@
 package com.woowacourse.dsgram.service.assembler;
 
 import com.woowacourse.dsgram.domain.User;
-import com.woowacourse.dsgram.service.dto.AuthUserDto;
-import com.woowacourse.dsgram.service.dto.LoginUserDto;
-import com.woowacourse.dsgram.service.dto.SignUpUserDto;
-import com.woowacourse.dsgram.service.dto.UserDto;
+import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
+import com.woowacourse.dsgram.service.dto.user.UserDto;
 
 public class UserAssembler {
     public static User toEntity(SignUpUserDto signUpUserDto) {

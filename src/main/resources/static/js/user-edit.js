@@ -51,11 +51,14 @@ const USER_EDIT_APP = (() => {
                     window.location.href = '/user/edit/' + userId.value;
                 }
 
-                if (response.status !== 200) {
+                if (response.status === 400) {
                     throw response;
                 }
             }).catch(error => {
-                alert(error);
+                error.json()
+                    .then(exception => {
+                        alert(exception.message)
+                    });
             });
         };
 

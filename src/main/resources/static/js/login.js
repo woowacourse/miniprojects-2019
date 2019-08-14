@@ -35,15 +35,20 @@ const LOGIN_APP = (() => {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json; charset=UTF-8'},
                 body: JSON.stringify(userBasicInfo)
-            })
-                .then(response => {
-                    if (response.status === 200) {
-                        window.location.href = '/';
-                    }
-                })
-                .catch(error => {
-                    alert(error);
-                });
+            }).then(response => {
+                if (response.status === 200) {
+                    window.location.href = '/';
+                    return;
+                }
+                if (response.status === 400) {
+                    throw response;
+                }
+            }).catch(error => {
+                error.json()
+                    .then(exception => {
+                        alert(exception.message)
+                    });
+            });
         };
 
         return {

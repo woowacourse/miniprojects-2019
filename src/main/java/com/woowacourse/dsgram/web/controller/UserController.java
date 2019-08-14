@@ -1,6 +1,8 @@
 package com.woowacourse.dsgram.web.controller;
 
 import com.woowacourse.dsgram.service.UserService;
+import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
+import com.woowacourse.dsgram.web.argumentresolver.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +30,10 @@ public class UserController {
     }
 
     @GetMapping("/user/edit/{userId}")
-    public String showUserEdit(@PathVariable long userId, Model model) {
-        model.addAttribute("user", userService.findUserInfoById(userId));
+    public String showUserEdit(@PathVariable long userId,
+                               Model model,
+                               @UserSession LoginUserDto loginUserDto) {
+        model.addAttribute("user", userService.findUserInfoById(userId, loginUserDto));
         return "account-edit";
     }
 

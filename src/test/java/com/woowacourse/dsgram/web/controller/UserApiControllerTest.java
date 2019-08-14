@@ -1,7 +1,8 @@
 package com.woowacourse.dsgram.web.controller;
 
 
-import com.woowacourse.dsgram.service.dto.SignUpUserDto;
+import com.woowacourse.dsgram.service.dto.user.AuthUserDto;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ class UserApiControllerTest {
                 .build();
 
         defaultSignUp(signUpUserDto)
-                .expectStatus().isCreated();
+                .expectStatus().isOk();
 
     }
 
@@ -53,7 +54,7 @@ class UserApiControllerTest {
                 .build();
 
         defaultSignUp(anotherUser)
-                .expectStatus().isCreated();
+                .expectStatus().isOk();
     }
 
     @Test
@@ -67,7 +68,7 @@ class UserApiControllerTest {
 
         // TODO: 2019-08-14 Process Exception!!
         defaultSignUp(anotherUser)
-                .expectStatus().is5xxServerError();
+                .expectStatus().isBadRequest();
     }
 
     @Test
@@ -81,6 +82,23 @@ class UserApiControllerTest {
 
         // TODO: 2019-08-14 Process Exception!!
         defaultSignUp(anotherUser)
-                .expectStatus().is5xxServerError();
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void login() {
+        AuthUserDto authUserDto = new AuthUserDto(signUpUserDto.getEmail(), signUpUserDto.getPassword());
+        getCookie(authUserDto);
+        // TODO: 2019-08-14 Search CRUD return type
+    }
+
+    private String getCookie(AuthUserDto authUserDto) {
+        return webTestClient.post().uri("/api/users/login")
+                .body(Mono.just(authUserDto), AuthUserDto.class)
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(String.class)
+                .getResponseHeaders()
+                .getFirst("Set-Cookie");
     }
 }
