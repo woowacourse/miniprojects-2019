@@ -1,9 +1,14 @@
 package com.wootecobook.turkey.comment.service;
 
+import com.wootecobook.turkey.comment.domain.Comment;
 import com.wootecobook.turkey.comment.domain.CommentRepository;
+import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
+import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
+import com.wootecobook.turkey.comment.service.exception.CommentSaveException;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.service.PostService;
+import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +29,26 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CommentResponse> findAllByPostId(final Long postId, final Pageable pageable) {
+    public Page<CommentResponse> findCommentResponsesByPostId(final Long postId, final Pageable pageable) {
         final Post post = postService.findById(postId);
         return commentRepository.findAllByPost(post, pageable)
                 .map(CommentResponse::from);
+    }
+
+    public CommentResponse save(final CommentCreate commentCreate) {
+        final User user = userService.findById(commentCreate.getUserId());
+        final Post post = postService.findById(commentCreate.getPostId());
+        final Comment parent = findById(commentCreate.getParentId());
+        final Comment comment = commentCreate.toEntity(user, post, parent);
+        try {
+            return CommentResponse.from(commentRepository.save(comment));
+        } catch (RuntimeException e) {
+            throw new CommentSaveException(e.getMessage());
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Comment findById(final Long id) {
+        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
     }
 }

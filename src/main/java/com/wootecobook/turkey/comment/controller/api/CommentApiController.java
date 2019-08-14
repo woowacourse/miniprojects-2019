@@ -1,7 +1,9 @@
 package com.wootecobook.turkey.comment.controller.api;
 
 import com.wootecobook.turkey.comment.service.CommentService;
+import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
+import com.wootecobook.turkey.commons.resolver.UserSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -9,10 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping("/api/posts/{postId}/comments")
@@ -26,12 +29,26 @@ public class CommentApiController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CommentResponse>> list(@PageableDefault( sort = "created_at", direction = Sort.Direction.ASC) Pageable pageable,
+    public ResponseEntity<Page<CommentResponse>> list(@PageableDefault(sort = "created_at", direction = Sort.Direction.ASC) Pageable pageable,
                                                       @PathVariable Long postId) {
         log.info("postId : {}, page : {}, pageSize : {}, sort : {}", postId, pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 
-        final Page<CommentResponse> commentResponses = commentService.findAllByPostId(postId, pageable);
+        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByPostId(postId, pageable);
 
         return ResponseEntity.ok(commentResponses);
     }
+
+    @PostMapping
+    public ResponseEntity<CommentResponse> create(@RequestBody CommentCreate commentCreate,
+                                                  @PathVariable Long postId) {
+        log.info("postId : {}", postId);
+        commentCreate.setPostId(postId);
+//        commentCreate.setUserId(userSession.getId());
+
+        final CommentResponse commentResponse = commentService.save(commentCreate);
+        final URI uri = linkTo(CommentApiController.class, postId).toUri();
+        return ResponseEntity.created(uri).body(commentResponse);
+    }
+
 }
+
