@@ -1,3 +1,4 @@
+/*
 package techcourse.w3.woostagram;
 
 import org.junit.jupiter.api.Test;
@@ -14,3 +15,4 @@ public class WoostagramApplicationTests {
     }
 
 }
+*/
