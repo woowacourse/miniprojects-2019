@@ -24,7 +24,7 @@ public class ArticleService {
     }
 
     public List<ArticleResponse> getArticleResponses() {
-        List<Article> articles = articleRepository.findAll();
+        List<Article> articles = articleRepository.findAllByOrderByIdDesc();
 
         return articles.stream()
                 .map(ArticleAssembler::toDto)
