@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="utf-8">
     <meta name="viewport"
@@ -78,6 +78,8 @@
                                                         <input type="password" name="password" class="form-control"
                                                                placeholder="Password" required>
                                                     </div>
+                                                    <div th:if="${error}" th:text="${message}"
+                                                         class="alert alert-danger" role="alert"></div>
                                                     <div class="form-group">
                                                         <button type="submit"
                                                                 class="btn btn-info btn-block border-radius-6 font-size-16 text-white">

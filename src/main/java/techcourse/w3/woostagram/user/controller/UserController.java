@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping("signup")
-    public String create(@Valid UserDto userDto) {
+    public String create(UserDto userDto) {
         userService.create(userDto);
         return "redirect:/users/login/form";
     }
@@ -61,7 +61,8 @@ public class UserController {
     }
 
     @PutMapping
-    public String update(UserContentsDto userContentsDto, HttpSession httpSession) {
+    public String update(@Valid UserContentsDto userContentsDto, HttpSession httpSession) {
+
         String email = (String) httpSession.getAttribute("email");
         userService.update(userContentsDto, email);
         return "redirect:/users/mypage";

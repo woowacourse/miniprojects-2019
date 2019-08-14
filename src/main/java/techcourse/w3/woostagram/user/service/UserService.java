@@ -8,10 +8,12 @@ import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
+import techcourse.w3.woostagram.user.exception.UserCreateException;
+import techcourse.w3.woostagram.user.exception.UserUpdateException;
 
 @Service
 public class UserService {
-    private static final String ERROR_USER_NOT_FOUND = "유저를 찾을 수 없습니다.";
+
 
     private UserRepository userRepository;
 
@@ -20,27 +22,31 @@ public class UserService {
     }
 
     public UserInfoDto create(UserDto userDto) {
-        return UserInfoDto.from(userRepository.save(userDto.toEntity()));
+        try {
+            return UserInfoDto.from(userRepository.save(userDto.toEntity()));
+        } catch (Exception error) {
+            throw new UserCreateException();
+        }
     }
 
     public String authUser(UserDto userDto) {
         return userRepository.findUserByEmailAndPassword(userDto.getEmail(), userDto.getPassword())
-                .orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND)).getEmail();
+                .orElseThrow(LoginException::new).getEmail();
     }
 
     @Transactional
     public void update(UserContentsDto userContentsDto, String email) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND));
+        User user = userRepository.findUserByEmail(email).orElseThrow(UserUpdateException::new);
         user.contentsUpdated(userContentsDto.toEntity());
     }
 
     public void delete(String email) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND));
+        User user = userRepository.findUserByEmail(email).orElseThrow(LoginException::new);
         userRepository.delete(user);
     }
 
     public UserInfoDto findByEmail(String email) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND));
+        User user = userRepository.findUserByEmail(email).orElseThrow(LoginException::new);
         return UserInfoDto.from(user);
     }
 }

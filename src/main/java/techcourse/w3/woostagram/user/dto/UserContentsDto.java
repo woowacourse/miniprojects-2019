@@ -6,12 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import techcourse.w3.woostagram.user.domain.UserContents;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class UserContentsDto {
     private String name;
+
+    @NotBlank(message = "빈칸을 허용하지 않는 항목입니다.")
     private String userName;
+
     private String contents;
     private String profile;
 

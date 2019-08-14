@@ -3,6 +3,8 @@ package techcourse.w3.woostagram.user.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.Validation;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
@@ -39,6 +41,7 @@ public class User {
     }
 
     public void contentsUpdated(UserContents userContents) {
+
         this.userContents = userContents;
     }
 }

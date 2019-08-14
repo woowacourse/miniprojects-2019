@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Lob;
+import javax.validation.constraints.NotBlank;
 
 @EqualsAndHashCode
 @ToString
@@ -13,6 +14,7 @@ import javax.persistence.Lob;
 @NoArgsConstructor
 public class UserContents {
 
+    @NotBlank(message = "빈칸을 허용하지 않는 항목입니다.")
     @Column(nullable = false, unique = true)
     private String userName;
 

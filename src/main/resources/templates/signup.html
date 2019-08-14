@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="utf-8">
     <meta name="viewport"
@@ -68,10 +68,13 @@
                                                     <h2 class="text-center text-dark no-mrg-vertical mrg-btm-15">
                                                         회원가입</h2>
                                                 </div>
+                                                <div th:if="${error}" th:text="${message}" class="alert alert-danger"
+                                                     role="alert"></div>
                                                 <form action="/users/signup" method="post">
                                                     <div class="form-group">
                                                         <label class="text-normal text-dark">Email Address</label>
-                                                        <input type="email" name="email" class="form-control" required>
+                                                        <input type="email" name="email" class="form-control"
+                                                               required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="text-normal text-dark">Password</label>
@@ -92,7 +95,8 @@
                                                 </form>
                                                 <div class="text-dark">
                                                     <span>이미 회원이신가요?</span>
-                                                    <a href="/users/login/form" class="text-info pointer mrg-left-5">로그인</a>
+                                                    <a href="/users/login/form"
+                                                       class="text-info pointer mrg-left-5">로그인</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -106,7 +110,6 @@
         </div>
     </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

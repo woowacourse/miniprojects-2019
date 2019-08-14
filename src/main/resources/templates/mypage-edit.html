@@ -62,6 +62,8 @@
                         <h4 class="card-title d-inline-block">profile</h4>
                         <button type="submit" class="btn btn-info float-right mrg-btm-0 relative bottom-5">수정</button>
                     </div>
+                    <div th:if="${error}" th:text="${message}" class="alert alert-danger"
+                         role="alert"></div>
                     <div class="card-block">
                         <div class="row">
                             <div class="col-md-3">
@@ -77,7 +79,7 @@
                                 <p class="mrg-top-10 text-dark"><b>UserName</b></p>
                             </div>
                             <div class="col-md-6">
-                                <input name="userName" type="text" class="form-control" th:value="${userInfo.userContentsDto.userName}">
+                                <input name="userName" type="text" class="form-control" th:value="${userInfo.userContentsDto.userName}" th:filed="*{userName}">
                             </div>
                         </div>
                         <hr>
