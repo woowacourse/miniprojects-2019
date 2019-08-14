@@ -20,10 +20,14 @@ public class NickName {
     }
 
     private String validateName(final String name) {
-        if (!name.matches(NICK_NAME_REGEX)) {
+        if (isMismatch(name)) {
             throw new IllegalArgumentException("이름은 2자 이상 10자 이하입니다.");
         }
         return name;
+    }
+
+    private boolean isMismatch(String name) {
+        return !name.matches(NICK_NAME_REGEX);
     }
 
     public NickName updateName(String name) {

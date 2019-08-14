@@ -5,18 +5,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Embeddable
-public class Profile {
+public class ProfileImage {
     private String url;
 
-    private Profile(final String url) {
+    private ProfileImage(final String url) {
         this.url = validateUrl(url);
     }
 
-    private Profile() {
+    private ProfileImage() {
     }
 
-    public static Profile of(final String url) {
-        return new Profile(url);
+    public static ProfileImage of(final String url) {
+        return new ProfileImage(url);
     }
 
     private String validateUrl(final String url) {
@@ -33,8 +33,8 @@ public class Profile {
         return url;
     }
 
-    public Profile updateUrl(String url) {
-        return new Profile(url);
+    public ProfileImage updateUrl(String url) {
+        return new ProfileImage(url);
     }
 
     public String getUrl() {
