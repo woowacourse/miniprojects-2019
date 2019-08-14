@@ -1,7 +1,6 @@
 package com.woowacourse.zzazanstagram.model.member;
 
 import com.woowacourse.zzazanstagram.model.support.WebTestHelper;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,8 +12,7 @@ class MemberControllerTest {
     private WebTestClient webTestClient;
 
     @Test
-    @DisplayName("회원가입 페이지 이동")
-    void signUpForm() {
+    void 회원가입_페이지_이동() {
         webTestClient.get().uri("/signup")
                 .exchange()
                 .expectStatus()
@@ -22,8 +20,7 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입 성공")
-    void signUp() {
+    void 회원가입_성공() {
         webTestClient.post().uri("/members")
                 .body(WebTestHelper.userSignUpForm("test@gmail.com",
                         "myName",
@@ -33,6 +30,30 @@ class MemberControllerTest {
                 .exchange()
                 .expectHeader()
                 .valueMatches("location", ".*/login")
+                .expectStatus()
+                .isFound();
+    }
+
+    @Test
+    void 로그인_성공() {
+        webTestClient.post().uri("/members")
+                .body(WebTestHelper.userSignUpForm("test@gmail.com",
+                        "myName",
+                        "https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-600w-1048185397.jpg",
+                        "myNick",
+                        "Password!1"))
+                .exchange()
+                .expectHeader()
+                .valueMatches("location", ".*/login")
+                .expectStatus()
+                .isFound();
+
+        webTestClient.post().uri("/login")
+                .body(WebTestHelper.loginForm("test@gmail.com",
+                        "Password!1"))
+                .exchange()
+                .expectHeader()
+                .valueMatches("location", ".*/;jsessionid=([\\d\\w]+)")
                 .expectStatus()
                 .isFound();
     }

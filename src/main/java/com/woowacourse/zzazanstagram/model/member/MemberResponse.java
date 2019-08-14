@@ -1,52 +1,47 @@
 package com.woowacourse.zzazanstagram.model.member;
 
-import com.woowacourse.zzazanstagram.model.member.vo.Email;
-import com.woowacourse.zzazanstagram.model.member.vo.Name;
-import com.woowacourse.zzazanstagram.model.member.vo.NickName;
-import com.woowacourse.zzazanstagram.model.member.vo.ProfileImage;
-
 public class MemberResponse {
-    private NickName nickName;
-    private Name name;
-    private Email email;
-    private ProfileImage profileImage;
+    private String nickName;
+    private String name;
+    private String email;
+    private String profileImage;
 
-    public MemberResponse(NickName nickName, Name name, Email email, ProfileImage profileImage) {
+    public MemberResponse(String nickName, String name, String email, String profileImage) {
         this.nickName = nickName;
         this.name = name;
         this.email = email;
         this.profileImage = profileImage;
     }
 
-    public NickName getNickName() {
+    public String getNickName() {
         return nickName;
     }
 
-    public void setNickName(NickName nickName) {
+    public void setNickName(String nickName) {
         this.nickName = nickName;
     }
 
-    public Name getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Name name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Email getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Email email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public ProfileImage getProfileImage() {
+    public String getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(ProfileImage profileImage) {
+    public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
 }

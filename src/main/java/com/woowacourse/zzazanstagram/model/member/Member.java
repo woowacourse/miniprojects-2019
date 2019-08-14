@@ -36,6 +36,22 @@ public class Member extends BaseEntity {
         return profileImage;
     }
 
+    public String name() {
+        return name.getName();
+    }
+
+    public String email() {
+        return email.getEmail();
+    }
+
+    public String nickName() {
+        return nickName.getNickName();
+    }
+
+    public String profileImage() {
+        return profileImage.getUrl();
+    }
+
     public static final class MemberBuilder {
         private NickName nickName;
         private Name name;

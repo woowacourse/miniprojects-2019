@@ -12,4 +12,9 @@ public class WebTestHelper {
                 .with("nickName", nickName)
                 .with("password", password);
     }
+
+    public static BodyInserters.FormInserter<String> loginForm(String email, String password) {
+        return fromFormData("email", email)
+                .with("password", password);
+    }
 }

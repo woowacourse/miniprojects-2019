@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -20,13 +21,20 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String loginForm() {
         return "login";
     }
 
+    @PostMapping("/login")
+    public String login(MemberLoginRequest memberLoginRequest, HttpSession httpSession) {
+        MemberResponse memberResponse = memberService.find(memberLoginRequest);
+        httpSession.setAttribute("user", new UserSession(memberResponse.getEmail()));
+        return "redirect:/";
+    }
+
     @PostMapping("/members")
-    public String saveMember(@Valid MemberRequest memberRequest) {
-        memberService.save(memberRequest);
+    public String saveMember(@Valid MemberSignUpRequest memberSignupRequest) {
+        memberService.save(memberSignupRequest);
         return "redirect:/login";
     }
 }
