@@ -1,7 +1,7 @@
 package com.woowacourse.edd.domain.vo;
 
 import com.woowacourse.edd.exceptions.InvalidTitleException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
