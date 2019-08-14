@@ -3,19 +3,19 @@ package com.woowacourse.zzazanstagram.model.member;
 import com.woowacourse.zzazanstagram.model.member.vo.Email;
 import com.woowacourse.zzazanstagram.model.member.vo.Name;
 import com.woowacourse.zzazanstagram.model.member.vo.NickName;
-import com.woowacourse.zzazanstagram.model.member.vo.Profile;
+import com.woowacourse.zzazanstagram.model.member.vo.ProfileImage;
 
 public class MemberResponse {
     private NickName nickName;
     private Name name;
     private Email email;
-    private Profile profile;
+    private ProfileImage profileImage;
 
-    public MemberResponse(NickName nickName, Name name, Email email, Profile profile) {
+    public MemberResponse(NickName nickName, Name name, Email email, ProfileImage profileImage) {
         this.nickName = nickName;
         this.name = name;
         this.email = email;
-        this.profile = profile;
+        this.profileImage = profileImage;
     }
 
     public NickName getNickName() {
@@ -42,11 +42,11 @@ public class MemberResponse {
         this.email = email;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public ProfileImage getProfileImage() {
+        return profileImage;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setProfileImage(ProfileImage profileImage) {
+        this.profileImage = profileImage;
     }
 }
