@@ -37,4 +37,9 @@ public class PostService {
         Post post = findById(postId);
         return PostResponse.from(post.update(postRequest.toEntity()));
     }
+
+    public void delete(Long postId) {
+        Post post = findById(postId);
+        postRepository.delete(post);
+    }
 }

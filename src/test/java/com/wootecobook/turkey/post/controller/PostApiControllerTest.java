@@ -78,6 +78,26 @@ class PostApiControllerTest {
                 .expectStatus().isBadRequest();
     }
 
+    @Test
+    void 게시글_삭제_정상_로직_테스트() {
+        PostRequest postRequest = new PostRequest("olaf");
+        Long postId = addPost(postRequest);
+
+        webTestClient.delete().uri(POST_URL + "/" + postId)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void 게시글_삭제_존재하지_않는_게시글_예외_테스트() {
+        PostRequest postRequest = new PostRequest("olaf");
+        Long postId = addPost(postRequest) + 1;
+
+        webTestClient.delete().uri(POST_URL + "/" + postId)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
     private Long addPost(PostRequest postRequest) {
         PostResponse postResponse = webTestClient.post().uri(POST_URL)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

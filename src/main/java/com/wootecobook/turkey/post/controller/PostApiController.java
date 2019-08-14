@@ -52,4 +52,10 @@ public class PostApiController {
 
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity delete(@PathVariable Long postId) {
+        postService.delete(postId);
+        return ResponseEntity.ok().build();
+    }
 }

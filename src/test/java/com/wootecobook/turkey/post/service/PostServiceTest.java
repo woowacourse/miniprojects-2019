@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
@@ -95,5 +96,19 @@ class PostServiceTest {
 
         assertThrows(NotExistPostException.class, () ->
                 postService.update(postRequest, testId + 1));
+    }
+
+    @Test
+    void post_삭제_테스트() {
+        Long testId = postService.save(new PostRequest(testPostContentText)).getId();
+
+        assertDoesNotThrow(() -> postService.delete(testId));
+    }
+
+    @Test
+    void 없는_post_삭제_예외_테스트() {
+        Long testId = postService.save(new PostRequest(testPostContentText)).getId();
+
+        assertThrows(NotExistPostException.class, () -> postService.delete(testId + 1));
     }
 }
