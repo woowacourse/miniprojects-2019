@@ -37,6 +37,13 @@ public class UserService {
     @Transactional
     public void update(long userId, UserDto userDto, LoginUserDto loginUserDto) {
         User user = findById(userId);
+
+        // TODO: 2019-08-15 사장님한테 검사 맞기 (domain 안에 넣어야 하나?)
+        if (!user.equalsNickName(userDto.getNickName()) &&
+                userRepository.countByNickName(userDto.getNickName()) > 0) {
+            throw new RuntimeException("이미 사용중인 닉네임입니다.");
+        }
+
         user.update(UserAssembler.toEntity(userDto), loginUserDto.getEmail());
     }
 

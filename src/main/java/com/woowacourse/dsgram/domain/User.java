@@ -69,6 +69,10 @@ public class User {
             throw new RuntimeException("Plz check your account~");
         }
     }
+
+    public boolean equalsNickName(String nickName) {
+        return this.nickName.equals(nickName);
+    }
 }
 
 
