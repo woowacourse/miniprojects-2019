@@ -22,6 +22,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(NotFoundUserException::new);
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(NotFoundUserException::new);
+    }
+
     public UserResponse findUserResponseById(Long id) {
         return UserResponse.from(findById(id));
     }
@@ -41,5 +45,4 @@ public class UserService {
             throw new UserDeleteException();
         }
     }
-
 }
