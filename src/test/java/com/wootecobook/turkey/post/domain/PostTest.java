@@ -32,6 +32,7 @@ public class PostTest {
     @Test
     void 수정시_Post가_null인_경우_예외_테스트() {
         Post post = new Post(testContents);
+
         assertThrows(PostUpdateFailException.class, () -> post.update(null));
     }
 
