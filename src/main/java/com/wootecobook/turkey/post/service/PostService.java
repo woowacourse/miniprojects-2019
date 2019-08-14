@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PostService {
-    private static final String NOT_EXIST_POST_ERROR_MESSAGE = "존재하지 않는 포스트입니다.";
 
     private final PostRepository postRepository;
 
@@ -26,7 +25,7 @@ public class PostService {
 
     public Post findById(Long id) {
         return postRepository.findById(id)
-                .orElseThrow(() -> new NotExistPostException(NOT_EXIST_POST_ERROR_MESSAGE));
+                .orElseThrow(NotExistPostException::new);
     }
 
     public Page<PostResponse> findPostResponses(final Pageable pageable) {
