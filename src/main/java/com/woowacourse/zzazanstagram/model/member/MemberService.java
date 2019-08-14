@@ -16,12 +16,7 @@ public class MemberService {
     }
 
     public void save(MemberRequest memberRequest) {
-        Member member = Member.MemberBuilder.aMember().email(memberRequest.getEmail())
-                .name(memberRequest.getName())
-                .nickName(memberRequest.getNickName())
-                .password(memberRequest.getPassword())
-                .profile(memberRequest.getProfile())
-                .build();
+        Member member = MemberAssembler.toEntity(memberRequest);
         memberRepository.save(member);
     }
 }

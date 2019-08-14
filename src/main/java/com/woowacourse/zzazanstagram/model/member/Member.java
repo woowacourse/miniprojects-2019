@@ -11,7 +11,7 @@ public class Member extends BaseEntity {
     private Name name;
     private Email email;
     private Password password;
-    private Profile profile;
+    private ProfileImage profileImage;
 
     private Member() {
     }
@@ -32,8 +32,8 @@ public class Member extends BaseEntity {
         return password;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public ProfileImage getProfileImage() {
+        return profileImage;
     }
 
     public static final class MemberBuilder {
@@ -41,7 +41,7 @@ public class Member extends BaseEntity {
         private Name name;
         private Email email;
         private Password password;
-        private Profile profile;
+        private ProfileImage profileImage;
 
         private MemberBuilder() {
         }
@@ -71,7 +71,7 @@ public class Member extends BaseEntity {
         }
 
         public MemberBuilder profile(String profile) {
-            this.profile = Profile.of(profile);
+            this.profileImage = ProfileImage.of(profile);
             return this;
         }
 
@@ -81,7 +81,7 @@ public class Member extends BaseEntity {
             member.nickName = this.nickName;
             member.email = this.email;
             member.password = this.password;
-            member.profile = this.profile;
+            member.profileImage = this.profileImage;
             return member;
         }
     }
