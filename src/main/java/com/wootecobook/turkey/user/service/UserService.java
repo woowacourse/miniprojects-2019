@@ -6,6 +6,7 @@ import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import com.wootecobook.turkey.user.service.exception.NotFoundUserException;
 import com.wootecobook.turkey.user.service.exception.SignUpException;
+import com.wootecobook.turkey.user.service.exception.UserDeleteException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +31,14 @@ public class UserService {
             return UserResponse.from(userRepository.save(userRequest.toEntity()));
         } catch (Exception e) {
             throw new SignUpException();
+        }
+    }
+
+    public void delete(Long id) {
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new UserDeleteException();
         }
     }
 

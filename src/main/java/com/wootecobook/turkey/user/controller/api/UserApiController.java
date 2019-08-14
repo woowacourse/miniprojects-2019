@@ -26,4 +26,10 @@ public class UserApiController {
         return ResponseEntity.ok(userService.save(userRequest));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
+import static com.wootecobook.turkey.user.service.exception.UserDeleteException.USER_DELETE_FAIL_MESSAGE;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserApiControllerTest extends BaseControllerTest {
@@ -57,7 +58,7 @@ class UserApiControllerTest extends BaseControllerTest {
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
-                .expectStatus().is4xxClientError()
+                .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody()
                 .jsonPath("$.errorMessage").isNotEmpty()
@@ -78,7 +79,7 @@ class UserApiControllerTest extends BaseControllerTest {
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
-                .expectStatus().is4xxClientError()
+                .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody()
                 .jsonPath("$.errorMessage").isNotEmpty()
@@ -99,10 +100,32 @@ class UserApiControllerTest extends BaseControllerTest {
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
-                .expectStatus().is4xxClientError()
+                .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody()
                 .jsonPath("$.errorMessage").isNotEmpty()
                 .jsonPath("$.errorMessage").isEqualTo(SIGN_UP_FAIL_MESSAGE);
+    }
+
+    @Test
+    void 유저_삭제() {
+        Long id = addUser("delete", "delete@delete.del", VALID_PASSWORD);
+
+        webTestClient.delete()
+                .uri("/api/users/" + id)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void 없는_유저_삭제() {
+        webTestClient.delete()
+                .uri("/api/users/" + Long.MAX_VALUE)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody()
+                .jsonPath("$.errorMessage").isNotEmpty()
+                .jsonPath("$.errorMessage").isEqualTo(USER_DELETE_FAIL_MESSAGE);
     }
 }
