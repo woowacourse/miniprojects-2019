@@ -781,9 +781,9 @@ button.disabled,button:disabled{opacity:.5;cursor:not-allowed}
 button,input,textarea{outline:none}
 .form-group{margin-bottom:25px}
 .form-control{border-radius:2px;box-shadow:none;height:42px;font-size:14px;color:#333;transition:all .2s ease-in;-webkit-transition:all .2s ease-in;-moz-transition:all .2s ease-in;-o-transition:all .2s ease-in;-ms-transition:all .2s ease-in}
-.form-control::-webkit-input-placeholder{color:#e0e2e9}
-.form-control:-moz-placeholder,.form-control::-moz-placeholder{color:#e0e2e9}
-.form-control:-ms-input-placeholder{color:#e0e2e9}
+.form-control::-webkit-input-placeholder{color:#544E4C}
+.form-control:-moz-placeholder,.form-control::-moz-placeholder{color:#544E4C}
+.form-control:-ms-input-placeholder{color:#544E4C}
 .form-control:focus{outline:0 none;box-shadow:none;border-color:#3daef3}
 .form-control.input-sm{height:30px}
 .form-control.input-lg{height:50px}
