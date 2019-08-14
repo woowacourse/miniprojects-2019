@@ -28,8 +28,8 @@ public class ArticleService {
     public void save(ArticleDto articleDto) {
         String fullPath = String.join(".", UPLOAD_PATH + UUID.randomUUID().toString(),
                 FilenameUtils.getExtension(articleDto.getImageFile().getOriginalFilename()));
-        Article article = ArticleAssembler.toArticle(articleDto, fullPath);
-        File file = new File(article.getImageUrl());
+        Article article = ArticleAssembler.toArticle(articleDto, fullPath.split("static")[1]);
+        File file = new File(fullPath);
         try {
             file.createNewFile();
             articleRepository.save(article);
