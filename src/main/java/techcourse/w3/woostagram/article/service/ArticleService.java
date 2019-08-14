@@ -7,6 +7,7 @@ import techcourse.w3.woostagram.article.assembler.ArticleAssembler;
 import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
+import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.article.exception.FileSaveFailException;
 
 import javax.transaction.Transactional;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Service
 public class ArticleService {
 //    @Value("${file.upload.directory}")
-    private static final String UPLOAD_PATH = "/home/yumin/Codes/WoowaTech/Level2/miniprojects-2019/src/main/resources/static/uploaded/";
+    private static final String UPLOAD_PATH = "/home/yumin/Codes/WoowaTech/Level2/miniprojects-2019/uploads/";
     private final ArticleRepository articleRepository;
 
     public ArticleService(final ArticleRepository articleRepository) {
@@ -28,7 +29,7 @@ public class ArticleService {
     public void save(ArticleDto articleDto) {
         String fullPath = String.join(".", UPLOAD_PATH + UUID.randomUUID().toString(),
                 FilenameUtils.getExtension(articleDto.getImageFile().getOriginalFilename()));
-        Article article = ArticleAssembler.toArticle(articleDto, fullPath.split("static")[1]);
+        Article article = ArticleAssembler.toArticle(articleDto, fullPath.split("miniprojects-2019")[1]);
         File file = new File(fullPath);
         try {
             file.createNewFile();
@@ -38,5 +39,9 @@ public class ArticleService {
             file.delete();
             throw new FileSaveFailException("서버에 정적 파일을 업로드 하는 데 실패했습니다.");
         }
+    }
+
+    public ArticleDto get(Long articleId) {
+        return ArticleAssembler.toArticleDto(articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new));
     }
 }

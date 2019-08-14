@@ -8,13 +8,13 @@
     <div id="detail-con">
         <div class="inner-con">
             <div class="pic-con">
-                <img id="item-preview" src="" />
+                <img id="pic" src="" />
             </div>
             <div class="text-con">
                 <div class="author-con">
                 </div>
                 <div class="contents-con">
-
+                    <p id = "contents-para"></p>
                 </div>
 
                 <div class="social-con">
@@ -25,7 +25,7 @@
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script th:inline="javascript">
-        let mediaFileId = [[${article.mediaFileId}]];
+        let articleId = [[${articleId}]];
     </script>
     <script src = "/js/article-detail.js"></script>
 

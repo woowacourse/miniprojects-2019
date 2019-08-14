@@ -1,16 +1,17 @@
 
 const detail = (function(){
-    const createImage = ()=>
-        axios.get('/api/mediafiles/'+mediaFileId)
+    const createContents = ()=>
+        axios.get('/articles/'+articleId + "/api")
         .then(response=>{
             console.log(response);
-            document.getElementById("item-preview").src = "data:image/jpeg;base64,"+ Base64.getEncoder().encodeToString(response);
+            document.getElementById("pic").src = response.data.imageUrl;
+            document.getElementById("contents-para").innerText = response.data.contents;
         })
         return{
-            createImage:createImage
+            createContents:createContents
         };
 }());
 
 window.onload= function(){
-    detail.createImage();
+    detail.createContents();
 }
