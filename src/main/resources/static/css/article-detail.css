@@ -1,0 +1,32 @@
+#detail-con {
+    display:flex;
+    height:100%;
+    align-items: center;
+    background-color:black;
+    justify-content: center;
+}
+
+#detail-con>.inner-con{
+    background-color:white;
+    max-width:700px;
+    width:100%;
+    min-height:500px;
+    height:auto;
+    display:flex;
+    align-items: stretch;
+    position:relative;
+}
+
+.pic-con{
+    background-color:red;
+    width:70%;
+    height:auto;
+}
+.text-con{
+    width:30%;
+    height:auto;
+    background-color:white;
+    border-top-right-radius:2px;
+    border-bottom-right-radius:2px;
+}
+
