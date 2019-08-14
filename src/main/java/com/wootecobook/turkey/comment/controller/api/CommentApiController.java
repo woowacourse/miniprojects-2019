@@ -30,7 +30,7 @@ public class CommentApiController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CommentResponse>> list(@PageableDefault(sort = "created_at", direction = Sort.Direction.ASC) Pageable pageable,
+    public ResponseEntity<Page<CommentResponse>> list(@PageableDefault(sort = "created_at") Pageable pageable,
                                                       @PathVariable Long postId) {
         log.info("postId : {}, page : {}, pageSize : {}, sort : {}", postId, pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 
