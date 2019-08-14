@@ -21,15 +21,15 @@ public class User {
     private UserEmail userEmail;
 
     @Embedded
-    private UserPassword password;
+    private UserPassword userPassword;
 
     @Embedded
-    private UserName name;
+    private UserName userName;
 
-    public User(UserEmail email, UserPassword password, UserName name) {
+    public User(UserEmail email, UserPassword userPassword, UserName userName) {
         this.userEmail = email;
-        this.password = password;
-        this.name = name;
+        this.userPassword = userPassword;
+        this.userName = userName;
     }
 
     public void updateEmail(User user, UserEmail email) {
@@ -39,12 +39,12 @@ public class User {
 
     public void updatePassword(User user, UserPassword password) {
         checkValid(user);
-        this.password = password;
+        this.userPassword = password;
     }
 
     public void updateName(User user, UserName name) {
         checkValid(user);
-        this.name = name;
+        this.userName = name;
     }
 
     private void checkValid(User user) {
