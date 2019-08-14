@@ -30,7 +30,7 @@ public class UserService {
         try {
             return UserResponse.from(userRepository.save(userRequest.toEntity()));
         } catch (Exception e) {
-            throw new SignUpException();
+            throw new SignUpException(e.getMessage());
         }
     }
 

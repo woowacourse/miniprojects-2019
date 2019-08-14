@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import static com.wootecobook.turkey.user.domain.UserValidator.*;
 import static com.wootecobook.turkey.user.service.exception.NotFoundUserException.NOT_FOUND_USER_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.UserDeleteException.USER_DELETE_FAIL_MESSAGE;
@@ -78,7 +79,7 @@ class UserApiControllerTest extends BaseControllerTest {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).isEqualTo(SIGN_UP_FAIL_MESSAGE);
+        assertThat(errorMessage.getErrorMessage()).contains(SIGN_UP_FAIL_MESSAGE);
     }
 
     @Test
@@ -101,7 +102,7 @@ class UserApiControllerTest extends BaseControllerTest {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).isEqualTo(SIGN_UP_FAIL_MESSAGE);
+        assertThat(errorMessage.getErrorMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_CONSTRAINT_MESSAGE);
     }
 
     @Test
@@ -124,7 +125,7 @@ class UserApiControllerTest extends BaseControllerTest {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).isEqualTo(SIGN_UP_FAIL_MESSAGE);
+        assertThat(errorMessage.getErrorMessage()).contains(SIGN_UP_FAIL_MESSAGE, NAME_CONSTRAINT_MESSAGE);
     }
 
     @Test
@@ -147,7 +148,7 @@ class UserApiControllerTest extends BaseControllerTest {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).isEqualTo(SIGN_UP_FAIL_MESSAGE);
+        assertThat(errorMessage.getErrorMessage()).contains(SIGN_UP_FAIL_MESSAGE, PASSWORD_CONSTRAINT_MESSAGE);
     }
 
     @Test
