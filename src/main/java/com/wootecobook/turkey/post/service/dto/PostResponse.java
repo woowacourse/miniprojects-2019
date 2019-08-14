@@ -3,10 +3,12 @@ package com.wootecobook.turkey.post.service.dto;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class PostResponse {
 
     private Long id;

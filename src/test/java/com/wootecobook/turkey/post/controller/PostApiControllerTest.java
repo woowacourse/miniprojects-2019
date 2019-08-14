@@ -1,6 +1,7 @@
 package com.wootecobook.turkey.post.controller;
 
 import com.wootecobook.turkey.post.service.dto.PostRequest;
+import com.wootecobook.turkey.post.service.dto.PostResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,5 +48,46 @@ class PostApiControllerTest {
         webTestClient.get().uri(POST_URL)
                 .exchange()
                 .expectStatus().isOk();
+    }
+
+    @Test
+    void 게시글_수정_정상_로직_테스트() {
+        PostRequest postRequest = new PostRequest("olaf");
+        Long postId = addPost(postRequest);
+
+        PostRequest postUpdateRequest = new PostRequest("chelsea");
+        webTestClient.put().uri(POST_URL + "/" + postId)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(postUpdateRequest), PostRequest.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.contents.contents").isEqualTo("chelsea");
+    }
+
+    @Test
+    void 게시글_수정_contents가_빈_내용인_경우_예외_테스트() {
+        PostRequest postRequest = new PostRequest("olaf");
+        Long postId = addPost(postRequest);
+
+        PostRequest postUpdateRequest = new PostRequest("");
+        webTestClient.put().uri(POST_URL + "/" + postId)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(postUpdateRequest), PostRequest.class)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    private Long addPost(PostRequest postRequest) {
+        PostResponse postResponse = webTestClient.post().uri(POST_URL)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(postRequest), PostRequest.class)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(PostResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        return postResponse.getId();
     }
 }

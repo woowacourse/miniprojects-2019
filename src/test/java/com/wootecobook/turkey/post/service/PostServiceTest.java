@@ -77,4 +77,23 @@ class PostServiceTest {
             assertThat(postResponse.getContents()).isEqualTo(new Contents("hello" + i));
         }
     }
+
+    @Test
+    void post_수정_테스트() {
+        Long testId = postService.save(new PostRequest(testPostContentText)).getId();
+        PostRequest postRequest = new PostRequest("world!");
+
+        PostResponse updateResult = postService.update(postRequest, testId);
+
+        assertThat(updateResult.getContents()).isEqualTo(new Contents("world!"));
+    }
+
+    @Test
+    void 없는_게시글_수정_예외_테스트() {
+        Long testId = postService.save(new PostRequest(testPostContentText)).getId();
+        PostRequest postRequest = new PostRequest("world!");
+
+        assertThrows(NotExistPostException.class, () ->
+                postService.update(postRequest, testId + 1));
+    }
 }

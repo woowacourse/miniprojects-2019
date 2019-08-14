@@ -32,4 +32,9 @@ public class PostService {
     public Page<PostResponse> findPostResponses(final Pageable pageable) {
         return postRepository.findAll(pageable).map(PostResponse::from);
     }
+
+    public PostResponse update(PostRequest postRequest, Long postId) {
+        Post post = findById(postId);
+        return PostResponse.from(post.update(postRequest.toEntity()));
+    }
 }

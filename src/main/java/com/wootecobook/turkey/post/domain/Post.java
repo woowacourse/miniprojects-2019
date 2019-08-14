@@ -2,6 +2,7 @@ package com.wootecobook.turkey.post.domain;
 
 import com.wootecobook.turkey.commons.BaseEntity;
 import com.wootecobook.turkey.post.domain.exception.InvalidPostException;
+import com.wootecobook.turkey.post.domain.exception.PostUpdateFailException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import javax.persistence.Entity;
 public class Post extends BaseEntity {
 
     private static final String NOT_POSTING_ERROR_MESSAGE = "포스팅 할 수 없습니다.";
+    public static final String POST_UPDATE_ERROR_MESSAGE = "수정할 수 없습니다.";
 
     @Embedded
     private Contents contents;
@@ -34,4 +36,12 @@ public class Post extends BaseEntity {
         }
     }
 
+    public Post update(Post updatePost) {
+        if (updatePost == null) {
+            throw new PostUpdateFailException(POST_UPDATE_ERROR_MESSAGE);
+        }
+        this.contents = updatePost.contents;
+
+        return this;
+    }
 }

@@ -40,4 +40,16 @@ public class PostApiController {
         Page<PostResponse> postResponses = postService.findPostResponses(pageable);
         return new ResponseEntity<>(postResponses, HttpStatus.OK);
     }
+
+    @PutMapping("/{postId}")
+    public ResponseEntity<PostResponse> update(@PathVariable Long postId, @RequestBody @Valid PostRequest postRequest,
+                                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new PostBadRequestException("글이 비어있으면 안됩니다.");
+        }
+
+        PostResponse postResponse = postService.update(postRequest, postId);
+
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
+    }
 }
