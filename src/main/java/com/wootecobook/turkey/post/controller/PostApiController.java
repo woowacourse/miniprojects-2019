@@ -1,6 +1,5 @@
 package com.wootecobook.turkey.post.controller;
 
-import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.post.service.PostService;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
@@ -24,7 +23,7 @@ public class PostApiController {
 
     @PostMapping
     public ResponseEntity<PostResponse> create(@RequestBody PostRequest postRequest) {
-        PostResponse postResponse = postService.save(postRequest, null);
+        PostResponse postResponse = postService.save(postRequest);
         return new ResponseEntity<>(postResponse, HttpStatus.CREATED);
     }
 

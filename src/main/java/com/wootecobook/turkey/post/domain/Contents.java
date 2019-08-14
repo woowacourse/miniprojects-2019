@@ -3,6 +3,7 @@ package com.wootecobook.turkey.post.domain;
 import com.wootecobook.turkey.post.domain.exception.InvalidContentException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -10,6 +11,7 @@ import javax.persistence.Lob;
 
 @Embeddable
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Contents {
 
