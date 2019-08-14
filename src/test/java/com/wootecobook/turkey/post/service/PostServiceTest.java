@@ -28,30 +28,28 @@ class PostServiceTest {
 
     private PostService postService;
 
-    private String testPostContentText;
     private Contents testContents;
-    private Post post;
+    private PostRequest postRequest;
 
     @BeforeEach
     void setUp() {
         postService = new PostService(postRepository);
 
-        testPostContentText = "hello";
-        testContents = new Contents(testPostContentText);
-        post = new Post(testContents);
+        String contentsText = "hello";
+        postRequest = new PostRequest(contentsText);
+        testContents = new Contents(contentsText);
     }
 
     @Test
     void post_생성_테스트() {
-        PostResponse result = postService.save(new PostRequest(testPostContentText));
+        PostResponse result = postService.save(postRequest);
 
         assertThat(result.getContents()).isEqualTo(testContents);
     }
 
     @Test
     void post_조회_테스트() {
-        PostResponse savedPost = postService.save(new PostRequest(testPostContentText));
-        long testId = savedPost.getId();
+        Long testId = addPost();
 
         Post testPost = postService.findById(testId);
 
@@ -81,7 +79,7 @@ class PostServiceTest {
 
     @Test
     void post_수정_테스트() {
-        Long testId = postService.save(new PostRequest(testPostContentText)).getId();
+        Long testId = addPost();
         PostRequest postRequest = new PostRequest("world!");
 
         PostResponse updateResult = postService.update(postRequest, testId);
@@ -91,7 +89,7 @@ class PostServiceTest {
 
     @Test
     void 없는_게시글_수정_예외_테스트() {
-        Long testId = postService.save(new PostRequest(testPostContentText)).getId();
+        Long testId = addPost();
         PostRequest postRequest = new PostRequest("world!");
 
         assertThrows(NotExistPostException.class, () ->
@@ -100,15 +98,20 @@ class PostServiceTest {
 
     @Test
     void post_삭제_테스트() {
-        Long testId = postService.save(new PostRequest(testPostContentText)).getId();
+        Long testId = addPost();
 
         assertDoesNotThrow(() -> postService.delete(testId));
     }
 
     @Test
     void 없는_post_삭제_예외_테스트() {
-        Long testId = postService.save(new PostRequest(testPostContentText)).getId();
+        Long testId = addPost();
 
         assertThrows(NotExistPostException.class, () -> postService.delete(testId + 1));
     }
+
+    private Long addPost() {
+        return postService.save(postRequest).getId();
+    }
+
 }
