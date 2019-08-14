@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 class PostApiControllerTest {
 
     public static final String POST_URL = "/api/posts";
+
     @Autowired
     private WebTestClient webTestClient;
 
@@ -39,5 +40,12 @@ class PostApiControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody()
                 .jsonPath("$.message").exists();
+    }
+
+    @Test
+    void 페이지_조회_정상_로직_테스트() {
+        webTestClient.get().uri(POST_URL)
+                .exchange()
+                .expectStatus().isOk();
     }
 }
