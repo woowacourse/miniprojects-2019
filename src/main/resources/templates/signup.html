@@ -38,7 +38,6 @@
             background-image: url("https://www.instagram.com/static/images/homepage/home-phones@2x.png/9364675fb26a.png");
             background-repeat:no-repeat;
             background-size: contain;
-            /*background-position: center center;*/
             width: 454px;
             height: 618px;
         }
@@ -71,35 +70,40 @@
                         </div>
 	                    
                         <div class="card" style="width: 350px; display: inline-block; position: absolute;">
-                            <div class="card-title" style="margin: 30px 0 0 80px;">
-                                <img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png">
+                            <div class="card-title" style="margin-top: 30px;">
+                                <img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png" style="margin-left: 85px;">
+                                <h5 style="margin: 20px 0 0 40px;">친구들의 사진을 보려면 가입하세요 :)</h5>
                             </div>
-                            <div class="card-body">
-                                <h5 class="card-title" style="margin: 10px 0 0 30px;">친구들의 사진을 보려면 가입하세요 :)</h5>
-                                <form action="/members" method="post" class="form-horizontal mrg-top-40">
+                            <div class="card-body" style="padding-top: 0">
+                                <form id="signup-form" action="/members" method="post" class="form-horizontal mrg-top-40">
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <input type="email" name="email" class="form-control" id="form-1-1" placeholder="Email" required>
+                                            <input type="email" name="email" class="form-control" id="signup-form-email" placeholder="이메일" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <input type="password" name="password" class="form-control" id="form-1-2" placeholder="Password" required>
+                                            <input type="password" name="password" class="form-control" id="signup-form-password" placeholder="비밀번호" required pattern=".*(?=^.{8,}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <input type="text" name="nickName" class="form-control" id="form-1-3" placeholder="NickName" required>
+                                            <input type="password" class="form-control" id="signup-form-password-confirm" placeholder="비밀번호 확인">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <input type="text" name="name" class="form-control" id="form-1-4" placeholder="Name" required>
+                                            <input type="text" name="nickName" class="form-control" id="signup-form-nick-name" placeholder="사용자 닉네임" required pattern="[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣]{2,10}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input type="text" name="name" class="form-control" id="signup-form-name" placeholder="이름" required pattern="[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣]{2,10}">
                                         </div>
                                     </div>
                                     <div class="form-group row" style="margin-bottom: 15px;">
                                         <div class="col-md-12">
-                                            <input type="text" name="profile" class="form-control" id="form-1-5" placeholder="profile URL">
+                                            <input type="text" name="profile" class="form-control" id="signup-form-profile" placeholder="프로필 사진 URL">
                                         </div>
                                     </div>
                                     <button type="submit" class="btn-inverse btn-primary btn-sm" style="width: 308px; height: 30px; font-size: 12px; padding: 0;">가입하기</button>
@@ -107,7 +111,7 @@
                             </div>
                         </div>
     
-                        <div class="card" style="width: 350px; display: inline-block; position: absolute; margin-top: 530px;">
+                        <div class="card" style="width: 350px; display: inline-block; position: absolute; margin-top: 590px;">
                             <div class="card-body" style="padding-left: 90px;">
                                 <form action="/login" method="get">
                                     <text class="card-title">계정이 있으신가요?</text>
@@ -128,7 +132,57 @@
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl" crossorigin="anonymous"></script>
 <script>
+    
+    const form = document.querySelector("#signup-from");
+    const email = document.querySelector("#signup-form-email");
+    const password = document.querySelector("#signup-form-password");
+    const passwordConfirm = document.querySelector("#signup-form-password-confirm");
+    const nickName = document.querySelector("#signup-form-nick-name");
+    const name = document.querySelector("#signup-form-name");
+    const profile = document.querySelector("#signup-form-profile");
+    
+    function setCustomValidityMessage(el, message) {
+        if (el.validity.valueMissing || el.validity.patternMismatch) {
+            el.setCustomValidity(message);
+            return;
+        }
+        el.setCustomValidity('');
+    }
+    
+    email.addEventListener("input", function (event) {
+        setCustomValidityMessage(email, "올바른 이메일 주소를 입력해 주세요.");
+    });
 
+    password.addEventListener("input", function (event) {
+        setCustomValidityMessage(password, "알파벳 소문자, 대문자, 특수문자를 모두 포함하여 8자리 이상으로 작성해 주세요.");
+    });
+
+    nickName.addEventListener("input", function (event) {
+        setCustomValidityMessage(nickName, "닉네임은 2~10자 사이로 입력해 주세요.");
+    });
+
+    name.addEventListener("input", function (event) {
+        setCustomValidityMessage(name, "이름은 2~10자 사이로 입력해 주세요.");
+    });
+
+    function checkPassword() {
+        if (password.value !== passwordConfirm.value) {
+            passwordConfirm.setCustomValidity('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+        passwordConfirm.setCustomValidity('');
+    }
+
+    password.onchange = checkPassword;
+    passwordConfirm.onkeyup = checkPassword;
+    
+    form.addEventListener("submit", function () {
+        setCustomValidityMessage(email, "올바른 이메일 주소를 입력해 주세요.");
+        setCustomValidityMessage(password, "알파벳 소문자, 대문자, 특수문자를 모두 포함하여 8자리 이상으로 작성해 주세요.");
+        setCustomValidityMessage(nickName, "닉네임은 2~10자 사이로 입력해 주세요.");
+        setCustomValidityMessage(name, "이름은 2~10자 사이로 입력해 주세요.");
+    })
+    
 </script>
 </body>
 </html>
