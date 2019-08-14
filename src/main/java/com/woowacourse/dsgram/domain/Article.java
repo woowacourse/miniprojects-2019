@@ -29,4 +29,16 @@ public class Article {
         this.fileName = fileName;
         this.filePath = filePath;
     }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
 }
