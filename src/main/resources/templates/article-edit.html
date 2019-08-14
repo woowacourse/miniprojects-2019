@@ -138,9 +138,7 @@
     function goBackToIndexPage(event) {
         event.preventDefault();
     
-        console.log("asdf");
         if (confirm("작성하신 게시물을 취소하고 돌아가시겠습니까?") == true) {
-            console.log("adfasdjfkajskdfjk");
             articleForm.setAttribute("method", "get");
             articleForm.setAttribute("action", "/");
             articleFormMethod.remove();
