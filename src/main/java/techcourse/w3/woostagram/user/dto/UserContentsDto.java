@@ -1,13 +1,12 @@
 package techcourse.w3.woostagram.user.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import techcourse.w3.woostagram.user.domain.UserContents;
 
 import javax.validation.constraints.NotBlank;
 
+@ToString
+@EqualsAndHashCode
 @Getter
 @Setter
 @NoArgsConstructor

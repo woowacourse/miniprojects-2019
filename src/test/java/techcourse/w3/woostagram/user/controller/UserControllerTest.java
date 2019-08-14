@@ -6,12 +6,13 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseCookie;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import techcourse.w3.woostagram.AbstractControllerTests;
 
 import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
 
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerTest {
+class UserControllerTest extends AbstractControllerTests {
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
 
