@@ -7,6 +7,7 @@ import com.woowacourse.sunbook.presentation.NotFoundArticleException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +20,9 @@ public class ArticleService {
         this.articleRepository = articleRepository;
     }
 
-    public ArticleFeature save(ArticleFeature articleFeature) {
-        articleRepository.save(new Article(articleFeature.getContents(), articleFeature.getImageUrl(), articleFeature.getVideoUrl()));
-        return articleFeature;
+    public ArticleResponseDto save(ArticleFeature articleFeature) {
+        Article savedArticle = articleRepository.save(new Article(articleFeature.getContents(), articleFeature.getImageUrl(), articleFeature.getVideoUrl()));
+        return new ArticleResponseDto(savedArticle.getId(), savedArticle.getArticleFeature(), savedArticle.getUpdatedTime());
     }
 
     @Transactional
@@ -32,10 +33,11 @@ public class ArticleService {
     }
 
     public List<ArticleFeature> findAll() {
-        return articleRepository.findAll().stream()
-                .map(Article::getArticleFeature)
-                .collect(Collectors.toList())
-                ;
+        return Collections.unmodifiableList(
+                articleRepository.findAll().stream()
+                        .map(Article::getArticleFeature)
+                        .collect(Collectors.toList())
+        );
     }
 
     public void remove(long articleId) {

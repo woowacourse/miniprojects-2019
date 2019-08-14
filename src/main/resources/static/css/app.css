@@ -684,7 +684,12 @@ button.disabled,button:disabled{opacity:.5;cursor:not-allowed}
 .btn-success.btn-inverse{background-color:#ebfaeb;color:#37c936;border-color:transparent;box-shadow:none}
 .btn-success.btn-inverse:focus,.btn-success.btn-inverse:hover{background-color:#d7f4d7;color:#32b531;border-color:transparent}
 .btn-success.disabled{opacity:.35}.btn-success.disabled,.btn-success.disabled:focus,.btn-success.disabled:hover{background-color:#37c936;border-color:#37c936}
-.btn-info{background-color:#0f9aee;border-color:#0f9aee;color:#fff}
+
+.btn-info {
+    background-color: #4267b2;
+    border-color: #0f9aee;
+    color: #fff
+}
 .btn-info:focus,.btn-info:hover{color:#fff;background-color:#25a4f1;border-color:#25a4f1}
 .btn-info.active,.btn-info.active:focus,.btn-info.active:hover,.btn-info:active{background-color:#0d8ad6;border-color:#0d8ad6}
 .btn-info.btn-inverse{background-color:#e5f4fd;color:#0f9aee;border-color:transparent;box-shadow:none}

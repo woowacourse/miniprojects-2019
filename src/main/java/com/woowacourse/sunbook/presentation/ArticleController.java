@@ -1,5 +1,6 @@
 package com.woowacourse.sunbook.presentation;
 
+import com.woowacourse.sunbook.application.ArticleResponseDto;
 import com.woowacourse.sunbook.application.ArticleService;
 import com.woowacourse.sunbook.domain.ArticleFeature;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ArticleFeature save(@RequestBody ArticleFeature articleFeature) {
+    public ArticleResponseDto save(@RequestBody ArticleFeature articleFeature) {
         return articleService.save(articleFeature);
     }
 
