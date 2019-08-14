@@ -3,10 +3,10 @@ package com.woowacourse.dsgram.service;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.domain.UserRepository;
 import com.woowacourse.dsgram.service.assembler.UserAssembler;
-import com.woowacourse.dsgram.service.dto.AuthUserDto;
-import com.woowacourse.dsgram.service.dto.LoginUserDto;
-import com.woowacourse.dsgram.service.dto.SignUpUserDto;
-import com.woowacourse.dsgram.service.dto.UserDto;
+import com.woowacourse.dsgram.service.dto.user.AuthUserDto;
+import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
+import com.woowacourse.dsgram.service.dto.user.UserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +22,9 @@ public class UserService {
         userRepository.save(UserAssembler.toEntity(signUpUserDto));
     }
 
-    public UserDto findUserInfoById(long userId) {
+    public UserDto findUserInfoById(long userId, LoginUserDto loginUserDto) {
+        User user = findById(userId);
+        user.checkEmail(loginUserDto.getEmail());
         return UserAssembler.toDto(findById(userId));
     }
 
@@ -33,16 +35,15 @@ public class UserService {
     }
 
     @Transactional
-    public void update(long userId, UserDto userDto) {
+    public void update(long userId, UserDto userDto, LoginUserDto loginUserDto) {
         User user = findById(userId);
-        user.update(UserAssembler.toEntity(userDto));
+        user.update(UserAssembler.toEntity(userDto), loginUserDto.getEmail());
     }
 
     public LoginUserDto login(AuthUserDto authUserDto) {
         User user = userRepository.findByEmail(authUserDto.getEmail())
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new IllegalArgumentException("Plz check your account."));
         user.checkPassword(authUserDto.getPassword());
         return UserAssembler.toAuthUserDto(user);
-
     }
 }

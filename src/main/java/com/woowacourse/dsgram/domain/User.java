@@ -1,9 +1,6 @@
 package com.woowacourse.dsgram.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,6 +9,7 @@ import javax.validation.constraints.Size;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@EqualsAndHashCode(of = {"id"})
 public class User {
     @Id
     @GeneratedValue
@@ -49,7 +47,8 @@ public class User {
         this.intro = intro;
     }
 
-    public void update(User updatedUser) {
+    public void update(User updatedUser, String email) {
+        checkEmail(email);
         // TODO: 2019-08-14 Nick name 중복 확인
         this.intro = updatedUser.intro;
         this.userName = updatedUser.userName;
@@ -61,7 +60,13 @@ public class User {
     public void checkPassword(String password) {
         if (!this.password.equals(password)) {
             // TODO: 2019-08-14 exception
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Plz check your account!");
+        }
+    }
+
+    public void checkEmail(String email) {
+        if (!this.email.equals(email)) {
+            throw new RuntimeException("Plz check your account~");
         }
     }
 }
