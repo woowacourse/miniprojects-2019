@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-@ControllerAdvice(basePackages = "com.wootecobook.turkey.user.controller.api")
+@ControllerAdvice(basePackageClasses = UserApiController.class)
 public class UserApiControllerExceptionAdvice {
 
     @ExceptionHandler({SignUpException.class, UserDeleteException.class, NotFoundUserException.class})
