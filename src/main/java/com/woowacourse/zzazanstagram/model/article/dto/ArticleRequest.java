@@ -7,14 +7,14 @@ import javax.validation.constraints.NotBlank;
 public class ArticleRequest {
 
     @NotBlank
-    @Column(name = "imageUrl", nullable = false)
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
     @Lob
     @Column(name = "contents")
     private String contents;
 
-    @Column(name = "hashTag")
+    @Column(name = "hash_tag")
     private String hashTag;
 
     public ArticleRequest() {

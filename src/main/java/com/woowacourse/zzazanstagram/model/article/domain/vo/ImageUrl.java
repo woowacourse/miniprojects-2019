@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class ImageUrl {
 
-    @Column(name = "url", nullable = false)
+    @Column(name = "image_url", nullable = false)
     private String url;
 
     private ImageUrl() {
