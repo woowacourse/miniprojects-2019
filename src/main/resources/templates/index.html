@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
@@ -97,7 +97,7 @@
                                     <li>
                                         <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
                                         <div class="info">
-                                            <a href="" class="title no-pdd-vertical text-bold inline-block font-size-15">eastjun</a>
+                                            <a href="" class="title no-pdd-vertical text-bold inline-block font-size-15" th:text="${session.sessionUser.nickName}">nick name</a>
                                         </div>
                                     </li>
                                     <a class="pointer absolute top-10 right-0" data-toggle="dropdown" aria-expanded="false">

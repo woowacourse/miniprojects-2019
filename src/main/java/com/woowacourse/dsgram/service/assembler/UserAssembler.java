@@ -1,6 +1,8 @@
 package com.woowacourse.dsgram.service.assembler;
 
 import com.woowacourse.dsgram.domain.User;
+import com.woowacourse.dsgram.service.dto.AuthUserDto;
+import com.woowacourse.dsgram.service.dto.LoginUserDto;
 import com.woowacourse.dsgram.service.dto.SignUpUserDto;
 import com.woowacourse.dsgram.service.dto.UserDto;
 
@@ -32,6 +34,14 @@ public class UserAssembler {
                 .userName(user.getUserName())
                 .password(user.getPassword())
                 .webSite(user.getWebSite())
+                .build();
+    }
+
+    public static LoginUserDto toAuthUserDto(User user) {
+        return LoginUserDto.builder()
+                .nickName(user.getNickName())
+                .userName(user.getUserName())
+                .email(user.getEmail())
                 .build();
     }
 }

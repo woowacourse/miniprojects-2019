@@ -57,6 +57,13 @@ public class User {
         this.password = updatedUser.password;
         this.webSite = updatedUser.webSite;
     }
+
+    public void checkPassword(String password) {
+        if (!this.password.equals(password)) {
+            // TODO: 2019-08-14 exception
+            throw new IllegalArgumentException();
+        }
+    }
 }
 
 
