@@ -15,8 +15,6 @@ import javax.persistence.Lob;
 @EqualsAndHashCode
 public class Contents {
 
-    private static final String EMPTY_CONTENTS_ERROR_MESSAGE = "내용이 없습니다.";
-
     @Lob
     @Column(nullable = false)
     private String contents;
@@ -28,7 +26,7 @@ public class Contents {
 
     private void validate(String contents) {
         if (contents == null || contents.trim().equals("")) {
-            throw new InvalidContentException(EMPTY_CONTENTS_ERROR_MESSAGE);
+            throw new InvalidContentException();
         }
     }
 }

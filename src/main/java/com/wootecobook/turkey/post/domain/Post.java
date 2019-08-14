@@ -14,9 +14,6 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class Post extends BaseEntity {
 
-    private static final String NOT_POSTING_ERROR_MESSAGE = "포스팅 할 수 없습니다.";
-    public static final String POST_UPDATE_ERROR_MESSAGE = "수정할 수 없습니다.";
-
     @Embedded
     private Contents contents;
 
@@ -32,13 +29,13 @@ public class Post extends BaseEntity {
 
     private void validate(final Contents contents) {
         if (contents == null) {
-            throw new InvalidPostException(NOT_POSTING_ERROR_MESSAGE);
+            throw new InvalidPostException();
         }
     }
 
     public Post update(Post updatePost) {
         if (updatePost == null) {
-            throw new PostUpdateFailException(POST_UPDATE_ERROR_MESSAGE);
+            throw new PostUpdateFailException();
         }
         this.contents = updatePost.contents;
 
