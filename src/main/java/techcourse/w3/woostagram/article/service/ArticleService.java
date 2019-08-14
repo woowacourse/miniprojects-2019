@@ -9,6 +9,10 @@ import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.article.exception.FileSaveFailException;
+import techcourse.w3.woostagram.user.domain.User;
+import techcourse.w3.woostagram.user.dto.UserDto;
+import techcourse.w3.woostagram.user.dto.UserInfoDto;
+import techcourse.w3.woostagram.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.io.File;
@@ -20,16 +24,20 @@ public class ArticleService {
 //    @Value("${file.upload.directory}")
     private static final String UPLOAD_PATH = "/home/yumin/Codes/WoowaTech/Level2/miniprojects-2019/uploads/";
     private final ArticleRepository articleRepository;
+    private final UserService userService;
 
-    public ArticleService(final ArticleRepository articleRepository) {
+    public ArticleService(final ArticleRepository articleRepository, final UserService userService) {
         this.articleRepository = articleRepository;
+        this.userService = userService;
     }
 
     @Transactional
-    public Long save(ArticleDto articleDto) {
+    public Long save(ArticleDto articleDto, String email) {
+        User user = userService.findEntityByEmail(email);
+
         String fullPath = String.join(".", UPLOAD_PATH + UUID.randomUUID().toString(),
                 FilenameUtils.getExtension(articleDto.getImageFile().getOriginalFilename()));
-        Article article = ArticleAssembler.toArticle(articleDto, fullPath.split("miniprojects-2019")[1]);
+        Article article = ArticleAssembler.toArticle(articleDto, fullPath.split("miniprojects-2019")[1], user);
         File file = new File(fullPath);
         try {
             file.createNewFile();

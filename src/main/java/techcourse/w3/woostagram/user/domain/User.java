@@ -34,7 +34,8 @@ public class User {
     private UserContents userContents;
 
     @Builder
-    public User(String email, String password, UserContents userContents) {
+    public User(Long id, String email, String password, UserContents userContents) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.userContents = userContents;

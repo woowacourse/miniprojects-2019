@@ -11,11 +11,13 @@ import techcourse.w3.woostagram.user.domain.User;
 @Setter
 @NoArgsConstructor
 public class UserInfoDto {
+    private Long id;
     private String email;
     private UserContentsDto userContentsDto;
 
     @Builder
-    public UserInfoDto(String email, UserContentsDto userContentsDto) {
+    public UserInfoDto(Long id, String email, UserContentsDto userContentsDto) {
+        this.id = id;
         this.email = email;
         this.userContentsDto = userContentsDto;
     }
@@ -24,5 +26,13 @@ public class UserInfoDto {
         return UserInfoDto.builder()
                 .email(user.getEmail())
                 .userContentsDto(UserContentsDto.from(user.getUserContents())).build();
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .userContents(userContentsDto.toEntity())
+                .build();
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.service.ArticleService;
+import techcourse.w3.woostagram.user.support.LoggedInUser;
 
 @Controller
 @RequestMapping("/articles")
@@ -22,8 +23,8 @@ public class ArticleController {
     }
 
     @PostMapping
-    public String create(ArticleDto articleDto) {
-        return "redirect:/articles/" + articleService.save(articleDto);
+    public String create(ArticleDto articleDto, @LoggedInUser String email) {
+        return "redirect:/articles/" + articleService.save(articleDto, email);
     }
 
     @GetMapping("/{articleId}")

@@ -13,8 +13,6 @@ import techcourse.w3.woostagram.user.exception.UserUpdateException;
 
 @Service
 public class UserService {
-
-
     private UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -48,5 +46,9 @@ public class UserService {
     public UserInfoDto findByEmail(String email) {
         User user = userRepository.findUserByEmail(email).orElseThrow(LoginException::new);
         return UserInfoDto.from(user);
+    }
+
+    public User findEntityByEmail(String email) {
+        return userRepository.findUserByEmail(email).orElseThrow(LoginException::new);
     }
 }
