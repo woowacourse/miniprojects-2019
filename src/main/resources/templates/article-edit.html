@@ -39,10 +39,7 @@
         <div class="header-container max-width-lg mx-auto">
             <ul class="nav-left mrg-left-0 padding-15">
                 <li>
-                    <img class="logo desktop-view" src="/images/logo/instgram_logo.png">
-                    <div class="width-40px mobile-view overflow-hidden">
-                        <img class="logo" src="/images/logo/instgram_logo.png">
-                    </div>
+                    <img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png">
                 </li>
             </ul>
             <ul class="nav-right padding-15">
@@ -92,10 +89,10 @@
                                                 <i class="ti-image font-size-22"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control" required placeholder="이미지 URL을 입력해 주세요!" aria-label="Username" aria-describedby="basic-addon1">
+                                        <input type="text" name="imageUrl" class="form-control" required placeholder="이미지 URL을 입력해 주세요!" aria-label="Username" aria-describedby="basic-addon1">
                                     </div>
                                     <div class="info pdd-vertical-5">
-                                        <textarea rows="1" class="form-control text-dark padding-15" placeholder="사진에 대해 친구들에게 알려주세요 :)"></textarea>
+                                        <textarea rows="1" name="contents" class="form-control text-dark padding-15" placeholder="사진에 대해 친구들에게 알려주세요 :)"></textarea>
                                     </div>
                                 </div>
                                 <div class="feed-footer">
@@ -107,7 +104,7 @@
                                                         <i class="ti-tag font-size-22"></i>
                                                     </span>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="해쉬태그를 쉼표(,)로 구분해서 추가해 주세요!" aria-label="Username" aria-describedby="basic-addon1">
+                                                <input type="text" name="hashTag" class="form-control" placeholder="해쉬태그를 쉼표(,)로 구분해서 추가해 주세요!" aria-label="Username" aria-describedby="basic-addon1">
                                             </div>
                                             <div class="top-5 right-0" style="float: right;">
                                                 <button onclick="goBackToIndexPage(event)" class="btn btn-default no-border text-gray">취소</button>
@@ -138,9 +135,7 @@
     function goBackToIndexPage(event) {
         event.preventDefault();
     
-        console.log("asdf");
         if (confirm("작성하신 게시물을 취소하고 돌아가시겠습니까?") == true) {
-            console.log("adfasdjfkajskdfjk");
             articleForm.setAttribute("method", "get");
             articleForm.setAttribute("action", "/");
             articleFormMethod.remove();
@@ -152,7 +147,7 @@
     function submitArticle(event) {
         event.preventDefault();
         
-        
+        articleForm.submit();
     }
 </script>
 </body>

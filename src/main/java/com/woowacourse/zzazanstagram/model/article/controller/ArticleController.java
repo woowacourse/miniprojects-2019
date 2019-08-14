@@ -1,9 +1,7 @@
 package com.woowacourse.zzazanstagram.model.article.controller;
 
-import com.woowacourse.zzazanstagram.model.article.ArticleAssembler;
-import com.woowacourse.zzazanstagram.model.article.domain.Article;
 import com.woowacourse.zzazanstagram.model.article.dto.ArticleRequest;
-import com.woowacourse.zzazanstagram.model.article.repository.ArticleRepository;
+import com.woowacourse.zzazanstagram.model.article.service.ArticleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,14 +16,15 @@ public class ArticleController {
     private static final Logger log = LoggerFactory.getLogger(ArticleController.class);
     private static final String TAG = "[ArticleController]";
 
-    private ArticleRepository articleRepository;
+    private ArticleService articleService;
 
-    public ArticleController(ArticleRepository articleRepository) {
-        this.articleRepository = articleRepository;
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
     }
 
     @GetMapping("/")
     public String index(Model model) {
+        model.addAttribute("articles", articleService.getArticleResponses());
         return "index";
     }
 
@@ -36,11 +35,7 @@ public class ArticleController {
 
     @PostMapping("/articles")
     public String create(@Valid ArticleRequest dto) {
-        Article article = ArticleAssembler.toEntity(dto);
-        articleRepository.save(article);
-
-        log.info("{} create() >> {}", TAG, article);
-
+        articleService.save(dto);
         return "redirect:/";
     }
 }
