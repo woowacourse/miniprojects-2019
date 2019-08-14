@@ -1,6 +1,6 @@
 package com.wootecobook.turkey.user.controller.api;
 
-import com.wootecobook.turkey.user.controller.BaseControllerTest;
+import com.wootecobook.turkey.user.controller.BaseControllerTests;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static com.wootecobook.turkey.user.service.exception.UserDeleteException.
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserApiControllerTest extends BaseControllerTest {
+class UserApiControllerTests extends BaseControllerTests {
 
     private static final String VALID_EMAIL = "email@test.test";
     private static final String VALID_NAME = "name";

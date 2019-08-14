@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-public abstract class BaseControllerTest {
+public abstract class BaseControllerTests {
 
     private static final String USER_API_URI = "/api/users";
     private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
