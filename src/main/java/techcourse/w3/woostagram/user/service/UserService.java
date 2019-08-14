@@ -38,4 +38,9 @@ public class UserService {
         User user = userRepository.findUserByEmail(email).orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND));
         userRepository.delete(user);
     }
+
+    public UserInfoDto findByEmail(String email) {
+        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new LoginException(ERROR_USER_NOT_FOUND));
+        return UserInfoDto.from(user);
+    }
 }

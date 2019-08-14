@@ -1,9 +1,11 @@
 package techcourse.w3.woostagram.user.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
+import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -43,12 +45,18 @@ public class UserController {
     }
 
     @GetMapping("mypage")
-    public String show() {
+    public String show(Model model, HttpSession httpSession) {
+        String email = (String) httpSession.getAttribute("email");
+        UserInfoDto userInfoDto = userService.findByEmail(email);
+        model.addAttribute("userInfo", userInfoDto);
         return "mypage";
     }
 
     @GetMapping("mypage-edit/form")
-    public String updateForm() {
+    public String updateForm(Model model, HttpSession httpSession) {
+        String email = (String) httpSession.getAttribute("email");
+        UserInfoDto userInfoDto = userService.findByEmail(email);
+        model.addAttribute("userInfo", userInfoDto);
         return "mypage-edit";
     }
 
