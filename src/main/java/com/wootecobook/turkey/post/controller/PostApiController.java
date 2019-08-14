@@ -28,7 +28,7 @@ public class PostApiController {
     @PostMapping
     public ResponseEntity<PostResponse> create(@RequestBody @Valid PostRequest postRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new PostBadRequestException("글이 비어있으면 안됩니다.");
+            throw new PostBadRequestException();
         }
 
         PostResponse postResponse = postService.save(postRequest);
@@ -45,7 +45,7 @@ public class PostApiController {
     public ResponseEntity<PostResponse> update(@PathVariable Long postId, @RequestBody @Valid PostRequest postRequest,
                                                BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new PostBadRequestException("글이 비어있으면 안됩니다.");
+            throw new PostBadRequestException();
         }
 
         PostResponse postResponse = postService.update(postRequest, postId);
