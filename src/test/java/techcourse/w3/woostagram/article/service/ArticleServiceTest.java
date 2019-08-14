@@ -12,8 +12,10 @@ import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
@@ -26,7 +28,7 @@ class ArticleServiceTest {
     void save_correctContentsAndImage_isOk() {
         Article article = Article.builder()
                 .contents("Test article")
-                .imageUrl("/home/yumin/Codes/WoowaTech/Level2/miniprojects-2019/src/main/resources/static/testImage.jpg")
+                .imageUrl("/home/yumin/Codes/WoowaTech/Level2/miniprojects-2019/src/main/resources/static/uploaded/testImage.jpg")
                 .build();
 
         MultipartFile multipartFile = new MockMultipartFile("testImage", "testImage.jpg", MediaType.IMAGE_JPEG_VALUE, "<<jpg data>>".getBytes());
@@ -39,5 +41,12 @@ class ArticleServiceTest {
         when(articleRepository.save(article)).thenReturn(article);
         articleService.save(articleDto);
         verify(articleRepository).save(article);
+    }
+
+    @Test
+    void name() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        UUID uid = UUID.randomUUID();
+        System.out.println(uid);
     }
 }

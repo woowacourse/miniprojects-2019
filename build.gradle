@@ -48,4 +48,7 @@ dependencies {
     
     // Mockito
     testImplementation 'org.mockito:mockito-junit-jupiter'
+
+    // Util
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
 }
