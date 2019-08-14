@@ -65,7 +65,7 @@ class CommentApiControllerTests {
         final CommentCreate commentCreate = new CommentCreate();
         final CommentResponse commentResponse = mock(CommentResponse.class);
 
-        when(commentService.save(any()))
+        when(commentService.save(any(), anyLong(), anyLong()))
                 .thenReturn(commentResponse);
         // when
         final EntityExchangeResult<byte[]> result = webTestClient.post().uri(BASE_URI)

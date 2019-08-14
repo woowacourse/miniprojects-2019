@@ -44,10 +44,8 @@ public class CommentApiController {
                                                   @PathVariable Long postId,
                                                   UserSession userSession) {
         log.info("postId : {}", postId);
-        commentCreate.setPostId(postId);
-        commentCreate.setUserId(userSession.getId());
 
-        final CommentResponse commentResponse = commentService.save(commentCreate);
+        final CommentResponse commentResponse = commentService.save(commentCreate, userSession.getId(),  postId);
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
         return ResponseEntity.created(uri).body(commentResponse);
     }
@@ -70,9 +68,8 @@ public class CommentApiController {
                                                   UserSession userSession) {
         log.info("id : {}", id);
 
-        commentUpdate.setUserId(userSession.getId());
         commentUpdate.setId(id);
-        CommentResponse commentResponse = commentService.update(commentUpdate);
+        CommentResponse commentResponse = commentService.update(commentUpdate, userSession.getId());
 
         return ResponseEntity.ok(commentResponse);
     }

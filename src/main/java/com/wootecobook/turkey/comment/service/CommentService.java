@@ -38,9 +38,9 @@ public class CommentService {
                 .map(CommentResponse::from);
     }
 
-    public CommentResponse save(final CommentCreate commentCreate) {
-        final User user = userService.findById(commentCreate.getUserId());
-        final Post post = postService.findById(commentCreate.getPostId());
+    public CommentResponse save(final CommentCreate commentCreate, final Long userId, final Long postId) {
+        final User user = userService.findById(userId);
+        final Post post = postService.findById(postId);
         final Comment parent = findById(commentCreate.getParentId());
         final Comment comment = commentCreate.toEntity(user, post, parent);
         try {
@@ -65,9 +65,9 @@ public class CommentService {
         }
     }
 
-    public CommentResponse update(final CommentUpdate commentUpdate) {
+    public CommentResponse update(final CommentUpdate commentUpdate, final Long userId) {
         Comment comment = findById(commentUpdate.getId());
-        comment.isWrittenBy(commentUpdate.getUserId());
+        comment.isWrittenBy(userId);
         comment.update(commentUpdate.toEntity());
         return CommentResponse.from(comment);
     }

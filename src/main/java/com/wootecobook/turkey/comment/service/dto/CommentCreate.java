@@ -14,8 +14,6 @@ import lombok.ToString;
 @NoArgsConstructor
 public class CommentCreate {
     private String contents;
-    private Long userId;
-    private Long postId;
     private Long parentId;
 
     public Comment toEntity(final User user, final Post post, final Comment parent) {
