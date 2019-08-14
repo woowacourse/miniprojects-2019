@@ -1,0 +1,21 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/blog?characterEncoding=UTF-8&serverTimezone=UTC
+    username: heebong
+    password: 1234
+
+debug: true
+trace: false
