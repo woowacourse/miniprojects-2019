@@ -1,6 +1,5 @@
 package com.woowacourse.zzazanstagram.model.article.controller;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -17,7 +16,7 @@ class ArticleControllerTest {
     @Autowired
     private WebTestClient webTestClient;
 
-    @Ignore
+    @Test
     void 게시글_등록_페이지_이동_테스트() {
         webTestClient.get().uri("/articles/new")
                 .exchange()
