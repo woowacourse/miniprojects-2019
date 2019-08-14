@@ -9,6 +9,7 @@ import techcourse.fakebook.service.utils.encryptor.Encryptor;
 
 @Component
 public class UserAssembler {
+    private static final String DEFAULT_PROFILE_PHOTO = "default.png";
     private final Encryptor encryptor;
 
     public UserAssembler(Encryptor encryptor) {
@@ -25,11 +26,11 @@ public class UserAssembler {
         return new User(
                 userSignupRequest.getEmail(),
                 encryptor.encrypt(userSignupRequest.getPassword()),
-                userSignupRequest.getName(),
+                userSignupRequest.getLastName() + userSignupRequest.getFirstName(),
                 userSignupRequest.getGender(),
-                userSignupRequest.getCoverUrl(),
+                DEFAULT_PROFILE_PHOTO,
                 userSignupRequest.getBirth(),
-                userSignupRequest.getIntroduction()
+                ""
         );
     }
 

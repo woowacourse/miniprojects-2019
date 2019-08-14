@@ -26,12 +26,12 @@ public class ControllerTestHelper {
 
     protected UserSignupRequest newUserSignupRequest() {
         UserSignupRequest userSignupRequest = new UserSignupRequest(String.format("email%d@hello.com", newUserRequestId++),
+                "성",
+                "이름",
                 "Password!1",
-                "name",
+                "Password!1",
                 "gender",
-                "coverUrl",
-                "birth",
-                "introduction");
+                "birth");
 
         log.debug("userSignupRequest: {}", userSignupRequest);
 
@@ -42,11 +42,11 @@ public class ControllerTestHelper {
         return webTestClient.post().uri("/users")
                 .body(BodyInserters.fromFormData("email", userSignupRequest.getEmail())
                         .with("password", userSignupRequest.getPassword())
-                        .with("name", userSignupRequest.getName())
+                        .with("reconfirmPassword", userSignupRequest.getReconfirmPassword())
+                        .with("lastName", userSignupRequest.getLastName())
+                        .with("firstName", userSignupRequest.getFirstName())
                         .with("gender", userSignupRequest.getGender())
-                        .with("coverUrl", userSignupRequest.getCoverUrl())
                         .with("birth", userSignupRequest.getBirth())
-                        .with("introduction", userSignupRequest.getIntroduction())
                 )
                 .exchange();
     }

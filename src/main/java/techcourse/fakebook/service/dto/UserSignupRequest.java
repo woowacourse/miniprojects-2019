@@ -1,62 +1,104 @@
 package techcourse.fakebook.service.dto;
 
-public class UserSignupRequest {
-    private String email;
-    private String password;
-    private String name;
-    private String gender;
-    private String coverUrl;
-    private String birth;
-    private String introduction;
+import techcourse.fakebook.utils.EqualFields;
+import techcourse.fakebook.utils.NotExistsEmail;
 
-    public UserSignupRequest(String email, String password, String name, String gender, String coverUrl, String birth, String introduction) {
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+@EqualFields(baseField = "password", matchField = "reconfirmPassword")
+public class UserSignupRequest {
+    @NotBlank(message = "* 이메일을 작성해주세요!")
+    @Email(message = "* 이메일 양식을 지켜주세요!")
+    @NotExistsEmail
+    private String email;
+    @NotBlank(message = "* 성을 입력해주세요!")
+    private String lastName;
+    @NotBlank(message = "* 이름을 입력해주세요!")
+    private String firstName;
+    @NotBlank(message = "* 비밀번호를 작성해주세요!")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,}",
+            message = "* 비밀번호는 8자 이상의 소문자, 대문자, 숫자, 특수문자의 조합이어야 합니다!")
+    private String password;
+    private String gender;
+    private String birth;
+
+    public UserSignupRequest() {}
+
+    public UserSignupRequest(
+            String email,
+            String lastName,
+            String firstName,
+            String password,
+            String gender,
+            String birth
+    ) {
         this.email = email;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.password = password;
-        this.name = name;
         this.gender = gender;
-        this.coverUrl = coverUrl;
         this.birth = birth;
-        this.introduction = introduction;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getPassword() {
         return password;
     }
 
-    public String getName() {
-        return name;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getGender() {
         return gender;
     }
 
-    public String getCoverUrl() {
-        return coverUrl;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getBirth() {
         return birth;
     }
 
-    public String getIntroduction() {
-        return introduction;
+    public void setBirth(String birth) {
+        this.birth = birth;
     }
 
     @Override
     public String toString() {
         return "UserSignupRequest{" +
                 "email='" + email + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
                 ", gender='" + gender + '\'' +
-                ", coverUrl='" + coverUrl + '\'' +
                 ", birth='" + birth + '\'' +
-                ", introduction='" + introduction + '\'' +
                 '}';
     }
 }

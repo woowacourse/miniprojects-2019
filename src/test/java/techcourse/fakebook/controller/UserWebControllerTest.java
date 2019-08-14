@@ -29,15 +29,13 @@ class UserWebControllerTest extends ControllerTestHelper {
                 .header("Cookie", cookie)
                 .body(BodyInserters.fromFormData("email", otherUserSignupRequest.getEmail())
                         .with("password", otherUserSignupRequest.getPassword())
-                        .with("name", otherUserSignupRequest.getName())
+                        .with("lastName", otherUserSignupRequest.getLastName())
+                        .with("firstName", otherUserSignupRequest.getFirstName())
                         .with("gender", otherUserSignupRequest.getGender())
-                        .with("coverUrl", otherUserSignupRequest.getCoverUrl())
                         .with("birth", otherUserSignupRequest.getBirth())
-                        .with("introduction", otherUserSignupRequest.getIntroduction())
                 )
                 .exchange().expectHeader().valueMatches("location", ".*/timeline");
     }
-
 
     @Test
     void 존재하는_유저조회() {
@@ -53,11 +51,10 @@ class UserWebControllerTest extends ControllerTestHelper {
                 .consumeWith(response -> {
                     String body = new String(response.getResponseBody());
                     assertThat(body.contains(userSignupRequest.getEmail())).isTrue();
-                    assertThat(body.contains(userSignupRequest.getName())).isTrue();
+                    assertThat(body.contains(userSignupRequest.getLastName())).isTrue();
+                    assertThat(body.contains(userSignupRequest.getFirstName())).isTrue();
                     assertThat(body.contains(userSignupRequest.getGender())).isTrue();
-                    assertThat(body.contains(userSignupRequest.getCoverUrl())).isTrue();
                     assertThat(body.contains(userSignupRequest.getBirth())).isTrue();
-                    assertThat(body.contains(userSignupRequest.getIntroduction())).isTrue();
                 });
     }
 

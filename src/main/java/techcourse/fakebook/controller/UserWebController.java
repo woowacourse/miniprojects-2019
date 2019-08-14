@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import techcourse.fakebook.service.UserService;
-import techcourse.fakebook.service.dto.UserSignupRequest;
 import techcourse.fakebook.service.dto.UserResponse;
+import techcourse.fakebook.service.dto.UserSignupRequest;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -21,12 +24,16 @@ public class UserWebController {
     }
 
     @PostMapping
-    public String create(UserSignupRequest userSignupRequest) {
+    public String create(@Valid UserSignupRequest userSignupRequest, BindingResult bindingResult) {
         log.debug("begin");
+
+        if (bindingResult.hasErrors()) {
+            return "index";
+        }
 
         userService.save(userSignupRequest);
 
-        return "redirect:/timeline";
+        return "redirect:/";
     }
 
     @GetMapping("/{userId}")
@@ -35,7 +42,7 @@ public class UserWebController {
 
         UserResponse userResponse = userService.findById(userId);
         model.addAttribute("user", userResponse);
-        return "mypage";
+        return "profile";
     }
 
     @DeleteMapping("/{userId}")
