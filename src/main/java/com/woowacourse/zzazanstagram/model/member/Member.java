@@ -16,6 +16,10 @@ public class Member extends BaseEntity {
     private Member() {
     }
 
+    public boolean isMatchPassword(String password) {
+        return this.password.isMatch(password);
+    }
+
     public NickName getNickName() {
         return nickName;
     }
@@ -34,6 +38,22 @@ public class Member extends BaseEntity {
 
     public ProfileImage getProfileImage() {
         return profileImage;
+    }
+
+    public String name() {
+        return name.getName();
+    }
+
+    public String email() {
+        return email.getEmail();
+    }
+
+    public String nickName() {
+        return nickName.getNickName();
+    }
+
+    public String profileImage() {
+        return profileImage.getUrl();
     }
 
     public static final class MemberBuilder {

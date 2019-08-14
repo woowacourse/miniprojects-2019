@@ -1,5 +1,6 @@
 package com.woowacourse.zzazanstagram.model.member;
 
+import com.woowacourse.zzazanstagram.model.member.vo.Email;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,13 +11,15 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public MemberResponse find(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("user가 없습니다"));
+    public MemberResponse find(MemberLoginRequest request) {
+        Member member = memberRepository.findByEmail(Email.of(request.getEmail()))
+                .filter(m -> m.isMatchPassword(request.getPassword()))
+                .orElseThrow(() -> new IllegalArgumentException("로그인 정보가 올바르지 않습니다."));
         return MemberAssembler.assemble(member);
     }
 
-    public void save(MemberRequest memberRequest) {
-        Member member = MemberAssembler.toEntity(memberRequest);
+    public void save(MemberSignUpRequest memberSignupRequest) {
+        Member member = MemberAssembler.toEntity(memberSignupRequest);
         memberRepository.save(member);
     }
 }

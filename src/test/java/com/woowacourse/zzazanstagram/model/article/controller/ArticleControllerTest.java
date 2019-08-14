@@ -1,31 +1,25 @@
 package com.woowacourse.zzazanstagram.model.article.controller;
 
+import com.woowacourse.zzazanstagram.model.RequestTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import static com.woowacourse.zzazanstagram.model.article.ArticleConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ArticleControllerTest {
-    @Autowired
-    private WebTestClient webTestClient;
+class ArticleControllerTest extends RequestTemplate {
 
     @Test
     void 게시글_등록_페이지_이동_테스트() {
-        webTestClient.get().uri("/articles/new")
+        getHeaderWithLogin("/articles/new")
                 .exchange()
                 .expectStatus().isOk();
     }
 
     @Test
     void 게시글_등록이_되는지_테스트() {
-        webTestClient.post().uri("/articles")
+        postHeaderWithLogin("/articles")
                 .body(BodyInserters.fromFormData("imageUrl", IMAGE_URL)
                         .with("contents", CONTENTS)
                         .with("hashTag", HASHTAG))

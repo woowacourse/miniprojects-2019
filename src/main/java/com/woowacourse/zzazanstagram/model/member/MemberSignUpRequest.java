@@ -2,7 +2,7 @@ package com.woowacourse.zzazanstagram.model.member;
 
 import javax.validation.constraints.NotBlank;
 
-public class MemberRequest {
+public class MemberSignUpRequest {
     @NotBlank
     private String name;
 
