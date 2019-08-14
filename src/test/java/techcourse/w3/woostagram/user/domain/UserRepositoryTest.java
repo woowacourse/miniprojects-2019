@@ -18,7 +18,7 @@ public class UserRepositoryTest {
     @Test
     public void save() {
         User user = User.builder()
-                .email("a@naver.com")
+                .email("ab@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
                         .userName("a@naver.com")
