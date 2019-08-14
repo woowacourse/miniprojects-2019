@@ -1,108 +1,103 @@
 package techcourse.w3.woostagram.user.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseCookie;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import techcourse.w3.woostagram.AbstractControllerTests;
+import techcourse.w3.woostagram.user.dto.UserContentsDto;
+import techcourse.w3.woostagram.user.dto.UserDto;
 
-import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerTest {
-    private static final String EMAIL = "email";
-    private static final String PASSWORD = "password";
-
-    private static final String TEST_EMAIL = "test@test.com";
+class UserControllerTest extends AbstractControllerTests {
+    private static final String TEST_EMAIL = "a@naver.com";
     private static final String TEST_EMAIL2 = "test2@test.com";
-    private static final String TEST_EMAIL3 = "test3@test.com";
-    private static final String TEST_EMAIL4 = "test4@test.com";
     private static final String TEST_PASSWORD = "Aa1234!!";
-    private static final String JSESSIONID = "JSESSIONID";
+    private static final String BAD_PASSWROD = "abc";
 
-
-    @Autowired
-    private WebTestClient webTestClient;
-
-    @Test
-    void showSignPage_showForm_isOk() {
-        webTestClient.get().uri("/users/signup/form")
-                .exchange()
-                .expectStatus().isOk();
+    @BeforeEach
+    void setUp() {
+        loginRequest(TEST_EMAIL, TEST_PASSWORD);
     }
 
     @Test
-    void create_correct_isFound() {
-        webTestClient.post().uri("/users/signup")
-                .body(fromFormData(EMAIL, TEST_EMAIL)
-                        .with(PASSWORD, TEST_PASSWORD))
-                .exchange()
-                .expectStatus()
-                .isFound();
+    void loginForm_empty_isOk() {
+        assertThat(getRequest("/users/login/form")
+                .getStatus()
+                .is2xxSuccessful())
+                .isTrue();
     }
 
     @Test
     void login_correct_isOk() {
-        webTestClient.post().uri("/users/signup")
-                .body(fromFormData(EMAIL, TEST_EMAIL2)
-                        .with(PASSWORD, TEST_PASSWORD))
-                .exchange()
-                .expectStatus()
-                .isFound();
-
-        webTestClient.post().uri("/users/login")
-                .body(fromFormData(EMAIL, TEST_EMAIL2)
-                        .with(PASSWORD, TEST_PASSWORD))
-                .exchange()
-                .expectStatus()
-                .isOk();
+        assertThat(postFormRequest("/users/login", UserDto.class, TEST_EMAIL, TEST_PASSWORD)
+                .getStatus()
+                .is2xxSuccessful()).isTrue();
     }
 
     @Test
-    void update_correct_isRedirect() {
-        webTestClient.post().uri("/users/signup")
-                .body(fromFormData(EMAIL, TEST_EMAIL3)
-                        .with(PASSWORD, TEST_PASSWORD))
-                .exchange()
-                .expectStatus()
-                .isFound();
-
-        webTestClient.put().uri("/users")
-                .cookie(JSESSIONID, getResponseCookie(TEST_EMAIL3, TEST_PASSWORD).getValue())
-                .body(fromFormData("contents", "gggg")
-                        .with("userName", "abc"))
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection();
+    void login_mismatch_isFail() {
+        assertThat(postFormRequest("/users/login", UserDto.class, TEST_EMAIL2, TEST_PASSWORD)
+                .getStatus()
+                .is3xxRedirection()).isTrue();
     }
 
     @Test
-    void delete_userdata_isRedirect() {
-        webTestClient.post().uri("/users/signup")
-                .body(fromFormData(EMAIL, TEST_EMAIL4)
-                        .with(PASSWORD, TEST_PASSWORD))
-                .exchange()
-                .expectStatus()
-                .isFound();
-
-        webTestClient.delete().uri("/users")
-                .cookie(JSESSIONID, getResponseCookie(TEST_EMAIL4, TEST_PASSWORD).getValue())
-                .exchange()
-                .expectStatus()
-                .isFound();
+    void createForm_empty_isOk() {
+        assertThat(getRequest("/users/signup/form")
+                .getStatus()
+                .is2xxSuccessful())
+                .isTrue();
     }
 
-    protected ResponseCookie getResponseCookie(String email, String password) {
-        return webTestClient.post().uri("/users/login")
-                .body(fromFormData(EMAIL, email)
-                        .with(PASSWORD, password))
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection()
-                .returnResult(ResponseCookie.class)
-                .getResponseCookies()
-                .getFirst(JSESSIONID);
+    @Test
+    void create_correct_isOk() {
+        assertThat(postFormRequest("/users/signup", UserDto.class, TEST_EMAIL2, TEST_PASSWORD)
+                .getStatus()
+                .is3xxRedirection()).isTrue();
+    }
+
+    @Test
+    void create_mismatch_isFail() {
+        assertThat(postFormRequest("/users/signup", UserDto.class, TEST_EMAIL2, BAD_PASSWROD)
+                .getStatus()
+                .is3xxRedirection()).isTrue();
+    }
+
+    @Test
+    void show_correct_isOk() {
+        assertThat(getRequest("/users/mypage")
+                .getStatus()
+                .is2xxSuccessful()).isTrue();
+    }
+
+    @Test
+    void updateForm_correct_isOk() {
+        assertThat(getRequest("/users/mypage-edit/form")
+                .getStatus()
+                .is2xxSuccessful()).isTrue();
+    }
+
+    @Test
+    void update_correct_isOk() {
+        assertThat(putFormRequest("/users", UserContentsDto.class, "a", "b", "c", "d")
+                .getStatus()
+                .is3xxRedirection()).isTrue();
+    }
+
+    @Test
+    void update_mismatch_isFail() {
+        assertThat(putFormRequest("/users", UserContentsDto.class, "", "", "", "")
+                .getStatus()
+                .is3xxRedirection()).isTrue();
+    }
+
+    @Test
+    void delete_correct_isOk() {
+        postFormRequest("/users/signup", UserDto.class, TEST_EMAIL2, TEST_PASSWORD);
+        loginRequest(TEST_EMAIL2, TEST_PASSWORD);
+
+        assertThat(deleteRequest("/users")
+                .getStatus()
+                .is3xxRedirection()).isTrue();
     }
 }

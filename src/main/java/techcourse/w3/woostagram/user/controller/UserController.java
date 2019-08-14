@@ -7,6 +7,7 @@ import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
+import techcourse.w3.woostagram.user.support.LoggedInUser;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -45,32 +46,27 @@ public class UserController {
     }
 
     @GetMapping("mypage")
-    public String show(Model model, HttpSession httpSession) {
-        String email = (String) httpSession.getAttribute("email");
+    public String show(Model model, @LoggedInUser String email) {
         UserInfoDto userInfoDto = userService.findByEmail(email);
         model.addAttribute("userInfo", userInfoDto);
         return "mypage";
     }
 
     @GetMapping("mypage-edit/form")
-    public String updateForm(Model model, HttpSession httpSession) {
-        String email = (String) httpSession.getAttribute("email");
+    public String updateForm(Model model, @LoggedInUser String email) {
         UserInfoDto userInfoDto = userService.findByEmail(email);
         model.addAttribute("userInfo", userInfoDto);
         return "mypage-edit";
     }
 
     @PutMapping
-    public String update(@Valid UserContentsDto userContentsDto, HttpSession httpSession) {
-
-        String email = (String) httpSession.getAttribute("email");
+    public String update(@Valid UserContentsDto userContentsDto, @LoggedInUser String email) {
         userService.update(userContentsDto, email);
         return "redirect:/users/mypage";
     }
 
     @DeleteMapping
-    public String delete(HttpSession httpSession) {
-        String email = (String) httpSession.getAttribute("email");
+    public String delete(@LoggedInUser String email) {
         userService.delete(email);
         return "redirect:/users/login/form";
     }
