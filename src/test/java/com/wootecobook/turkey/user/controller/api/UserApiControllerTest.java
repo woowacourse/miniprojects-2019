@@ -2,6 +2,7 @@ package com.wootecobook.turkey.user.controller.api;
 
 import com.wootecobook.turkey.user.controller.BaseControllerTest;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
+import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 import static com.wootecobook.turkey.user.service.exception.NotFoundUserException.NOT_FOUND_USER_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.UserDeleteException.USER_DELETE_FAIL_MESSAGE;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserApiControllerTest extends BaseControllerTest {
@@ -19,6 +21,9 @@ class UserApiControllerTest extends BaseControllerTest {
     private static final String VALID_EMAIL = "email@test.test";
     private static final String VALID_NAME = "name";
     private static final String VALID_PASSWORD = "passWORD1!";
+
+    private static final String USER_API_URI = "/api/users";
+    private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
 
     @Autowired
     private WebTestClient webTestClient;
@@ -31,18 +36,49 @@ class UserApiControllerTest extends BaseControllerTest {
                 .password(VALID_PASSWORD)
                 .build();
 
-        webTestClient.post()
-                .uri("/api/users")
+        UserResponse userResponse = webTestClient.post()
+                .uri(USER_API_URI)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
-                .jsonPath("$.id").isNotEmpty()
-                .jsonPath("$.email").isEqualTo(VALID_EMAIL)
-                .jsonPath("$.name").isEqualTo(VALID_NAME);
+                .expectBody(UserResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(userResponse.getId()).isNotNull();
+        assertThat(userResponse.getEmail()).isEqualTo(VALID_EMAIL);
+        assertThat(userResponse.getName()).isEqualTo(VALID_NAME);
+    }
+
+    @Test
+    void 중복_이메일_생성_에러() {
+        String email = "duplicated@dupli.cated";
+
+        addUser(VALID_NAME, email, VALID_PASSWORD);
+
+
+        UserRequest userRequest = UserRequest.builder()
+                .email(email)
+                .name(VALID_NAME)
+                .password(VALID_PASSWORD)
+                .build();
+
+        ErrorMessage errorMessage = webTestClient.post()
+                .uri(USER_API_URI)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(userRequest), UserRequest.class)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorMessage.getErrorMessage()).isEqualTo(SIGN_UP_FAIL_MESSAGE);
     }
 
     @Test
@@ -53,17 +89,19 @@ class UserApiControllerTest extends BaseControllerTest {
                 .password(VALID_PASSWORD)
                 .build();
 
-        webTestClient.post()
-                .uri("/api/users")
+        ErrorMessage errorMessage = webTestClient.post()
+                .uri(USER_API_URI)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
-                .jsonPath("$.errorMessage").isNotEmpty()
-                .jsonPath("$.errorMessage").isEqualTo(SIGN_UP_FAIL_MESSAGE);
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorMessage.getErrorMessage()).isEqualTo(SIGN_UP_FAIL_MESSAGE);
     }
 
     @Test
@@ -74,17 +112,19 @@ class UserApiControllerTest extends BaseControllerTest {
                 .password(VALID_PASSWORD)
                 .build();
 
-        webTestClient.post()
-                .uri("/api/users")
+        ErrorMessage errorMessage = webTestClient.post()
+                .uri(USER_API_URI)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
-                .jsonPath("$.errorMessage").isNotEmpty()
-                .jsonPath("$.errorMessage").isEqualTo(SIGN_UP_FAIL_MESSAGE);
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorMessage.getErrorMessage()).isEqualTo(SIGN_UP_FAIL_MESSAGE);
     }
 
     @Test
@@ -95,44 +135,54 @@ class UserApiControllerTest extends BaseControllerTest {
                 .password("1")
                 .build();
 
-        webTestClient.post()
-                .uri("/api/users")
+        ErrorMessage errorMessage = webTestClient.post()
+                .uri(USER_API_URI)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
-                .jsonPath("$.errorMessage").isNotEmpty()
-                .jsonPath("$.errorMessage").isEqualTo(SIGN_UP_FAIL_MESSAGE);
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorMessage.getErrorMessage()).isEqualTo(SIGN_UP_FAIL_MESSAGE);
     }
 
     @Test
     void 유저_조회() {
-        Long id = addUser("show", "show@show.show", VALID_PASSWORD);
+        String email = "show@show.show";
+        String name = "show";
 
-        webTestClient.get()
-                .uri("/api/users/" + id)
+        Long id = addUser(name, email, VALID_PASSWORD);
+
+        UserResponse userResponse = webTestClient.get()
+                .uri(USER_API_URI_WITH_SLASH + id)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
-                .jsonPath("$.id").isEqualTo(id)
-                .jsonPath("$.email").isEqualTo("show@show.show")
-                .jsonPath("$.name").isEqualTo("show");
+                .expectBody(UserResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(userResponse.getId()).isEqualTo(id);
+        assertThat(userResponse.getEmail()).isEqualTo(email);
+        assertThat(userResponse.getName()).isEqualTo(name);
     }
 
     @Test
     void 없는_유저_조회() {
-        webTestClient.get()
-                .uri("/api/users/" + Long.MAX_VALUE)
+        ErrorMessage errorMessage = webTestClient.get()
+                .uri(USER_API_URI_WITH_SLASH + Long.MAX_VALUE)
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
-                .jsonPath("$.errorMessage").isNotEmpty()
-                .jsonPath("$.errorMessage").isEqualTo(NOT_FOUND_USER_MESSAGE);
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorMessage.getErrorMessage()).isEqualTo(NOT_FOUND_USER_MESSAGE);
     }
 
 
@@ -141,20 +191,22 @@ class UserApiControllerTest extends BaseControllerTest {
         Long id = addUser("delete", "delete@delete.del", VALID_PASSWORD);
 
         webTestClient.delete()
-                .uri("/api/users/" + id)
+                .uri(USER_API_URI_WITH_SLASH + id)
                 .exchange()
                 .expectStatus().isOk();
     }
 
     @Test
     void 없는_유저_삭제() {
-        webTestClient.delete()
-                .uri("/api/users/" + Long.MAX_VALUE)
+        ErrorMessage errorMessage = webTestClient.delete()
+                .uri(USER_API_URI_WITH_SLASH + Long.MAX_VALUE)
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
-                .jsonPath("$.errorMessage").isNotEmpty()
-                .jsonPath("$.errorMessage").isEqualTo(USER_DELETE_FAIL_MESSAGE);
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorMessage.getErrorMessage()).isEqualTo(USER_DELETE_FAIL_MESSAGE);
     }
 }
