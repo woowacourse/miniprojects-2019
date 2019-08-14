@@ -14,10 +14,10 @@ public class Article extends BaseEntity {
 //    @Column(name = "author", nullable = false)
 //    private Member author;
 
-    public Article() {
+    private Article() {
     }
 
-    public Article(ImageUrl imageUrl, Contents contents) {
+    private Article(ImageUrl imageUrl, Contents contents) {
         this.imageUrl = imageUrl;
         this.contents = contents;
     }
@@ -27,6 +27,11 @@ public class Article extends BaseEntity {
         this.contents = contents;
         this.author = author;
     }*/
+
+
+    public static Article from(final ImageUrl imageUrl, final Contents contents) {
+        return new Article(imageUrl, contents);
+    }
 
     public ImageUrl getImageUrl() {
         return imageUrl;

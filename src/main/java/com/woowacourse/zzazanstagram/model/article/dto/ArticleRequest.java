@@ -2,9 +2,11 @@ package com.woowacourse.zzazanstagram.model.article.dto;
 
 import javax.persistence.Column;
 import javax.persistence.Lob;
+import javax.validation.constraints.NotBlank;
 
 public class ArticleRequest {
 
+    @NotBlank
     @Column(name = "imageUrl", nullable = false)
     private String imageUrl;
 

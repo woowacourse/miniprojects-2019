@@ -18,13 +18,13 @@ class ArticleTest {
 
     @BeforeEach
     void setUp() {
-        imageUrl = new ImageUrl(IMAGE_URL);
-        contents = new Contents(CONTENTS);
-        article = new Article(imageUrl, contents);
+        imageUrl = ImageUrl.of(IMAGE_URL);
+        contents = Contents.of(CONTENTS);
+        article = Article.from(imageUrl, contents);
     }
 
     @Test
     void create() {
-        assertThat(article).isEqualTo(new Article(imageUrl, contents));
+        assertThat(article).isEqualTo(Article.from(imageUrl, contents));
     }
 }

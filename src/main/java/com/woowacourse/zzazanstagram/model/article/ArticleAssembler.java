@@ -8,9 +8,9 @@ import com.woowacourse.zzazanstagram.model.article.dto.ArticleRequest;
 public class ArticleAssembler {
     //Todo author 추가시 변경
     public static Article toEntity(ArticleRequest dto) {
-        ImageUrl imageUrl = new ImageUrl(dto.getImageUrl());
-        Contents contents = new Contents(dto.getContents());
+        ImageUrl imageUrl = ImageUrl.of(dto.getImageUrl());
+        Contents contents = Contents.of(dto.getContents());
 
-        return new Article(imageUrl, contents);
+        return Article.from(imageUrl, contents);
     }
 }
