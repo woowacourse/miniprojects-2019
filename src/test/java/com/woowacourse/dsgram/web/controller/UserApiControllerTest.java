@@ -1,7 +1,7 @@
 package com.woowacourse.dsgram.web.controller;
 
 
-import com.woowacourse.dsgram.domain.UserBasicInfo;
+import com.woowacourse.dsgram.service.dto.SignUpUserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,35 +17,35 @@ class UserApiControllerTest {
     @Autowired
     private WebTestClient webTestClient;
 
-    private UserBasicInfo userBasicInfo;
+    private SignUpUserDto signUpUserDto;
 
     @BeforeEach
     void setUp() {
         FLAG_NO++;
 
-        userBasicInfo = UserBasicInfo.builder()
+        signUpUserDto = SignUpUserDto.builder()
                 .userName("김버디")
                 .email(FLAG_NO + "buddy@buddy.com")
                 .nickName(FLAG_NO + "buddy")
                 .password("buddybuddy1!")
                 .build();
 
-        defaultSignUp(userBasicInfo)
+        defaultSignUp(signUpUserDto)
                 .expectStatus().isCreated();
 
     }
 
-    private WebTestClient.ResponseSpec defaultSignUp(UserBasicInfo userBasicInfo) {
+    private WebTestClient.ResponseSpec defaultSignUp(SignUpUserDto signUpUserDto) {
         return webTestClient.post().uri("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(userBasicInfo), UserBasicInfo.class)
+                .body(Mono.just(signUpUserDto), SignUpUserDto.class)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange();
     }
 
     @Test
     void signUp() {
-        UserBasicInfo anotherUser = UserBasicInfo.builder()
+        SignUpUserDto anotherUser = SignUpUserDto.builder()
                 .userName("버디킴")
                 .email("buddy@gmail.com")
                 .nickName("body")
@@ -58,9 +58,9 @@ class UserApiControllerTest {
 
     @Test
     void signUp_duplicatedEmail_thrown_exception() {
-        UserBasicInfo anotherUser = UserBasicInfo.builder()
+        SignUpUserDto anotherUser = SignUpUserDto.builder()
                 .userName("서오상씨")
-                .email(userBasicInfo.getEmail())
+                .email(signUpUserDto.getEmail())
                 .nickName("ooooohsang")
                 .password("tjdhtkd12!")
                 .build();
@@ -72,10 +72,10 @@ class UserApiControllerTest {
 
     @Test
     void signUp_duplicatedNickName_thrown_exception() {
-        UserBasicInfo anotherUser = UserBasicInfo.builder()
+        SignUpUserDto anotherUser = SignUpUserDto.builder()
                 .userName("솔로스")
                 .email("anotherEmail@naver.com")
-                .nickName(userBasicInfo.getNickName())
+                .nickName(signUpUserDto.getNickName())
                 .password("ooollehh!")
                 .build();
 

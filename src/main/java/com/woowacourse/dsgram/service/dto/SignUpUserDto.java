@@ -1,4 +1,4 @@
-package com.woowacourse.dsgram.domain;
+package com.woowacourse.dsgram.service.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,31 +10,26 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
-@Embeddable
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserBasicInfo {
-    @Email
-    @Column(nullable = false, unique = true)
-    private String email;
-
+public class SignUpUserDto {
     @Size(min = 2, max = 10)
-    @Column(nullable = false, unique = true)
     private String nickName;
 
     @Size(min = 2, max = 10)
-    @Column(nullable = false)
     private String userName;
 
     @Size(min = 4, max = 16)
-    @Column(nullable = false)
     private String password;
 
-    public UserBasicInfo(String email, String nickName, String userName, String password) {
-        this.email = email;
+    @Email
+    private String email;
+
+    @Builder
+    public SignUpUserDto(@Size(min = 2, max = 10) String nickName, @Size(min = 2, max = 10) String userName, @Size(min = 4, max = 16) String password, @Email String email) {
         this.nickName = nickName;
         this.userName = userName;
         this.password = password;
+        this.email = email;
     }
 }

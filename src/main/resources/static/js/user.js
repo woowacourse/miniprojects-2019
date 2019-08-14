@@ -3,6 +3,7 @@ const USER_APP = (() => {
 
     const UserController = function () {
         const userService = new UserService();
+
         const signUp = () => {
             const signUpButton = document.getElementById('signup');
             signUpButton.addEventListener('click', userService.saveUser);
@@ -18,6 +19,7 @@ const USER_APP = (() => {
     };
 
     const UserService = function () {
+
         const email = document.getElementById('email');
         const nickName = document.getElementById('nickName');
         const userName = document.getElementById('userName');
@@ -49,7 +51,7 @@ const USER_APP = (() => {
         };
 
         return {
-            saveUser: saveUser
+            saveUser: saveUser,
         }
     };
 
