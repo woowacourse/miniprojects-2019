@@ -10,8 +10,7 @@ class MemberControllerTest extends RequestTemplate {
     void 회원가입_페이지_이동() {
         getRequest("/signup")
                 .exchange()
-                .expectStatus()
-                .isOk();
+                .expectStatus().isOk();
     }
 
     @Test
@@ -23,10 +22,8 @@ class MemberControllerTest extends RequestTemplate {
                         "myNick",
                         "Password!1"))
                 .exchange()
-                .expectHeader()
-                .valueMatches("location", ".*/login")
-                .expectStatus()
-                .isFound();
+                .expectHeader().valueMatches("location", ".*/login")
+                .expectStatus().isFound();
     }
 
     @Test
@@ -35,9 +32,7 @@ class MemberControllerTest extends RequestTemplate {
                 .body(WebTestHelper.loginForm("test@gmail.com",
                         "Password!1"))
                 .exchange()
-                .expectHeader()
-                .valueMatches("location", ".*/;jsessionid=([\\d\\w]+)")
-                .expectStatus()
-                .is3xxRedirection();
+                .expectHeader().valueMatches("location", ".*/;jsessionid=([\\d\\w]+)")
+                .expectStatus().is3xxRedirection();
     }
 }

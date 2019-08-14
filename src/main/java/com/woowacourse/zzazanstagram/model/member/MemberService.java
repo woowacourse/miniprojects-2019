@@ -12,10 +12,14 @@ public class MemberService {
     }
 
     public MemberResponse find(MemberLoginRequest request) {
-        Member member = memberRepository.findByEmail(Email.of(request.getEmail()))
+        Member member = validateEnrolledMember(request);
+        return MemberAssembler.assemble(member);
+    }
+
+    private Member validateEnrolledMember(MemberLoginRequest request) {
+        return memberRepository.findByEmail(Email.of(request.getEmail()))
                 .filter(m -> m.isMatchPassword(request.getPassword()))
                 .orElseThrow(() -> new IllegalArgumentException("로그인 정보가 올바르지 않습니다."));
-        return MemberAssembler.assemble(member);
     }
 
     public void save(MemberSignUpRequest memberSignupRequest) {
