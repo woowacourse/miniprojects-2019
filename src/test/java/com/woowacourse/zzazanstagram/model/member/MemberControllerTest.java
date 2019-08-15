@@ -77,7 +77,7 @@ class MemberControllerTest extends RequestTemplate {
                 .body(WebTestHelper.loginForm("test10@gmail.com",
                         "Password!1"))
                 .exchange()
-                .expectHeader().valueMatches("location", URL_REGEX + "/signup" + JSESSIONID_URL)
+                .expectHeader().valueMatches("location", URL_REGEX + "/login" + JSESSIONID_URL)
                 .expectStatus().is3xxRedirection();
     }
 
@@ -87,7 +87,7 @@ class MemberControllerTest extends RequestTemplate {
                 .body(WebTestHelper.loginForm("test@gmail.com",
                         "Password@2"))
                 .exchange()
-                .expectHeader().valueMatches("location", URL_REGEX + "/signup" + JSESSIONID_URL)
+                .expectHeader().valueMatches("location", URL_REGEX + "/login" + JSESSIONID_URL)
                 .expectStatus().is3xxRedirection();
     }
 }

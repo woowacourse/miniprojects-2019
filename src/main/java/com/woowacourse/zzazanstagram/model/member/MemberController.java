@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -18,18 +17,6 @@ public class MemberController {
     @GetMapping("/signup")
     public String signUp() {
         return "signup";
-    }
-
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String login(MemberLoginRequest memberLoginRequest, HttpSession httpSession) {
-        MemberResponse memberResponse = memberService.find(memberLoginRequest);
-        httpSession.setAttribute("user", new UserSession(memberResponse.getEmail()));
-        return "redirect:/";
     }
 
     @PostMapping("/members")
