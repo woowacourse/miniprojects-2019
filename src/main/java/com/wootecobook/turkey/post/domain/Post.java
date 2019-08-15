@@ -33,11 +33,11 @@ public class Post extends BaseEntity {
         }
     }
 
-    public Post update(Post updatePost) {
-        if (updatePost == null) {
+    public Post update(Post other) {
+        if (other == null) {
             throw new PostUpdateFailException();
         }
-        this.contents = updatePost.contents;
+        this.contents = other.contents;
 
         return this;
     }
