@@ -5,7 +5,6 @@ import com.wootecobook.turkey.user.service.exception.NotFoundUserException;
 import com.wootecobook.turkey.user.service.exception.SignUpException;
 import com.wootecobook.turkey.user.service.exception.UserDeleteException;
 import com.wootecobook.turkey.user.service.exception.UserMismatchException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,7 +16,7 @@ public class UserApiControllerAdvice {
             NotFoundUserException.class, NotLoginException.class})
     private ResponseEntity<ErrorMessage> handleException(Exception exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(errorMessage);
     }
 
 }
