@@ -41,4 +41,5 @@ public class Post extends BaseEntity {
 
         return this;
     }
+  
 }
