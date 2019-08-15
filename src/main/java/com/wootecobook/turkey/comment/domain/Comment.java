@@ -1,6 +1,5 @@
 package com.wootecobook.turkey.comment.domain;
 
-import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.commons.BaseEntity;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;
@@ -24,11 +23,11 @@ public class Comment extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_post_to_article"), nullable = false)
+    @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_comment_to_post"), nullable = false)
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_id",  foreignKey = @ForeignKey(name = "fk_comment_to_comment"))
     private Comment parent;
 
     @Builder
@@ -40,7 +39,7 @@ public class Comment extends BaseEntity {
     }
 
     public boolean isWrittenBy(Long userId) {
-        if(this.user.getId().equals(userId)){
+        if (this.user.getId().equals(userId)) {
             return true;
         }
         throw new CommentAuthException();
