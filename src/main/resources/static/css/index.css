@@ -1,259 +1,302 @@
-#wootecobook-app {
-    min-width: 992px;
+body {
+    margin: 0;
+    font-family: 'Lucida Grande', tahoma, verdana, arial, sans-serif;
+    line-height: 1.28;
 }
 
-header ul.nav-right li, header ul.nav-left li {
-    height: 43px;
-}
-
-.header {
-    background-color: #4267b2;
-    border-bottom: 1px solid #29487d;
-    color: white;
-    height: 43px !important;
-    top: 0px;
-    min-width: 992px;
-}
-
-.logo {
-    background-repeat: no-repeat;
-    -webkit-background-size: 283px 396px;
-    background-size: 283px 396px;
-    background-position: -125px -304px;
-    height: 24px;
-    outline: none;
-    overflow: hidden;
-    text-indent: -999px;
-    white-space: nowrap;
-    width: 24px;
-    position: absolute;
-    top: 9px;
-}
-
-.header .header-container .nav-left>li>a, .header .header-container .nav-right>li>a {
-    min-height: 43px;
-}
-.search-container {
-    position: absolute;
-    top: 1px;
-    left: 50px;
-}
-
-.search {
-    border-radius: 3px;
-    background: white;
-}
-.searchbox {
-    width: 400px;
-    height: 18px;
-    position: absolute;
-    top: 3px;
-    left: 7px;
-    border: 0 none white;
-    border-radius: 3px;
-    height: 25px;
-    margin: 5px;
-    padding: 3px 10px;
-    font-size: 10pt;
-    outline-style: none;
-}
-.search-btn {
-    width: 27px;
-    height: 17px;
-    position: absolute;
-    top: 12px;
-    left: 383px;
-    background: none;
-    background-image: url('../images/default/icons.png');
-    background-position: -26px -202px;
-    border-style: none;
-    border-left: 1px solid rgb(220, 220, 220);
-}
-
-.user-profile {
-    height: 43px;
-}
-
-.profile-img {
-    width: 24px;
-    height: 24px;
-}
-
-.friend-btn {
-    background-size: 283px 396px;
-    background-position: 0 -354px;
-}
-
-.message-btn {
-    background-size: 283px 396px;
-    background-position: -50px -354px;
-}
-
-.notification-btn {
-    background-size: 283px 396px;
-    background-position: -175px -329px;
-}
-
-.friend-btn, .message-btn, .notification-btn {
-    background-image: url('../images/default/icons.png');
-    background-repeat: no-repeat;
-    height: 24px;
-    width: 24px;
-}
-
-.story-user-list {
-    height: 55px;
+#navwrapper {
     width: 100%;
+    height: 82px;
+    background-color: #3b5998;
 }
 
-.bg-lightgray {
-    background-color: #f5f6f7;
+#navbar {
+    margin: 0 auto;
+    width: 980px;
+    height: 59px;
 }
 
-.flex-grow-1 {
-    flex-grow: 1;
+#contentwrapper {
+    width: 100%;
+    height: 606px;
+    background-color: #edf0f5;
 }
 
+#content {
+    margin: 0 auto;
+    width: 980px;
+    padding-top: 20px;
+}
 
-.left{
+h1 {
+    font-family: tahoma, verdana, arial, sans-serif;
+    font-size: 38px;
+    letter-spacing: 0.05px;
+    margin: 0;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+}
+
+.logowrapper {
+    display: block;
+    padding: 30px 0;
+}
+
+#button {
     position: relative;
-    display: block;
-    float: left;
-    word-wrap: break-word;
+    width: 45px;
+    height: 18px;
+    background-color: #5b72a9;
+    border: 1px solid #999;
+    border-color: #8b9dc3 #2f477a #29447e #1a356e;
+    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
 }
-.left-profile{
-    display: block;
-    height: 25px;
-    word-wrap: break-word;
-}
-.left-photo{
-    height: 38px !important;
-    width: 38px !important;
-    margin-right: 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-.left-name-edit{
-    width: 130px;
+
+.tablewrapper {
     float: right;
-    clear: left;
-    display: block;
-    padding-top: 4px;
+    margin-top: 15px;
 }
-.left-name{
-    height: 17px;
-    width: 112px;
+
+.row1 {
+
+    color: #fff;
+    font-size: 11px;
+    width: 164px;
+    cursor: pointer;
+}
+
+.inputtext {
+    border-color: #1d2a5b;
+    margin: 0;
+    width: 142px;
+    border: 1px solid #bdc7d8;
+    margin: 0;
+    padding: 3px;
+    background-color: #FAFFBD;
+}
+
+.row2 {
+
+    color: #9daccb;
+    font-size: 11px;
+    width: 164px;
+    cursor: pointer;
+}
+
+#leftbod {
+    width: 565px;
+    display: inline-block;
+}
+
+.connect {
+    width: 409px;
+    height: 72px;
+    padding: 42px 0 24px;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 36px;
+    color: #333;
+    display: inline-block;
+}
+
+.leftbar {
+
+    padding-bottom: 10px;
+    margin-top: 20px;
+}
+
+.iconwrap {
+    margin-right: 20px;
+    width: 500px;
+
+}
+
+.rowtext {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.fb1 {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.rowtext2 {
+    font-size: 15px;
+    color: #666;
+    margin-left: 10px;
+}
+
+#rightbod {
+    display: inline-block;
+    vertical-align: top;
+    width: 399px;
+    height: 200px;
+    float: right;
+}
+
+.signup {
+    font-size: 36px;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.bolder {
+    font-family: 'Open Sans', sans-serif;
+    text-rendering: optimizelegibility;
+    color: #333;
+}
+
+.free {
+    font-size: 19px;
+    margin-bottom: 20px;
+}
+
+.formbox {
+    display: inline-block;
+    width: 399px;
+}
+
+.inputbody {
+    display: inline-block;
+    font-size: 18px;
+    padding: 8px 10px;
+    border: 1px solid #bdc7d8;
+    -webkit-border-radius: 5px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+::-webkit-input-placeholder {
+    color: #999;
+}
+
+::-moz-placeholder {
+    color: #999;
+}
+
+:-ms-input-placeholder {
+    color: #999;
+}
+
+.in1 {
+    width: 172px;
+}
+
+.in2 {
+    width: 377px;
+}
+
+.fr {
+    float: right;
+}
+
+.fl {
+    float: left;
+}
+
+.bday {
+    font-size: 19px;
+    color: #141823;
+    -webkit-font-smoothing: antialiased;
+    margin-bottom: 5px;
+}
+
+.selectbody {
+    display: inline-block;
+    height: 30px;
+    font-size: 13px;
+    border: 1px solid #bdc7d8;
+    -webkit-border-radius: 5px;
+    color: #141823;
+
+}
+
+.why {
+    font-size: 11px;
+    color: #3b5998;
+    width: 150px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.h:hover {
+    text-decoration: underline;
+}
+
+.gender {
+    font-size: 18px;
+    color: #141823;
+    cursor: pointer;
+    padding: 0 10px 0 3px;
+    margin-right: 4px;
+    line-height: 18px;
+    vertical-align: middle;
+}
+
+.spanpad {
+    padding: 5px 0 5px 4px;
+    display: inline-block;
+}
+
+.mt1 {
+    margin-top: 15px;
+}
+
+.m0 {
+    margin: 0;
+}
+
+.agree {
+    font-size: 11px;
+    color: #777;
+    width: 316px;
+    margin: 11px 0 11px;
+}
+
+.link {
+    color: #3b5998;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.signbut {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #fff;
+    min-width: 194px;
+    padding: 7px 20px;
+    text-align: center;
+    -webkit-border-radius: 5px;
+    background: -webkit-linear-gradient(#67ae55, #578843);
+    -webkit-box-shadow: inset 0 1px 1px #a4e388;
+    border: 1px solid;
+    border-color: #3b6e22 #3b6e22 #2c5115;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+    cursor: pointer;
+}
+
+.signbut:hover {
+    background: -webkit-linear-gradient(#79bc64, #578843);
+}
+
+.create {
+    border-top: 1px solid #a0a9c0;
+    color: #666;
     font-size: 13px;
     font-weight: bold;
-    letter-spacing: -0.5px;
-    text-decoration: none;
-    display: block;
-}
-.left-name:hover{
-    font-weight: bold;
-    text-decoration: underline;
-    display: block;
-}
-.left-edit{
-    height: 17px;
-    width: 112px;
-    display: block;
-}
-.left-edit:hover{
-    height: 17px;
-    width: 112px;
-    text-decoration: underline;
-    display: block;
-}
-.left-sub-menus{
-    height: 100px;
-    width: 164px;
-    margin: 12px 0;
-    padding: 0;
-    list-style-type: none;
-}
-.left-sub-sub-menus{
-    height: 24px;
-    width: 164px;
-}
-.left-sub-sub-menus:hover{
-    height: 24px;
-    width: 164px;
-    font-weight: bold;
-    background-color: rgba(203,204,207,0.4);
-}
-.icons {
-    height: 20px;
-    width: 20px;
-    margin: 3.5px;
-    vertical-align: middle;
-    display: inline-block;
-    background-image: url('../images/default/icons2.png');
-    background-repeat: no-repeat;
-}
-.icon-name {
-    vertical-align: middle;
+    margin-top: 10px;
+    padding-top: 15px;
 }
 
-.icons.newspeed {
-    background-position: 0 -711px;
-    background-size: 37px 1608px;
-}
-
-.icons.message {
-    background-position: 0 -186px;
-    background-size: 37px 1608px;
-}
-
-.icons.watch {
-    background-position: 0 -1110px;
-    background-size: 37px 1608px;
-}
-
-.icons.group {
-    background-position: 0 -879px;
-    background-size: 37px 1608px;
-}
-
-.icons.photo-video {
-    background-position: 0 -837px;
-    background-size: 37px 1608px;
-}
-
-.icons.tag-friend {
-    background-position: 0 -543px;
-    background-size: 37px 1608px;
-}
-
-.icons.feeling-activity {
-    background-position: 0 -501px;
-    background-size: 37px 1608px;
-}
-
-.left-group-title{
-    font-weight: bold;
-    color: #616770;
-}
-
-.resize-none {
-    resize: none;
-}
-
-.border-radius-18 {
-    border-radius: 18px;
-}
-
-.text-link-color {
-    color: #385898 !important;
-}
-
-.nav-right .user-profile .profile-img {
-    width: 25px !important;
-    height: 25px !important;
-    float: none !important;
-}
-
-.header .header-container .nav-left>li>a, .header .header-container .nav-right>li>a {
-    line-height: 43px;
-    min-height: 43px;
-}
