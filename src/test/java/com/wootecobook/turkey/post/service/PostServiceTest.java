@@ -5,7 +5,7 @@ import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostRepository;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
-import com.wootecobook.turkey.post.service.exception.NotExistPostException;
+import com.wootecobook.turkey.post.service.exception.NotFoundPostException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ class PostServiceTest {
         Post testPost = postService.findById(testId);
 
         assertThat(testPost.getContents()).isEqualTo(testContents);
-        assertThrows(NotExistPostException.class, () -> postService.findById(testId + 1));
+        assertThrows(NotFoundPostException.class, () -> postService.findById(testId + 1));
     }
 
     @Test
@@ -92,7 +92,7 @@ class PostServiceTest {
         Long testId = addPost();
         PostRequest postRequest = new PostRequest("world!");
 
-        assertThrows(NotExistPostException.class, () ->
+        assertThrows(NotFoundPostException.class, () ->
                 postService.update(postRequest, testId + 1));
     }
 
@@ -107,7 +107,7 @@ class PostServiceTest {
     void 없는_post_삭제_예외_테스트() {
         Long testId = addPost();
 
-        assertThrows(NotExistPostException.class, () -> postService.delete(testId + 1));
+        assertThrows(NotFoundPostException.class, () -> postService.delete(testId + 1));
     }
 
     private Long addPost() {
