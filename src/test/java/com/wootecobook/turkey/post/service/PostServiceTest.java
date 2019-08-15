@@ -23,18 +23,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DataJpaTest
 class PostServiceTest {
 
-    @Autowired
-    private PostRepository postRepository;
-
-    private PostService postService;
+    public static final long NOT_FOUND_POST_ID = Long.MAX_VALUE;
+    private final PostService postService;
 
     private Contents testContents;
     private PostRequest postRequest;
 
+    @Autowired
+    public PostServiceTest(PostRepository postRepository) {
+        this.postService = new PostService(postRepository);
+    }
+
     @BeforeEach
     void setUp() {
-        postService = new PostService(postRepository);
-
         String contentsText = "hello";
         postRequest = new PostRequest(contentsText);
         testContents = new Contents(contentsText);
@@ -50,11 +51,14 @@ class PostServiceTest {
     @Test
     void post_조회_테스트() {
         Long testId = addPost();
-
         Post testPost = postService.findById(testId);
 
         assertThat(testPost.getContents()).isEqualTo(testContents);
-        assertThrows(NotFoundPostException.class, () -> postService.findById(testId + 1));
+    }
+
+    @Test
+    void 존재하지_않는_post_조회_예외_테스트() {
+        assertThrows(NotFoundPostException.class, () -> postService.findById(NOT_FOUND_POST_ID));
     }
 
     @Test
@@ -89,11 +93,8 @@ class PostServiceTest {
 
     @Test
     void 없는_게시글_수정_예외_테스트() {
-        Long testId = addPost();
-        PostRequest postRequest = new PostRequest("world!");
-
         assertThrows(NotFoundPostException.class, () ->
-                postService.update(postRequest, testId + 1));
+                postService.update(postRequest, NOT_FOUND_POST_ID));
     }
 
     @Test
@@ -105,9 +106,7 @@ class PostServiceTest {
 
     @Test
     void 없는_post_삭제_예외_테스트() {
-        Long testId = addPost();
-
-        assertThrows(NotFoundPostException.class, () -> postService.delete(testId + 1));
+        assertThrows(NotFoundPostException.class, () -> postService.delete(NOT_FOUND_POST_ID));
     }
 
     private Long addPost() {

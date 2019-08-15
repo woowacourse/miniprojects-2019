@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PostTest {
 
-    Contents testContents;
+    private Contents testContents;
 
     @BeforeEach
     void setUp() {
