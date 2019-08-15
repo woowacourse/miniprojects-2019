@@ -1,9 +1,9 @@
-package com.woowacourse.zzazanstagram.model.article;
+package com.woowacourse.zzazanstagram.model.article.domain;
 
 import com.woowacourse.zzazanstagram.model.article.domain.Article;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Contents;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Image;
-import com.woowacourse.zzazanstagram.model.member.Member;
+import com.woowacourse.zzazanstagram.model.member.domain.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

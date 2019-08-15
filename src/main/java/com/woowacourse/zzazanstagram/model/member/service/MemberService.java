@@ -1,8 +1,11 @@
-package com.woowacourse.zzazanstagram.model.member;
+package com.woowacourse.zzazanstagram.model.member.service;
 
+import com.woowacourse.zzazanstagram.model.member.domain.Member;
+import com.woowacourse.zzazanstagram.model.member.domain.vo.Email;
+import com.woowacourse.zzazanstagram.model.member.domain.vo.NickName;
+import com.woowacourse.zzazanstagram.model.member.dto.MemberSignUpRequest;
 import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
-import com.woowacourse.zzazanstagram.model.member.vo.Email;
-import com.woowacourse.zzazanstagram.model.member.vo.NickName;
+import com.woowacourse.zzazanstagram.model.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

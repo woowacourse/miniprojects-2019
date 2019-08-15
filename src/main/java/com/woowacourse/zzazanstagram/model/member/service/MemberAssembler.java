@@ -1,4 +1,8 @@
-package com.woowacourse.zzazanstagram.model.member;
+package com.woowacourse.zzazanstagram.model.member.service;
+
+import com.woowacourse.zzazanstagram.model.member.domain.Member;
+import com.woowacourse.zzazanstagram.model.member.dto.MemberResponse;
+import com.woowacourse.zzazanstagram.model.member.dto.MemberSignUpRequest;
 
 public class MemberAssembler {
     static MemberResponse assemble(Member member) {

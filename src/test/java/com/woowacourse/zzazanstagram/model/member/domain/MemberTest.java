@@ -1,11 +1,10 @@
-package com.woowacourse.zzazanstagram.model.member;
+package com.woowacourse.zzazanstagram.model.member.domain;
 
-import com.woowacourse.zzazanstagram.model.member.vo.Password;
+import com.woowacourse.zzazanstagram.model.member.domain.vo.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

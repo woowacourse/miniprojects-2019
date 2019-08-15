@@ -1,4 +1,4 @@
-package com.woowacourse.zzazanstagram.model.member.vo;
+package com.woowacourse.zzazanstagram.model.member.domain.vo;
 
 import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
 

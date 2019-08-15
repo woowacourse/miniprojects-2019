@@ -1,4 +1,4 @@
-package com.woowacourse.zzazanstagram.model.member;
+package com.woowacourse.zzazanstagram.model.member.controller;
 
 import com.woowacourse.zzazanstagram.model.RequestTemplate;
 import com.woowacourse.zzazanstagram.model.support.WebTestHelper;

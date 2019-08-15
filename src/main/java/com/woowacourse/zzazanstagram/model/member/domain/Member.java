@@ -1,7 +1,7 @@
-package com.woowacourse.zzazanstagram.model.member;
+package com.woowacourse.zzazanstagram.model.member.domain;
 
 import com.woowacourse.zzazanstagram.model.common.BaseEntity;
-import com.woowacourse.zzazanstagram.model.member.vo.*;
+import com.woowacourse.zzazanstagram.model.member.domain.vo.*;
 
 import javax.persistence.Entity;
 

@@ -3,7 +3,7 @@ package com.woowacourse.zzazanstagram.model.article.domain;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Contents;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Image;
 import com.woowacourse.zzazanstagram.model.common.BaseEntity;
-import com.woowacourse.zzazanstagram.model.member.Member;
+import com.woowacourse.zzazanstagram.model.member.domain.Member;
 
 import javax.persistence.*;
 

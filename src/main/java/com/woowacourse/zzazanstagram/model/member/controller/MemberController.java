@@ -1,5 +1,7 @@
-package com.woowacourse.zzazanstagram.model.member;
+package com.woowacourse.zzazanstagram.model.member.controller;
 
+import com.woowacourse.zzazanstagram.model.member.dto.MemberSignUpRequest;
+import com.woowacourse.zzazanstagram.model.member.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
