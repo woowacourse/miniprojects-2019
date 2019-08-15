@@ -44,7 +44,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
-                .expectStatus().isOk()
+                .expectStatus().isCreated()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody(UserResponse.class)
                 .returnResult()
@@ -198,7 +198,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .uri(USER_API_URI_WITH_SLASH + id)
                 .cookie("JSESSIONID", logIn(email, VALID_PASSWORD))
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isNoContent();
     }
 
     @Test

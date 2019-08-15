@@ -4,6 +4,7 @@ import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +25,13 @@ public class UserApiController {
 
     @PostMapping
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest userRequest) {
-        return ResponseEntity.ok(userService.save(userRequest));
+        return new ResponseEntity<>(userService.save(userRequest), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id, UserSession userSession) {
         userService.delete(id, userSession.getId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

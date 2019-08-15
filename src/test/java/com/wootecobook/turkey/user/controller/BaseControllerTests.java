@@ -40,8 +40,7 @@ public abstract class BaseControllerTests {
         webTestClient.delete()
                 .uri(USER_API_URI_WITH_SLASH + id)
                 .cookie("JSESSIONID", logIn(email, password))
-                .exchange()
-                .expectStatus().isOk();
+                .exchange();
     }
 
     protected String logIn(String email, String password) {
