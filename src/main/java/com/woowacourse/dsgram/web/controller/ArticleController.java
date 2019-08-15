@@ -45,4 +45,5 @@ public class ArticleController {
 
         return new ResponseEntity<>(base64, HttpStatus.OK);
     }
+
 }
