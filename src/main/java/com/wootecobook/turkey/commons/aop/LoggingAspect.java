@@ -17,6 +17,10 @@ public class LoggingAspect {
     @Pointcut("execution(* com.wootecobook.turkey.*.controller..*Controller.*(..))")
     public void loggingForController() {}
 
+    @Pointcut("execution(* com.wootecobook.turkey.*.*Advice.*(..))")
+    public void loggingForException() {
+    }
+
     @Around("loggingForController()")
     public Object controllerLogging(final ProceedingJoinPoint pjp) throws Throwable {
         setLogger(pjp.getSignature().getDeclaringType());
@@ -25,6 +29,14 @@ public class LoggingAspect {
         log.info("response {}", requestResult);
 
         return requestResult;
+    }
+
+    @Around("loggingForException() && args(exception)")
+    public void exceptionLogging(final ProceedingJoinPoint pjp, Exception exception) throws Throwable {
+        setLogger(exception.getClass());
+        pjp.proceed();
+
+        log.error("errorMessage: {}", exception.getMessage());
     }
 
     private void setLogger(Class<?> clazz) {
