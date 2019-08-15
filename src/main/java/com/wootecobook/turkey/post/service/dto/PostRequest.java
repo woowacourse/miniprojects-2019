@@ -2,6 +2,7 @@ package com.wootecobook.turkey.post.service.dto;
 
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
+import com.wootecobook.turkey.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +19,7 @@ public class PostRequest {
         this.contents = contents;
     }
 
-    public Post toEntity() {
-        return new Post(new Contents(contents));
+    public Post toEntity(User author) {
+        return new Post(new Contents(contents), author);
     }
 }
