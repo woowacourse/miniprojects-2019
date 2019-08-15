@@ -4,7 +4,6 @@ import com.wootecobook.turkey.commons.BaseEntity;
 import com.wootecobook.turkey.post.domain.exception.InvalidPostException;
 import com.wootecobook.turkey.post.domain.exception.PostUpdateFailException;
 import com.wootecobook.turkey.user.domain.User;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Post extends BaseEntity {
 
     @Embedded

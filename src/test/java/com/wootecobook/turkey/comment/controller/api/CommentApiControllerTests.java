@@ -8,17 +8,14 @@ import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
 import com.wootecobook.turkey.user.controller.BaseControllerTests;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -29,19 +26,15 @@ class CommentApiControllerTests extends BaseControllerTests {
     @Autowired
     private WebTestClient webTestClient;
 
-    private String jSessionId;
-    private Long postId;
-    private String uri;
+    private Long userId;
     private Long commentId;
+    private String jSessionId;
+    private String uri;
 
     @BeforeEach
     void setUp() {
-        final String email = "email@gmail.com";
-        final String password = "P@ssw0rd";
-        final String name = "name";
-
-        addUser(name, email, password);
-        jSessionId = logIn(email, password);
+        userId = addUser("name", USER_EMAIL, USER_PASSWORD);
+        jSessionId = logIn(USER_EMAIL, USER_PASSWORD);
 
         // TODO 리팩토링 (샘플 데이터 ?)
         // 글작성
@@ -49,14 +42,15 @@ class CommentApiControllerTests extends BaseControllerTests {
 
         PostResponse postResponse = webTestClient.post().uri("/api/posts")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .cookie("JSESSIONID", jSessionId)
                 .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(PostResponse.class)
                 .returnResult()
                 .getResponseBody();
-        postId = postResponse.getId();
 
+        final Long postId = postResponse.getId();
         uri = linkTo(CommentApiController.class, postId).toUri().toString();
 
         // 댓글 작성
@@ -205,5 +199,10 @@ class CommentApiControllerTests extends BaseControllerTests {
                 .getResponseBody();
 
         return commentResponse.getId();
+    }
+
+    @AfterEach
+    void tearDown() {
+        deleteUser(userId, USER_EMAIL, USER_PASSWORD);
     }
 }

@@ -60,6 +60,17 @@ public class CommentApiController {
         return ResponseEntity.created(uri).body(commentResponse);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CommentResponse> update(@RequestBody CommentUpdate commentUpdate,
+                                                  @PathVariable Long id,
+                                                  UserSession userSession) {
+        log.info("id : {}", id);
+
+        CommentResponse commentResponse = commentService.update(commentUpdate, id, userSession.getId());
+
+        return ResponseEntity.ok(commentResponse);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id,
                                  @PathVariable Long postId,
@@ -70,17 +81,6 @@ public class CommentApiController {
 
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
         return ResponseEntity.noContent().location(uri).build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<CommentResponse> update(@RequestBody CommentUpdate commentUpdate,
-                                                  @PathVariable Long id,
-                                                  UserSession userSession) {
-        log.info("id : {}", id);
-
-        CommentResponse commentResponse = commentService.update(commentUpdate, id, userSession.getId());
-
-        return ResponseEntity.ok(commentResponse);
     }
 }
 

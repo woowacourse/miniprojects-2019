@@ -34,8 +34,12 @@ class CommentRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        post = postRepository.save(new Post(new Contents("contents")));
         user = userRepository.save(new User("PostRepoTest@gmail.com", "name", "P@ssw0rd"));
+        post = Post.builder()
+                .contents(new Contents("contents"))
+                .author(user)
+                .build();
+        post = postRepository.save(post);
 
         comment = new Comment("contents1", user, post, null);
 
