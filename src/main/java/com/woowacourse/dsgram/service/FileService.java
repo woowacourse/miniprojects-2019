@@ -40,6 +40,7 @@ public class FileService {
     }
 
     private void saveFile(MultipartFile multiFile, String fileName) {
+        // Mac에선 full-path 입력해야함
         File file = new File(ARTICLE_UPLOAD_PATH, fileName);
         try {
             multiFile.transferTo(file);

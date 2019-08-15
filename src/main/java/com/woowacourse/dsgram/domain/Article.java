@@ -30,6 +30,10 @@ public class Article {
         this.filePath = filePath;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getContents() {
         return contents;
     }
