@@ -36,9 +36,9 @@ public class PostApiController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PostResponse>> list(@PageableDefault(size = 10, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<Page<PostResponse>> list(@PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostResponse> postResponses = postService.findPostResponses(pageable);
-        return new ResponseEntity<>(postResponses, HttpStatus.OK);
+        return ResponseEntity.ok(postResponses);
     }
 
     @PutMapping("/{postId}")
@@ -50,12 +50,12 @@ public class PostApiController {
 
         PostResponse postResponse = postService.update(postRequest, postId);
 
-        return new ResponseEntity<>(postResponse, HttpStatus.OK);
+        return ResponseEntity.ok(postResponse);
     }
 
     @DeleteMapping("/{postId}")
     public ResponseEntity delete(@PathVariable Long postId) {
         postService.delete(postId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
