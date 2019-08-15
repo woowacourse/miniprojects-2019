@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import static com.wootecobook.turkey.commons.resolver.UserSession.USER_SESSION_KEY;
 
-public class UserSessionHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
+public class UserSessionArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
