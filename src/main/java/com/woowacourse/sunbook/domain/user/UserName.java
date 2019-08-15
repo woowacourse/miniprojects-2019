@@ -13,7 +13,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @NoArgsConstructor
 public class UserName {
-    public static final String NAME_PATTERN = "^(?!.*[~`!@#$%\\^&*()-])(?!.*\\d).{2,10}$";
+    public static final String NAME_PATTERN = "^(?!.*[~`!@#$%\\^&*()-])(?!.*\\d).{2,25}$";
     public static final String NAME_EXCEPTION_MESSAGE = "올바르지 않은 이름입니다.";
 
     @Column(nullable = false, length = 25)

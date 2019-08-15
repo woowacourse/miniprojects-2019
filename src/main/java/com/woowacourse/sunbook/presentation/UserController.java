@@ -21,5 +21,8 @@ public class UserController {
         return new RedirectView("/");
     }
 
-
+    @GetMapping("/sunbook")
+    public String sunbookPage() {
+        return "sunbook";
+    }
 }

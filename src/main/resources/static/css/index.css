@@ -42,7 +42,7 @@ h1 {
     padding: 30px 0;
 }
 
-#button {
+.button {
     position: relative;
     width: 45px;
     height: 18px;

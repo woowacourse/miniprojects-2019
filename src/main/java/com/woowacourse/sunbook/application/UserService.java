@@ -2,10 +2,13 @@ package com.woowacourse.sunbook.application;
 
 import com.woowacourse.sunbook.application.dto.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.UserResponseDto;
+import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
 import com.woowacourse.sunbook.application.exception.LoginException;
 import com.woowacourse.sunbook.domain.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class UserService {
@@ -16,7 +19,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public UserResponseDto save(UserRequestDto userRequestDto) {
+        checkDuplicateEmail(userRequestDto);
         User user = userRepository.save(
                 new User(
                         userRequestDto.getUserEmail(),
@@ -30,6 +35,12 @@ public class UserService {
                 .userEmail(user.getUserEmail())
                 .userName(user.getUserName())
                 .build();
+    }
+
+    private void checkDuplicateEmail(UserRequestDto userRequestDto) {
+        if (userRepository.existsByUserEmail(userRequestDto.getUserEmail())) {
+            throw new DuplicateEmailException();
+        }
     }
 
     public UserResponseDto login(UserRequestDto userRequestDto) {

@@ -22,10 +22,10 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity signUp(@RequestBody UserRequestDto userRequestDto) {
-        userService.save(userRequestDto);
+    public ResponseEntity<UserResponseDto> signUp(@RequestBody UserRequestDto userRequestDto) {
+        UserResponseDto signUpUser = userService.save(userRequestDto);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(signUpUser, HttpStatus.OK);
     }
 
     @PostMapping("/signin")
