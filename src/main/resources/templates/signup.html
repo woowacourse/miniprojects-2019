@@ -24,7 +24,7 @@
 							</h1>
 						</div>
 						<div class="menu_login_container rfloat _ohf">
-							<form id="login_form" action="" method="post">
+							<form id="login_form">
 								<table cellspacing="0" role="presentation">
 									<tbody>
 										<tr>
@@ -40,11 +40,11 @@
 												<input type="email" class="inputtext" name="email" id="email">
 											</td>
 											<td>
-												<input type="password" class="inputtext" name="pass" id="pass">
+												<input type="password" class="inputtext" name="password" id="pass">
 											</td>
 											<td>
 												<label class="uiButton uiButtonConfirm" id="loginbutton" for="u_0_2">
-													<input value="로그인" aria-label="로그인" type="submit" id="u_0_2">
+													<input value="로그인" aria-label="로그인" type="button" id="u_0_2" onclick="login()">
 												</label>
 											</td>
 										</tr>
@@ -115,5 +115,6 @@
 		</div>
 	</div>
 <script src="/js/signup/signup.js"></script>
+<script src="/js/login/login.js"></script>
 </body>
 </html>

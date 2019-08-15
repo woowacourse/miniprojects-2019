@@ -1,9 +1,9 @@
-const url = "/api/users"
-const header = {
-	"Content-Type": "application/json; charset=UTF-8"
-}
-
 const signup = async e => {
+	const url = "/api/users"
+	const header = {
+		"Content-Type": "application/json; charset=UTF-8"
+	}
+
 	const form_data = JSON.stringify($("#reg").serializeObject())
 
 	const res = await fetch(url, {
@@ -17,26 +17,15 @@ const signup = async e => {
 
 	if(result.status === 201) {
 		alert('가입이 완료되었습니다. 로그인 해주세요.')
+		clear()
 	} else if(result.status === 400) {
 		alert(result_data.errorMessage)
 	}
 
 }
 
-$.fn.serializeObject = function() {
-  var result = {}
-  var extend = function(i, element) {
-    var node = result[element.name]
-    if ("undefined" !== typeof node && node !== null) {
-      if ($.isArray(node)) {
-        node.push(element.value)
-      } else {
-        result[element.name] = [node, element.value]
-      }
-    } else {
-      result[element.name] = element.value
-    }
-  }
-  $.each(this.serializeArray(), extend)
-  return result
+const clear = async e => {
+	document.getElementById("form-1-1").value = ""
+	document.getElementById("form-1-2").value = ""
+	document.getElementById("form-1-3").value = ""
 }
