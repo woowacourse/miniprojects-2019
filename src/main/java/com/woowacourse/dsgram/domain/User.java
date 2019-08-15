@@ -48,7 +48,7 @@ public class User {
     }
 
     public void update(User updatedUser, String email) {
-        checkEmail(email);
+        checkEmail(email); //TODO..???
         this.intro = updatedUser.intro;
         this.userName = updatedUser.userName;
         this.nickName = updatedUser.nickName;

@@ -19,15 +19,15 @@ public class UserService {
     }
 
     public void save(SignUpUserDto signUpUserDto) {
-        checkDuplicatedAttributes(signUpUserDto);
+        checkDuplicatedAttributes(signUpUserDto.getNickName(), signUpUserDto.getEmail());
         userRepository.save(UserAssembler.toEntity(signUpUserDto));
     }
 
-    private void checkDuplicatedAttributes(SignUpUserDto signUpUserDto) {
-        if (userRepository.countByNickName(signUpUserDto.getNickName()) > 0) {
+    private void checkDuplicatedAttributes(String nickName, String email) {
+        if (userRepository.countByNickName(nickName) > 0) {
             throw new RuntimeException("이미 사용중인 닉네임입니다.");
         }
-        if (userRepository.findByEmail(signUpUserDto.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("이미 사용중인 이메일입니다.");
         }
     }
@@ -49,10 +49,14 @@ public class UserService {
         User user = findById(userId);
 
         // TODO: 2019-08-15 사장님한테 검사 맞기 (domain 안에 넣어야 하나?)
-        if (!user.equalsNickName(userDto.getNickName()) &&
-                userRepository.countByNickName(userDto.getNickName()) > 0) {
-            throw new RuntimeException("이미 사용중인 닉네임입니다.");
-        }
+
+        // TODO 모든 닉네임,이메일과 비교해야함
+
+        checkDuplicatedAttributes(userDto.getNickName(), userDto.getEmail());
+//        if (!user.equalsNickName(userDto.getNickName()) &&
+//                userRepository.countByNickName(userDto.getNickName()) > 0) {
+//            throw new RuntimeException("이미 사용중인 닉네임입니다.");
+//        }
 
         user.update(UserAssembler.toEntity(userDto), loginUserDto.getEmail());
     }
