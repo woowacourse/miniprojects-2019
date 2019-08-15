@@ -10,6 +10,8 @@ import reactor.core.publisher.Mono;
 
 public abstract class BaseControllerTests {
     protected static final String JSESSIONID = "JSESSIONID";
+    protected static final String USER_PASSWORD = "P@ssw0rd";
+    protected static final String USER_EMAIL = "email@gmail.com";
 
     private static final String USER_API_URI = "/api/users";
     private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
