@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.post.controller;
 
+import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.post.controller.exception.PostBadRequestException;
 import com.wootecobook.turkey.post.service.PostService;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
@@ -26,12 +27,13 @@ public class PostApiController {
     }
 
     @PostMapping
-    public ResponseEntity<PostResponse> create(@RequestBody @Valid PostRequest postRequest, BindingResult bindingResult) {
+    public ResponseEntity<PostResponse> create(@RequestBody @Valid PostRequest postRequest,
+                                               BindingResult bindingResult, UserSession userSession) {
         if (bindingResult.hasErrors()) {
             throw new PostBadRequestException();
         }
 
-        PostResponse postResponse = postService.save(postRequest);
+        PostResponse postResponse = postService.save(postRequest, userSession.getId());
         return new ResponseEntity<>(postResponse, HttpStatus.CREATED);
     }
 
@@ -43,19 +45,19 @@ public class PostApiController {
 
     @PutMapping("/{postId}")
     public ResponseEntity<PostResponse> update(@PathVariable Long postId, @RequestBody @Valid PostRequest postRequest,
-                                               BindingResult bindingResult) {
+                                               BindingResult bindingResult, UserSession userSession) {
         if (bindingResult.hasErrors()) {
             throw new PostBadRequestException();
         }
 
-        PostResponse postResponse = postService.update(postRequest, postId);
+        PostResponse postResponse = postService.update(postRequest, postId, userSession.getId());
 
         return ResponseEntity.ok(postResponse);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity delete(@PathVariable Long postId) {
-        postService.delete(postId);
+    public ResponseEntity delete(@PathVariable Long postId, UserSession userSession) {
+        postService.delete(postId, userSession.getId());
         return ResponseEntity.noContent().build();
     }
 }
