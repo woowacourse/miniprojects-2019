@@ -104,9 +104,8 @@ class PostApiControllerTest {
     @Test
     void 게시글_삭제_존재하지_않는_게시글_예외_테스트() {
         PostRequest postRequest = new PostRequest("olaf");
-        Long postId = addPost(postRequest) + 1;
 
-        webTestClient.delete().uri(POST_URL + "/{postId}", postId)
+        webTestClient.delete().uri(POST_URL + "/{postId}", Long.MAX_VALUE)
                 .exchange()
                 .expectStatus().isBadRequest();
     }
