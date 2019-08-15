@@ -1,5 +1,6 @@
 package com.woowacourse.dsgram.domain;
 
+import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -48,7 +49,7 @@ public class User {
     }
 
     public void update(User updatedUser, String email) {
-        checkEmail(email); //TODO..???
+        checkEmail(email);
         this.intro = updatedUser.intro;
         this.userName = updatedUser.userName;
         this.nickName = updatedUser.nickName;
@@ -58,14 +59,13 @@ public class User {
 
     public void checkPassword(String password) {
         if (!this.password.equals(password)) {
-            // TODO: 2019-08-14 exception
-            throw new IllegalArgumentException("Plz check your account!");
+            throw new InvalidUserException("회원정보가 일치하지 않습니다.");
         }
     }
 
     public void checkEmail(String email) {
         if (!this.email.equals(email)) {
-            throw new RuntimeException("Plz check your account~");
+            throw new InvalidUserException("회원정보가 일치하지 않습니다.");
         }
     }
 

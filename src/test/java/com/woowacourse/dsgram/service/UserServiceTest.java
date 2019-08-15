@@ -2,6 +2,7 @@ package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.domain.UserRepository;
+import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import com.woowacourse.dsgram.service.dto.user.AuthUserDto;
 import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
@@ -14,7 +15,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -84,14 +86,14 @@ public class UserServiceTest {
     void 로그인_실패_이메일_존재안함() {
         given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> userService.login(authUserDto));
+        assertThrows(InvalidUserException.class, () -> userService.login(authUserDto));
     }
 
     @Test
     void 로그인_실패_패스워드_불일치() {
         given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
 
-        assertThrows(IllegalArgumentException.class, () -> userService.login(new AuthUserDto("buddy@buddy.com","exception")));
+        assertThrows(InvalidUserException.class, () -> userService.login(new AuthUserDto("buddy@buddy.com","exception")));
     }
 
     @Test
@@ -110,6 +112,7 @@ public class UserServiceTest {
         assertThrows(RuntimeException.class, () -> userService.update(any(), userDto, loginUserDto));
     }
 
+    //TODO
     @Test
     void 유저_수정_실패_닉네임_중복() {
         given(userRepository.findById(any())).willReturn(Optional.of(user));
@@ -117,14 +120,13 @@ public class UserServiceTest {
         assertThrows(RuntimeException.class, () -> userService.update(any(), userDto, loginUserDto));
     }
 
+    //TODO
     @Test
     void 유저_수정_실패_이메일_중복() {
         given(userRepository.findById(any())).willReturn(Optional.of(user));
-        given(userRepository.countByNickName(any())).willReturn(0L);
+        given(userRepository.countByNickName(any())).willReturn(1L);
         given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
 
         assertThrows(RuntimeException.class, () -> userService.update(any(), userDto, loginUserDto));
     }
-
-
 }

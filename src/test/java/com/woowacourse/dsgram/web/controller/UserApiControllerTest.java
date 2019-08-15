@@ -116,7 +116,7 @@ class UserApiControllerTest {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.message").isEqualTo("Plz check your account.");
+                .jsonPath("$.message").isEqualTo("회원정보가 일치하지 않습니다.");
     }
 
     @Test
@@ -146,7 +146,7 @@ class UserApiControllerTest {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.message").isEqualTo("Plz check your account~");
+                .jsonPath("$.message").isEqualTo("회원정보가 일치하지 않습니다.");
     }
 
     @Test
@@ -185,6 +185,6 @@ class UserApiControllerTest {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.message").isEqualTo("Plz check your account~");
+                .jsonPath("$.message").isEqualTo("회원정보가 일치하지 않습니다.");
     }
 }

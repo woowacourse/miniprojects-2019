@@ -29,7 +29,7 @@ public class UserApiController {
     public ResponseEntity signUp(@RequestBody @Valid SignUpUserDto signUpUserDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
-            throw new RuntimeException(fieldError.getDefaultMessage());
+            throw new InvalidPatternException(fieldError.getDefaultMessage());
         }
         userService.save(signUpUserDto);
         return new ResponseEntity(HttpStatus.OK);
