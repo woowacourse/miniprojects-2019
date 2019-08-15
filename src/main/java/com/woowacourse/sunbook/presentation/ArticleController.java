@@ -19,7 +19,7 @@ public class ArticleController {
     }
 
     @GetMapping
-    public List<ArticleFeature> show() {
+    public List<ArticleResponseDto> show() {
         return articleService.findAll();
     }
 

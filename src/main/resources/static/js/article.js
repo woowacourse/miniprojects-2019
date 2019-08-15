@@ -95,19 +95,39 @@ const host = 'http://' + window.location.host;
 
 const articleTemplate = Handlebars.compile(template);
 
-function putData(method, url, data) {
-    return fetch(url, {
-        method: method, // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, cors, *same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrer: 'no-referrer', // no-referrer, *client
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-    })
+const api = {
+    get: function (url) {
+        return fetch(url, {
+            method: 'GET',
+        });
+    },
+    post: function (url, data) {
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    },
+    put: function (url, data) {
+        return fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    },
+    delete: function (url) {
+        return fetch(url, {
+            method: 'DELETE',
+        });
+    },
+};
+
+function addArticle(url, data) {
+    return api.post(url, data)
         .then(response => response.json())
         .then(function (article) {
             document.getElementById('article-list')
@@ -118,15 +138,14 @@ function putData(method, url, data) {
                     "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
                     "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png"
                 }));
-            console.log(article);
         })
-        ; // parses JSON response into native JavaScript objects
+        ;
 }
 
 function saveArticle() {
     const contents = document.getElementById("article-contents");
     if (contents) {
-        putData("post", "/articles", {
+        addArticle("/articles", {
             contents: contents.value,
             imageUrl: "",
             videoUrl: "",
@@ -139,3 +158,21 @@ function saveArticle() {
 
 const saveBtn = document.getElementById('article-save-btn');
 saveBtn.addEventListener('click', saveArticle);
+
+window.addEventListener("DOMContentLoaded", function () {
+    return api.get("/articles")
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(article => {
+                document.getElementById('article-list')
+                    .insertAdjacentHTML('afterbegin', articleTemplate({
+                        "id": article.id,
+                        "updatedTime": article.updatedTime,
+                        "article-contents": article.articleFeature.contents,
+                        "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
+                        "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png"
+                    }));
+            })
+        })
+        .catch(error => console.log("error: " + error));
+});

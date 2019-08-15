@@ -1,10 +1,13 @@
 package com.woowacourse.sunbook.domain;
 
+import com.woowacourse.sunbook.domain.user.User;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -28,6 +31,10 @@ public class Article {
 
     @UpdateTimestamp
     private LocalDateTime updatedTime;
+
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
+    private User author;
 
     public Article(String contents, String imageUrl, String videoUrl) {
         articleFeature = new ArticleFeature(contents, imageUrl, videoUrl);

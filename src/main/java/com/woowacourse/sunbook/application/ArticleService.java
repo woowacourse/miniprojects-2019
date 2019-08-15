@@ -32,10 +32,11 @@ public class ArticleService {
         return articleFeature;
     }
 
-    public List<ArticleFeature> findAll() {
+    public List<ArticleResponseDto> findAll() {
         return Collections.unmodifiableList(
                 articleRepository.findAll().stream()
-                        .map(Article::getArticleFeature)
+                        .map(article -> new ArticleResponseDto(article.getId(), article.getArticleFeature(),
+                                article.getUpdatedTime()))
                         .collect(Collectors.toList())
         );
     }
