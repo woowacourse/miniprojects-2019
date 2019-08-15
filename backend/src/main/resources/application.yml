@@ -13,9 +13,9 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/blog?characterEncoding=UTF-8&serverTimezone=UTC
-    username: heebong
-    password: 1234
+    url: jdbc:mysql://db:3306/wootube?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: p@ssW0rd
 
 debug: true
 trace: false

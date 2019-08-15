@@ -11,3 +11,4 @@ WORKDIR /usr/src/app
 RUN rm -rf build
 
 CMD java -jar $JAR_NAME
+EXPOSE 8080

@@ -16,7 +16,7 @@ services:
     volumes:
       - ./db_data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=p@ssW0rd
       - MYSQL_DATABASE=wootube
     networks:
       - app-net
