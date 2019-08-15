@@ -13,14 +13,13 @@
             <th:block th:include="fragments/left-panel"/>
             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                 <th:block th:include="fragments/write-post"/>
-                <div class="card widget-feed padding-15">
-                    <th:block layout:fragment="content"/>
-                </div>
+                <th:block layout:fragment="content"/>
             </div>
             <th:block layout:fragment="right-panel"/>
         </div>
     </div>
 </div>
 <th:block th:include="fragments/script"/>
+<th:block layout:fragment="custom-js"/>
 </body>
 </html>

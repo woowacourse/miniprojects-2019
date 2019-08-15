@@ -14,6 +14,8 @@ import javax.validation.constraints.Email;
 @NoArgsConstructor
 public class User extends BaseEntity {
 
+    public static final String INVALID_PASSWORD_MESSAGE = "비밀번호가 틀렸습니다.";
+
     @Email
     @Column(unique = true)
     private String email;
@@ -33,6 +35,16 @@ public class User extends BaseEntity {
         this.email = email;
         this.name = name;
         this.password = password;
+    }
+
+    public void matchPassword(String password) {
+        if (!this.password.equals(password)) {
+            throw new IllegalArgumentException(INVALID_PASSWORD_MESSAGE);
+        }
+    }
+
+    public boolean matchId(Long id) {
+        return (id != null) && (id.equals(getId()));
     }
 
 }
