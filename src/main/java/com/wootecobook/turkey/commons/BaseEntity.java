@@ -27,4 +27,7 @@ public abstract class BaseEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    public void setId(final Long id) {
+        this.id = id;
+    }
 }
