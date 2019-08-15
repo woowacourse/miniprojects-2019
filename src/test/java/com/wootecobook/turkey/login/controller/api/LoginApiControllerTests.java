@@ -28,7 +28,7 @@ class LoginApiControllerTests extends BaseControllerTests {
     @Autowired
     private WebTestClient webTestClient;
 
-    Long userId;
+    private Long userId;
 
     @BeforeEach
     void setUp() {
@@ -120,7 +120,7 @@ class LoginApiControllerTests extends BaseControllerTests {
 
     @AfterEach
     void tearDown() {
-        deleteUser(userId);
+        deleteUser(userId, VALID_EMAIL, VALID_PASSWORD);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.user.controller.api;
 
+import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
@@ -27,8 +28,8 @@ public class UserApiController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
-        userService.delete(id);
+    public ResponseEntity delete(@PathVariable Long id, UserSession userSession) {
+        userService.delete(id, userSession.getId());
         return ResponseEntity.ok().build();
     }
 

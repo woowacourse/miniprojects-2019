@@ -14,6 +14,7 @@ import static com.wootecobook.turkey.user.domain.UserValidator.*;
 import static com.wootecobook.turkey.user.service.exception.NotFoundUserException.NOT_FOUND_USER_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.UserDeleteException.USER_DELETE_FAIL_MESSAGE;
+import static com.wootecobook.turkey.user.service.exception.UserMismatchException.USER_MISMATCH_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -59,7 +60,6 @@ class UserApiControllerTests extends BaseControllerTests {
         String email = "duplicated@dupli.cated";
 
         addUser(VALID_NAME, email, VALID_PASSWORD);
-
 
         UserRequest userRequest = UserRequest.builder()
                 .email(email)
@@ -189,25 +189,34 @@ class UserApiControllerTests extends BaseControllerTests {
 
     @Test
     void 유저_삭제() {
-        Long id = addUser("delete", "delete@delete.del", VALID_PASSWORD);
+        String email = "delete@delete.del";
+        String name = "delete";
+
+        Long id = addUser(name, email, VALID_PASSWORD);
 
         webTestClient.delete()
                 .uri(USER_API_URI_WITH_SLASH + id)
+                .cookie("JSESSIONID", logIn(email, VALID_PASSWORD))
                 .exchange()
                 .expectStatus().isOk();
     }
 
     @Test
     void 없는_유저_삭제() {
+        String email = "deleteerror@delete.del";
+        String name = "delete";
+
+        Long id = addUser(name, email, VALID_PASSWORD);
+
         ErrorMessage errorMessage = webTestClient.delete()
                 .uri(USER_API_URI_WITH_SLASH + Long.MAX_VALUE)
+                .cookie("JSESSIONID", logIn(email, VALID_PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
-
-        assertThat(errorMessage.getErrorMessage()).isEqualTo(USER_DELETE_FAIL_MESSAGE);
+        assertThat(errorMessage.getErrorMessage()).isEqualTo(USER_MISMATCH_MESSAGE);
     }
 }

@@ -36,9 +36,10 @@ public abstract class BaseControllerTests {
         return result.getId();
     }
 
-    protected void deleteUser(Long id) {
+    protected void deleteUser(Long id, String email, String password) {
         webTestClient.delete()
                 .uri(USER_API_URI_WITH_SLASH + id)
+                .cookie("JSESSIONID", logIn(email, password))
                 .exchange()
                 .expectStatus().isOk();
     }

@@ -7,6 +7,7 @@ import com.wootecobook.turkey.user.service.dto.UserResponse;
 import com.wootecobook.turkey.user.service.exception.NotFoundUserException;
 import com.wootecobook.turkey.user.service.exception.SignUpException;
 import com.wootecobook.turkey.user.service.exception.UserDeleteException;
+import com.wootecobook.turkey.user.service.exception.UserMismatchException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -130,12 +131,29 @@ class UserServiceTest {
 
         UserResponse userResponse = userService.save(userRequest);
 
-        assertDoesNotThrow(() -> userService.delete(userResponse.getId()));
+        assertDoesNotThrow(() -> userService.delete(userResponse.getId(), userResponse.getId()));
     }
 
     @Test
     void 없는_유저_삭제() {
-        assertThrows(UserDeleteException.class, () -> userService.delete(Long.MAX_VALUE));
+        assertThrows(UserDeleteException.class, () -> userService.delete(Long.MAX_VALUE, Long.MAX_VALUE));
     }
 
+    @Test
+    void null_유저_삭제() {
+        UserRequest userRequest = UserRequest.builder()
+                .email(VALID_EMAIL)
+                .name(VALID_NAME)
+                .password(VALID_PASSWORD)
+                .build();
+
+        UserResponse userResponse = userService.save(userRequest);
+
+        assertThrows(UserMismatchException.class, () -> userService.delete(null, userResponse.getId()));
+    }
+
+    @Test
+    void 다른_id_유저_삭제() {
+        assertThrows(UserMismatchException.class, () -> userService.delete(1L, 2L));
+    }
 }
