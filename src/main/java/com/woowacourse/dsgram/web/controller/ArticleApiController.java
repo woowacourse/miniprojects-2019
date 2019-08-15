@@ -23,11 +23,11 @@ public class ArticleApiController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<HttpStatus> create(ArticleRequest articleRequest) {
+    public ResponseEntity<Article> create(ArticleRequest articleRequest) {
         FileInfo fileInfo = fileService.save(articleRequest.getFile());
         Article article = convertFrom(articleRequest, fileInfo);
-        articleApiService.create(article);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Article savedArticle = articleApiService.create(article);
+        return new ResponseEntity<>(savedArticle, HttpStatus.OK);
     }
 
     private Article convertFrom(ArticleRequest articleRequest, FileInfo fileInfo) {

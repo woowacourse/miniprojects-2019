@@ -13,9 +13,9 @@ public class ArticleApiService {
     @Autowired
     ArticleRepositoy articleRepositoy;
 
-    public void create(Article article) {
+    public Article create(Article article) {
         try {
-            articleRepositoy.save(article);
+            return articleRepositoy.save(article);
         } catch (Exception exception) {
             throw new JpaException("게시글 생성에 실패하였습니다.", exception);
         }

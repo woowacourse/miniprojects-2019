@@ -17,10 +17,14 @@ const save = function () {
         method: "POST",
         body: formData
     }).then(response => {
-        console.log(response);
+        if (response.ok) {
+            return response.json();
+        } else {
+            alert('게시글 작성에 실패했습니다.');
+        }
+    }).then(article => {
+        window.location.href = '/articles/' + article.id;
     })
-
-
 }
 
 saveButton.addEventListener('click',save);
