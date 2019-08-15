@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  app:
+    build: backend
+    container_name: app
+    depends_on:
+      - db
+    volumes:
+      - ./log:/var/log/app
+    networks:
+      - app-net
+  db:
+    image: mysql:8.0.16
+    container_name: app-db
+    volumes:
+      - ./db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=wootube
+    networks:
+      - app-net
+  nginx:
+    image: nginx
+    container_name: web
+    ports:
+      - 80:80
+    depends_on:
+      - app
+    volumes:
+      - ./scripts/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/log:/var/log/nginx
+      - ./frontend:/usr/src/app/public
+    networks:
+      - app-net
+
+networks:
+  app-net:
