@@ -41,7 +41,11 @@ public class CommentService {
     public CommentResponse save(final CommentCreate commentCreate, final Long userId, final Long postId) {
         final User user = userService.findById(userId);
         final Post post = postService.findById(postId);
-        final Comment parent = findById(commentCreate.getParentId());
+        Comment parent = null;
+        if (commentCreate.getParentId() != null) {
+            parent = findById(commentCreate.getParentId());
+        }
+
         final Comment comment = commentCreate.toEntity(user, post, parent);
         try {
             return CommentResponse.from(commentRepository.save(comment));
@@ -58,11 +62,7 @@ public class CommentService {
     public void delete(final Long id, final Long userId) {
         Comment comment = findById(id);
         comment.isWrittenBy(userId);
-        try {
-            commentRepository.delete(comment);
-        } catch (IllegalArgumentException e) {
-            throw new CommentDeleteException(e.getMessage());
-        }
+        comment.delete();
     }
 
     public CommentResponse update(final CommentUpdate commentUpdate, final Long userId) {

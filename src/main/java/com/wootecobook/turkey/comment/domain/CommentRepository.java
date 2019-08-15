@@ -9,5 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
+    //TODO 답글만 조회
+
+    //TODO 답글 제외하고 조회
     Page<Comment> findAllByPost(Post post, Pageable pageable);
 }

@@ -58,7 +58,7 @@ class CommentTest {
     @Test
     void 수정_확인() {
         // given
-        Comment other = Comment.builder()
+        final Comment other = Comment.builder()
                 .contents("수정_확인")
                 .build();
         // when
@@ -66,5 +66,15 @@ class CommentTest {
 
         // then
         assertThat(comment.getContents()).isEqualTo(other.getContents());
+    }
+
+    @Test
+    void 삭제_확인() {
+        // when
+        comment.delete();
+
+        // then
+        assertThat(comment.getContents()).isEqualTo(Comment.CONTENTS_DELETE_MESSAGE);
+        assertThat(comment.isDeleted()).isEqualTo(true);
     }
 }
