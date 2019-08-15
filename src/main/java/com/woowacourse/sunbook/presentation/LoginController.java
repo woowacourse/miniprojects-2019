@@ -3,6 +3,7 @@ package com.woowacourse.sunbook.presentation;
 import com.woowacourse.sunbook.application.UserService;
 import com.woowacourse.sunbook.application.dto.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.UserResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     private final UserService userService;
 
+    @Autowired
     public LoginController(final UserService userService) {
         this.userService = userService;
     }

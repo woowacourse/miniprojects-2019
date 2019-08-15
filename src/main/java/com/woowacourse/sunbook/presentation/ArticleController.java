@@ -3,6 +3,7 @@ package com.woowacourse.sunbook.presentation;
 import com.woowacourse.sunbook.application.ArticleResponseDto;
 import com.woowacourse.sunbook.application.ArticleService;
 import com.woowacourse.sunbook.domain.ArticleFeature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.List;
 @RequestMapping("/articles")
 @RestController
 public class ArticleController {
-
     private final ArticleService articleService;
 
+    @Autowired
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }
