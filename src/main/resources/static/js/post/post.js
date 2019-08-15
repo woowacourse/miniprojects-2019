@@ -9,12 +9,22 @@ let totalPage;
 let currentPageNumber = 1;
 writeBtn.addEventListener('click', (event) => {
     const contents = writeArea.value
-    if (contents) {
-        api.POST(POST_URL, contents)
-            .then(res => res.json())
-            .then(post => posts.prepend(createPostDOM(post)))
-            .catch(error => console.error(error))
-    }
+
+    api.POST(POST_URL, contents)
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+            throw res
+        })
+        .then(post => posts.prepend(createPostDOM(post)))
+        .catch(error => {
+            error.json()
+                .then(errorMessage =>
+                    console.log(errorMessage.message)
+                )
+        })
+
 
     writeArea.value = ''
 })
@@ -105,17 +115,21 @@ const postOperateButton = (function () {
                 api.PUT(getTargetPostUrl(postId), contents)
                     .then(response => {
                         if (!response.ok) {
-                            throw response.json();
+                            throw response;
                         }
                         return response.json();
-                    }).then(post => {
-                    const updatePostContainer = createPostDOM(post);
+                    })
+                    .then(post => {
+                        const updatePostContainer = createPostDOM(post);
 
-                    postCard.parentNode.innerHTML = updatePostContainer.innerHTML;
-                    postCard.classList.toggle('editing');
-                })
-                    .catch(errorMessage =>
-                        console.log(errorMessage.message)
+                        postCard.parentNode.innerHTML = updatePostContainer.innerHTML;
+                        postCard.classList.toggle('editing');
+                    })
+                    .catch(errorResponse =>
+                        errorResponse.json()
+                            .then(errorMessage =>
+                                console.log(errorMessage.message)
+                            )
                     )
             }
         }
@@ -128,12 +142,17 @@ const postOperateButton = (function () {
 
                 api.DELETE(getTargetPostUrl(postId))
                     .then(response => {
-                        if (!response.ok) {
-                            throw response.json();
+                        if (response.status !== 204) {
+                            throw response;
                         }
                         postList.removeChild(postCard.parentNode);
                     })
-                    .catch(errorMessage => console.log(errorMessage.message))
+                    .catch(errorResponse =>
+                        errorResponse.json()
+                            .then(errorMessage =>
+                                console.log(errorMessage.message)
+                            )
+                    )
             }
         }
 
