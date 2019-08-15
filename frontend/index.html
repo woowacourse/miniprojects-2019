@@ -37,44 +37,7 @@
 </head>
 <body>
 <div class="app">
-    <header id="header" class="header navbar shadow-sm">
-        <div class="header-container">
-            <ul class="nav-left mrg-left-0 padding-8">
-                <li>
-                    <a class="side-nav-toggle" href="javascript:void(0);">
-                        <i class="material-icons">menu</i>
-                    </a>
-                </li>
-                <li>
-                    <a href="/"><img class="logo" src="./images/logo/youtube-logo.png"></a>
-                </li>
-            </ul>
-            <ul class="nav-right padding-8">
-
-                <li class="">
-                    <a href="video-create.html" class="pointer">
-                        <i class="material-icons">video_call</i>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer">
-                        <i class="material-icons">apps</i>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer">
-                        <i class="material-icons">notifications</i>
-                    </a>
-                </li>
-                <li class="user-profile">
-                    <a href="profile.html">
-                        <img class="profile-img img-fluid" src="./images/default/eastjun_profile.jpg" alt="">
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </header>
-
+    <div class="header"></div>
     <div class="side-nav mrg-top-60">
         <div class="side-nav-inner">
             <ul class="side-nav-menu overflow-y-auto">
@@ -197,8 +160,10 @@
 <script src="./js/const.js"></script>
 <script src="./js/video/videocardtemplate.js"></script>
 <script src="./js/fetchapi.js"></script>
-<script src="./js/video/testdata.js"></script>
 <script src="./js/mainpage.js"></script>
-
+<script src="./js/headerTemplate.js"></script>
+<script>
+addHeader(document.querySelector(".header"))
+</script>
 </body>
 </html>
