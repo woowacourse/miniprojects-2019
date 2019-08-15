@@ -9,6 +9,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 public abstract class BaseControllerTests {
+    protected static final String JSESSIONID = "JSESSIONID";
 
     private static final String USER_API_URI = "/api/users";
     private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
