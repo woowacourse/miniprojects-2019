@@ -7,7 +7,6 @@ import com.woowacourse.zzazanstagram.model.article.dto.ArticleResponse;
 import com.woowacourse.zzazanstagram.model.article.repository.ArticleRepository;
 import com.woowacourse.zzazanstagram.model.member.Member;
 import com.woowacourse.zzazanstagram.model.member.MemberService;
-import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class ArticleService {
 
     public void save(ArticleRequest dto, String email) {
         Member author = memberService.findMemberByEmail(email);
-        
+
         Article article = ArticleAssembler.toEntity(dto, author);
         articleRepository.save(article);
 

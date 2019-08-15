@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
@@ -70,11 +70,9 @@
                                 <div class="feed-header padding-15">
                                     <ul class="list-unstyled list-info">
                                         <li>
-    <!--                                        TODO : th:src 적용 -->
-                                            <img class="thumb-img img-circle" src="http://newsimg.hankookilbo.com/2016/04/13/201604131460701467_1.jpg" alt="">
+                                            <img class="thumb-img img-circle" th:src="${session.member.profileImage}" alt="">
                                             <div class="info">
-    <!--                                            TODO : th:nickname 적용 -->
-                                                <a href="" class="title no-pdd-vertical text-bold inline-block font-size-15">eastjun</a>
+                                                <p th:text="${session.member.nickName}" class="title no-pdd-vertical text-bold inline-block font-size-15"></p>
                                             </div>
                                             <div class="info">
                                                 <text style="font-size: 12px; color: gray;">새 글 쓰기</text>

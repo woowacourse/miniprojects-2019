@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 public class ArticleAssembler {
     public static Article toEntity(ArticleRequest dto, Member author) {
-        Image image = Image.of(dto.getImageUrl());
+        Image image = Image.of(dto.getImage());
         Contents contents = Contents.of(dto.getContents());
 
         return Article.from(image, contents, author);
@@ -19,11 +19,17 @@ public class ArticleAssembler {
 
     public static ArticleResponse toDto(Article article) {
         Long id = article.getId();
-        Image image = article.getImage();
-        Contents contents = article.getContents();
         LocalDateTime createdDate = article.getCreatedDate();
         LocalDateTime lastModifiedDate = article.getLastModifiedDate();
 
-        return new ArticleResponse(id, image.getUrl(), contents.getContents(), createdDate, lastModifiedDate);
+        return ArticleResponse.ArticleResponseBuilder.anArticleResponse()
+                .id(id)
+                .image(article.image())
+                .contents(article.contents())
+                .nickName(article.getAuthor().nickName())
+                .profileImage(article.getAuthor().profileImage())
+                .createdDate(createdDate)
+                .lastModifiedDate(lastModifiedDate)
+                .build();
     }
 }

@@ -24,7 +24,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(MemberLoginRequest memberLoginRequest, HttpSession httpSession) {
         MemberResponse memberResponse = loginService.find(memberLoginRequest);
-        httpSession.setAttribute(MEMBER, new MemberSession(memberResponse.getEmail()));
+        httpSession.setAttribute(MEMBER, new MemberSession(memberResponse.getEmail(), memberResponse.getNickName(), memberResponse.getProfileImage()));
         return "redirect:/";
     }
 }

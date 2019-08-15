@@ -47,7 +47,7 @@ class ArticleControllerTest extends RequestTemplate {
 
     private WebTestClient.ResponseSpec createArticle() {
         return postHeaderWithLogin("/articles")
-                .body(BodyInserters.fromFormData("imageUrl", IMAGE_URL)
+                .body(BodyInserters.fromFormData("image", IMAGE_URL)
                         .with("contents", CONTENTS)
                         .with("hashTag", HASHTAG))
                 .exchange();

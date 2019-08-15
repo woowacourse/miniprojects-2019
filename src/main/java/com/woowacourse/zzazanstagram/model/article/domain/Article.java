@@ -37,6 +37,14 @@ public class Article extends BaseEntity {
         return contents;
     }
 
+    public String image() {
+        return image.getUrl();
+    }
+
+    public String contents() {
+        return contents.getContents();
+    }
+
     public Member getAuthor() {
         return author;
     }

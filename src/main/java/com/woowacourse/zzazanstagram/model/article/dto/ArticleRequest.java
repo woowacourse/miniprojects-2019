@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 public class ArticleRequest {
 
     @NotBlank
-    private String imageUrl;
+    private String image;
 
     private String contents;
     private String hashTag;
@@ -13,18 +13,18 @@ public class ArticleRequest {
     public ArticleRequest() {
     }
 
-    public ArticleRequest(String imageUrl, String contents, String hashTag) {
-        this.imageUrl = imageUrl;
+    public ArticleRequest(String image, String contents, String hashTag) {
+        this.image = image;
         this.contents = contents;
         this.hashTag = hashTag;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getContents() {
