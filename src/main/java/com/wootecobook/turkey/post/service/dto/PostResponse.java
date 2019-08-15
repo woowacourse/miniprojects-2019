@@ -2,6 +2,7 @@ package com.wootecobook.turkey.post.service.dto;
 
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +17,8 @@ public class PostResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public PostResponse(Long id, Contents contents, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    @Builder
+    private PostResponse(Long id, Contents contents, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.contents = contents;
         this.createdAt = createdAt;
@@ -24,7 +26,12 @@ public class PostResponse {
     }
 
     public static PostResponse from(final Post post) {
-        return new PostResponse(post.getId(), post.getContents(), post.getCreatedAt(), post.getUpdatedAt());
+        return PostResponse.builder()
+                .id(post.getId())
+                .contents(post.getContents())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .build();
     }
 
 }

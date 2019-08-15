@@ -4,12 +4,15 @@ import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostRepository;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
-import com.wootecobook.turkey.post.service.exception.NotExistPostException;
+import com.wootecobook.turkey.post.service.exception.NotFoundPostException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PostService {
 
     private final PostRepository postRepository;
@@ -23,11 +26,13 @@ public class PostService {
         return PostResponse.from(savedPost);
     }
 
+    @Transactional(readOnly = true)
     public Post findById(Long id) {
         return postRepository.findById(id)
-                .orElseThrow(NotExistPostException::new);
+                .orElseThrow(NotFoundPostException::new);
     }
 
+    @Transactional(readOnly = true)
     public Page<PostResponse> findPostResponses(final Pageable pageable) {
         return postRepository.findAll(pageable).map(PostResponse::from);
     }
@@ -38,7 +43,10 @@ public class PostService {
     }
 
     public void delete(Long postId) {
-        Post post = findById(postId);
-        postRepository.delete(post);
+        try {
+            postRepository.deleteById(postId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundPostException();
+        }
     }
 }
