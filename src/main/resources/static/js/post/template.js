@@ -1,5 +1,5 @@
 const postTemplate = (post) => `
-<div class="card widget-feed padding-15">
+<div class="card widget-feed padding-15" data-id="${post.id}">
     <div class="feed-header">
         <ul class="list-unstyled list-info">
             <li>
@@ -8,14 +8,23 @@ const postTemplate = (post) => `
                     <a href="" class="title no-pdd-vertical text-semibold inline-block">eastjun</a>
                     <span>님이 그룹에 링크를 공유했습니다.</span>
                     <span class="sub-title">${dateFormat(post.updatedAt, isUpdated(post.createdAt, post.updatedAt))}</span>
-                    <a class="pointer absolute top-0 right-0" data-toggle="dropdown" aria-expanded="false">
+                    <a class="pointer absolute top-0 right-0 view" data-toggle="dropdown" aria-expanded="false">
                         <span class="btn-icon text-dark">
                             <i class="ti-more font-size-16"></i>
                         </span>
                     </a>
-                    <ul class="dropdown-menu">
+                    <a class="toggle-post-update pointer absolute top-0 right-0 edit"  aria-expanded="false">
+                        <i class="ti-close pdd-right-10 text-dark"></i>
+                    </a>
+                    <ul class="dropdown-menu view">
                         <li>
-                            <a class="pointer">
+                            <a class="pointer toggle-post-update">
+                                <i class="ti-pencil pdd-right-10 text-dark"></i>
+                                <span class="">게시글 수정</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="pointer post-delete">
                                 <i class="ti-trash pdd-right-10 text-dark"></i>
                                 <span class="">게시글 삭제</span>
                             </a>
@@ -26,9 +35,40 @@ const postTemplate = (post) => `
         </ul>
     </div>
     <div class="feed-body no-pdd">
-        <p>
+        <p class="view">
             <span>${post.contents.contents}</span>
         </p>
+        <div class="edit edit-form">
+            <textarea class="resize-none form-control border bottom resize-none edit">${post.contents.contents}</textarea>
+            <ul class="composor-tools pdd-top-15">
+                <div>
+                <li class="bg-lightgray border-radius-round mrg-right-5">
+                    <a class="pdd-vertical-5 pdd-horizon-10 pointer">
+                        <div class="icons photo-video"></div>
+                        <span class="icon-name font-size-13 text-bold"> 사진/동영상</span>
+                    </a>
+                </li>
+                <li class="bg-lightgray border-radius-round mrg-right-5">
+                    <a class="pdd-vertical-5 pdd-horizon-10 pointer">
+                        <div class="icons tag-friend"></div>
+                        <span class="icon-name font-size-13 text-bold"> 친구 태그하기</span>
+                    </a>
+                </li>
+                <li class="bg-lightgray border-radius-round mrg-right-5">
+                    <a class="pdd-vertical-5 pdd-horizon-10 pointer">
+                        <div class="icons feeling-activity"></div>
+                        <span class="icon-name font-size-13 text-bold"> 기분/활동</span>
+                    </a>
+                </li>
+                </div>
+                <li class="bg-lightgray border-radius-round mrg-right-5 post-update">
+                    <a class="pdd-vertical-5 pdd-horizon-10 pointer">
+                        <i class="icons ti-save"></i>
+                        <span class="icon-name font-size-13 text-bold">게시</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     <ul class="feed-action pdd-btm-5 border bottom">
         <li>

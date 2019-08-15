@@ -60,3 +60,102 @@ const createPostDOM = (post) => {
 window.onload = initLoad
 document.addEventListener('scroll', infinityScroll);
 
+const postOperateButton = (function () {
+    const postList = document.getElementById('contents');
+
+    const PostController = function () {
+        const postService = new PostService();
+
+        const modifyPost = function () {
+            postList.addEventListener('click', postService.toggleUpdate);
+            postList.addEventListener('click', postService.update);
+        };
+
+        const deletePost = function () {
+            postList.addEventListener('click', postService.remove);
+        }
+
+        const init = function () {
+            modifyPost();
+            deletePost();
+        };
+
+        return {
+            init: init
+        }
+    };
+
+    const PostService = function () {
+        const toggleUpdate = function (event) {
+            const buttonContainer = event.target.closest("a")
+            if (buttonContainer.classList.contains('toggle-post-update')) {
+                const postCard = buttonContainer.closest('.card');
+                postCard.classList.toggle('editing');
+            }
+        };
+
+        const update = function (event) {
+            const buttonContainer = event.target.closest("li")
+            if (buttonContainer.classList.contains('post-update')) {
+                const postCard = buttonContainer.closest('.card');
+                const postId = postCard.dataset.id
+                const updatePostContainer = buttonContainer.closest("div");
+                const contents = updatePostContainer.querySelector("textArea").value;
+
+                api.PUT(getTargetPostUrl(postId), contents)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw response.json();
+                        }
+                        return response.json();
+                    }).then(post => {
+                    const updatePostContainer = createPostDOM(post);
+
+                    postCard.parentNode.innerHTML = updatePostContainer.innerHTML;
+                    postCard.classList.toggle('editing');
+                })
+                    .catch(errorMessage =>
+                        console.log(errorMessage.message)
+                    )
+            }
+        }
+
+        const remove = (event) => {
+            const buttonContainer = event.target.closest("a")
+            if (buttonContainer.classList.contains('post-delete')) {
+                const postCard = buttonContainer.closest('.card');
+                const postId = postCard.dataset.id
+
+                api.DELETE(getTargetPostUrl(postId))
+                    .then(response => {
+                        if (!response.ok) {
+                            throw response.json();
+                        }
+                        postList.removeChild(postCard.parentNode);
+                    })
+                    .catch(errorMessage => console.log(errorMessage.message))
+            }
+        }
+
+        const getTargetPostUrl = (postId) => {
+            return POST_URL + "/" + postId;
+        }
+
+        return {
+            toggleUpdate: toggleUpdate,
+            update: update,
+            remove: remove
+        }
+    };
+
+    const init = function () {
+        const buttonController = new PostController();
+        buttonController.init();
+    };
+
+    return {
+        init: init
+    }
+})();
+
+postOperateButton.init();
