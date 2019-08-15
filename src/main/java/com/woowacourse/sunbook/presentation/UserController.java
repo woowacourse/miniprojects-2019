@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 public class UserController {
     @GetMapping("/")
     public String signUpPage() {
-        return "sunbook";
+        return "index";
     }
 
     @PostMapping("/signout")

@@ -7,17 +7,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class ArticleServiceTest {
 
     private static final long ARTICLE_ID = 1L;
@@ -40,15 +39,17 @@ public class ArticleServiceTest {
     @Test
     void 게시글_정상_생성() {
         given(articleRepository.save(any(Article.class))).willReturn(article);
+        articleService.save(articleFeature);
 
-        assertEquals(articleFeature, articleService.save(articleFeature));
+        verify(articleRepository).save(article);
     }
 
     @Test
     void 게시글_정상_수정() {
         given(articleRepository.findById(ARTICLE_ID)).willReturn(Optional.of(article));
+        articleService.modify(ARTICLE_ID, updatedArticleFeature);
 
-        assertEquals(updatedArticleFeature, articleService.modify(ARTICLE_ID, updatedArticleFeature));
+        verify(articleRepository).findById(ARTICLE_ID);
     }
 
     @Test

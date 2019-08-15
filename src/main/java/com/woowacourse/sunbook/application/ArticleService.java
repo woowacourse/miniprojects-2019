@@ -26,10 +26,10 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleFeature modify(long articleId, ArticleFeature articleFeature) {
+    public ArticleResponseDto modify(long articleId, ArticleFeature articleFeature) {
         Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
         article.update(articleFeature);
-        return articleFeature;
+        return new ArticleResponseDto(articleId, articleFeature, article.getUpdatedTime());
     }
 
     public List<ArticleResponseDto> findAll() {

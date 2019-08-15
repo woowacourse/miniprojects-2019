@@ -29,7 +29,7 @@ public class ArticleController {
     }
 
     @PutMapping("/{articleId}")
-    public ArticleFeature modify(@PathVariable long articleId, @RequestBody ArticleFeature articleFeature) {
+    public ArticleResponseDto modify(@PathVariable long articleId, @RequestBody ArticleFeature articleFeature) {
         return articleService.modify(articleId, articleFeature);
     }
 

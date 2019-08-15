@@ -1,4 +1,4 @@
-const template = `<div class="card widget-feed" id="article-{{id}}">
+const template = `<div class="card widget-feed" data-object="article" data-article-id="{{id}}">
                     <div class="feed-header">
                         <ul class="list-unstyled list-info">
                             <li>
@@ -13,10 +13,16 @@ const template = `<div class="card widget-feed" id="article-{{id}}">
                                         </span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li>
+                                        <li data-btn="update">
+                                            <a class="pointer">
+                                                <i class="ti-pencil pdd-right-10 text-dark"></i>
+                                                <span id="article-update-{{id}}" data-toggle="modal" data-target="#default-modal">게시글 수정</span>
+                                            </a>
+                                        </li>
+                                        <li data-btn="delete">
                                             <a class="pointer">
                                                 <i class="ti-trash pdd-right-10 text-dark"></i>
-                                                <span class="">게시글 삭제</span>
+                                                <span id="article-delete-{{id}}">게시글 삭제</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -26,7 +32,7 @@ const template = `<div class="card widget-feed" id="article-{{id}}">
                     </div>
                     <div class="feed-body no-pdd">
                         <p>
-                            <span>{{article-contents}}</span> <br>
+                            <span data-object="article-contents">{{article-contents}}</span> <br>
                             <iframe src="{{article-videoUrl}}" height="380"
                                     allowfullscreen></iframe>
                             <img src="{{article-imageUrl}}" height="100" width="100"/>
@@ -138,8 +144,7 @@ function addArticle(url, data) {
                     "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
                     "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png"
                 }));
-        })
-        ;
+        });
 }
 
 function saveArticle() {
@@ -155,11 +160,36 @@ function saveArticle() {
     }
 }
 
+function showModal(article) {
+    const updateArea = document.getElementById('article-update-contents');
+    const articleId = article.getAttribute('data-article-id');
+    updateArea.innerText = article.querySelector('span[data-object="article-contents"]').innerText;
+    api.put("/articles/" + articleId,)
+}
+
 
 const saveBtn = document.getElementById('article-save-btn');
 saveBtn.addEventListener('click', saveArticle);
 
-window.addEventListener("DOMContentLoaded", function () {
+const articleList = document.getElementById('article-list');
+articleList.addEventListener('click', function (event) {
+    const target = event.target;
+    if (target.closest('li[data-btn="delete"]')) {
+        const article = target.closest('div[data-object="article"]');
+        const articleId = article.getAttribute('data-article-id');
+        api.delete('/articles/' + articleId);
+        article.remove();
+    }
+
+    if (target.closest('li[data-btn="update"]')) {
+        const article = target.closest('div[data-object="article"]');
+        showModal(article);
+    }
+});
+
+const updateBtn = document.getElementById('update-btn');
+
+window.addEventListener('DOMContentLoaded', function () {
     return api.get("/articles")
         .then(response => response.json())
         .then(data => {
