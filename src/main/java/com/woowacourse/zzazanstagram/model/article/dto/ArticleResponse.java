@@ -4,21 +4,25 @@ import java.time.LocalDateTime;
 
 public class ArticleResponse {
     private Long id;
-    private String imageUrl;
+    private String image;
     private String contents;
-//    private String hashTag;
+    //    private String hashTag;
+    private String nickName;
+    private String profileImage;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 
-    //Todo author, 댓글, 좋아요 추가하자
+    //Todo 댓글, 좋아요 추가하자
 
     public ArticleResponse() {
     }
 
-    public ArticleResponse(Long id, String imageUrl, String contents, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    private ArticleResponse(Long id, String image, String contents, String nickName, String profileImage, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.id = id;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.contents = contents;
+        this.nickName = nickName;
+        this.profileImage = profileImage;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
     }
@@ -27,12 +31,20 @@ public class ArticleResponse {
         return id;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
     public String getContents() {
         return contents;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -41,5 +53,63 @@ public class ArticleResponse {
 
     public LocalDateTime getLastModifiedDate() {
         return lastModifiedDate;
+    }
+
+
+    public static final class ArticleResponseBuilder {
+        private Long id;
+        private String image;
+        private String contents;
+        //    private String hashTag;
+        private String nickName;
+        private String profileImage;
+        private LocalDateTime createdDate;
+        private LocalDateTime lastModifiedDate;
+
+        private ArticleResponseBuilder() {
+        }
+
+        public static ArticleResponseBuilder anArticleResponse() {
+            return new ArticleResponseBuilder();
+        }
+
+        public ArticleResponseBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public ArticleResponseBuilder image(String image) {
+            this.image = image;
+            return this;
+        }
+
+        public ArticleResponseBuilder contents(String contents) {
+            this.contents = contents;
+            return this;
+        }
+
+        public ArticleResponseBuilder nickName(String nickName) {
+            this.nickName = nickName;
+            return this;
+        }
+
+        public ArticleResponseBuilder profileImage(String profileImage) {
+            this.profileImage = profileImage;
+            return this;
+        }
+
+        public ArticleResponseBuilder createdDate(LocalDateTime createdDate) {
+            this.createdDate = createdDate;
+            return this;
+        }
+
+        public ArticleResponseBuilder lastModifiedDate(LocalDateTime lastModifiedDate) {
+            this.lastModifiedDate = lastModifiedDate;
+            return this;
+        }
+
+        public ArticleResponse build() {
+            return new ArticleResponse(id, image, contents, nickName, profileImage, createdDate, lastModifiedDate);
+        }
     }
 }

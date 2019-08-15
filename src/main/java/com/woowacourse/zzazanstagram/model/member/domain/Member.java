@@ -1,7 +1,7 @@
-package com.woowacourse.zzazanstagram.model.member;
+package com.woowacourse.zzazanstagram.model.member.domain;
 
 import com.woowacourse.zzazanstagram.model.common.BaseEntity;
-import com.woowacourse.zzazanstagram.model.member.vo.*;
+import com.woowacourse.zzazanstagram.model.member.domain.vo.*;
 
 import javax.persistence.Entity;
 
@@ -13,7 +13,7 @@ public class Member extends BaseEntity {
     private Password password;
     private ProfileImage profileImage;
 
-    private Member() {
+    protected Member() {
     }
 
     public boolean isMatchPassword(String password) {

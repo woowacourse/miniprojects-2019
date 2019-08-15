@@ -1,47 +1,51 @@
 package com.woowacourse.zzazanstagram.model.article.domain;
 
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Contents;
-import com.woowacourse.zzazanstagram.model.article.domain.vo.ImageUrl;
+import com.woowacourse.zzazanstagram.model.article.domain.vo.Image;
 import com.woowacourse.zzazanstagram.model.common.BaseEntity;
+import com.woowacourse.zzazanstagram.model.member.domain.Member;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 public class Article extends BaseEntity {
-    private ImageUrl imageUrl;
+    private Image image;
     private Contents contents;
 
-//    @Column(name = "author", nullable = false)
-//    private Member author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author", nullable = false, foreignKey = @ForeignKey(name = "fk_article_to_member"))
+    private Member author;
 
-    private Article() {
+    protected Article() {
     }
 
-    private Article(ImageUrl imageUrl, Contents contents) {
-        this.imageUrl = imageUrl;
-        this.contents = contents;
-    }
-
-/*    public Article(final ImageUrl imageUrl, final Contents contents, final Member author) {
-        this.imageUrl = imageUrl;
+    public Article(final Image image, final Contents contents, final Member author) {
+        this.image = image;
         this.contents = contents;
         this.author = author;
-    }*/
-
-
-    public static Article from(final ImageUrl imageUrl, final Contents contents) {
-        return new Article(imageUrl, contents);
     }
 
-    public ImageUrl getImageUrl() {
-        return imageUrl;
+    public static Article from(final Image image, final Contents contents, final Member author) {
+        return new Article(image, contents, author);
+    }
+
+    public Image getImage() {
+        return image;
     }
 
     public Contents getContents() {
         return contents;
     }
 
-/*    public Member getAuthor() {
+    public String image() {
+        return image.getUrl();
+    }
+
+    public String contents() {
+        return contents.getContents();
+    }
+
+    public Member getAuthor() {
         return author;
-    }*/
+    }
 }

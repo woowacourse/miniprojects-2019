@@ -6,12 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import static com.woowacourse.zzazanstagram.util.SessionKeys.MEMBER;
+
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession httpSession = request.getSession();
 
-        if (httpSession.getAttribute("user") == null) {
+        if (httpSession.getAttribute(MEMBER) == null) {
             response.sendRedirect("/signup");
             return false;
         }

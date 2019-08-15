@@ -93,9 +93,9 @@
                             <div class="feed-header padding-15">
                                 <ul class="list-unstyled list-info">
                                     <li>
-                                        <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
+                                        <img class="thumb-img img-circle" th:src="${article.profileImage}" alt="">
                                         <div class="info">
-                                            <a th:text="user넣으렴" href="" class="title no-pdd-vertical text-bold inline-block font-size-15"></a>
+                                            <a th:text="${article.nickName}" href="" class="title no-pdd-vertical text-bold inline-block font-size-15"></a>
                                         </div>
                                     </li>
                                     <a class="pointer absolute top-10 right-0" data-toggle="dropdown" aria-expanded="false">
@@ -114,7 +114,7 @@
                                 </ul>
                             </div>
                             <div class="feed-body no-pdd">
-                                <img class="img-fluid" th:src="${article.imageUrl}" alt="">
+                                <img class="img-fluid" th:src="${article.image}" alt="">
                             </div>
                             <ul class="feed-action pdd-horizon-15 pdd-top-5">
                                 <li>
@@ -149,7 +149,7 @@
                                     <ul class="list-unstyled list-info pdd-horizon-5">
                                         <li class="comment-item no-pdd">
                                             <div class="info pdd-left-15 pdd-vertical-5">
-                                                <a th:text="user넣으렴" href="" class="title no-pdd-vertical text-bold inline-block font-size-15"></a>
+                                                <a th:text="${article.nickName}" href="" class="title no-pdd-vertical text-bold inline-block font-size-15"></a>
                                                 <!--<span class="font-size-14">안돌 어디갔다 온거였지?</span>-->
                                                 <p th:text="${article.contents}"></p><p>
                                                     <a href="" class="hashtag">#우테코1기</a>

@@ -1,13 +1,15 @@
-package com.woowacourse.zzazanstagram.model.member.vo;
+package com.woowacourse.zzazanstagram.model.member.domain.vo;
+
+import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class NickName {
-    private static final String NICK_NAME_REGEX = "[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣]{2,10}";
+    private static final String NICK_NAME_REGEX = "[0-9A-Za-zㄱ-ㅎㅏ-ㅣ가-힣]{2,10}";
 
-    @Column(name = "nickname")
+    @Column(name = "nick_name", unique = true)
     private String nickName;
 
     private NickName(final String name) {
@@ -23,7 +25,7 @@ public class NickName {
 
     private String validateName(final String name) {
         if (isMismatch(name)) {
-            throw new IllegalArgumentException("이름은 2자 이상 10자 이하입니다.");
+            throw new MemberException("이름은 2자 이상 10자 이하입니다.");
         }
         return name;
     }

@@ -1,37 +1,30 @@
 package com.woowacourse.zzazanstagram.model.article.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Lob;
 import javax.validation.constraints.NotBlank;
 
 public class ArticleRequest {
 
     @NotBlank
-    @Column(name = "image_url", nullable = false)
-    private String imageUrl;
+    private String image;
 
-    @Lob
-    @Column(name = "contents")
     private String contents;
-
-    @Column(name = "hash_tag")
     private String hashTag;
 
     public ArticleRequest() {
     }
 
-    public ArticleRequest(String imageUrl, String contents, String hashTag) {
-        this.imageUrl = imageUrl;
+    public ArticleRequest(String image, String contents, String hashTag) {
+        this.image = image;
         this.contents = contents;
         this.hashTag = hashTag;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getContents() {

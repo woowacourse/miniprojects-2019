@@ -1,4 +1,4 @@
-package com.woowacourse.zzazanstagram.model.member;
+package com.woowacourse.zzazanstagram.model.member.dto;
 
 public class MemberResponse {
     private String nickName;

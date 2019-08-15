@@ -2,6 +2,7 @@ package com.woowacourse.zzazanstagram.model.article.controller;
 
 import com.woowacourse.zzazanstagram.model.article.dto.ArticleRequest;
 import com.woowacourse.zzazanstagram.model.article.service.ArticleService;
+import com.woowacourse.zzazanstagram.model.member.MemberSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -34,8 +35,8 @@ public class ArticleController {
     }
 
     @PostMapping("/articles")
-    public String create(@Valid ArticleRequest dto) {
-        articleService.save(dto);
+    public String create(@Valid ArticleRequest dto, MemberSession memberSession) {
+        articleService.save(dto, memberSession.getEmail());
         return "redirect:/";
     }
 }
