@@ -1,9 +1,9 @@
 package com.woowacourse.zzazanstagram.model.member;
 
-public class UserSession {
+public class MemberSession {
     private String email;
 
-    public UserSession(String email) {
+    public MemberSession(String email) {
         this.email = email;
     }
 

@@ -15,6 +15,11 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    public Member findMemberByEmail(String email) {
+        return findByEmail(email)
+                .orElseThrow(() -> new MemberException("잘못된 접근입니다."));
+    }
+
     private Optional<Member> findByEmail(String email) {
         return memberRepository.findByEmail(Email.of(email));
     }

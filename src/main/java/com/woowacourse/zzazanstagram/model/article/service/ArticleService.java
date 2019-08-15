@@ -5,6 +5,9 @@ import com.woowacourse.zzazanstagram.model.article.domain.Article;
 import com.woowacourse.zzazanstagram.model.article.dto.ArticleRequest;
 import com.woowacourse.zzazanstagram.model.article.dto.ArticleResponse;
 import com.woowacourse.zzazanstagram.model.article.repository.ArticleRepository;
+import com.woowacourse.zzazanstagram.model.member.Member;
+import com.woowacourse.zzazanstagram.model.member.MemberService;
+import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,10 +20,12 @@ public class ArticleService {
     private static final Logger log = LoggerFactory.getLogger(ArticleService.class);
     private static final String TAG = "[ArticleService]";
 
-    private ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
+    private final MemberService memberService;
 
-    public ArticleService(ArticleRepository articleRepository) {
+    public ArticleService(ArticleRepository articleRepository, MemberService memberService) {
         this.articleRepository = articleRepository;
+        this.memberService = memberService;
     }
 
     public List<ArticleResponse> getArticleResponses() {
@@ -31,8 +36,10 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    public void save(ArticleRequest dto) {
-        Article article = ArticleAssembler.toEntity(dto);
+    public void save(ArticleRequest dto, String email) {
+        Member author = memberService.findMemberByEmail(email);
+        
+        Article article = ArticleAssembler.toEntity(dto, author);
         articleRepository.save(article);
 
         log.info("{} create() >> {}", TAG, article);

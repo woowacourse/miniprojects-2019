@@ -5,16 +5,16 @@ import com.woowacourse.zzazanstagram.model.article.domain.vo.Contents;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Image;
 import com.woowacourse.zzazanstagram.model.article.dto.ArticleRequest;
 import com.woowacourse.zzazanstagram.model.article.dto.ArticleResponse;
+import com.woowacourse.zzazanstagram.model.member.Member;
 
 import java.time.LocalDateTime;
 
-//Todo author 추가시 변경
 public class ArticleAssembler {
-    public static Article toEntity(ArticleRequest dto) {
+    public static Article toEntity(ArticleRequest dto, Member author) {
         Image image = Image.of(dto.getImageUrl());
         Contents contents = Contents.of(dto.getContents());
 
-        return Article.from(image, contents);
+        return Article.from(image, contents, author);
     }
 
     public static ArticleResponse toDto(Article article) {

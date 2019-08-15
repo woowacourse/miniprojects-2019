@@ -13,7 +13,7 @@ public class Member extends BaseEntity {
     private Password password;
     private ProfileImage profileImage;
 
-    private Member() {
+    protected Member() {
     }
 
     public boolean isMatchPassword(String password) {
