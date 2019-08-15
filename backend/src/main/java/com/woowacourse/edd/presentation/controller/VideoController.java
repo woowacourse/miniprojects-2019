@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/videos")
+@RequestMapping("/v1/videos")
 public class VideoController {
 
     private static final String DATE = "date";
