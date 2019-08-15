@@ -27,7 +27,7 @@ public class FileService {
         String filePath = BASE_DIR + TOMCAT_PATH + ARTICLE_UPLOAD_PATH;
 
         makeDirectory(filePath);
-        saveFile(multiFile, fileName);
+        saveFile(multiFile, fileName, filePath);
 
         return new FileInfo(fileName, filePath);
     }
@@ -39,9 +39,8 @@ public class FileService {
         }
     }
 
-    private void saveFile(MultipartFile multiFile, String fileName) {
-        // Mac에선 full-path 입력해야함
-        File file = new File(ARTICLE_UPLOAD_PATH, fileName);
+    private void saveFile(MultipartFile multiFile, String fileName, String filePath) {
+        File file = new File(filePath, fileName);
         try {
             multiFile.transferTo(file);
         } catch (IOException e) {
