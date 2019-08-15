@@ -20,7 +20,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 @RestController
 @RequestMapping("/api/posts/{postId}/comments")
 public class CommentApiController {
-    private static final Logger log = LoggerFactory.getLogger(CommentApiController.class);
 
     private final CommentService commentService;
 
@@ -31,8 +30,6 @@ public class CommentApiController {
     @GetMapping
     public ResponseEntity<Page<CommentResponse>> list(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
                                                       @PathVariable Long postId) {
-        log.info("postId : {}, page : {}, pageSize : {}, sort : {}", postId, pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
-
         final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByPostId(postId, pageable);
 
         return ResponseEntity.ok(commentResponses);
@@ -42,8 +39,6 @@ public class CommentApiController {
     @GetMapping("/{id}")
     public ResponseEntity<Page<CommentResponse>> childCommentList(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
                                                                   @PathVariable Long id) {
-        log.info("id : {}, page : {}, pageSize : {}, sort : {}", id, pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
-
         final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByParentId(id, pageable);
 
         return ResponseEntity.ok(commentResponses);
@@ -53,8 +48,6 @@ public class CommentApiController {
     public ResponseEntity<CommentResponse> create(@RequestBody CommentCreate commentCreate,
                                                   @PathVariable Long postId,
                                                   UserSession userSession) {
-        log.info("postId : {}", postId);
-
         final CommentResponse commentResponse = commentService.save(commentCreate, userSession.getId(), postId);
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
         return ResponseEntity.created(uri).body(commentResponse);
@@ -64,8 +57,6 @@ public class CommentApiController {
     public ResponseEntity<CommentResponse> update(@RequestBody CommentUpdate commentUpdate,
                                                   @PathVariable Long id,
                                                   UserSession userSession) {
-        log.info("id : {}", id);
-
         CommentResponse commentResponse = commentService.update(commentUpdate, id, userSession.getId());
 
         return ResponseEntity.ok(commentResponse);
@@ -75,8 +66,6 @@ public class CommentApiController {
     public ResponseEntity delete(@PathVariable Long id,
                                  @PathVariable Long postId,
                                  UserSession userSession) {
-        log.info("id : {}", id);
-
         commentService.delete(id, userSession.getId());
 
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
