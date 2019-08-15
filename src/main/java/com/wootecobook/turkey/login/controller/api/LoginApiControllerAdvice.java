@@ -4,11 +4,11 @@ import com.wootecobook.turkey.login.service.exception.LoginFailException;
 import com.wootecobook.turkey.user.controller.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice(basePackageClasses = LoginApiController.class)
-public class LoginApiControllerExceptionAdvice {
+@RestControllerAdvice(basePackageClasses = LoginApiController.class)
+public class LoginApiControllerAdvice {
 
     @ExceptionHandler({LoginFailException.class})
     private ResponseEntity<ErrorMessage> handleException(Exception e) {

@@ -5,11 +5,11 @@ import com.wootecobook.turkey.user.service.exception.SignUpException;
 import com.wootecobook.turkey.user.service.exception.UserDeleteException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice(basePackageClasses = UserApiController.class)
-public class UserApiControllerExceptionAdvice {
+@RestControllerAdvice(basePackageClasses = UserApiController.class)
+public class UserApiControllerAdvice {
 
     @ExceptionHandler({SignUpException.class, UserDeleteException.class, NotFoundUserException.class})
     private ResponseEntity<ErrorMessage> handleException(Exception e) {
