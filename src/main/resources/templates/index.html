@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
@@ -30,8 +30,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amiri:400,400i|Source+Sans+Pro:400,400i,600,700'">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 <div>
@@ -98,7 +98,7 @@
                                     <li>
                                         <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
                                         <div class="info">
-                                            <a href="" class="title no-pdd-vertical text-bold inline-block font-size-15">eastjun</a>
+                                            <a href="" class="title no-pdd-vertical text-bold inline-block font-size-15" th:text="${session.sessionUser.nickName}">nick name</a>
                                         </div>
                                     </li>
                                     <a class="pointer absolute top-10 right-0" data-toggle="dropdown" aria-expanded="false">
@@ -258,7 +258,7 @@
     </div>
 </div>
 
-<script src="js/index.js"></script>
+<script src="/js/index.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
@@ -266,12 +266,14 @@
 <script>
     document.querySelector('.search-toggle').addEventListener('click', toggleSearchInput)
     document.querySelector(".search-input input").addEventListener("keyup", showSearchedList)
+
     function toggleSearchInput(event) {
         event.preventDefault();
         document.querySelector('.search-box').classList.toggle('active')
         document.querySelector(".search-input").classList.toggle("active")
         document.querySelector(".search-input input").focus()
     }
+
     function showSearchedList(event) {
         if(event.target.value.length > 0) {
             document.querySelector(".advanced-search").classList.add("active")

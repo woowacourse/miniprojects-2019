@@ -21,7 +21,7 @@
     <meta name="twitter:image" content="images/logo/logo-thumnail-bg.jpg">
     <meta name="twitter:domain" content="https://woowacourse.github.io/">
 
-    <link rel="shortcut icon" href="images/logo/favicon.ico">
+    <link rel="shortcut icon" href="/images/logo/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
@@ -30,9 +30,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amiri:400,400i|Source+Sans+Pro:400,400i,600,700'">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
 <div>
@@ -43,26 +43,26 @@
                     <div class="col-lg-7 col-sm-7 mx-auto">
                         <div class="card widget-feed no-pdd mrg-btm-15 text-center pdd-horizon-50">
                             <div class="text-center mrg-vertical-15">
-                                <img class="logo" src="images/logo/instagram_logo_literal.png" alt="logo">
+                                <img class="logo" src="/images/logo/instagram_logo_literal.png" alt="logo">
                             </div>
                             <div>
-                                <form action="/login" class="form-group mrg-vertical-15">
+                                <form class="form-group mrg-vertical-15">
                                     <div class="form-group mrg-btm-5">
-                                        <input type="text" class="form-control" placeholder="전화번호, 사용자 이름 또는 이메일">
+                                        <input id="email" type="text" class="form-control" placeholder="이메일">
                                     </div>
                                     <div class="form-group mrg-btm-10">
-                                        <input type="text" class="form-control" placeholder="비밀번호">
+                                        <input id="password" type="password" class="form-control" placeholder="비밀번호">
                                     </div>
-                                    <button class="btn btn-primary btn-sm form-control">로그인</button>
+                                    <button id="login-button" class="btn btn-primary btn-sm form-control">로그인</button>
                                 </form>
                             </div>
                             <div class="text-center">
                                 <div class="mrg-btm-10 text-gray">
-                                    ―――――――――― 또는 ――――――――――
+                                     또는
                                 </div>
                                 <div class="mrg-vertical-15">
                                     <a href="">
-                                        <img class="login-icon mrg-right-5" src="images/logo/github_logo.png" alt="Github">Github로 로그인
+                                        <img class="login-icon mrg-right-5" src="/images/logo/github_logo.png" alt="Github">Github로 로그인
                                     </a>
                                 </div>
 
@@ -71,7 +71,7 @@
                         <div class="card widget-feed no-pdd">
                             <div class="text-center mrg-vertical-30">
                                 계정이 없으신가요?
-                                <a href="/"><strong>가입하기</strong></a>
+                                <a href="/signup"><strong>가입하기</strong></a>
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
         </div>
     </div>
 </div>
-
+<script src="/js/user.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
