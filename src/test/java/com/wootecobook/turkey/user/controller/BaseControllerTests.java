@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.user.controller;
 
+import com.wootecobook.turkey.login.service.dto.LoginRequest;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,9 @@ public abstract class BaseControllerTests {
     private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
 
     @Autowired
-    WebTestClient webTestClient;
+    private WebTestClient webTestClient;
 
-    public Long addUser(String name, String email, String password) {
+    protected Long addUser(String name, String email, String password) {
         UserRequest userRequest = UserRequest.builder()
                 .email(email)
                 .name(name)
@@ -41,4 +42,20 @@ public abstract class BaseControllerTests {
                 .exchange()
                 .expectStatus().isOk();
     }
+
+    protected String logIn(String email, String password) {
+        LoginRequest loginRequest = LoginRequest.builder()
+                .email(email)
+                .password(password)
+                .build();
+
+        return webTestClient.post().uri("/login")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(loginRequest), LoginRequest.class)
+                .exchange()
+                .returnResult(String.class)
+                .getResponseCookies().get("JSESSIONID").get(0).getValue();
+    }
+
 }

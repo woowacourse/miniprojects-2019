@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import static com.wootecobook.turkey.commons.exception.NotLoginException.NOT_LOGIN_MESSAGE;
 import static com.wootecobook.turkey.login.service.exception.LoginFailException.LOGIN_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.domain.User.INVALID_PASSWORD_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.NotFoundUserException.NOT_FOUND_USER_MESSAGE;
@@ -94,8 +95,32 @@ class LoginApiControllerTests extends BaseControllerTests {
         assertThat(errorMessage.getErrorMessage()).contains(LOGIN_FAIL_MESSAGE, INVALID_PASSWORD_MESSAGE);
     }
 
+    @Test
+    void 로그아웃() {
+        webTestClient.post()
+                .uri("/logout")
+                .cookie("JSESSIONID", logIn(VALID_EMAIL, VALID_PASSWORD))
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void 로그인_안된_상태에서_로그아웃() {
+        ErrorMessage errorMessage = webTestClient.post()
+                .uri("/logout")
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorMessage.getErrorMessage()).isEqualTo(NOT_LOGIN_MESSAGE);
+    }
+
     @AfterEach
     void tearDown() {
         deleteUser(userId);
     }
+
 }
