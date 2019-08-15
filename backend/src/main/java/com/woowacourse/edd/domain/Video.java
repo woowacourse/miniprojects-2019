@@ -55,4 +55,15 @@ public class Video {
     public LocalDateTime getCreateDate() {
         return createDate;
     }
+
+    @Override
+    public String toString() {
+        return "Video{" +
+                "id=" + id +
+                ", youtubeId=" + youtubeId +
+                ", title=" + title +
+                ", contents=" + contents +
+                ", createDate=" + createDate +
+                '}';
+    }
 }

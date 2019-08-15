@@ -23,6 +23,12 @@ public class VideoController {
         this.videoService = videoService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<VideoResponse> findVideo(@PathVariable long id) {
+        VideoResponse videoResponse= videoService.find(id);
+        return new ResponseEntity<>(videoResponse, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<VideoPreviewResponse>> findVideosByFilter(@RequestParam String filter, @RequestParam int page, @RequestParam int limit) {
         if (DATE.equals(filter)) {

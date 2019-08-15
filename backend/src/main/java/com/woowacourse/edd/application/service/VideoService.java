@@ -5,6 +5,7 @@ import com.woowacourse.edd.application.dto.VideoPreviewResponse;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.response.VideoResponse;
 import com.woowacourse.edd.domain.Video;
+import com.woowacourse.edd.exceptions.VideoNotFoundException;
 import com.woowacourse.edd.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,13 +32,9 @@ public class VideoService {
     }
 
     public VideoResponse save(VideoSaveRequestDto requestDto) {
-        Video video = save(videoConverter.toEntity(requestDto));
+        Video video = videoRepository.save(videoConverter.toEntity(requestDto));
 
         return videoConverter.toResponse(video);
-    }
-
-    private Video save(Video video) {
-        return videoRepository.save(video);
     }
 
     public List<VideoPreviewResponse> findVideosByDate(int page, int limit) {
@@ -51,5 +48,14 @@ public class VideoService {
 
     public List<VideoPreviewResponse> findVideosByViewNumbers(int page, int limit) {
         return new ArrayList<>();
+    }
+
+    public VideoResponse find(long id) {
+        Video video = findById(id);
+        return videoConverter.toResponse(video);
+    }
+
+    private Video findById(long id) {
+        return videoRepository.findById(id).orElseThrow(VideoNotFoundException::new);
     }
 }

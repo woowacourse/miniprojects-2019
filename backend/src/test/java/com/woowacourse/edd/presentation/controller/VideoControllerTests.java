@@ -15,14 +15,13 @@ public class VideoControllerTests extends EddApplicationTests {
     @Autowired
     private WebTestClient webTestClient;
 
+    private final String DEFAULT_VIDEO_YOUTUBEID = "S8e1geEpnTA";
+    private final String DEFAULT_VIDEO_TITLE = "제목";
+    private final String DEFAULT_VIDEO_CONTENTS = "내용";
+
     @Test
     void saveVideoTest() {
-        String youtubeId = "1234!@#$asdf";
-        String title = "제목";
-        String contents = "내용";
-        String date = getFormedDate();
-
-        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(youtubeId, title, contents);
+        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
         webTestClient.post().uri("/v1/videos")
                 .body(Mono.just(videoSaveRequestDto), VideoSaveRequestDto.class)
@@ -31,20 +30,17 @@ public class VideoControllerTests extends EddApplicationTests {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody()
                 .jsonPath("$.id").isNotEmpty()
-                .jsonPath("$.youtubeId").isEqualTo(youtubeId)
-                .jsonPath("$.title").isEqualTo(title)
-                .jsonPath("$.contents").isEqualTo(contents)
-                .jsonPath("$.createDate").isEqualTo(date);
+                .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
+                .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
+                .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
+                .jsonPath("$.createDate").isEqualTo(getFormedDate());
     }
 
     @Test
     void saveVideoTestWhenYoutubeIdError() {
         String youtubeId = null;
-        String title = "제목";
-        String contents = "내용";
-        String date = getFormedDate();
 
-        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(youtubeId, title, contents);
+        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(youtubeId, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
         webTestClient.post().uri("/v1/videos")
                 .body(Mono.just(videoSaveRequestDto), VideoSaveRequestDto.class)
@@ -59,12 +55,9 @@ public class VideoControllerTests extends EddApplicationTests {
 
     @Test
     void saveVideoTestWhenTitleError() {
-        String youtubeId = "1234!@#$asdf";
         String title = "";
-        String contents = "내용";
-        String date = getFormedDate();
 
-        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(youtubeId, title, contents);
+        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, title, DEFAULT_VIDEO_CONTENTS);
 
         webTestClient.post().uri("/v1/videos")
                 .body(Mono.just(videoSaveRequestDto), VideoSaveRequestDto.class)
@@ -80,12 +73,9 @@ public class VideoControllerTests extends EddApplicationTests {
 
     @Test
     void saveVideoTestWhenContentsError() {
-        String youtubeId = "1234!@#$asdf";
-        String title = "aaa";
         String contents = " ";
-        String date = getFormedDate();
 
-        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(youtubeId, title, contents);
+        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, contents);
 
         webTestClient.post().uri("/v1/videos")
                 .body(Mono.just(videoSaveRequestDto), VideoSaveRequestDto.class)
@@ -103,6 +93,34 @@ public class VideoControllerTests extends EddApplicationTests {
         webTestClient.get().uri("/v1/videos?filter=date&page=0&limit=5")
                 .exchange()
                 .expectStatus().isOk();
+    }
+
+    @Test
+    void find_video_by_id() {
+        saveVideoTest();
+        webTestClient.get().uri("/v1/videos/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody()
+                .jsonPath("$.id").isNotEmpty()
+                .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
+                .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
+                .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
+                .jsonPath("$.createDate").isEqualTo(getFormedDate());
+    }
+
+    @Test
+    void find_video_by_id_exception() {
+        webTestClient.get().uri("/v1/videos/100")
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody()
+                .jsonPath("$.result").isNotEmpty()
+                .jsonPath("$.result").isEqualTo("FAIL")
+                .jsonPath("$.message").isNotEmpty()
+                .jsonPath("$.message").isEqualTo("그런 비디오는 존재하지 않아!");
     }
 
     private String getFormedDate() {

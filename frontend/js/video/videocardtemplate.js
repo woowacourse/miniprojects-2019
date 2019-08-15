@@ -2,7 +2,7 @@ function addVideoCardTemplate(data, number, categorie) {
     const vidioCardTemplate = `<div class="col-lg-2 padding-2">
     <div class="card bg-transparent no-border">
     <div class="card-media">
-    <a href="detail.html?id=${number+1}"> 
+    <a href="video-detail.html?id=${data[number].id}"> 
     <img class="img-responsive" src="http://img.youtube.com/vi/${data[number].youtubeId}/0.jpg" alt="">
     </a>
     </div>

@@ -11,8 +11,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EddApplicationTests {
 
+    public static final long DEFAULT_VIDEO_ID = 1;
+    public static final String DEFAULT_VIDEO_TITLE = "로비가 좋아하는 노래";
+    public static final String DEFAULT_VIDEO_CONTENTS = "로비만 좋아하는 노래";
+    public static final String DEFAULT_VIDEO_YOUTUBEID = "S8e1geEpnTA";
+
+
     @Test
     public void contextLoads() {
+
     }
 
 }

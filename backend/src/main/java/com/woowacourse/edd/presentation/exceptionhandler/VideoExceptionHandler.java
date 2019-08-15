@@ -3,6 +3,7 @@ package com.woowacourse.edd.presentation.exceptionhandler;
 import com.woowacourse.edd.exceptions.InvalidContentsException;
 import com.woowacourse.edd.exceptions.InvalidTitleException;
 import com.woowacourse.edd.exceptions.InvalidYoutubeIdException;
+import com.woowacourse.edd.exceptions.VideoNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,6 +28,12 @@ public class VideoExceptionHandler {
     @ResponseBody
     @ExceptionHandler(InvalidContentsException.class)
     public ResponseEntity<Error> handleContentsError(InvalidContentsException e) {
+        return new ResponseEntity<>(new Error("FAIL", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(VideoNotFoundException.class)
+    public ResponseEntity<Error> handleVideoNotFoundError(VideoNotFoundException e) {
         return new ResponseEntity<>(new Error("FAIL", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
