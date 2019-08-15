@@ -5,7 +5,7 @@ const postTemplate = (post) => `
             <li>
                 <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
                 <div class="info">
-                    <a href="" class="title no-pdd-vertical text-semibold inline-block">eastjun</a>
+                    <a href="" class="title no-pdd-vertical text-semibold inline-block">${post.author.name}</a>
                     <span>님이 그룹에 링크를 공유했습니다.</span>
                     <span class="sub-title">${dateFormat(post.updatedAt, isUpdated(post.createdAt, post.updatedAt))}</span>
                     <a class="pointer absolute top-0 right-0 view" data-toggle="dropdown" aria-expanded="false">
