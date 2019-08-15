@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 public class NickName {
     private static final String NICK_NAME_REGEX = "[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣]{2,10}";
 
-    @Column(name = "nickname")
+    @Column(name = "nick_name", unique = true)
     private String nickName;
 
     private NickName(final String name) {

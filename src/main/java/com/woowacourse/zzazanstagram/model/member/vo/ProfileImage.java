@@ -1,11 +1,14 @@
 package com.woowacourse.zzazanstagram.model.member.vo;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Embeddable
 public class ProfileImage {
+
+    @Column(name = "profile_image_url")
     private String url;
 
     private ProfileImage(final String url) {
