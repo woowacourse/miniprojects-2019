@@ -257,3 +257,16 @@ header ul.nav-right li, header ul.nav-left li {
     line-height: 43px;
     min-height: 43px;
 }
+
+.composor-tools {
+    display: flex;
+    justify-content: space-between;
+}
+
+.composor-tools div {
+    display: inline-flex;
+}
+
+.composor-tools div li {
+    display: flex;
+}
