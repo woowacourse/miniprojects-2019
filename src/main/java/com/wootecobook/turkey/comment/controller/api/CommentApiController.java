@@ -5,8 +5,6 @@ import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.commons.resolver.UserSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -30,8 +28,8 @@ public class CommentApiController {
     @GetMapping
     public ResponseEntity<Page<CommentResponse>> list(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
                                                       @PathVariable Long postId) {
-        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByPostId(postId, pageable);
 
+        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByPostId(postId, pageable);
         return ResponseEntity.ok(commentResponses);
     }
 
@@ -39,8 +37,8 @@ public class CommentApiController {
     @GetMapping("/{id}")
     public ResponseEntity<Page<CommentResponse>> childCommentList(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
                                                                   @PathVariable Long id) {
-        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByParentId(id, pageable);
 
+        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByParentId(id, pageable);
         return ResponseEntity.ok(commentResponses);
     }
 
@@ -48,6 +46,7 @@ public class CommentApiController {
     public ResponseEntity<CommentResponse> create(@RequestBody CommentCreate commentCreate,
                                                   @PathVariable Long postId,
                                                   UserSession userSession) {
+
         final CommentResponse commentResponse = commentService.save(commentCreate, userSession.getId(), postId);
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
         return ResponseEntity.created(uri).body(commentResponse);
@@ -57,8 +56,8 @@ public class CommentApiController {
     public ResponseEntity<CommentResponse> update(@RequestBody CommentUpdate commentUpdate,
                                                   @PathVariable Long id,
                                                   UserSession userSession) {
-        CommentResponse commentResponse = commentService.update(commentUpdate, id, userSession.getId());
 
+        CommentResponse commentResponse = commentService.update(commentUpdate, id, userSession.getId());
         return ResponseEntity.ok(commentResponse);
     }
 
@@ -66,8 +65,8 @@ public class CommentApiController {
     public ResponseEntity delete(@PathVariable Long id,
                                  @PathVariable Long postId,
                                  UserSession userSession) {
-        commentService.delete(id, userSession.getId());
 
+        commentService.delete(id, userSession.getId());
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
         return ResponseEntity.noContent().location(uri).build();
     }

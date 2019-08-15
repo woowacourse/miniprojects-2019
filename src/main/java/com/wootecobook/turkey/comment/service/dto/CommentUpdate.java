@@ -13,6 +13,10 @@ import lombok.ToString;
 public class CommentUpdate {
     private String contents;
 
+    public CommentUpdate(final String contents) {
+        this.contents = contents;
+    }
+
     public Comment toEntity() {
         return Comment.builder()
                 .contents(contents)

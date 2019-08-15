@@ -49,18 +49,18 @@ public class CommentService {
     public CommentResponse save(final CommentCreate commentCreate, final Long userId, final Long postId) {
         final User user = userService.findById(userId);
         final Post post = postService.findById(postId);
-        Comment parent = null;
-        if (commentCreate.getParentId() != null) {
-            parent = findById(commentCreate.getParentId());
-        }
-
+        final Comment parent = findParentIfExist(commentCreate.getParentId());
         final Comment comment = commentCreate.toEntity(user, post, parent);
+
         try {
             return CommentResponse.from(commentRepository.save(comment));
         } catch (RuntimeException e) {
-            e.printStackTrace();
             throw new CommentSaveException(e.getMessage());
         }
+    }
+
+    private Comment findParentIfExist(final Long parentId) {
+        return parentId == null ? null : findById(parentId);
     }
 
     public CommentResponse update(final CommentUpdate commentUpdate, final Long id, final Long userId) {

@@ -6,10 +6,12 @@ import com.wootecobook.turkey.user.service.dto.UserResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 @NoArgsConstructor
 public class CommentResponse {
     private Long id;

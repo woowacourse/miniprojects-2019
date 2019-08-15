@@ -16,6 +16,11 @@ public class CommentCreate {
     private String contents;
     private Long parentId;
 
+    public CommentCreate(final String contents, final Long parentId) {
+        this.contents = contents;
+        this.parentId = parentId;
+    }
+
     public Comment toEntity(final User user, final Post post, final Comment parent) {
         return Comment.builder()
                 .contents(contents)
