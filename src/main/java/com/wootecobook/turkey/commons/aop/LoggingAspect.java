@@ -32,11 +32,12 @@ public class LoggingAspect {
     }
 
     @Around("loggingForException() && args(exception)")
-    public void exceptionLogging(final ProceedingJoinPoint pjp, Exception exception) throws Throwable {
+    public Object exceptionLogging(final ProceedingJoinPoint pjp, Exception exception) throws Throwable {
         setLogger(exception.getClass());
-        pjp.proceed();
-
+        Object result = pjp.proceed();
         log.error("errorMessage: {}", exception.getMessage());
+
+        return result;
     }
 
     private void setLogger(Class<?> clazz) {
