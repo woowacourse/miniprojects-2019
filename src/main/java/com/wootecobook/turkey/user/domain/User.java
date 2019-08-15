@@ -42,4 +42,9 @@ public class User extends BaseEntity {
             throw new IllegalArgumentException(INVALID_PASSWORD_MESSAGE);
         }
     }
+
+    public boolean matchId(Long id) {
+        return (id != null) && (id.equals(getId()));
+    }
+
 }
