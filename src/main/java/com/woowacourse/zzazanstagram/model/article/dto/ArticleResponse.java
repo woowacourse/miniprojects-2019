@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public class ArticleResponse {
     private Long id;
-    private String imageUrl;
+    private String image;
     private String contents;
-//    private String hashTag;
+    //    private String hashTag;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 
@@ -15,9 +15,9 @@ public class ArticleResponse {
     public ArticleResponse() {
     }
 
-    public ArticleResponse(Long id, String imageUrl, String contents, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public ArticleResponse(Long id, String image, String contents, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.id = id;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.contents = contents;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
@@ -27,8 +27,8 @@ public class ArticleResponse {
         return id;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
     public String getContents() {

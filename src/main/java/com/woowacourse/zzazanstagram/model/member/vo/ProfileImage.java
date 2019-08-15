@@ -1,5 +1,7 @@
 package com.woowacourse.zzazanstagram.model.member.vo;
 
+import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.net.HttpURLConnection;
@@ -28,10 +30,10 @@ public class ProfileImage {
             HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
             con.setRequestMethod("HEAD");
             if (con.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new IllegalArgumentException("리소스가 존재하지 않습니다");
+                throw new MemberException("리소스가 존재하지 않습니다");
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("리소스 경로가 올바르지 않습니다");
+            throw new MemberException("리소스 경로가 올바르지 않습니다");
         }
         return url;
     }
