@@ -30,10 +30,19 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CommentResponse> findCommentResponsesByPostId(final Long postId, final Pageable pageable) {
+    public Comment findById(final Long id) {
+        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
+    }
 
-        final Post post = postService.findById(postId);
-        return commentRepository.findAllByPost(post, pageable)
+    @Transactional(readOnly = true)
+    public Page<CommentResponse> findCommentResponsesByPostId(final Long postId, final Pageable pageable) {
+        return commentRepository.findAllByPostId(postId, pageable)
+                .map(CommentResponse::from);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CommentResponse> findCommentResponsesByParentId(final Long parentId, final Pageable pageable) {
+        return commentRepository.findAllByParentId(parentId, pageable)
                 .map(CommentResponse::from);
     }
 
@@ -54,21 +63,16 @@ public class CommentService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public Comment findById(final Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
+    public CommentResponse update(final CommentUpdate commentUpdate, final Long id, final Long userId) {
+        Comment comment = findById(id);
+        comment.isWrittenBy(userId);
+        comment.update(commentUpdate.toEntity());
+        return CommentResponse.from(comment);
     }
 
     public void delete(final Long id, final Long userId) {
         Comment comment = findById(id);
         comment.isWrittenBy(userId);
         comment.delete();
-    }
-
-    public CommentResponse update(final CommentUpdate commentUpdate, final Long id,final Long userId) {
-        Comment comment = findById(id);
-        comment.isWrittenBy(userId);
-        comment.update(commentUpdate.toEntity());
-        return CommentResponse.from(comment);
     }
 }

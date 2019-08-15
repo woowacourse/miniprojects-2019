@@ -29,11 +29,22 @@ public class CommentApiController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CommentResponse>> list(@PageableDefault(sort = "created_at") Pageable pageable,
+    public ResponseEntity<Page<CommentResponse>> list(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
                                                       @PathVariable Long postId) {
         log.info("postId : {}, page : {}, pageSize : {}, sort : {}", postId, pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 
         final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByPostId(postId, pageable);
+
+        return ResponseEntity.ok(commentResponses);
+    }
+
+    //TODO /{id}는 comment 하나만 조회인데 자식List 조회해도 괜찮은지?
+    @GetMapping("/{id}")
+    public ResponseEntity<Page<CommentResponse>> childCommentList(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
+                                                                  @PathVariable Long id) {
+        log.info("id : {}, page : {}, pageSize : {}, sort : {}", id, pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
+
+        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByParentId(id, pageable);
 
         return ResponseEntity.ok(commentResponses);
     }

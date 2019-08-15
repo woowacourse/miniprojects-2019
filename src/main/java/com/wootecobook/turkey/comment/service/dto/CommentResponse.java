@@ -13,29 +13,29 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentResponse {
     private Long id;
+    private Long parentId;
     private String contents;
-    private CommentResponse parent;
     private UserResponse userResponse;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @Builder
-    private CommentResponse(final Long id, final String contents, final CommentResponse parent,
-                            final UserResponse userResponse, final LocalDateTime createdAt, final LocalDateTime updatedAt) {
+    public CommentResponse(final Long id, final Long parentId, final String contents,
+                           final UserResponse userResponse, final LocalDateTime createdAt, final LocalDateTime updatedAt) {
         this.id = id;
+        this.parentId = parentId;
         this.contents = contents;
-        this.parent = parent;
         this.userResponse = userResponse;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     public static CommentResponse from(Comment comment) {
-        return comment == null ? null : CommentResponse.builder()
+        final Long parentId = comment.getParent() == null ? null : comment.getParent().getId();
+        return CommentResponse.builder()
                 .id(comment.getId())
                 .contents(comment.getContents())
-                .userResponse(UserResponse.from(comment.getUser()))
-                .parent(CommentResponse.from(comment.getParent()))
+                .parentId(parentId)
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();

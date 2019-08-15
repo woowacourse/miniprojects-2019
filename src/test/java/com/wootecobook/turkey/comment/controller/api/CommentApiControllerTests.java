@@ -12,12 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -42,7 +43,7 @@ class CommentApiControllerTests extends BaseControllerTests {
         addUser(name, email, password);
         jSessionId = logIn(email, password);
 
-        // TODO 리팩토링
+        // TODO 리팩토링 (샘플 데이터 ?)
         // 글작성
         PostRequest postRequest = new PostRequest("contents");
 
@@ -57,26 +58,54 @@ class CommentApiControllerTests extends BaseControllerTests {
         postId = postResponse.getId();
 
         uri = linkTo(CommentApiController.class, postId).toUri().toString();
-        commentId = addComment();
+
+        // 댓글 작성
+        final CommentCreate commentCreate = new CommentCreate();
+        commentCreate.setContents("contents");
+        commentId = addComment(commentCreate);
+
+        // 답글 작성
+        commentCreate.setParentId(commentId);
+        addComment(commentCreate);
+        addComment(commentCreate);
     }
 
     @Test
     void 댓글_목록_조회() {
         // given
-        final Pageable pageable = PageRequest.of(0, 20);
+        final int size = 20;
+        final int page = 0;
 
-        // when
-        final Page expected = webTestClient.get().uri(uri + "?size={size}&page={page}", pageable.getPageSize(), pageable.getPageNumber())
+        // when & then
+        webTestClient.get().uri(uri + "?size={size}&page={page}", size, page)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody(Page.class)
-                .returnResult()
-                .getResponseBody();
-        // then
+                .expectBody()
+                .jsonPath("$.size").isEqualTo(size)
+                .jsonPath("$.number").isEqualTo(page)
+                .jsonPath("$.totalElements").isEqualTo(1);
+    }
 
+    @Test
+    void 답글만_목록_조회() {
+        // given
+        final int size = 20;
+        final int page = 0;
+
+        // when & then
+        webTestClient.get().uri(uri + "/{id}?size={size}&page={page}", commentId, size, page)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .cookie(JSESSIONID, jSessionId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody()
+                .jsonPath("$.size").isEqualTo(size)
+                .jsonPath("$.number").isEqualTo(page)
+                .jsonPath("$.totalElements").isEqualTo(2);
     }
 
     @Test
@@ -87,6 +116,8 @@ class CommentApiControllerTests extends BaseControllerTests {
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectHeader().valueMatches("Location", ".*" + uri);
+
+        //TODO 삭제가 되었는지 조회로 확인 해봐야 할까?
     }
 
     @Test
@@ -157,13 +188,10 @@ class CommentApiControllerTests extends BaseControllerTests {
 
         // then
         assertThat(commentCreate.getContents()).isEqualTo(commentResponse.getContents());
-        assertThat(commentId).isEqualTo(commentResponse.getParent().getId());
+        assertThat(commentId).isEqualTo(commentResponse.getParentId());
     }
 
-    private Long addComment() {
-        final CommentCreate commentCreate = new CommentCreate();
-        commentCreate.setContents("contents");
-
+    private Long addComment(CommentCreate commentCreate) {
         final CommentResponse commentResponse = webTestClient.post().uri(uri)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(JSESSIONID, jSessionId)
