@@ -11,7 +11,6 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class CommentUpdate {
-    private Long id;
     private String contents;
 
     public Comment toEntity() {

@@ -1,111 +1,181 @@
 package com.wootecobook.turkey.comment.controller.api;
 
-import com.wootecobook.turkey.comment.service.CommentService;
+import com.wootecobook.turkey.comment.domain.CommentAuthException;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
+import com.wootecobook.turkey.commons.ErrorMessage;
+import com.wootecobook.turkey.post.service.dto.PostRequest;
+import com.wootecobook.turkey.post.service.dto.PostResponse;
+import com.wootecobook.turkey.user.controller.BaseControllerTests;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CommentApiControllerTests {
-    private static final Long POST_ID = 1L;
-    private static final Long COMMENT_ID = 1L;
-    private static final String BASE_URI = linkTo(CommentApiController.class, POST_ID).toUri().toString();
+class CommentApiControllerTests extends BaseControllerTests {
 
     @Autowired
     private WebTestClient webTestClient;
 
-    @MockBean
-    private CommentService commentService;
+    private String jSessionId;
+    private Long postId;
+    private String uri;
+    private Long commentId;
 
-    @Test
-    void 댓글_목록_조회() throws IOException {
-        // given
-        final Pageable pageable = PageRequest.of(0, 20);
-        final Page<CommentResponse> commentResponses = mock(Page.class);
+    @BeforeEach
+    void setUp() {
+        final String email = "email@gmail.com";
+        final String password = "P@ssw0rd";
+        final String name = "name";
 
-        when(commentService.findCommentResponsesByPostId(anyLong(), any()))
-                .thenReturn(commentResponses);
+        addUser(name, email, password);
+        jSessionId = logIn(email, password);
 
-        // when
-        final EntityExchangeResult<byte[]> result = webTestClient.get().uri(BASE_URI + "?size={size}&page={page}", pageable.getPageSize(), pageable.getPageNumber())
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+        // TODO 리팩토링
+        // 글작성
+        PostRequest postRequest = new PostRequest("contents");
+
+        PostResponse postResponse = webTestClient.post().uri("/api/posts")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody().returnResult();
+                .expectStatus().isCreated()
+                .expectBody(PostResponse.class)
+                .returnResult()
+                .getResponseBody();
+        postId = postResponse.getId();
 
-//        final String body = new String(result.getResponseBody());
-//        final Page expected = new ObjectMapper().readValue(body, Page.class);
-
-        // then
+        uri = linkTo(CommentApiController.class, postId).toUri().toString();
+        commentId = addComment();
     }
 
     @Test
-    void 댓글_작성_성공() throws IOException {
+    void 댓글_목록_조회() {
         // given
-        final CommentCreate commentCreate = new CommentCreate();
-        final CommentResponse commentResponse = mock(CommentResponse.class);
+        final Pageable pageable = PageRequest.of(0, 20);
 
-        when(commentService.save(any(), anyLong(), anyLong()))
-                .thenReturn(commentResponse);
         // when
-        final EntityExchangeResult<byte[]> result = webTestClient.post().uri(BASE_URI)
+        final Page expected = webTestClient.get().uri(uri + "?size={size}&page={page}", pageable.getPageSize(), pageable.getPageNumber())
                 .accept(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(commentCreate), CommentCreate.class)
+                .cookie(JSESSIONID, jSessionId)
                 .exchange()
-                .expectStatus().isCreated()
+                .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody().returnResult();
-
-//        final String body = new String(result.getResponseBody());
-//        final CommentResponse expected = new ObjectMapper().readValue(body, CommentResponse.class);
-
+                .expectBody(Page.class)
+                .returnResult()
+                .getResponseBody();
         // then
+
     }
 
     @Test
     void 댓글_삭제_성공() {
-        // given
-
         // when & then
-        webTestClient.delete().uri(BASE_URI + "/{id}", COMMENT_ID)
+        webTestClient.delete().uri(uri + "/{id}", commentId)
+                .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isNoContent()
-                .expectHeader().valueMatches("Location", ".*" + BASE_URI);
+                .expectHeader().valueMatches("Location", ".*" + uri);
     }
 
     @Test
     void 댓글_수정_성공() {
         // given
-        final CommentUpdate commentUpdate = mock(CommentUpdate.class);
+        final CommentUpdate commentUpdate = new CommentUpdate();
+        commentUpdate.setContents("댓글_수정_성공");
 
         // when
-        final EntityExchangeResult<byte[]> result = webTestClient.put().uri(BASE_URI + "/{id}", COMMENT_ID)
+        final CommentResponse commentResponse = webTestClient.put().uri(uri + "/{id}", commentId)
+                .cookie(JSESSIONID, jSessionId)
                 .body(Mono.just(commentUpdate), CommentUpdate.class)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody().returnResult();
-        // then
+                .expectBody(CommentResponse.class)
+                .returnResult()
+                .getResponseBody();
 
+        // then
+        assertThat(commentUpdate.getContents()).isEqualTo(commentResponse.getContents());
+    }
+
+    @Test
+    void 다른_작성자_댓글_수정_예외처리() {
+        // given
+        final String email = "otheremail@gmail.com";
+        final String password = "P@ssw0rd";
+        addUser("name", email, password);
+        String otherJsessionId = logIn(email, password);
+
+        final CommentUpdate commentUpdate = new CommentUpdate();
+        commentUpdate.setContents("다른_작성자_댓글_수정_예외처리");
+
+        // when
+        final ErrorMessage errorMessage = webTestClient.put().uri(uri + "/{id}", commentId)
+                .cookie(JSESSIONID, otherJsessionId)
+                .body(Mono.just(commentUpdate), CommentUpdate.class)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        // then
+        assertThat(CommentAuthException.DEFAULT_MESSAGE).isEqualTo(errorMessage.getMessage());
+    }
+
+    @Test
+    void 답글_저장_성공() {
+        // given
+        final CommentCreate commentCreate = new CommentCreate();
+        commentCreate.setContents("contents");
+        commentCreate.setParentId(commentId);
+
+        // when
+        final CommentResponse commentResponse = webTestClient.post().uri(uri)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .cookie(JSESSIONID, jSessionId)
+                .body(Mono.just(commentCreate), CommentCreate.class)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().valueMatches("Location", ".*" + uri)
+                .expectBody(CommentResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        // then
+        assertThat(commentCreate.getContents()).isEqualTo(commentResponse.getContents());
+        assertThat(commentId).isEqualTo(commentResponse.getParent().getId());
+    }
+
+    private Long addComment() {
+        final CommentCreate commentCreate = new CommentCreate();
+        commentCreate.setContents("contents");
+
+        final CommentResponse commentResponse = webTestClient.post().uri(uri)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .cookie(JSESSIONID, jSessionId)
+                .body(Mono.just(commentCreate), CommentCreate.class)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().valueMatches("Location", ".*" + uri)
+                .expectBody(CommentResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        return commentResponse.getId();
     }
 }

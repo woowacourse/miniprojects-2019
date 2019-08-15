@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +44,7 @@ public class CommentApiController {
                                                   UserSession userSession) {
         log.info("postId : {}", postId);
 
-        final CommentResponse commentResponse = commentService.save(commentCreate, userSession.getId(),  postId);
+        final CommentResponse commentResponse = commentService.save(commentCreate, userSession.getId(), postId);
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
         return ResponseEntity.created(uri).body(commentResponse);
     }
@@ -68,8 +67,7 @@ public class CommentApiController {
                                                   UserSession userSession) {
         log.info("id : {}", id);
 
-        commentUpdate.setId(id);
-        CommentResponse commentResponse = commentService.update(commentUpdate, userSession.getId());
+        CommentResponse commentResponse = commentService.update(commentUpdate, id, userSession.getId());
 
         return ResponseEntity.ok(commentResponse);
     }

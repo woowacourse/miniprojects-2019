@@ -5,10 +5,12 @@ import com.wootecobook.turkey.comment.domain.Comment;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class CommentResponse {
     private Long id;
     private String contents;
@@ -29,7 +31,7 @@ public class CommentResponse {
     }
 
     public static CommentResponse from(Comment comment) {
-        return CommentResponse.builder()
+        return comment == null ? null : CommentResponse.builder()
                 .id(comment.getId())
                 .contents(comment.getContents())
                 .userResponse(UserResponse.from(comment.getUser()))

@@ -5,7 +5,6 @@ import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
-import com.wootecobook.turkey.comment.service.exception.CommentDeleteException;
 import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
 import com.wootecobook.turkey.comment.service.exception.CommentSaveException;
 import com.wootecobook.turkey.post.domain.Post;
@@ -50,6 +49,7 @@ public class CommentService {
         try {
             return CommentResponse.from(commentRepository.save(comment));
         } catch (RuntimeException e) {
+            e.printStackTrace();
             throw new CommentSaveException(e.getMessage());
         }
     }
@@ -65,8 +65,8 @@ public class CommentService {
         comment.delete();
     }
 
-    public CommentResponse update(final CommentUpdate commentUpdate, final Long userId) {
-        Comment comment = findById(commentUpdate.getId());
+    public CommentResponse update(final CommentUpdate commentUpdate, final Long id,final Long userId) {
+        Comment comment = findById(id);
         comment.isWrittenBy(userId);
         comment.update(commentUpdate.toEntity());
         return CommentResponse.from(comment);
