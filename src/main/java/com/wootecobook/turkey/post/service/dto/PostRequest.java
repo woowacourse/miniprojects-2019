@@ -20,6 +20,9 @@ public class PostRequest {
     }
 
     public Post toEntity(User author) {
-        return new Post(new Contents(contents), author);
+        return Post.builder()
+                .contents(new Contents(contents))
+                .author(author)
+                .build();
     }
 }
