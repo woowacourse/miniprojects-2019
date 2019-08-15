@@ -3,6 +3,7 @@ package com.woowacourse.dsgram.web.controller;
 
 import com.woowacourse.dsgram.service.dto.user.AuthUserDto;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
+import com.woowacourse.dsgram.service.dto.user.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,30 +14,42 @@ import reactor.core.publisher.Mono;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserApiControllerTest {
-    private static int FLAG_NO = 0;
+    private static int AUTO_INCREMENT = 0;
 
     @Autowired
     private WebTestClient webTestClient;
 
     private SignUpUserDto signUpUserDto;
+    private AuthUserDto authUserDto;
+    private String sessionCookie;
+    private SignUpUserDto anotherUser;
 
     @BeforeEach
     void setUp() {
-        FLAG_NO++;
-
         signUpUserDto = SignUpUserDto.builder()
                 .userName("김버디")
-                .email(FLAG_NO + "buddy@buddy.com")
-                .nickName(FLAG_NO + "buddy")
+                .email(AUTO_INCREMENT + "buddy@buddy.com")
+                .nickName(AUTO_INCREMENT + "buddy")
                 .password("buddybuddy1!")
                 .build();
-
-        defaultSignUp(signUpUserDto)
+        defaultSignUp(signUpUserDto, true)
                 .expectStatus().isOk();
+        authUserDto = new AuthUserDto(signUpUserDto.getEmail(), signUpUserDto.getPassword());
+        sessionCookie = getCookie(authUserDto);
 
+        anotherUser = SignUpUserDto.builder()
+                .userName("김희CHORE")
+                .email(AUTO_INCREMENT + "buddy@gmail.com")
+                .nickName(AUTO_INCREMENT + "chore")
+                .password("bodybuddy1!")
+                .build();
     }
 
-    private WebTestClient.ResponseSpec defaultSignUp(SignUpUserDto signUpUserDto) {
+    private WebTestClient.ResponseSpec defaultSignUp(SignUpUserDto signUpUserDto, boolean willIncrease) {
+        if (willIncrease) {
+            AUTO_INCREMENT++;
+        }
+
         return webTestClient.post().uri("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(signUpUserDto), SignUpUserDto.class)
@@ -46,14 +59,7 @@ class UserApiControllerTest {
 
     @Test
     void signUp() {
-        SignUpUserDto anotherUser = SignUpUserDto.builder()
-                .userName("버디킴")
-                .email("buddy@gmail.com")
-                .nickName("body")
-                .password("bodybuddy1!")
-                .build();
-
-        defaultSignUp(anotherUser)
+        defaultSignUp(anotherUser, true)
                 .expectStatus().isOk();
     }
 
@@ -66,9 +72,10 @@ class UserApiControllerTest {
                 .password("tjdhtkd12!")
                 .build();
 
-        // TODO: 2019-08-14 Process Exception!!
-        defaultSignUp(anotherUser)
-                .expectStatus().isBadRequest();
+        defaultSignUp(anotherUser, false)
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.message").isEqualTo("이미 사용중인 이메일입니다.");
     }
 
     @Test
@@ -80,16 +87,15 @@ class UserApiControllerTest {
                 .password("ooollehh!")
                 .build();
 
-        // TODO: 2019-08-14 Process Exception!!
-        defaultSignUp(anotherUser)
-                .expectStatus().isBadRequest();
+        defaultSignUp(anotherUser, false)
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.message").isEqualTo("이미 사용중인 닉네임입니다.");
     }
 
     @Test
     void login() {
-        AuthUserDto authUserDto = new AuthUserDto(signUpUserDto.getEmail(), signUpUserDto.getPassword());
         getCookie(authUserDto);
-        // TODO: 2019-08-14 Search CRUD return type
     }
 
     private String getCookie(AuthUserDto authUserDto) {
@@ -100,5 +106,85 @@ class UserApiControllerTest {
                 .returnResult(String.class)
                 .getResponseHeaders()
                 .getFirst("Set-Cookie");
+    }
+
+    @Test
+    void login_fail() {
+        AuthUserDto authUserDto = new AuthUserDto("nonexistent", "nonexistent");
+        webTestClient.post().uri("/api/users/login")
+                .body(Mono.just(authUserDto), AuthUserDto.class)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.message").isEqualTo("Plz check your account.");
+    }
+
+    @Test
+    void 회원정보_수정페이지_접근() {
+        webTestClient.get().uri("/users/{userId}/edit", AUTO_INCREMENT)
+                .header("Cookie", sessionCookie)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void 회정정보_수정페이지_접근_비로그인() {
+        webTestClient.get().uri("/users/{userId}/edit", AUTO_INCREMENT)
+                .exchange()
+                .expectStatus().isFound()
+                .expectHeader().valueMatches("Location", ".*/login");
+    }
+
+    @Test
+    void 회정정보_수정페이지_접근_다른_사용자() {
+        defaultSignUp(anotherUser, true)
+                .expectStatus().isOk();
+
+        AuthUserDto authUserDto = new AuthUserDto(anotherUser.getEmail(), anotherUser.getPassword());
+        webTestClient.get().uri("/users/{userId}/edit", AUTO_INCREMENT - 1)
+                .header("Cookie", getCookie(authUserDto))
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.message").isEqualTo("Plz check your account~");
+    }
+
+    @Test
+    void 회원정보_수정() {
+        UserDto updatedUserDto = UserDto.builder()
+                .userName("김씨유")
+                .intro("updatedIntro")
+                .nickName("펠프스")
+                .password("dsdsds")
+                .webSite("updatedWebSite")
+                .build();
+
+        webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
+                .header("Cookie", sessionCookie)
+                .body(Mono.just(updatedUserDto), UserDto.class)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void 회원정보_수정_다른_사용자() {
+        defaultSignUp(anotherUser, true)
+                .expectStatus().isOk();
+
+        UserDto updatedUserDto = UserDto.builder()
+                .userName("김포비")
+                .intro("updatedIntro")
+                .nickName("반란군")
+                .password("dsdsds")
+                .webSite("updatedWebSite")
+                .build();
+
+        webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
+                .header("Cookie", sessionCookie)
+                .body(Mono.just(updatedUserDto), UserDto.class)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.message").isEqualTo("Plz check your account~");
     }
 }

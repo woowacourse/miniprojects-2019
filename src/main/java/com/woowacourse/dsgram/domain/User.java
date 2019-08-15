@@ -49,7 +49,6 @@ public class User {
 
     public void update(User updatedUser, String email) {
         checkEmail(email);
-        // TODO: 2019-08-14 Nick name 중복 확인
         this.intro = updatedUser.intro;
         this.userName = updatedUser.userName;
         this.nickName = updatedUser.nickName;

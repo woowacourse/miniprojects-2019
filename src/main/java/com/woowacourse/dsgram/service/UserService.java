@@ -19,7 +19,17 @@ public class UserService {
     }
 
     public void save(SignUpUserDto signUpUserDto) {
+        checkDuplicatedAttributes(signUpUserDto);
         userRepository.save(UserAssembler.toEntity(signUpUserDto));
+    }
+
+    private void checkDuplicatedAttributes(SignUpUserDto signUpUserDto) {
+        if (userRepository.countByNickName(signUpUserDto.getNickName()) > 0) {
+            throw new RuntimeException("이미 사용중인 닉네임입니다.");
+        }
+        if (userRepository.findByEmail(signUpUserDto.getEmail()).isPresent()) {
+            throw new RuntimeException("이미 사용중인 이메일입니다.");
+        }
     }
 
     public UserDto findUserInfoById(long userId, LoginUserDto loginUserDto) {
@@ -31,7 +41,7 @@ public class UserService {
     private User findById(long userId) {
         // TODO: 2019-08-14 Exception
         return userRepository.findById(userId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
     }
 
     @Transactional
