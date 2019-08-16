@@ -9,9 +9,9 @@ import techcourse.w3.woostagram.user.dto.UserInfoDto;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 public class ArticleDto {
+    private MultipartFile imageFile;
     private Long id;
     private String contents;
-    private MultipartFile imageFile;
     private String imageUrl;
     private UserInfoDto userInfoDto;
 

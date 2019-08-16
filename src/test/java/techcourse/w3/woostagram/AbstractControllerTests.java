@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 import techcourse.w3.woostagram.user.dto.UserDto;
@@ -29,6 +31,22 @@ public class AbstractControllerTests {
     @BeforeEach
     void setUp() {
         loginRequest(TEST_EMAIL, TEST_PW);
+    }
+
+    protected EntityExchangeResult<byte[]> postMultipartRequest(String uri, Class mappingClass, MultipartBodyBuilder bodyBuilder, String... args) {
+        return webTestClient.post().uri(uri)
+                .header("Cookie", cookie)
+                .syncBody(mapMultipart(bodyBuilder, mappingClass, args))
+                .exchange()
+                .expectBody()
+                .returnResult();
+    }
+
+    private MultiValueMap mapMultipart(MultipartBodyBuilder bodyBuilder, Class mappingClass, String[] args) {
+        for (int i = 1; i < mappingClass.getDeclaredFields().length; i++) {
+            bodyBuilder.part(mappingClass.getDeclaredFields()[i].getName(), args[i]);
+        }
+        return bodyBuilder.build();
     }
 
     protected <T> T getRequest(String uri, Class<T> bodyType) {
