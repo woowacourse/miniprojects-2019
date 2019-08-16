@@ -2,7 +2,6 @@ package techcourse.w3.woostagram.article.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import techcourse.w3.woostagram.article.assembler.ArticleAssembler;
 import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
@@ -16,6 +15,9 @@ import javax.transaction.Transactional;
 @Slf4j
 @Service
 public class ArticleService {
+    private static final String PROJECT_NAME = "miniprojects-2019";
+    private static final int IMAGE_URL_INDEX = 1;
+
     private final ArticleRepository articleRepository;
     private final UserService userService;
     private final FileService fileService;
@@ -30,13 +32,13 @@ public class ArticleService {
     public Long save(ArticleDto articleDto, String email) {
         User user = userService.findUserByEmail(email);
         String filePath = fileService.saveMultipartFile(articleDto.getImageFile());
-        Article article = ArticleAssembler.toArticle(articleDto, filePath.split("miniprojects-2019")[1], user);
+        Article article = articleDto.toEntity(filePath.split(PROJECT_NAME)[IMAGE_URL_INDEX], user);
         articleRepository.save(article);
         return article.getId();
     }
 
     public ArticleDto findById(Long articleId) {
-        return ArticleAssembler.toArticleDto(articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new));
+        return ArticleDto.from(articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new));
     }
 
     @Transactional

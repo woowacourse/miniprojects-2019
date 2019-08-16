@@ -15,8 +15,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("users")
 public class UserController {
-
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;

@@ -13,7 +13,7 @@ import techcourse.w3.woostagram.user.exception.UserUpdateException;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;

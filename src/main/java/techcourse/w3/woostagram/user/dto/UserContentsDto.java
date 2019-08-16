@@ -3,19 +3,14 @@ package techcourse.w3.woostagram.user.dto;
 import lombok.*;
 import techcourse.w3.woostagram.user.domain.UserContents;
 
-import javax.validation.constraints.NotBlank;
-
-@ToString
-@EqualsAndHashCode
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class UserContentsDto {
     private String name;
-
-    @NotBlank(message = "빈칸을 허용하지 않는 항목입니다.")
     private String userName;
-
     private String contents;
     private String profile;
 

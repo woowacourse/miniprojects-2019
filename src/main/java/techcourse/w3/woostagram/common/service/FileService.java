@@ -16,7 +16,7 @@ public class FileService {
     private static final String PATH_DELIMITER = ".";
     //@Value("${file.upload.directory}")
     private static final String UPLOAD_PATH = "/home/yumin/Codes/WoowaTech/Level2/miniprojects-2019/uploads/";
-    private List<String> validExtensions = Arrays.asList("jpg", "jpeg", "png");
+    private static final List<String> VALID_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
 
     public String saveMultipartFile(MultipartFile multipartFile) {
         String fileExtension = validateFileExtension(multipartFile);
@@ -38,7 +38,7 @@ public class FileService {
 
     private String validateFileExtension(MultipartFile multipartFile) {
         String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        if (fileExtension == null || !validExtensions.contains(fileExtension.toLowerCase())) {
+        if (fileExtension == null || !VALID_EXTENSIONS.contains(fileExtension.toLowerCase())) {
             throw new InvalidExtensionException();
         }
         return fileExtension;
