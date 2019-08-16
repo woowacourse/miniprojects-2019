@@ -13,7 +13,6 @@ class ArticleControllerTest extends AbstractControllerTests {
     @Test
     void create_correctArticle_isOk() {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-
         bodyBuilder.part("imageFile", new ByteArrayResource("<<png data>>".getBytes()) {
             @Override
             public String getFilename() {

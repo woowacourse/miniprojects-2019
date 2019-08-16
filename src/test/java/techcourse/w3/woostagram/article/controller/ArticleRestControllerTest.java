@@ -21,14 +21,14 @@ class ArticleRestControllerTest extends AbstractControllerTests {
     @Test
     void update_correctArticleDto_isOk() {
         assertThat(putJsonRequest("/api/articles", ArticleDto.class,
-                String.valueOf(1), "moomin is not moomin anymoer", null, null, null).getStatus().is2xxSuccessful()).isTrue();
+                null, String.valueOf(1), "moomin is not moomin anymoer", null, null).getStatus().is2xxSuccessful()).isTrue();
         putJsonRequest("/api/articles", ArticleDto.class,
-                String.valueOf(1), "moomin is moomin", null, null, null);
+                null, String.valueOf(1), "moomin is moomin", null, null);
     }
 
     @Test
     void update_incorrectArticleDto_exception() {
         assertThat(putJsonRequest("/api/articles", ArticleDto.class,
-                String.valueOf(2), "moomin is not moomin anymoer", null, null, null).getStatus().is4xxClientError()).isTrue();
+                null, String.valueOf(2), "moomin is not moomin anymoer", null, null).getStatus().is4xxClientError()).isTrue();
     }
 }
