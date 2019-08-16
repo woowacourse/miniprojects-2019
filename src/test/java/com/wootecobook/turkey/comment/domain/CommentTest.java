@@ -52,7 +52,7 @@ class CommentTest {
         when(user.getId()).thenReturn(userId);
 
         // when & then
-        assertThrows(CommentAuthException.class, () -> comment.isWrittenBy(otherUserId));
+        assertThrows(NotCommentOwnerException.class, () -> comment.isWrittenBy(otherUserId));
     }
 
     @Test

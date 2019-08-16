@@ -50,7 +50,7 @@ public class Comment extends BaseEntity {
         if (this.user.getId().equals(userId)) {
             return true;
         }
-        throw new CommentAuthException();
+        throw new NotCommentOwnerException();
     }
 
     public void update(final Comment other) {

@@ -1,6 +1,6 @@
 package com.wootecobook.turkey.comment.controller.api;
 
-import com.wootecobook.turkey.comment.domain.CommentAuthException;
+import com.wootecobook.turkey.comment.domain.NotCommentOwnerException;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
@@ -157,7 +157,7 @@ class CommentApiControllerTests extends BaseControllerTests {
                 .getResponseBody();
 
         // then
-        assertThat(CommentAuthException.DEFAULT_MESSAGE).isEqualTo(errorMessage.getMessage());
+        assertThat(NotCommentOwnerException.DEFAULT_MESSAGE).isEqualTo(errorMessage.getMessage());
     }
 
     @Test
