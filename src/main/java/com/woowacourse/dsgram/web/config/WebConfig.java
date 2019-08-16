@@ -1,7 +1,8 @@
 package com.woowacourse.dsgram.web.config;
 
 import com.woowacourse.dsgram.web.argumentresolver.UserSessionArgumentResolver;
-import com.woowacourse.dsgram.web.interceptor.AuthInterceptor;
+import com.woowacourse.dsgram.web.interceptor.UnauthenticatedUserInterceptor;
+import com.woowacourse.dsgram.web.interceptor.AuthenticatedUserInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -13,14 +14,22 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${interceptor.login}")
-    private List<String> excludedPaths;
+    private static final String ALL_PATTERN = "/**";
+
+    @Value("${interceptor.unauthenticated}")
+    private List<String> excludedUnauthenticatedPaths;
+
+    @Value("${interceptor.authenticated}")
+    private List<String> authenticatedPaths;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns(excludedPaths);
+        registry.addInterceptor(new UnauthenticatedUserInterceptor())
+                .addPathPatterns(ALL_PATTERN)
+                .excludePathPatterns(excludedUnauthenticatedPaths);
+
+        registry.addInterceptor(new AuthenticatedUserInterceptor())
+                .addPathPatterns(authenticatedPaths);
     }
 
     @Override
