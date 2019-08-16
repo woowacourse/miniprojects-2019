@@ -10,11 +10,10 @@ import java.util.List;
 
 @Configuration
 @EnableJpaAuditing
-public class ResolverConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new UserSessionArgumentResolver());
     }
-
 }
