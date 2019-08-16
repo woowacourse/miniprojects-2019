@@ -7,10 +7,6 @@ echo "> Git Pull"
 
 git pull
 
-echo "> test 시작"
-
-./gradlew clean test
-
 echo "> 프로젝트 Build 시작"
 
 ./gradlew build
