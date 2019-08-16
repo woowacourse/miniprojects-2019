@@ -129,6 +129,10 @@ header ul.nav-right li, header ul.nav-left li {
     vertical-align: middle;
 }
 
+.delete-btn{
+    color:red;
+}
+
 button:hover{
     background-color: rgb(230,230,230);
 }

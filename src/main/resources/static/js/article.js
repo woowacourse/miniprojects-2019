@@ -1,77 +1,78 @@
 const Article = (function () {
-    const ArticleController = function(){
+    const ArticleController = function () {
         const articleService = new ArticleService();
-        const modifyFormButton = ()=>{
-            const button = document.getElementById("modal-btn")
-            button.addEventListener('click',articleService.createModifyInput);
+        const modalButton = ()=>{
+            const button=document.querySelector('#modal-btn');
+            button.addEventListener('click',articleService.modalActive);
         }
-        const modifyButton = ()=>{
-            const button = document.getElementById("contents-modify-btn");
-            button.addEventListener('click',articleService.modify);
+        const modifyFormButton = () => {
+            const button = document.querySelector("#create-modify-btn")
+            button.addEventListener('click', articleService.createModifyInput);
         }
-        const removeButton = ()=>{
-            const button = document.getElementById("contents-remove-btn");
-            button.addEventListener('click',articleService.remove);
+        const modifyButton = () => {
+            const button = document.querySelector("#contents-modify-btn");
+            button.addEventListener('click', articleService.modify);
         }
-        const initContent = ()=>{
-            articleService.createContents();
+        const removeButton = () => {
+            const button = document.querySelector("#contents-remove-btn");
+            button.addEventListener('click', articleService.remove);
+        }
+        const initContent = () => {
+            articleService.loadContent();
         }
         const init = function () {
             modifyButton()
             modifyFormButton()
             initContent()
             removeButton()
+            modalButton()
         }
         return {
             init: init
         }
     }
 
-    const ArticleService = function(){
-        const createContents = () =>
-            axios.get('/api/articles/' + articleId)
+    const ArticleService = function () {
+        const loadContent = () =>
+            request.get('/api/articles/' + articleId)
                 .then(response => {
                     console.log(response);
-                    document.getElementById("pic").src = '/uploads/'+response.data.imageUrl;
+                    document.getElementById("pic").src = '/uploads/' + response.data.imageUrl;
                     document.getElementById("contents-para").innerText = response.data.contents;
                 })
+
+        const modalActive= ()=>{
+            modal.active()
+        }
         const createModifyInput = () => {
             document.getElementById("contents-para").classList.add("pace-inactive");
             document.getElementById("contents-input").classList.remove("pace-inactive");
             document.getElementById("contents-modify-btn").classList.remove("pace-inactive");
+            modal.inactive();
         }
 
-        const modify = ()=>{
+        const modify = () => {
             let contents = document.getElementById("contents-input").value;
-            axios.put('/api/articles',{
+            request.put('/api/articles', {
                 id: articleId,
-                contents:contents
-            })
-            .then(()=>{
+                contents: contents
+            }).then(() => {
                 document.getElementById("contents-para").classList.remove("pace-inactive");
                 document.getElementById("contents-input").classList.add("pace-inactive");
                 document.getElementById("contents-modify-btn").classList.add("pace-inactive");
                 document.getElementById("contents-para").innerText = contents;
-            })            
+            })
         }
-        const remove    = () => {
-            const form = document.createElement('form');
-            form.method = 'post';
-            form.action = '/articles/'+ articleId;
-            const deleteMethod = document.createElement('input');
-            deleteMethod.name = '_method';
-            deleteMethod.value = 'delete';
-            document.body.appendChild(form);
-            form.appendChild(deleteMethod);
-            form.style.display = "none";
-            form.submit(); 
+        const remove = () => {
+            request.delete('/articles/' + articleId);
         }
 
         return {
-            createContents: createContents,
-            createModifyInput : createModifyInput,
+            loadContent: loadContent,
+            createModifyInput: createModifyInput,
             remove: remove,
-            modify: modify
+            modify: modify,
+            modalActive: modalActive
         }
     }
     const init = () => {
@@ -82,9 +83,6 @@ const Article = (function () {
     return {
         init: init
     }
-
 }());
 
-window.onload = function () {
-    Article.init();
-}
+Article.init();
