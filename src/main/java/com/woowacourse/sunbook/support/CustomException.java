@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.presentation.excpetion;
+package com.woowacourse.sunbook.support;
 
 import lombok.Getter;
 

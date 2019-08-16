@@ -1,6 +1,6 @@
 package com.woowacourse.sunbook.presentation;
 
-import com.woowacourse.sunbook.domain.ArticleFeature;
+import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

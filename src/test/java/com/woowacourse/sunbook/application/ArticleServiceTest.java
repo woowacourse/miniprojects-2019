@@ -1,8 +1,8 @@
 package com.woowacourse.sunbook.application;
 
-import com.woowacourse.sunbook.domain.Article;
-import com.woowacourse.sunbook.domain.ArticleFeature;
-import com.woowacourse.sunbook.domain.ArticleRepository;
+import com.woowacourse.sunbook.domain.article.Article;
+import com.woowacourse.sunbook.domain.article.ArticleFeature;
+import com.woowacourse.sunbook.domain.article.ArticleRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

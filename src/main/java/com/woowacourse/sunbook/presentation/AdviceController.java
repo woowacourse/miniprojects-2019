@@ -2,7 +2,7 @@ package com.woowacourse.sunbook.presentation;
 
 import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
 import com.woowacourse.sunbook.domain.validation.exception.InvalidValueException;
-import com.woowacourse.sunbook.presentation.excpetion.CustomException;
+import com.woowacourse.sunbook.support.CustomException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

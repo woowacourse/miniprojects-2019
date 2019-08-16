@@ -1,8 +1,8 @@
 package com.woowacourse.sunbook.presentation;
 
-import com.woowacourse.sunbook.application.ArticleResponseDto;
+import com.woowacourse.sunbook.application.dto.ArticleResponseDto;
 import com.woowacourse.sunbook.application.ArticleService;
-import com.woowacourse.sunbook.domain.ArticleFeature;
+import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

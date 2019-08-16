@@ -1,9 +1,10 @@
 package com.woowacourse.sunbook.application;
 
-import com.woowacourse.sunbook.domain.Article;
-import com.woowacourse.sunbook.domain.ArticleFeature;
-import com.woowacourse.sunbook.domain.ArticleRepository;
-import com.woowacourse.sunbook.presentation.NotFoundArticleException;
+import com.woowacourse.sunbook.application.dto.ArticleResponseDto;
+import com.woowacourse.sunbook.domain.article.Article;
+import com.woowacourse.sunbook.domain.article.ArticleFeature;
+import com.woowacourse.sunbook.domain.article.ArticleRepository;
+import com.woowacourse.sunbook.presentation.excpetion.NotFoundArticleException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

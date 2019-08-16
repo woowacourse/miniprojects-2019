@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.domain;
+package com.woowacourse.sunbook.domain.article;
 
 import com.woowacourse.sunbook.domain.user.User;
 import lombok.AccessLevel;

@@ -1,6 +1,6 @@
-package com.woowacourse.sunbook.application;
+package com.woowacourse.sunbook.application.dto;
 
-import com.woowacourse.sunbook.domain.ArticleFeature;
+import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

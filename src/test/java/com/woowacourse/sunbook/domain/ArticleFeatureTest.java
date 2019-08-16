@@ -1,5 +1,6 @@
 package com.woowacourse.sunbook.domain;
 
+import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

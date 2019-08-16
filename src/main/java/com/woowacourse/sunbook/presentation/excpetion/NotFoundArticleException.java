@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.presentation;
+package com.woowacourse.sunbook.presentation.excpetion;
 
 public class NotFoundArticleException extends RuntimeException {
     public NotFoundArticleException() {
