@@ -5,6 +5,7 @@ import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
+import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
 import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
@@ -97,6 +98,17 @@ class CommentServiceTest {
     }
 
     @Test
+    void 삭제된_댓글_수정시도_예외처리() {
+        // given
+        final CommentUpdate commentUpdate = new CommentUpdate("댓글_수정");
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
+        commentService.delete(COMMENT_ID, USER_ID);
+
+        // when & then
+        assertThrows(AlreadyDeleteException.class, () -> commentService.update(commentUpdate, COMMENT_ID, USER_ID));
+    }
+
+    @Test
     void 댓글_삭제() {
         // given
         when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
@@ -107,6 +119,16 @@ class CommentServiceTest {
         // then
         verify(commentRepository).findById(COMMENT_ID);
         assertThat(comment.isDeleted()).isTrue();
+    }
+
+    @Test
+    void 삭제된_댓글_삭제시도_예외처리() {
+        // given
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
+        commentService.delete(COMMENT_ID, USER_ID);
+
+        // when & then
+        assertThrows(AlreadyDeleteException.class, () -> commentService.delete(COMMENT_ID, USER_ID));
     }
 
     @Test

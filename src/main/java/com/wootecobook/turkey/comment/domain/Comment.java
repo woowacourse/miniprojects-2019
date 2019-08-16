@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.comment.domain;
 
+import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
 import com.wootecobook.turkey.commons.BaseEntity;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;
@@ -54,11 +55,19 @@ public class Comment extends BaseEntity {
     }
 
     public void update(final Comment other) {
+        validateDelete();
         this.contents = other.getContents();
     }
 
     public void delete() {
+        validateDelete();
         isDeleted = true;
         contents = CONTENTS_DELETE_MESSAGE;
+    }
+
+    private void validateDelete() {
+        if (this.isDeleted) {
+            throw new AlreadyDeleteException(this.getId());
+        }
     }
 }
