@@ -30,7 +30,7 @@ public class UserController {
     public String login(UserDto userDto, HttpSession httpSession) {
         String email = userService.authUser(userDto);
         httpSession.setAttribute("email", email);
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("signup/form")

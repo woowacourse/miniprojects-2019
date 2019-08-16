@@ -28,10 +28,10 @@ class UserControllerTest extends AbstractControllerTests {
     }
 
     @Test
-    void login_correct_isOk() {
+    void login_correct_isRedirect() {
         assertThat(postFormRequest("/users/login", UserDto.class, TEST_EMAIL, TEST_PASSWORD)
                 .getStatus()
-                .is2xxSuccessful()).isTrue();
+                .is3xxRedirection()).isTrue();
     }
 
     @Test
