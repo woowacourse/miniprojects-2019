@@ -3,10 +3,10 @@ package com.woowacourse.sunbook.support;
 import lombok.Getter;
 
 @Getter
-public class CustomException {
+public class ErrorMessage {
     private String errorMessage;
 
-    public CustomException(final String errorMessage) {
+    public ErrorMessage(final String errorMessage) {
         this.errorMessage = errorMessage;
     }
 }
