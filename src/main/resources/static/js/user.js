@@ -37,7 +37,10 @@ const USER_APP = (() => {
         const fetchTemplate = function (requestUrl, method, body, redirectUrl) {
             fetch(requestUrl, {
                 method: method,
-                headers: {'Content-Type': 'application/json; charset=UTF-8'},
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify(body)
             }).then(response => {
                 if (response.status === 200) {
@@ -83,7 +86,7 @@ const USER_APP = (() => {
                 password: password.value,
             };
 
-            connector.fetchTemplate('/api/users', Connector.POST, userBasicInfo, '/login');
+            connector.fetchTemplate('/api/users', connector.POST, userBasicInfo, '/login');
         };
 
         const updateUser = function (event) {
@@ -98,9 +101,9 @@ const USER_APP = (() => {
                 intro: intro.value,
             };
 
-            // TODO redirect SLOWS~
+            // TODO redirect `SLOWS`~
             connector.fetchTemplate('/api/users/' + userId.value,
-                Connector.PUT,
+                connector.PUT,
                 userDto,
                 '/users/' + userId.value + '/edit');
         };
@@ -114,7 +117,7 @@ const USER_APP = (() => {
             };
 
             connector.fetchTemplate('/api/users/login',
-                Connector.POST,
+                connector.POST,
                 userBasicInfo,
                 '/');
         };
