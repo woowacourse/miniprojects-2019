@@ -14,6 +14,7 @@ import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
+import techcourse.w3.woostagram.common.service.FileService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserContents;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -28,11 +29,13 @@ import static org.mockito.Mockito.*;
 class ArticleServiceTest {
     private static final String USER_EMAIL = "moomin@naver.com";
     @InjectMocks
-    ArticleService articleService;
+    private ArticleService articleService;
     @Mock
-    ArticleRepository articleRepository;
+    private ArticleRepository articleRepository;
     @Mock
-    UserService userService;
+    private UserService userService;
+    @Mock
+    private FileService fileService;
     private Article article;
     private User user;
 
@@ -62,6 +65,7 @@ class ArticleServiceTest {
                 .imageFile(multipartFile)
                 .build();
 
+        when(fileService.saveMultipartFile(multipartFile)).thenReturn("aaminiprojects-2019bb");
         when(userService.findEntityByEmail(USER_EMAIL)).thenReturn(user);
         when(articleRepository.save(article)).thenReturn(article);
         articleService.save(articleDto, USER_EMAIL);
@@ -76,6 +80,7 @@ class ArticleServiceTest {
                 .contents("Test article")
                 .imageFile(multipartFile)
                 .build();
+        when(fileService.saveMultipartFile(multipartFile)).thenThrow(InvalidExtensionException.class);
         assertThrows(InvalidExtensionException.class, () -> articleService.save(articleDto, USER_EMAIL));
     }
 
