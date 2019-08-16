@@ -12,6 +12,8 @@ public class UserAssembler {
                 .nickName(signUpUserDto.getNickName())
                 .password(signUpUserDto.getPassword())
                 .userName(signUpUserDto.getUserName())
+                .intro("")
+                .webSite("")
                 .build();
     }
 

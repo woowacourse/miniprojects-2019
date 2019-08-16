@@ -89,8 +89,8 @@ const USER_APP = (() => {
                 body: JSON.stringify(userDto)
             }).then(response => {
                 if (response.status === 200) {
-                    // TODO 슬로스꺼ㄹ로 이동
-                    window.location.href = '/users/' + userId.value + '/edit';
+                    // TODO 슬로스꺼ㄹ로 이동->index로 이동
+                    window.location.href = '/';
                 }
 
                 if (response.status === 400) {
