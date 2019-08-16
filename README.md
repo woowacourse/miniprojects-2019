@@ -33,7 +33,7 @@ ERROR: Service 'app' failed to build: The command '/bin/sh -c ./gradlew build' r
 이 경우, 다음과 같이 해결할 수 있습니다:
 
 ```bash
-$ sed $'s/\r$//' backend\gradlew
+$ sed $'s/\r$//' backend\gradlew > backend/gradlew
 $ sed -i -e 's/\r$//' backend\docker-entrypoint.sh
 $ docker-compose up -d --build
 ```
