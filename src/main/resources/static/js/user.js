@@ -30,11 +30,11 @@ const USER_APP = (() => {
         }
     };
 
-    const Connector = function () {
+    const FetchApi = function () {
         const POST = 'POST';
         const PUT = 'PUT';
 
-        const fetchTemplate = function (requestUrl, method, body, redirectUrl) {
+        const fetchTemplate = function (requestUrl, method, body, ifSucceed) {
             fetch(requestUrl, {
                 method: method,
                 headers: {
@@ -44,7 +44,7 @@ const USER_APP = (() => {
                 body: JSON.stringify(body)
             }).then(response => {
                 if (response.status === 200) {
-                    window.location.href = redirectUrl;
+                    ifSucceed();
                     return;
                 }
                 if (response.status === 400) {
@@ -66,7 +66,7 @@ const USER_APP = (() => {
     };
 
     const UserService = function () {
-        const connector = new Connector();
+        const connector = new FetchApi();
 
         const email = document.getElementById('email');
         const nickName = document.getElementById('nickName');
@@ -86,7 +86,12 @@ const USER_APP = (() => {
                 password: password.value,
             };
 
-            connector.fetchTemplate('/api/users', connector.POST, userBasicInfo, '/login');
+            const ifSucceed = () => window.location.href = '/login';
+
+            connector.fetchTemplate('/api/users',
+                connector.POST,
+                userBasicInfo,
+                ifSucceed);
         };
 
         const updateUser = function (event) {
@@ -101,11 +106,13 @@ const USER_APP = (() => {
                 intro: intro.value,
             };
 
+            const ifSucceed = () => window.location.href = '/users/' + userId.value + '/edit';
+
             // TODO redirect `SLOWS`~
             connector.fetchTemplate('/api/users/' + userId.value,
                 connector.PUT,
                 userDto,
-                '/users/' + userId.value + '/edit');
+                ifSucceed);
         };
 
         const login = function (event) {
@@ -116,10 +123,12 @@ const USER_APP = (() => {
                 password: password.value,
             };
 
+            const ifSucceed = () => window.location.href = '/';
+
             connector.fetchTemplate('/api/users/login',
                 connector.POST,
                 userBasicInfo,
-                '/');
+                ifSucceed);
         };
 
         return {
