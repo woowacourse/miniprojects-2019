@@ -5,6 +5,7 @@ import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
+import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
 import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
@@ -29,6 +30,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
+
     private static final long POST_ID = 1L;
     private static final long USER_ID = 1L;
     private static final long COMMENT_ID = 1L;
@@ -66,7 +68,7 @@ class CommentServiceTest {
     void 댓글_저장() {
         // given
         final CommentCreate commentCreate = new CommentCreate("댓글 저장", null);
-        final CommentResponse commentResponse = CommentResponse.from(comment);
+        final Comment comment = commentCreate.toEntity(user, post, null);
 
         when(userService.findById(USER_ID)).thenReturn(user);
         when(postService.findById(POST_ID)).thenReturn(post);
@@ -79,7 +81,7 @@ class CommentServiceTest {
         verify(userService).findById(USER_ID);
         verify(postService).findById(POST_ID);
         verify(commentRepository).save(any());
-        assertThat(commentResponse.getContents()).isEqualTo(expected.getContents());
+        assertThat(commentCreate.getContents()).isEqualTo(expected.getContents());
     }
 
     @Test
@@ -97,6 +99,17 @@ class CommentServiceTest {
     }
 
     @Test
+    void 삭제된_댓글_수정시도_예외처리() {
+        // given
+        final CommentUpdate commentUpdate = new CommentUpdate("댓글_수정");
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
+        commentService.delete(COMMENT_ID, USER_ID);
+
+        // when & then
+        assertThrows(AlreadyDeleteException.class, () -> commentService.update(commentUpdate, COMMENT_ID, USER_ID));
+    }
+
+    @Test
     void 댓글_삭제() {
         // given
         when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
@@ -107,6 +120,16 @@ class CommentServiceTest {
         // then
         verify(commentRepository).findById(COMMENT_ID);
         assertThat(comment.isDeleted()).isTrue();
+    }
+
+    @Test
+    void 삭제된_댓글_삭제시도_예외처리() {
+        // given
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
+        commentService.delete(COMMENT_ID, USER_ID);
+
+        // when & then
+        assertThrows(AlreadyDeleteException.class, () -> commentService.delete(COMMENT_ID, USER_ID));
     }
 
     @Test
@@ -134,7 +157,7 @@ class CommentServiceTest {
     }
 
     @Test
-    void findCommentResponsesByPostIdTest() {
+    void 댓글목록_조회_테스트() {
         // given
         final Page page = mock(Page.class);
         final Pageable pageable = mock(Pageable.class);
@@ -150,7 +173,7 @@ class CommentServiceTest {
     }
 
     @Test
-    void findCommentResponsesByParentIdTest() {
+    void 답글목록_조회_테스트() {
         // given
         final Page page = mock(Page.class);
         final Pageable pageable = mock(Pageable.class);

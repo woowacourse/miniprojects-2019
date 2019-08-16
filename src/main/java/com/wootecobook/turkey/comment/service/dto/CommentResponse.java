@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 public class CommentResponse {
+
     private Long id;
     private Long parentId;
     private String contents;
@@ -33,11 +34,10 @@ public class CommentResponse {
     }
 
     public static CommentResponse from(Comment comment) {
-        final Long parentId = comment.getParent() == null ? null : comment.getParent().getId();
         return CommentResponse.builder()
                 .id(comment.getId())
                 .contents(comment.getContents())
-                .parentId(parentId)
+                .parentId(comment.getParentCommentId())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();

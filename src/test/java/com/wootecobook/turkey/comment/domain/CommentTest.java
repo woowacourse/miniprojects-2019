@@ -1,5 +1,8 @@
 package com.wootecobook.turkey.comment.domain;
 
+import com.wootecobook.turkey.comment.domain.exception.CommentUpdateFailException;
+import com.wootecobook.turkey.comment.domain.exception.InvalidCommentException;
+import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +37,18 @@ class CommentTest {
     }
 
     @Test
+    void contents_null_예외처리() {
+        // when & then
+        assertThrows(InvalidCommentException.class, () -> new Comment(null, user, post, null));
+    }
+
+    @Test
+    void contents_공백_예외처리() {
+        // when & then
+        assertThrows(InvalidCommentException.class, () -> new Comment("    ", user, post, null));
+    }
+
+    @Test
     void 작성자_맞는_경우() {
         // given
         final long userId = 1L;
@@ -52,7 +67,7 @@ class CommentTest {
         when(user.getId()).thenReturn(userId);
 
         // when & then
-        assertThrows(CommentAuthException.class, () -> comment.isWrittenBy(otherUserId));
+        assertThrows(NotCommentOwnerException.class, () -> comment.isWrittenBy(otherUserId));
     }
 
     @Test
@@ -76,5 +91,12 @@ class CommentTest {
         // then
         assertThat(comment.getContents()).isEqualTo(Comment.CONTENTS_DELETE_MESSAGE);
         assertThat(comment.isDeleted()).isEqualTo(true);
+    }
+
+    @Test
+    void 수정_null_입력_예외처리() {
+        // when & then
+        assertThrows(CommentUpdateFailException.class, () -> comment.update(null));
+
     }
 }

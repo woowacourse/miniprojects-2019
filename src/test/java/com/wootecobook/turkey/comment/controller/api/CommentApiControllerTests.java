@@ -1,6 +1,6 @@
 package com.wootecobook.turkey.comment.controller.api;
 
-import com.wootecobook.turkey.comment.domain.CommentAuthException;
+import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
@@ -36,7 +36,6 @@ class CommentApiControllerTests extends BaseControllerTests {
         userId = addUser("name", USER_EMAIL, USER_PASSWORD);
         jSessionId = logIn(USER_EMAIL, USER_PASSWORD);
 
-        // TODO 리팩토링 (샘플 데이터 ?)
         // 글작성
         PostRequest postRequest = new PostRequest("contents");
 
@@ -54,8 +53,7 @@ class CommentApiControllerTests extends BaseControllerTests {
         uri = linkTo(CommentApiController.class, postId).toUri().toString();
 
         // 댓글 작성
-        final CommentCreate commentCreate = new CommentCreate();
-        commentCreate.setContents("contents");
+        final CommentCreate commentCreate = new CommentCreate("contents", null);
         commentId = addComment(commentCreate);
 
         // 답글 작성
@@ -90,7 +88,7 @@ class CommentApiControllerTests extends BaseControllerTests {
         final int page = 0;
 
         // when & then
-        webTestClient.get().uri(uri + "/{id}?size={size}&page={page}", commentId, size, page)
+        webTestClient.get().uri(uri + "/{id}/children?size={size}&page={page}", commentId, size, page)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .cookie(JSESSIONID, jSessionId)
                 .exchange()
@@ -110,8 +108,6 @@ class CommentApiControllerTests extends BaseControllerTests {
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectHeader().valueMatches("Location", ".*" + uri);
-
-        //TODO 삭제가 되었는지 조회로 확인 해봐야 할까?
     }
 
     @Test
@@ -157,15 +153,13 @@ class CommentApiControllerTests extends BaseControllerTests {
                 .getResponseBody();
 
         // then
-        assertThat(CommentAuthException.DEFAULT_MESSAGE).isEqualTo(errorMessage.getMessage());
+        assertThat(NotCommentOwnerException.DEFAULT_MESSAGE).isEqualTo(errorMessage.getMessage());
     }
 
     @Test
     void 답글_저장_성공() {
         // given
-        final CommentCreate commentCreate = new CommentCreate();
-        commentCreate.setContents("contents");
-        commentCreate.setParentId(commentId);
+        final CommentCreate commentCreate = new CommentCreate("contents", commentId);
 
         // when
         final CommentResponse commentResponse = webTestClient.post().uri(uri)
