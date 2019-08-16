@@ -1,4 +1,4 @@
-package com.woowacourse.zzinbros.post.config;
+package com.woowacourse.zzinbros.post.web.support;
 
 import com.woowacourse.zzinbros.post.exception.PostException;
 import com.woowacourse.zzinbros.post.exception.PostNotFoundException;

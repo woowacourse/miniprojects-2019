@@ -1,5 +1,6 @@
 package com.woowacourse.zzinbros.user.domain;
 
+import com.woowacourse.zzinbros.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

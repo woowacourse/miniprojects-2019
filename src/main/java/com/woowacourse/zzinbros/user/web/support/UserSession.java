@@ -1,4 +1,4 @@
-package com.woowacourse.zzinbros.user.domain;
+package com.woowacourse.zzinbros.user.web.support;
 
 import java.util.Objects;
 

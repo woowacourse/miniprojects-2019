@@ -1,4 +1,4 @@
-package com.woowacourse.zzinbros.user.config;
+package com.woowacourse.zzinbros.user.web.support;
 
 import com.woowacourse.zzinbros.user.exception.UserException;
 import com.woowacourse.zzinbros.user.exception.UserNotLoggedInException;

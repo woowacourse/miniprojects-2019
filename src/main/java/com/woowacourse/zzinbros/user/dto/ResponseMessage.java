@@ -1,4 +1,4 @@
-package com.woowacourse.zzinbros.user.domain;
+package com.woowacourse.zzinbros.user.dto;
 
 public class ResponseMessage<T> {
     private T object;
@@ -10,7 +10,7 @@ public class ResponseMessage<T> {
     }
 
     public static <T> ResponseMessage of(T object, String message) {
-        return new ResponseMessage(object, message);
+        return new ResponseMessage<>(object, message);
     }
 
     public T getObject() {

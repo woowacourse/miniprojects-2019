@@ -3,7 +3,7 @@ package com.woowacourse.zzinbros.post.web;
 import com.woowacourse.zzinbros.post.domain.Post;
 import com.woowacourse.zzinbros.post.exception.UnAuthorizedException;
 import com.woowacourse.zzinbros.post.service.PostService;
-import com.woowacourse.zzinbros.user.domain.UserSession;
+import com.woowacourse.zzinbros.user.web.support.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

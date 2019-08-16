@@ -1,11 +1,11 @@
 package com.woowacourse.zzinbros.user.web;
 
-import com.woowacourse.zzinbros.user.config.UserArgumentResolver;
-import com.woowacourse.zzinbros.user.config.UserControllerExceptionAdvice;
 import com.woowacourse.zzinbros.user.domain.User;
-import com.woowacourse.zzinbros.user.domain.UserSession;
+import com.woowacourse.zzinbros.user.web.support.UserSession;
 import com.woowacourse.zzinbros.user.domain.UserTest;
 import com.woowacourse.zzinbros.user.service.UserService;
+import com.woowacourse.zzinbros.user.web.support.UserArgumentResolver;
+import com.woowacourse.zzinbros.user.web.support.UserControllerExceptionAdvice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package com.woowacourse.zzinbros.user.service;
 
 import com.woowacourse.zzinbros.user.domain.User;
-import com.woowacourse.zzinbros.user.domain.UserRepository;
-import com.woowacourse.zzinbros.user.domain.UserSession;
+import com.woowacourse.zzinbros.user.domain.repository.UserRepository;
+import com.woowacourse.zzinbros.user.web.support.UserSession;
 import com.woowacourse.zzinbros.user.domain.UserTest;
 import com.woowacourse.zzinbros.user.dto.UserRequestDto;
 import com.woowacourse.zzinbros.user.dto.UserUpdateDto;

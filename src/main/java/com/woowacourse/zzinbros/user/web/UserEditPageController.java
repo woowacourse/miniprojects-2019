@@ -1,8 +1,8 @@
 package com.woowacourse.zzinbros.user.web;
 
-import com.woowacourse.zzinbros.user.domain.UserSession;
 import com.woowacourse.zzinbros.user.service.UserService;
 import com.woowacourse.zzinbros.user.web.exception.UserEditPageNotFoundException;
+import com.woowacourse.zzinbros.user.web.support.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
