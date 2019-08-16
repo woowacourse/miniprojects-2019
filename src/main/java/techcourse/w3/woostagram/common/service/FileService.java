@@ -15,7 +15,8 @@ import java.util.UUID;
 public class FileService {
     private static final String PATH_DELIMITER = ".";
     //@Value("${file.upload.directory}")
-    private static final String UPLOAD_PATH = "/home/yumin/Codes/WoowaTech/Level2/miniprojects-2019/uploads/";
+//    private static final String UPLOAD_PATH = "/home/yumin/Codes/WoowaTech/Level2/miniprojects-2019/uploads/";
+    private static final String UPLOAD_PATH = "/home/ubuntu/miniprojects-2019/uploads/";
     private static final List<String> VALID_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
 
     public String saveMultipartFile(MultipartFile multipartFile) {
