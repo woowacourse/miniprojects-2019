@@ -1,0 +1,19 @@
+spring:
+  devtools:
+    livereload:
+      enabled: false
+    restart:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:mysql://db:3306/wootube?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: p@ssW0rd
+

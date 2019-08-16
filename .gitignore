@@ -31,3 +31,7 @@ backend/out/
 
 ### VS Code ###
 .vscode/
+
+### Application output ###
+/db_data/
+/nginx/
