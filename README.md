@@ -70,8 +70,8 @@ $ npm install -g live-server
 프로젝트 루트 디렉터리에서 다음 명령어로 웹 서버를 실행합니다:
 
 ```bash
-$ live-server frontend
+$ live-server frontend --port=8000
 ```
 
-브라우저에서 `http://localhost:8080`로 접속할 수 있습니다.
+브라우저에서 `http://localhost:8000`로 접속할 수 있습니다.
 
