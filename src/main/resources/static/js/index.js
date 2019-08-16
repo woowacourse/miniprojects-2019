@@ -15,7 +15,7 @@ function login() {
             userPassword: password
         })
     }).then(response => {
-        return response;
+        return response.json();
     }).then(json => {
         if (json.hasOwnProperty('errorMessage')) {
             alert(json.errorMessage);
@@ -44,6 +44,7 @@ function signup() {
     }).then(response => {
         return response.json();
     }).then(json => {
+        console.log(json);
         if (json.hasOwnProperty('errorMessage')) {
             alert(json.errorMessage);
         } else {
