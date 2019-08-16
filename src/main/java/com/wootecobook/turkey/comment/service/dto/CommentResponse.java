@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 public class CommentResponse {
+
     private Long id;
     private Long parentId;
     private String contents;

@@ -39,13 +39,13 @@ class CommentTest {
     @Test
     void contents_null_예외처리() {
         // when & then
-        assertThrows(InvalidCommentException.class, ()-> new Comment(null, user, post, null));
+        assertThrows(InvalidCommentException.class, () -> new Comment(null, user, post, null));
     }
 
     @Test
     void contents_공백_예외처리() {
         // when & then
-        assertThrows(InvalidCommentException.class, ()-> new Comment("    ", user, post, null));
+        assertThrows(InvalidCommentException.class, () -> new Comment("    ", user, post, null));
     }
 
     @Test
@@ -96,7 +96,7 @@ class CommentTest {
     @Test
     void 수정_null_입력_예외처리() {
         // when & then
-        assertThrows(CommentUpdateFailException.class, ()-> comment.update(null));
+        assertThrows(CommentUpdateFailException.class, () -> comment.update(null));
 
     }
 }

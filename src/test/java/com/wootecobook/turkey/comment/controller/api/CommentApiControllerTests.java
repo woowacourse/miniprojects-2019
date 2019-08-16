@@ -36,7 +36,6 @@ class CommentApiControllerTests extends BaseControllerTests {
         userId = addUser("name", USER_EMAIL, USER_PASSWORD);
         jSessionId = logIn(USER_EMAIL, USER_PASSWORD);
 
-        // TODO 리팩토링 (샘플 데이터 ?)
         // 글작성
         PostRequest postRequest = new PostRequest("contents");
 
@@ -109,8 +108,6 @@ class CommentApiControllerTests extends BaseControllerTests {
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectHeader().valueMatches("Location", ".*" + uri);
-
-        //TODO 삭제가 되었는지 조회로 확인 해봐야 할까?
     }
 
     @Test

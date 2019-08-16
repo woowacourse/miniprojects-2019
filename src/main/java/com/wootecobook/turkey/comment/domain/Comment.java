@@ -18,6 +18,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 public class Comment extends BaseEntity {
+
     protected static final String CONTENTS_DELETE_MESSAGE = "삭제된 글입니다.";
 
     @Lob
@@ -59,7 +60,7 @@ public class Comment extends BaseEntity {
     }
 
     public void update(final Comment other) {
-        if(other == null){
+        if (other == null) {
             throw new CommentUpdateFailException();
         }
         validateDelete();

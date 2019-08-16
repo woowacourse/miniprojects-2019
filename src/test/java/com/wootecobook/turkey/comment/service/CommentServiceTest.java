@@ -30,6 +30,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
+
     private static final long POST_ID = 1L;
     private static final long USER_ID = 1L;
     private static final long COMMENT_ID = 1L;

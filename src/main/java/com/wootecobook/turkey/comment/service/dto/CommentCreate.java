@@ -13,6 +13,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class CommentCreate {
+
     private String contents;
     private Long parentId;
 

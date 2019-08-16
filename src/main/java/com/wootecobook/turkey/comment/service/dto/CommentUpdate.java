@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class CommentUpdate {
+
     private String contents;
 
     public CommentUpdate(final String contents) {
