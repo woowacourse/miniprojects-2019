@@ -1,6 +1,7 @@
 package com.woowacourse.edd.exceptions;
 
-public class VideoNotFoundException extends RuntimeException {
+public class VideoNotFoundException extends ErrorResponseException {
+
     private static final String EXCEPTION_MESSAGE = "그런 비디오는 존재하지 않아!";
 
     public VideoNotFoundException() {

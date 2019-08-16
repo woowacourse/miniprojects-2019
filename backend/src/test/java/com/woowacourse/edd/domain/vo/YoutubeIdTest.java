@@ -9,22 +9,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class YoutubeIdTest {
 
     @Test
-    void valid_id_test() {
+    void valid_id() {
         assertDoesNotThrow(() -> new YoutubeId("abc"));
     }
 
     @Test
-    void create_empty_test() {
+    void create_empty() {
         assertThrows(InvalidYoutubeIdException.class, () -> new YoutubeId(""));
     }
 
     @Test
-    void create_null_test() {
+    void create_null() {
         assertThrows(InvalidYoutubeIdException.class, () -> new YoutubeId(null));
     }
 
     @Test
-    void create_blank_test() {
+    void create_blank() {
         assertThrows(InvalidYoutubeIdException.class, () -> new YoutubeId(" "));
     }
 }

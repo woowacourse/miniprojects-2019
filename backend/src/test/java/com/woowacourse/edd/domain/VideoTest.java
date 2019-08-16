@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class VideoTest {
     @Test
-    void create_video_test() {
+    void create_video() {
         assertDoesNotThrow(() -> new Video(new YoutubeId("sadfsadfasdf"), new Title("title"), new Contents("contents")));
     }
 }

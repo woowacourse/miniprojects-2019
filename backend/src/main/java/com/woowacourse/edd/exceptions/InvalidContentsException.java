@@ -1,6 +1,6 @@
 package com.woowacourse.edd.exceptions;
 
-public class InvalidContentsException extends RuntimeException {
+public class InvalidContentsException extends ErrorResponseException {
 
     private static final String INVALID_CONTENTS_MESSAGE = "내용은 한 글자 이상이어야합니다";
 

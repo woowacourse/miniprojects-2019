@@ -8,22 +8,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TitleTest {
     @Test
-    void check_empty_test() {
+    void check_empty() {
         assertThrows(InvalidTitleException.class, () -> new Title(""));
     }
 
     @Test
-    void check_null_test() {
+    void check_null() {
         assertThrows(InvalidTitleException.class, () -> new Title(null));
     }
 
     @Test
-    void check_blank_test() {
+    void check_blank() {
         assertThrows(InvalidTitleException.class, () -> new Title(" "));
     }
 
     @Test
-    void valid_title_test() {
+    void valid_title() {
         assertDoesNotThrow(() -> new Title("abcd"));
     }
 }

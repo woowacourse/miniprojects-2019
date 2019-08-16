@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -42,12 +41,8 @@ public class VideoService {
         Page<Video> foundVideos = videoRepository.findAll(pageRequest);
 
         return foundVideos.getContent().stream()
-                .map(videoConverter::toPreviewResponse)
-                .collect(toList());
-    }
-
-    public List<VideoPreviewResponse> findVideosByViewNumbers(int page, int limit) {
-        return new ArrayList<>();
+            .map(videoConverter::toPreviewResponse)
+            .collect(toList());
     }
 
     public VideoResponse find(long id) {

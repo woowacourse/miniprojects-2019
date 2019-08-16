@@ -59,11 +59,11 @@ public class Video {
     @Override
     public String toString() {
         return "Video{" +
-                "id=" + id +
-                ", youtubeId=" + youtubeId +
-                ", title=" + title +
-                ", contents=" + contents +
-                ", createDate=" + createDate +
-                '}';
+            "id=" + id +
+            ", youtubeId=" + youtubeId +
+            ", title=" + title +
+            ", contents=" + contents +
+            ", createDate=" + createDate +
+            '}';
     }
 }

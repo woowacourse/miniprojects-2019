@@ -1,6 +1,6 @@
 package com.woowacourse.edd.exceptions;
 
-public class InvalidTitleException extends RuntimeException {
+public class InvalidTitleException extends ErrorResponseException {
 
     private static final String INVALID_TITLE_MESSAGE = "제목은 한 글자 이상이어야합니다";
 

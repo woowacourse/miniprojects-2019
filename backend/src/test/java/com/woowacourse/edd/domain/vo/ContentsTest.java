@@ -8,22 +8,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ContentsTest {
     @Test
-    void check_empty_test() {
+    void check_empty() {
         assertThrows(InvalidContentsException.class, () -> new Contents(""));
     }
 
     @Test
-    void check_null_test() {
+    void check_null() {
         assertThrows(InvalidContentsException.class, () -> new Contents(null));
     }
 
     @Test
-    void check_blank_test() {
+    void check_blank() {
         assertThrows(InvalidContentsException.class, () -> new Contents(" "));
     }
 
     @Test
-    void valid_contents_test() {
+    void valid_contents() {
         assertDoesNotThrow(() -> new Contents("This is contents!"));
     }
 }

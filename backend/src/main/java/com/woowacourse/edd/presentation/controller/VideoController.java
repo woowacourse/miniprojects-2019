@@ -4,6 +4,7 @@ import com.woowacourse.edd.application.dto.VideoPreviewResponse;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.response.VideoResponse;
 import com.woowacourse.edd.application.service.VideoService;
+import com.woowacourse.edd.exceptions.InvalidFilterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,8 @@ public class VideoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<VideoResponse> findVideo(@PathVariable long id) {
-        VideoResponse videoResponse= videoService.find(id);
-        return new ResponseEntity<>(videoResponse, HttpStatus.OK);
+        VideoResponse videoResponse = videoService.find(id);
+        return ResponseEntity.ok(videoResponse);
     }
 
     @GetMapping
@@ -34,12 +35,12 @@ public class VideoController {
         if (DATE.equals(filter)) {
             return new ResponseEntity<>(videoService.findVideosByDate(page, limit), HttpStatus.OK);
         }
-        return new ResponseEntity<>(videoService.findVideosByViewNumbers(page, limit), HttpStatus.OK);
+        throw new InvalidFilterException();
     }
 
     @PostMapping
     public ResponseEntity<VideoResponse> saveVideo(@RequestBody VideoSaveRequestDto requestDto) {
         VideoResponse response = videoService.save(requestDto);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
 }

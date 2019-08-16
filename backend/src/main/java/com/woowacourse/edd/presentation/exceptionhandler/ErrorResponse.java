@@ -1,14 +1,11 @@
 package com.woowacourse.edd.presentation.exceptionhandler;
 
-public class Error {
+public class ErrorResponse {
 
     private String result;
     private String message;
 
-    private Error() {
-    }
-
-    public Error(String result, String message) {
+    public ErrorResponse(String result, String message) {
         this.result = result;
         this.message = message;
     }

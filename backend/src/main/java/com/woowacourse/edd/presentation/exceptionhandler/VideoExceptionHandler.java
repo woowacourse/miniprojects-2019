@@ -1,10 +1,6 @@
 package com.woowacourse.edd.presentation.exceptionhandler;
 
-import com.woowacourse.edd.exceptions.InvalidContentsException;
-import com.woowacourse.edd.exceptions.InvalidTitleException;
-import com.woowacourse.edd.exceptions.InvalidYoutubeIdException;
-import com.woowacourse.edd.exceptions.VideoNotFoundException;
-import org.springframework.http.HttpStatus;
+import com.woowacourse.edd.exceptions.ErrorResponseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,26 +10,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class VideoExceptionHandler {
 
     @ResponseBody
-    @ExceptionHandler(InvalidTitleException.class)
-    public ResponseEntity<Error> handleTitleError(InvalidTitleException e) {
-        return new ResponseEntity<>(new Error("FAIL", e.getMessage()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ResponseBody
-    @ExceptionHandler(InvalidYoutubeIdException.class)
-    public ResponseEntity<Error> handleYoutubeIdError(InvalidYoutubeIdException e) {
-        return new ResponseEntity<>(new Error("FAIL", e.getMessage()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ResponseBody
-    @ExceptionHandler(InvalidContentsException.class)
-    public ResponseEntity<Error> handleContentsError(InvalidContentsException e) {
-        return new ResponseEntity<>(new Error("FAIL", e.getMessage()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ResponseBody
-    @ExceptionHandler(VideoNotFoundException.class)
-    public ResponseEntity<Error> handleVideoNotFoundError(VideoNotFoundException e) {
-        return new ResponseEntity<>(new Error("FAIL", e.getMessage()), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(ErrorResponseException.class)
+    public ResponseEntity<ErrorResponse> handleErrorResponse(ErrorResponseException e) {
+        return ResponseEntity.badRequest()
+            .body(new ErrorResponse("FAIL", e.getMessage()));
     }
 }
