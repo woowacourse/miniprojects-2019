@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -17,11 +18,12 @@ public class User {
     private long id;
 
     @Email
+    @NotBlank
     @Column(nullable = false, unique = true)
     private String email;
 
     @Size(min = 2, max = 10)
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String nickName;
 
     @Size(min = 2, max = 10)
@@ -32,14 +34,14 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(length = 50)
     private String webSite;
 
     @Lob
     private String intro;
 
     @Builder
-    public User(@Email String email, @Size(min = 2, max = 10) String nickName, @Size(min = 2, max = 10) String userName, @Size(min = 4, max = 16) String password, String webSite, String intro) {
+    public User(@Email @NotBlank String email, @Size(min = 2, max = 10) String nickName, @Size(min = 2, max = 10) String userName, @Size(min = 4, max = 16) String password, String webSite, String intro) {
         this.email = email;
         this.nickName = nickName;
         this.userName = userName;

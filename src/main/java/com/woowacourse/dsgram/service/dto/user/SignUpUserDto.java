@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -21,10 +22,11 @@ public class SignUpUserDto {
     private String password;
 
     @Email(message = "이메일 양식")
+    @NotBlank(message = "이메일은 필수입니다.")
     private String email;
 
     @Builder
-    public SignUpUserDto(@Size(min = 2, max = 10) String nickName, @Size(min = 2, max = 10) String userName, @Size(min = 4, max = 16) String password, @Email String email) {
+    public SignUpUserDto(@Size(min = 2, max = 10) String nickName, @Size(min = 2, max = 10) String userName, @Size(min = 4, max = 16) String password, @Email @NotBlank String email) {
         this.nickName = nickName;
         this.userName = userName;
         this.password = password;

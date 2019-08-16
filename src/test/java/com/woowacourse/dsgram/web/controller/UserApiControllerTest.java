@@ -51,6 +51,30 @@ class UserApiControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void signUp_blankEmail_thrown_exception() {
+        SignUpUserDto anotherUser = SignUpUserDto.builder()
+                .userName("서오상씨")
+                .email("")
+                .nickName("os94")
+                .password("tjdhtkd12!")
+                .build();
+
+        checkExceptionMessage(defaultSignUp(anotherUser, false), "이메일은 필수입니다.");
+    }
+
+    @Test
+    void signUp_InvalidEmail_thrown_exception() {
+        SignUpUserDto anotherUser = SignUpUserDto.builder()
+                .userName("서오상씨")
+                .email("@@")
+                .nickName("os94")
+                .password("tjdhtkd12!")
+                .build();
+
+        checkExceptionMessage(defaultSignUp(anotherUser, false), "이메일 양식");
+    }
+
+    @Test
     void signUp_duplicatedNickName_thrown_exception() {
         SignUpUserDto anotherUser = SignUpUserDto.builder()
                 .userName("솔로스")
