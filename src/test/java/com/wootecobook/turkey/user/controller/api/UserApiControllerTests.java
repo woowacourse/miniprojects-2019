@@ -20,10 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserApiControllerTests extends BaseControllerTests {
 
-    private static final String VALID_EMAIL = "email@test.test";
-    private static final String VALID_NAME = "name";
-    private static final String VALID_PASSWORD = "passWORD1!";
-
     private static final String USER_API_URI = "/api/users";
     private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
 
@@ -32,10 +28,11 @@ class UserApiControllerTests extends BaseControllerTests {
 
     @Test
     void 유저_생성() {
+        final String email = "UserApiCreate@gmail.com";
         UserRequest userRequest = UserRequest.builder()
-                .email(VALID_EMAIL)
-                .name(VALID_NAME)
-                .password(VALID_PASSWORD)
+                .email(email)
+                .name(VALID_USER_NAME)
+                .password(VALID_USER_PASSWORD)
                 .build();
 
         UserResponse userResponse = webTestClient.post()
@@ -51,20 +48,20 @@ class UserApiControllerTests extends BaseControllerTests {
                 .getResponseBody();
 
         assertThat(userResponse.getId()).isNotNull();
-        assertThat(userResponse.getEmail()).isEqualTo(VALID_EMAIL);
-        assertThat(userResponse.getName()).isEqualTo(VALID_NAME);
+        assertThat(userResponse.getEmail()).isEqualTo(email);
+        assertThat(userResponse.getName()).isEqualTo(VALID_USER_NAME);
     }
 
     @Test
     void 중복_이메일_생성_에러() {
         String email = "duplicated@dupli.cated";
 
-        addUser(VALID_NAME, email, VALID_PASSWORD);
+        addUser(VALID_USER_NAME, email, VALID_USER_PASSWORD);
 
         UserRequest userRequest = UserRequest.builder()
                 .email(email)
-                .name(VALID_NAME)
-                .password(VALID_PASSWORD)
+                .name(VALID_USER_NAME)
+                .password(VALID_USER_PASSWORD)
                 .build();
 
         ErrorMessage errorMessage = webTestClient.post()
@@ -86,8 +83,8 @@ class UserApiControllerTests extends BaseControllerTests {
     void 유저_생성_이메일_에러() {
         UserRequest userRequest = UserRequest.builder()
                 .email("test")
-                .name(VALID_NAME)
-                .password(VALID_PASSWORD)
+                .name(VALID_USER_NAME)
+                .password(VALID_USER_PASSWORD)
                 .build();
 
         ErrorMessage errorMessage = webTestClient.post()
@@ -108,9 +105,9 @@ class UserApiControllerTests extends BaseControllerTests {
     @Test
     void 유저_생성_이름_에러() {
         UserRequest userRequest = UserRequest.builder()
-                .email(VALID_EMAIL)
+                .email(VALID_USER_EMAIL)
                 .name("1")
-                .password(VALID_PASSWORD)
+                .password(VALID_USER_PASSWORD)
                 .build();
 
         ErrorMessage errorMessage = webTestClient.post()
@@ -131,8 +128,8 @@ class UserApiControllerTests extends BaseControllerTests {
     @Test
     void 유저_생성_비밀번호_에러() {
         UserRequest userRequest = UserRequest.builder()
-                .email(VALID_EMAIL)
-                .name(VALID_NAME)
+                .email(VALID_USER_EMAIL)
+                .name(VALID_USER_NAME)
                 .password("1")
                 .build();
 
@@ -156,7 +153,7 @@ class UserApiControllerTests extends BaseControllerTests {
         String email = "show@show.show";
         String name = "show";
 
-        Long id = addUser(name, email, VALID_PASSWORD);
+        Long id = addUser(name, email, VALID_USER_PASSWORD);
 
         UserResponse userResponse = webTestClient.get()
                 .uri(USER_API_URI_WITH_SLASH + id)
@@ -192,11 +189,11 @@ class UserApiControllerTests extends BaseControllerTests {
         String email = "delete@delete.del";
         String name = "delete";
 
-        Long id = addUser(name, email, VALID_PASSWORD);
+        Long id = addUser(name, email, VALID_USER_PASSWORD);
 
         webTestClient.delete()
                 .uri(USER_API_URI_WITH_SLASH + id)
-                .cookie("JSESSIONID", logIn(email, VALID_PASSWORD))
+                .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isNoContent();
     }
@@ -206,11 +203,11 @@ class UserApiControllerTests extends BaseControllerTests {
         String email = "deleteerror@delete.del";
         String name = "delete";
 
-        Long id = addUser(name, email, VALID_PASSWORD);
+        Long id = addUser(name, email, VALID_USER_PASSWORD);
 
         ErrorMessage errorMessage = webTestClient.delete()
                 .uri(USER_API_URI_WITH_SLASH + Long.MAX_VALUE)
-                .cookie("JSESSIONID", logIn(email, VALID_PASSWORD))
+                .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)

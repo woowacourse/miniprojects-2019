@@ -10,8 +10,9 @@ import reactor.core.publisher.Mono;
 
 public abstract class BaseControllerTests {
     protected static final String JSESSIONID = "JSESSIONID";
-    protected static final String USER_PASSWORD = "P@ssw0rd";
-    protected static final String USER_EMAIL = "email@gmail.com";
+    protected static final String VALID_USER_PASSWORD = "P@ssw0rd";
+    protected static final String VALID_USER_EMAIL = "email@gmail.com";
+    protected static final String VALID_USER_NAME = "name";
 
     private static final String USER_API_URI = "/api/users";
     private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
@@ -42,7 +43,7 @@ public abstract class BaseControllerTests {
     protected void deleteUser(Long id, String email, String password) {
         webTestClient.delete()
                 .uri(USER_API_URI_WITH_SLASH + id)
-                .cookie("JSESSIONID", logIn(email, password))
+                .cookie(JSESSIONID, logIn(email, password))
                 .exchange();
     }
 
@@ -58,7 +59,7 @@ public abstract class BaseControllerTests {
                 .body(Mono.just(loginRequest), LoginRequest.class)
                 .exchange()
                 .returnResult(String.class)
-                .getResponseCookies().get("JSESSIONID").get(0).getValue();
+                .getResponseCookies().get(JSESSIONID).get(0).getValue();
     }
 
 }

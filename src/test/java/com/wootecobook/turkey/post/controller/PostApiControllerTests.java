@@ -20,8 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PostApiControllerTests extends BaseControllerTests {
 
     public static final String POST_URL = "/api/posts";
-    private static final String USER_EMAIL = "olaf@woowa.com";
-    private static final String USER_PASSWORD = "passw0rD!";
 
     @Autowired
     private WebTestClient webTestClient;
@@ -31,8 +29,8 @@ class PostApiControllerTests extends BaseControllerTests {
 
     @BeforeEach
     void setUp() {
-        userId = addUser("olaf", USER_EMAIL, USER_PASSWORD);
-        jSessionId = logIn(USER_EMAIL, USER_PASSWORD);
+        userId = addUser("olaf", VALID_USER_EMAIL, VALID_USER_PASSWORD);
+        jSessionId = logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD);
     }
 
     @Test
@@ -40,7 +38,7 @@ class PostApiControllerTests extends BaseControllerTests {
         PostRequest postRequest = new PostRequest("contents");
 
         PostResponse postResponse = webTestClient.post().uri(POST_URL)
-                .cookie("JSESSIONID", jSessionId)
+                .cookie(JSESSIONID, jSessionId)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
@@ -57,7 +55,7 @@ class PostApiControllerTests extends BaseControllerTests {
         PostRequest postRequest = new PostRequest("");
 
         ErrorMessage errorMessage = webTestClient.post().uri(POST_URL)
-                .cookie("JSESSIONID", jSessionId)
+                .cookie(JSESSIONID, jSessionId)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
@@ -83,7 +81,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         PostRequest postUpdateRequest = new PostRequest("chelsea");
         PostResponse postResponse = webTestClient.put().uri(POST_URL + "/{postId}", postId)
-                .cookie("JSESSIONID", jSessionId)
+                .cookie(JSESSIONID, jSessionId)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(postUpdateRequest), PostRequest.class)
                 .exchange()
@@ -102,7 +100,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         PostRequest postUpdateRequest = new PostRequest("");
         webTestClient.put().uri(POST_URL + "/{postId}", postId)
-                .cookie("JSESSIONID", jSessionId)
+                .cookie(JSESSIONID, jSessionId)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(postUpdateRequest), PostRequest.class)
                 .exchange()
@@ -115,7 +113,7 @@ class PostApiControllerTests extends BaseControllerTests {
         Long postId = addPost(postRequest);
 
         webTestClient.delete().uri(POST_URL + "/{postId}", postId)
-                .cookie("JSESSIONID", jSessionId)
+                .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isNoContent();
     }
@@ -125,14 +123,14 @@ class PostApiControllerTests extends BaseControllerTests {
         PostRequest postRequest = new PostRequest("olaf");
 
         webTestClient.delete().uri(POST_URL + "/{postId}", Long.MAX_VALUE)
-                .cookie("JSESSIONID", jSessionId)
+                .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isBadRequest();
     }
 
     private Long addPost(PostRequest postRequest) {
         PostResponse postResponse = webTestClient.post().uri(POST_URL)
-                .cookie("JSESSIONID", jSessionId)
+                .cookie(JSESSIONID, jSessionId)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
@@ -146,6 +144,6 @@ class PostApiControllerTests extends BaseControllerTests {
 
     @AfterEach
     void tearDown() {
-        deleteUser(userId, USER_EMAIL, USER_PASSWORD);
+        deleteUser(userId, VALID_USER_EMAIL, VALID_USER_PASSWORD);
     }
 }

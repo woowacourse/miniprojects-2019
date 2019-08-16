@@ -21,10 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class LoginApiControllerTests extends BaseControllerTests {
 
-    private static final String VALID_EMAIL = "login@test.test";
-    private static final String VALID_NAME = "name";
-    private static final String VALID_PASSWORD = "passWORD1!";
-
     @Autowired
     private WebTestClient webTestClient;
 
@@ -32,14 +28,14 @@ class LoginApiControllerTests extends BaseControllerTests {
 
     @BeforeEach
     void setUp() {
-        userId = addUser(VALID_NAME, VALID_EMAIL, VALID_PASSWORD);
+        userId = addUser(VALID_USER_NAME, VALID_USER_EMAIL, VALID_USER_PASSWORD);
     }
 
     @Test
     void 로그인() {
         LoginRequest loginRequest = LoginRequest.builder()
-                .email(VALID_EMAIL)
-                .password(VALID_PASSWORD)
+                .email(VALID_USER_EMAIL)
+                .password(VALID_USER_PASSWORD)
                 .build();
 
         webTestClient.post()
@@ -55,7 +51,7 @@ class LoginApiControllerTests extends BaseControllerTests {
     void 없는_email로_로그인() {
         LoginRequest loginRequest = LoginRequest.builder()
                 .email("invalid@invalid.invalid")
-                .password(VALID_PASSWORD)
+                .password(VALID_USER_PASSWORD)
                 .build();
 
         ErrorMessage errorMessage = webTestClient.post()
@@ -76,7 +72,7 @@ class LoginApiControllerTests extends BaseControllerTests {
     @Test
     void 잘못된_비밀번호로_로그인() {
         LoginRequest loginRequest = LoginRequest.builder()
-                .email(VALID_EMAIL)
+                .email(VALID_USER_EMAIL)
                 .password("invalid")
                 .build();
 
@@ -99,7 +95,7 @@ class LoginApiControllerTests extends BaseControllerTests {
     void 로그아웃() {
         webTestClient.post()
                 .uri("/logout")
-                .cookie("JSESSIONID", logIn(VALID_EMAIL, VALID_PASSWORD))
+                .cookie(JSESSIONID, logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -120,7 +116,7 @@ class LoginApiControllerTests extends BaseControllerTests {
 
     @AfterEach
     void tearDown() {
-        deleteUser(userId, VALID_EMAIL, VALID_PASSWORD);
+        deleteUser(userId, VALID_USER_EMAIL, VALID_USER_PASSWORD);
     }
 
 }

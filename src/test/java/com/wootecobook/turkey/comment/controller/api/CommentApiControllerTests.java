@@ -33,15 +33,15 @@ class CommentApiControllerTests extends BaseControllerTests {
 
     @BeforeEach
     void setUp() {
-        userId = addUser("name", USER_EMAIL, USER_PASSWORD);
-        jSessionId = logIn(USER_EMAIL, USER_PASSWORD);
+        userId = addUser("name", VALID_USER_EMAIL, VALID_USER_PASSWORD);
+        jSessionId = logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD);
 
         // 글작성
         PostRequest postRequest = new PostRequest("contents");
 
         PostResponse postResponse = webTestClient.post().uri("/api/posts")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .cookie("JSESSIONID", jSessionId)
+                .cookie(JSESSIONID, jSessionId)
                 .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
                 .expectStatus().isCreated()
@@ -197,6 +197,6 @@ class CommentApiControllerTests extends BaseControllerTests {
 
     @AfterEach
     void tearDown() {
-        deleteUser(userId, USER_EMAIL, USER_PASSWORD);
+        deleteUser(userId, VALID_USER_EMAIL, VALID_USER_PASSWORD);
     }
 }
