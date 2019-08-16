@@ -1,8 +1,8 @@
 package com.wootecobook.turkey.login.controller.api;
 
+import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
 import com.wootecobook.turkey.user.controller.BaseControllerTests;
-import com.wootecobook.turkey.user.controller.api.ErrorMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ class LoginApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).contains(LOGIN_FAIL_MESSAGE, NOT_FOUND_USER_MESSAGE);
+        assertThat(errorMessage.getMessage()).contains(LOGIN_FAIL_MESSAGE, NOT_FOUND_USER_MESSAGE);
     }
 
     @Test
@@ -92,7 +92,7 @@ class LoginApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).contains(LOGIN_FAIL_MESSAGE, INVALID_PASSWORD_MESSAGE);
+        assertThat(errorMessage.getMessage()).contains(LOGIN_FAIL_MESSAGE, INVALID_PASSWORD_MESSAGE);
     }
 
     @Test
@@ -115,7 +115,7 @@ class LoginApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).isEqualTo(NOT_LOGIN_MESSAGE);
+        assertThat(errorMessage.getMessage()).isEqualTo(NOT_LOGIN_MESSAGE);
     }
 
     @AfterEach

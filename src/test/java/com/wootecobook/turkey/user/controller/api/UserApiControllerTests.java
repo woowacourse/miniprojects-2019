@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.user.controller.api;
 
+import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.user.controller.BaseControllerTests;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
@@ -13,7 +14,6 @@ import reactor.core.publisher.Mono;
 import static com.wootecobook.turkey.user.domain.UserValidator.*;
 import static com.wootecobook.turkey.user.service.exception.NotFoundUserException.NOT_FOUND_USER_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
-import static com.wootecobook.turkey.user.service.exception.UserDeleteException.USER_DELETE_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.UserMismatchException.USER_MISMATCH_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -79,7 +79,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).contains(SIGN_UP_FAIL_MESSAGE);
+        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE);
     }
 
     @Test
@@ -102,7 +102,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_CONSTRAINT_MESSAGE);
+        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_CONSTRAINT_MESSAGE);
     }
 
     @Test
@@ -125,7 +125,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).contains(SIGN_UP_FAIL_MESSAGE, NAME_CONSTRAINT_MESSAGE);
+        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, NAME_CONSTRAINT_MESSAGE);
     }
 
     @Test
@@ -148,7 +148,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).contains(SIGN_UP_FAIL_MESSAGE, PASSWORD_CONSTRAINT_MESSAGE);
+        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, PASSWORD_CONSTRAINT_MESSAGE);
     }
 
     @Test
@@ -183,7 +183,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getErrorMessage()).isEqualTo(NOT_FOUND_USER_MESSAGE);
+        assertThat(errorMessage.getMessage()).isEqualTo(NOT_FOUND_USER_MESSAGE);
     }
 
 
@@ -217,6 +217,6 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
-        assertThat(errorMessage.getErrorMessage()).isEqualTo(USER_MISMATCH_MESSAGE);
+        assertThat(errorMessage.getMessage()).isEqualTo(USER_MISMATCH_MESSAGE);
     }
 }

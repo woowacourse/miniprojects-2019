@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.user.controller.api;
 
+import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.commons.exception.NotLoginException;
 import com.wootecobook.turkey.user.service.exception.NotFoundUserException;
 import com.wootecobook.turkey.user.service.exception.SignUpException;
