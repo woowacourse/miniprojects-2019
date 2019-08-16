@@ -2,6 +2,7 @@ package com.woowacourse.dsgram.web.config;
 
 import com.woowacourse.dsgram.web.argumentresolver.UserSessionArgumentResolver;
 import com.woowacourse.dsgram.web.interceptor.AuthInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -12,16 +13,14 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${interceptor.login}")
+    private List<String> excludedPaths;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/css/**")
-                .excludePathPatterns("/js/**")
-                .excludePathPatterns("/images/**")
-                .excludePathPatterns("/login")
-                .excludePathPatterns("/signup")
-                .excludePathPatterns("/api/users/login");
+                .excludePathPatterns(excludedPaths);
     }
 
     @Override
