@@ -67,7 +67,7 @@ class CommentServiceTest {
     void 댓글_저장() {
         // given
         final CommentCreate commentCreate = new CommentCreate("댓글 저장", null);
-        final CommentResponse commentResponse = CommentResponse.from(comment);
+        final Comment comment = commentCreate.toEntity(user, post, null);
 
         when(userService.findById(USER_ID)).thenReturn(user);
         when(postService.findById(POST_ID)).thenReturn(post);
@@ -80,7 +80,7 @@ class CommentServiceTest {
         verify(userService).findById(USER_ID);
         verify(postService).findById(POST_ID);
         verify(commentRepository).save(any());
-        assertThat(commentResponse.getContents()).isEqualTo(expected.getContents());
+        assertThat(commentCreate.getContents()).isEqualTo(expected.getContents());
     }
 
     @Test
