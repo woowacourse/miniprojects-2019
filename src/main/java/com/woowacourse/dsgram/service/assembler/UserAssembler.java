@@ -1,13 +1,10 @@
 package com.woowacourse.dsgram.service.assembler;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
-
-import java.util.Optional;
 
 public class UserAssembler {
     public static User toEntity(SignUpUserDto signUpUserDto) {

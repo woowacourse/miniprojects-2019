@@ -19,7 +19,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Component
-@Getter @Setter
+@Getter
+@Setter
 @ConfigurationProperties(prefix = "oauth.client.github")
 public class GithubClient {
     private static final Logger log = LoggerFactory.getLogger(GithubClient.class);
