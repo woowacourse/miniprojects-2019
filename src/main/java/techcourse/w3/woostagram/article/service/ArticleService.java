@@ -42,7 +42,7 @@ public class ArticleService {
     @Transactional
     public void update(ArticleDto articleDto) {
         Article article = articleRepository.findById(articleDto.getId()).orElseThrow(ArticleNotFoundException::new);
-        article.update(articleDto.getContents());
+        article.updateContents(articleDto.getContents());
     }
 
     public void remove(Long articleId) {

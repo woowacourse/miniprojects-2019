@@ -7,13 +7,12 @@ import javax.persistence.Embeddable;
 import javax.persistence.Lob;
 import javax.validation.constraints.NotBlank;
 
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 @EqualsAndHashCode
 @ToString
-@Getter
-@Embeddable
-@NoArgsConstructor
 public class UserContents {
-
     @NotBlank(message = "빈칸을 허용하지 않는 항목입니다.")
     @Column(nullable = false, unique = true)
     private String userName;

@@ -35,7 +35,7 @@ public class UserService {
     @Transactional
     public void update(UserContentsDto userContentsDto, String email) {
         User user = userRepository.findUserByEmail(email).orElseThrow(UserUpdateException::new);
-        user.contentsUpdated(userContentsDto.toEntity());
+        user.updateContents(userContentsDto.toEntity());
     }
 
     public void delete(String email) {
