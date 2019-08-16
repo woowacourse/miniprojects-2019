@@ -42,6 +42,8 @@ public class Comment extends BaseEntity {
 
     @Builder
     public Comment(final String contents, final User user, final Post post, final Comment parent) {
+        CommentValidator.validateContents(contents);
+
         this.contents = contents;
         this.user = user;
         this.post = post;

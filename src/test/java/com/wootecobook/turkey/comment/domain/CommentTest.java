@@ -1,6 +1,7 @@
 package com.wootecobook.turkey.comment.domain;
 
 import com.wootecobook.turkey.comment.domain.exception.CommentUpdateFailException;
+import com.wootecobook.turkey.comment.domain.exception.InvalidCommentException;
 import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;
@@ -33,6 +34,18 @@ class CommentTest {
                 .post(post)
                 .user(user)
                 .build();
+    }
+
+    @Test
+    void contents_null_예외처리() {
+        // when & then
+        assertThrows(InvalidCommentException.class, ()-> new Comment(null, user, post, null));
+    }
+
+    @Test
+    void contents_공백_예외처리() {
+        // when & then
+        assertThrows(InvalidCommentException.class, ()-> new Comment("    ", user, post, null));
     }
 
     @Test
