@@ -37,7 +37,7 @@ const Article = (function () {
             request.get('/api/articles/' + articleId)
                 .then(response => {
                     console.log(response);
-                    document.getElementById("pic").src = '/uploads/' + response.data.imageUrl;
+                    document.getElementById("pic").src =  response.data.imageUrl;
                     document.getElementById("contents-para").innerText = response.data.contents;
                 })
 
