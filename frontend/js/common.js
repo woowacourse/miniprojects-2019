@@ -40,7 +40,7 @@ const wootubeCtx = {
             window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (str, key, value) { params[key] = value; });
             return params;
         },
-        calcualteDate: function (responseDate) {
+        calculateDate: function (responseDate) {
             const videoDate = new Date(responseDate.substr(0,4), responseDate.substr(4,2), responseDate.substr(6,2), responseDate.substr(8,2))
             const currentDate = new Date()
             const yearDifference = currentDate.getFullYear() - videoDate.getFullYear()

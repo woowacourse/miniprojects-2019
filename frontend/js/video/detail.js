@@ -1,10 +1,10 @@
 const detailView = function() {
-    params = getUrlParams();
+    params = wootubeCtx.util.getUrlParams();
 
     const videoId = params.id;
     console.log('videoId : ' + videoId);
     
-    api.get(`/v1/videos/${videoId}`)
+    wootubeCtx.util.api.get(`/v1/videos/${videoId}`)
     .then(response => response.json())
     .then(data => detailVideo(data))
 }
