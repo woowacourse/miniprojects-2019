@@ -24,7 +24,7 @@ const videoApp = (function () {
             body.contents = document.getElementById('contents').value;
             const dataBody = JSON.stringify(body);
 
-            api.post("api/v1/videos", dataBody)
+            api.post('api/v1/videos', dataBody)
             .then(response => response.json())
             .then(data => saveVideo(data))
         }
@@ -32,11 +32,11 @@ const videoApp = (function () {
         const saveVideo = function (data) {
             if (data.result) {
                 // error
-                console.log("error");
+                console.log('error');
                 return false;
             }
 
-            location.href = "./video-detail.html?id=" + data.id;
+            location.href = './video-detail.html?id=' + data.id;
         }
 
         return {
@@ -55,4 +55,3 @@ const videoApp = (function () {
 })();
 
 videoApp.init();
-

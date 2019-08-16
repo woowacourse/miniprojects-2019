@@ -1,5 +1,6 @@
 function addHeader(headerElement){
-    const headerTemplate = `<header id="header" class="header navbar shadow-sm">
+    const headerTemplate = 
+    `<header id="header" class="header navbar shadow-sm">
         <div class="header-container">
             <ul class="nav-left mrg-left-0 padding-8">
                 <li>
@@ -36,5 +37,5 @@ function addHeader(headerElement){
             </ul>
         </div>
     </header>`
-    headerElement.insertAdjacentHTML("afterbegin", headerTemplate)
+    headerElement.insertAdjacentHTML('afterbegin', headerTemplate)
 }
