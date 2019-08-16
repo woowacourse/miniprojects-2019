@@ -1,20 +1,20 @@
-const Detail = (function () {
-    const DetailController = function(){
-        const detailService = new DetailService();
+const Article = (function () {
+    const ArticleController = function(){
+        const articleService = new ArticleService();
         const modifyFormButton = ()=>{
             const button = document.getElementById("modal-btn")
-            button.addEventListener('click',detailService.createModifyInput);
+            button.addEventListener('click',articleService.createModifyInput);
         }
         const modifyButton = ()=>{
             const button = document.getElementById("contents-modify-btn");
-            button.addEventListener('click',detailService.modify);
+            button.addEventListener('click',articleService.modify);
         }
         const removeButton = ()=>{
             const button = document.getElementById("contents-remove-btn");
-            button.addEventListener('click',detailService.remove);
+            button.addEventListener('click',articleService.remove);
         }
         const initContent = ()=>{
-            detailService.createContents();
+            articleService.createContents();
         }
         const init = function () {
             modifyButton()
@@ -27,12 +27,12 @@ const Detail = (function () {
         }
     }
 
-    const DetailService = function(){
+    const ArticleService = function(){
         const createContents = () =>
             axios.get('/api/articles/' + articleId)
                 .then(response => {
                     console.log(response);
-                    document.getElementById("pic").src = response.data.imageUrl;
+                    document.getElementById("pic").src = '/uploads/'+response.data.imageUrl;
                     document.getElementById("contents-para").innerText = response.data.contents;
                 })
         const createModifyInput = () => {
@@ -75,8 +75,8 @@ const Detail = (function () {
         }
     }
     const init = () => {
-        const detailController = new DetailController();
-        detailController.init();
+        const articleController = new ArticleController();
+        articleController.init();
     };
 
     return {
@@ -86,5 +86,5 @@ const Detail = (function () {
 }());
 
 window.onload = function () {
-    Detail.init();
+    Article.init();
 }
