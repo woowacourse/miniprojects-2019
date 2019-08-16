@@ -47,6 +47,6 @@ public class UserController {
     @GetMapping("/oauth")
     public String test(@RequestParam String code, HttpSession httpSession) {
         httpSession.setAttribute("sessionUser", userService.oauth(code));
-        return "index";
+        return "redirect:/login";
     }
 }
