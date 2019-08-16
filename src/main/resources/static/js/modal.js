@@ -1,14 +1,14 @@
 const modal = {
-    inactive(){
+    inactive() {
         const modalContainer = document.querySelector('.modal');
         modalContainer.classList.add('pace-inactive');
     },
-    active(){
+    active() {
         const modalContainer = document.querySelector('.modal');
         modalContainer.classList.remove('pace-inactive')
     }
 }
 
-document.querySelector('.modal').addEventListener('click', function(){
+document.querySelector('.modal').addEventListener('click', function () {
     modal.inactive();
 });

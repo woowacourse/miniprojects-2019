@@ -1,9 +1,9 @@
 const Article = (function () {
     const ArticleController = function () {
         const articleService = new ArticleService();
-        const modalButton = ()=>{
-            const button=document.querySelector('#modal-btn');
-            button.addEventListener('click',articleService.modalActive);
+        const modalButton = () => {
+            const button = document.querySelector('#modal-btn');
+            button.addEventListener('click', articleService.modalActive);
         }
         const modifyFormButton = () => {
             const button = document.querySelector("#create-modify-btn")
@@ -41,7 +41,7 @@ const Article = (function () {
                     document.getElementById("contents-para").innerText = response.data.contents;
                 })
 
-        const modalActive= ()=>{
+        const modalActive = () => {
             modal.active()
         }
         const createModifyInput = () => {
