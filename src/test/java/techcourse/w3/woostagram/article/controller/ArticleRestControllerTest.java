@@ -1,22 +1,15 @@
 package techcourse.w3.woostagram.article.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 
-import java.io.IOException;
-import java.util.Objects;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ArticleRestControllerTest extends AbstractControllerTests {
-    private ObjectMapper objectMapper = new ObjectMapper();
-
     @Test
-    void read_correctArticleId_isOk() throws IOException {
-        String json = new String(Objects.requireNonNull(getRequest("/api/articles/1").getResponseBody()));
-        ArticleDto response = objectMapper.readValue(json, ArticleDto.class);
+    void read_correctArticleId_isOk() {
+        ArticleDto response = getRequest("/api/articles/1", ArticleDto.class);
         assertThat(response.getContents()).isEqualTo("moomin is moomin");
     }
 

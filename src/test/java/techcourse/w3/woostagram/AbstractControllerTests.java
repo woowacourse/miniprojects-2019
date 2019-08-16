@@ -31,6 +31,16 @@ public class AbstractControllerTests {
         loginRequest(TEST_EMAIL, TEST_PW);
     }
 
+    protected <T> T getRequest(String uri, Class<T> bodyType) {
+        return webTestClient.get()
+                .uri(uri)
+                .header("Cookie", cookie)
+                .exchange()
+                .expectBody(bodyType)
+                .returnResult()
+                .getResponseBody();
+    }
+
     protected EntityExchangeResult<byte[]> getRequest(String uri) {
         return webTestClient.get()
                 .uri(uri)
