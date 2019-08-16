@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SignUpUserDto {
     @Size(min = 2, max = 10, message = "닉네임은 2~10자")
+    @Email
     private String nickName;
 
     @Size(min = 2, max = 10, message = "이름은 2~10자")
