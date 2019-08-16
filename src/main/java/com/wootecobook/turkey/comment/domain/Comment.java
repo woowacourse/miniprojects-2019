@@ -70,4 +70,8 @@ public class Comment extends BaseEntity {
             throw new AlreadyDeleteException(this.getId());
         }
     }
+
+    public Long getParentId() {
+        return getParent() == null ? null : getParent().getId();
+    }
 }

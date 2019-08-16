@@ -33,11 +33,10 @@ public class CommentResponse {
     }
 
     public static CommentResponse from(Comment comment) {
-        final Long parentId = comment.getParent() == null ? null : comment.getParent().getId();
         return CommentResponse.builder()
                 .id(comment.getId())
                 .contents(comment.getContents())
-                .parentId(parentId)
+                .parentId(comment.getParentId())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();
