@@ -1,9 +1,13 @@
 package com.woowacourse.dsgram.service.assembler;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
+
+import java.util.Optional;
 
 public class UserAssembler {
     public static User toEntity(SignUpUserDto signUpUserDto) {
@@ -22,6 +26,17 @@ public class UserAssembler {
                 .nickName(userDto.getNickName())
                 .intro(userDto.getIntro())
                 .webSite(userDto.getWebSite())
+                .build();
+    }
+
+    public static User toEntity(String email, JsonObject userInfo) {
+        return User.builder()
+                .email(email)
+                .nickName(userInfo.get("login").getAsString())
+                // TODO: 2019-08-16 ID, Password 는 오또카지...?
+                .password("일단아무거나")
+                .webSite(userInfo.get("html_url").getAsString())
+                .userName(userInfo.get("name").getAsString())
                 .build();
     }
 
