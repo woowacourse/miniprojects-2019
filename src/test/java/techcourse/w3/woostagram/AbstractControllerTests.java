@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AbstractControllerTests {
     @Autowired
-    private WebTestClient webTestClient;
+    protected WebTestClient webTestClient;
     private String cookie;
     private static final String TEST_EMAIL = "a@naver.com";
     private static final String TEST_PW = "Aa1234!!";
