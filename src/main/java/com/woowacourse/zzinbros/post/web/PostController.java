@@ -24,17 +24,17 @@ public class PostController {
 
     @PostMapping
     public Post create(@RequestBody PostRequestDto dto, UserSession userSession) {
-        return postService.add(dto, userSession);
+        return postService.add(dto, userSession.getId());
     }
 
     @PutMapping("/{id}")
     public Post modify(@PathVariable long id, @RequestBody PostRequestDto dto, UserSession userSession) {
-        return postService.update(id, dto, userSession);
+        return postService.update(id, dto, userSession.getId());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Post> remove(@PathVariable long id, UserSession userSession) {
-        postService.delete(id, userSession);
+        postService.delete(id, userSession.getId());
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

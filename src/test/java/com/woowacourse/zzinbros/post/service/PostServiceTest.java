@@ -5,7 +5,6 @@ import com.woowacourse.zzinbros.post.domain.repository.PostRepository;
 import com.woowacourse.zzinbros.post.dto.PostRequestDto;
 import com.woowacourse.zzinbros.post.exception.UnAuthorizedException;
 import com.woowacourse.zzinbros.user.domain.User;
-import com.woowacourse.zzinbros.user.domain.UserSession;
 import com.woowacourse.zzinbros.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ public class PostServiceTest {
         PostRequestDto dto = new PostRequestDto();
         dto.setContents(DEFAULT_CONTENT);
 
-        assertThat(postService.add(dto, new UserSession(DEFAULT_USER_ID, DEFAULT_NAME, DEFAULT_EMAIL))).isEqualTo(defaultPost);
+        assertThat(postService.add(dto, DEFAULT_USER_ID)).isEqualTo(defaultPost);
     }
 
     @Test
@@ -59,7 +58,7 @@ public class PostServiceTest {
         PostRequestDto dto = new PostRequestDto();
         dto.setContents(NEW_CONTENT);
 
-        assertThat(postService.update(DEFAULT_POST_ID, dto, new UserSession(DEFAULT_USER_ID, DEFAULT_NAME, DEFAULT_EMAIL))).isEqualTo(new Post(NEW_CONTENT, defaultUser));
+        assertThat(postService.update(DEFAULT_POST_ID, dto, DEFAULT_USER_ID)).isEqualTo(new Post(NEW_CONTENT, defaultUser));
     }
 
     @Test
@@ -69,7 +68,7 @@ public class PostServiceTest {
 
     @Test
     void 게시글_작성자가_게시글_삭제() {
-        assertThat(postService.delete(DEFAULT_POST_ID, new UserSession(DEFAULT_USER_ID, DEFAULT_NAME, DEFAULT_EMAIL))).isTrue();
+        assertThat(postService.delete(DEFAULT_POST_ID, DEFAULT_USER_ID)).isTrue();
     }
 
     @Test
@@ -78,7 +77,7 @@ public class PostServiceTest {
         assertThatExceptionOfType(UnAuthorizedException.class)
                 .isThrownBy(() -> postService.delete(
                         DEFAULT_POST_ID,
-                        new UserSession(1000L, "paul", "paul123@example.com")));
+                        1000L));
     }
 
     @Test

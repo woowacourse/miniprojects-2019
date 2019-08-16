@@ -21,7 +21,7 @@ public class PostEditController {
     public ModelAndView showEdit(@PathVariable long id, UserSession userSession) {
         ModelAndView modelAndView = new ModelAndView();
         Post post = postService.read(id);
-        if (userSession.getId().equals(post.getAuthor().getId())) {
+        if (userSession.getId() == post.getAuthor().getId()) {
             modelAndView.setViewName("post-modify");
             modelAndView.addObject("post", postService.read(id));
             return modelAndView;

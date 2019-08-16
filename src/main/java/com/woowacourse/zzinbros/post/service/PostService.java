@@ -6,7 +6,6 @@ import com.woowacourse.zzinbros.post.dto.PostRequestDto;
 import com.woowacourse.zzinbros.post.exception.PostNotFoundException;
 import com.woowacourse.zzinbros.post.exception.UnAuthorizedException;
 import com.woowacourse.zzinbros.user.domain.User;
-import com.woowacourse.zzinbros.user.domain.UserSession;
 import com.woowacourse.zzinbros.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,15 +23,15 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public Post add(PostRequestDto dto, UserSession userSession) {
-        User user = userService.findUserById(userSession.getId());
+    public Post add(PostRequestDto dto, long userId) {
+        User user = userService.findUserById(userId);
         Post post = new Post(dto.getContents(), user);
         return postRepository.save(post);
     }
 
     @Transactional
-    public Post update(long postId, PostRequestDto dto, UserSession userSession) {
-        User user = userService.findUserById(userSession.getId());
+    public Post update(long postId, PostRequestDto dto, long userId) {
+        User user = userService.findUserById(userId);
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         return post.update(new Post(dto.getContents(), user));
     }
@@ -41,9 +40,9 @@ public class PostService {
         return postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
     }
 
-    public boolean delete(long postId, UserSession userSession) {
+    public boolean delete(long postId, long userId) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        User user = userService.findUserById(userSession.getId());
+        User user = userService.findUserById(userId);
         if (post.matchAuthor(user)) {
             postRepository.delete(post);
             return true;
