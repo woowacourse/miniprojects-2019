@@ -6,7 +6,6 @@ import com.woowacourse.zzinbros.user.exception.UserException;
 import com.woowacourse.zzinbros.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -26,7 +25,7 @@ public class LoginController {
         try {
             UserSession userSession = userService.login(userRequestDto);
             session.setAttribute(UserSession.LOGIN_USER, userSession);
-            return "index";
+            return "redirect:/";
         } catch (UserException e) {
             return "redirect:/login";
         }
