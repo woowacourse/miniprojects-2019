@@ -33,8 +33,7 @@ public class CommentApiController {
         return ResponseEntity.ok(commentResponses);
     }
 
-    //TODO /{id}는 comment 하나만 조회인데 자식List 조회해도 괜찮은지?
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/children")
     public ResponseEntity<Page<CommentResponse>> childCommentList(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
                                                                   @PathVariable Long id) {
 

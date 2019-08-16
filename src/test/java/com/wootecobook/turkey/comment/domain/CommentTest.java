@@ -1,5 +1,7 @@
 package com.wootecobook.turkey.comment.domain;
 
+import com.wootecobook.turkey.comment.domain.exception.CommentUpdateFailException;
+import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,5 +78,12 @@ class CommentTest {
         // then
         assertThat(comment.getContents()).isEqualTo(Comment.CONTENTS_DELETE_MESSAGE);
         assertThat(comment.isDeleted()).isEqualTo(true);
+    }
+
+    @Test
+    void 수정_null_입력_예외처리() {
+        // when & then
+        assertThrows(CommentUpdateFailException.class, ()-> comment.update(null));
+
     }
 }

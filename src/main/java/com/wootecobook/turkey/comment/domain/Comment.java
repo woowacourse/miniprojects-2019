@@ -1,5 +1,7 @@
 package com.wootecobook.turkey.comment.domain;
 
+import com.wootecobook.turkey.comment.domain.exception.CommentUpdateFailException;
+import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
 import com.wootecobook.turkey.commons.BaseEntity;
 import com.wootecobook.turkey.post.domain.Post;
@@ -55,6 +57,9 @@ public class Comment extends BaseEntity {
     }
 
     public void update(final Comment other) {
+        if(other == null){
+            throw new CommentUpdateFailException();
+        }
         validateDelete();
         this.contents = other.getContents();
     }
@@ -71,7 +76,7 @@ public class Comment extends BaseEntity {
         }
     }
 
-    public Long getParentId() {
+    public Long getParentCommentId() {
         return getParent() == null ? null : getParent().getId();
     }
 }
