@@ -14,6 +14,7 @@ import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
+import techcourse.w3.woostagram.common.service.FileService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserContents;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -28,11 +29,13 @@ import static org.mockito.Mockito.*;
 class ArticleServiceTest {
     private static final String USER_EMAIL = "moomin@naver.com";
     @InjectMocks
-    ArticleService articleService;
+    private ArticleService articleService;
     @Mock
-    ArticleRepository articleRepository;
+    private ArticleRepository articleRepository;
     @Mock
-    UserService userService;
+    private UserService userService;
+    @Mock
+    private FileService fileService;
     private Article article;
     private User user;
 
@@ -62,7 +65,8 @@ class ArticleServiceTest {
                 .imageFile(multipartFile)
                 .build();
 
-        when(userService.findEntityByEmail(USER_EMAIL)).thenReturn(user);
+        when(fileService.saveMultipartFile(multipartFile)).thenReturn("aaminiprojects-2019bb");
+        when(userService.findUserByEmail(USER_EMAIL)).thenReturn(user);
         when(articleRepository.save(article)).thenReturn(article);
         articleService.save(articleDto, USER_EMAIL);
         verify(articleRepository).save(article);
@@ -76,20 +80,21 @@ class ArticleServiceTest {
                 .contents("Test article")
                 .imageFile(multipartFile)
                 .build();
+        when(fileService.saveMultipartFile(multipartFile)).thenThrow(InvalidExtensionException.class);
         assertThrows(InvalidExtensionException.class, () -> articleService.save(articleDto, USER_EMAIL));
     }
 
     @Test
     void get_correctArticleId_isOk() {
         when(articleRepository.findById(1L)).thenReturn(Optional.of(article));
-        articleService.get(1L);
+        articleService.findById(1L);
         verify(articleRepository).findById(1L);
     }
 
     @Test
     void get_incorrectArticleId_exception() {
         when(articleRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(ArticleNotFoundException.class, () -> articleService.get(anyLong()));
+        assertThrows(ArticleNotFoundException.class, () -> articleService.findById(anyLong()));
     }
 
     @Test
@@ -115,6 +120,6 @@ class ArticleServiceTest {
     @Test
     void delete_correctArticleId_isOk() {
         doNothing().when(articleRepository).deleteById(anyLong());
-        assertDoesNotThrow(() -> articleService.remove(anyLong()));
+        assertDoesNotThrow(() -> articleService.deleteById(anyLong()));
     }
 }

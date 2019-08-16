@@ -6,11 +6,11 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
-@EqualsAndHashCode
-@ToString
 @Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+@EqualsAndHashCode(of = "id")
+@ToString
 public class User {
     public static final String ERROR_EMAIL = "올바른 email 형식이 아닙니다.";
     public static final String ERROR_PASSWORD = "올바른 비밀번호 형식이 아닙니다.";
@@ -39,8 +39,7 @@ public class User {
         this.userContents = userContents;
     }
 
-    public void contentsUpdated(UserContents userContents) {
-
+    public void updateContents(UserContents userContents) {
         this.userContents = userContents;
     }
 }

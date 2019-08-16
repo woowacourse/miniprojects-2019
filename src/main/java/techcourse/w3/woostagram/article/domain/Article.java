@@ -1,27 +1,28 @@
 package techcourse.w3.woostagram.article.domain;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import techcourse.w3.woostagram.user.domain.User;
 
 import javax.persistence.*;
 
-@Getter
-@NoArgsConstructor
-@EqualsAndHashCode(of = "id")
 @Entity
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+@EqualsAndHashCode(of = "id")
+@ToString
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(length = 1000)
     private String contents;
+
     @Column(nullable = false, length = 1000)
     private String imageUrl;
+
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_ARTICLE_TO_USER"), name = "user")
@@ -34,7 +35,7 @@ public class Article {
         this.user = user;
     }
 
-    public void update(String contents) {
+    public void updateContents(String contents) {
         this.contents = contents;
     }
 }

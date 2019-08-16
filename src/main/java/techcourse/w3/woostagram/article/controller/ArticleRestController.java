@@ -16,17 +16,17 @@ public class ArticleRestController {
 
     @GetMapping("/{articleId}")
     public ResponseEntity<ArticleDto> read(@PathVariable Long articleId) {
-        return ResponseEntity.ok(articleService.get(articleId));
+        return ResponseEntity.ok(articleService.findById(articleId));
     }
 
     @PutMapping
-    public ResponseEntity<ArticleDto> update(@RequestBody ArticleDto articleDto) {
+    public ResponseEntity update(@RequestBody ArticleDto articleDto) {
         articleService.update(articleDto);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok().build();
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity handleRuntimeException() {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

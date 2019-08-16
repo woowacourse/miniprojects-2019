@@ -15,8 +15,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("users")
 public class UserController {
-
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -41,7 +40,7 @@ public class UserController {
 
     @PostMapping("signup")
     public String create(UserDto userDto) {
-        userService.create(userDto);
+        userService.save(userDto);
         return "redirect:/users/login/form";
     }
 
@@ -67,7 +66,7 @@ public class UserController {
 
     @DeleteMapping
     public String delete(@LoggedInUser String email) {
-        userService.delete(email);
+        userService.deleteByEmail(email);
         return "redirect:/users/login/form";
     }
 }
