@@ -156,7 +156,7 @@ class CommentServiceTest {
     }
 
     @Test
-    void findCommentResponsesByPostIdTest() {
+    void 댓글목록_조회_테스트() {
         // given
         final Page page = mock(Page.class);
         final Pageable pageable = mock(Pageable.class);
@@ -172,7 +172,7 @@ class CommentServiceTest {
     }
 
     @Test
-    void findCommentResponsesByParentIdTest() {
+    void 답글목록_조회_테스트() {
         // given
         final Page page = mock(Page.class);
         final Pageable pageable = mock(Pageable.class);
