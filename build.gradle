@@ -4,6 +4,7 @@ plugins {
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java' // adds 'test' task
 
 group = 'techcourse.w3'
 version = '0.0.1-SNAPSHOT'
@@ -37,6 +38,7 @@ dependencies {
         exclude group: 'junit'
     }
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.4.2"
 
     // Database
@@ -55,4 +57,11 @@ dependencies {
 
     // Util
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
+}
+
+test {
+    // enable TestNG support (default is JUnit)
+    useTestNG()
+    // enable JUnit Platform (a.k.a. JUnit 5) support
+    useJUnitPlatform()
 }
