@@ -1,5 +1,6 @@
 package com.woowacourse.dsgram.service.assembler;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
@@ -33,8 +34,13 @@ public class UserAssembler {
                 // TODO: 2019-08-16 ID, Password 는 오또카지...?
                 .password("일단아무거나")
                 .webSite(userInfo.get("html_url").getAsString())
-                .userName(userInfo.get("name").getAsString())
+                .userName(ifBlankName(userInfo))
                 .build();
+    }
+
+    private static String ifBlankName(JsonObject userInfo) {
+        JsonElement name = userInfo.get("name");
+        return name.isJsonNull() ? userInfo.get("id").getAsString() : name.getAsString();
     }
 
     public static UserDto toDto(User user) {
