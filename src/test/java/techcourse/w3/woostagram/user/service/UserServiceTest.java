@@ -46,78 +46,78 @@ class UserServiceTest {
     @Test
     void create_correct_success() {
         when(userRepository.save(userDto.toEntity())).thenReturn(userDto.toEntity());
-        assertThat(userService.create(userDto)).isEqualTo(UserInfoDto.from(userDto.toEntity()));
+        assertThat(userService.save(userDto)).isEqualTo(UserInfoDto.from(userDto.toEntity()));
     }
 
     @Test
     void create_empty_fail() {
         when(userRepository.save(userDto.toEntity())).thenThrow(RuntimeException.class);
-        assertThrows(UserCreateException.class, () -> userService.create(userDto));
+        assertThrows(UserCreateException.class, () -> userService.save(userDto));
     }
 
     @Test
     void update_correct_success() {
-        when(userRepository.findUserByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
         userService.update(userContentsDto, userDto.getEmail());
-        verify(userRepository, times(1)).findUserByEmail(userDto.getEmail());
+        verify(userRepository, times(1)).findByEmail(userDto.getEmail());
     }
 
     @Test
     void update_empty_fail() {
-        when(userRepository.findUserByEmail(userDto.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
         assertThrows(UserUpdateException.class, () -> userService.update(userContentsDto, userDto.getEmail()));
-        verify(userRepository, times(1)).findUserByEmail(userDto.getEmail());
+        verify(userRepository, times(1)).findByEmail(userDto.getEmail());
     }
 
     @Test
     void delete_correct_success() {
-        when(userRepository.findUserByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
-        userService.delete(userDto.getEmail());
-        verify(userRepository, times(1)).findUserByEmail(userDto.getEmail());
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
+        userService.deleteByEmail(userDto.getEmail());
+        verify(userRepository, times(1)).findByEmail(userDto.getEmail());
         verify(userRepository, times(1)).delete(userDto.toEntity());
     }
 
     @Test
     void delete_empty_fail() {
-        when(userRepository.findUserByEmail(userDto.getEmail())).thenReturn(Optional.empty());
-        assertThrows(LoginException.class, () -> userService.delete(userDto.getEmail()));
-        verify(userRepository, times(1)).findUserByEmail(userDto.getEmail());
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
+        assertThrows(LoginException.class, () -> userService.deleteByEmail(userDto.getEmail()));
+        verify(userRepository, times(1)).findByEmail(userDto.getEmail());
         verify(userRepository, times(0)).delete(userDto.toEntity());
     }
 
     @Test
     void findByEmail_correct_success() {
-        when(userRepository.findUserByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
         assertThat(userService.findByEmail(userDto.getEmail())).isEqualTo(UserInfoDto.from(userDto.toEntity()));
     }
 
     @Test
     void findByEmail_empty_fail() {
-        when(userRepository.findUserByEmail(userDto.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
         assertThrows(LoginException.class, () -> userService.findByEmail(userDto.getEmail()));
     }
 
     @Test
     void findEntityByEmail_correct_success() {
-        when(userRepository.findUserByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
-        assertThat(userService.findEntityByEmail(userDto.getEmail())).isEqualTo(userDto.toEntity());
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
+        assertThat(userService.findUserByEmail(userDto.getEmail())).isEqualTo(userDto.toEntity());
     }
 
     @Test
     void findEntityByEmail_empty_fail() {
-        when(userRepository.findUserByEmail(userDto.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
         assertThrows(LoginException.class, () -> userService.findByEmail(userDto.getEmail()));
     }
 
     @Test
     void authUser_correct_success() {
-        when(userRepository.findUserByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.of(userDto.toEntity()));
+        when(userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.of(userDto.toEntity()));
         assertThat(userService.authUser(userDto)).isEqualTo(userDto.getEmail());
     }
 
     @Test
     void authUser_empty_fail() {
-        when(userRepository.findUserByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.empty());
+        when(userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.empty());
         assertThrows(LoginException.class, () -> userService.authUser(userDto));
     }
 }

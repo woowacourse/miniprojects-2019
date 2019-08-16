@@ -66,7 +66,7 @@ class ArticleServiceTest {
                 .build();
 
         when(fileService.saveMultipartFile(multipartFile)).thenReturn("aaminiprojects-2019bb");
-        when(userService.findEntityByEmail(USER_EMAIL)).thenReturn(user);
+        when(userService.findUserByEmail(USER_EMAIL)).thenReturn(user);
         when(articleRepository.save(article)).thenReturn(article);
         articleService.save(articleDto, USER_EMAIL);
         verify(articleRepository).save(article);
@@ -87,14 +87,14 @@ class ArticleServiceTest {
     @Test
     void get_correctArticleId_isOk() {
         when(articleRepository.findById(1L)).thenReturn(Optional.of(article));
-        articleService.get(1L);
+        articleService.findById(1L);
         verify(articleRepository).findById(1L);
     }
 
     @Test
     void get_incorrectArticleId_exception() {
         when(articleRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(ArticleNotFoundException.class, () -> articleService.get(anyLong()));
+        assertThrows(ArticleNotFoundException.class, () -> articleService.findById(anyLong()));
     }
 
     @Test
@@ -120,6 +120,6 @@ class ArticleServiceTest {
     @Test
     void delete_correctArticleId_isOk() {
         doNothing().when(articleRepository).deleteById(anyLong());
-        assertDoesNotThrow(() -> articleService.remove(anyLong()));
+        assertDoesNotThrow(() -> articleService.deleteById(anyLong()));
     }
 }

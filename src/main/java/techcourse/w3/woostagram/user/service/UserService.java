@@ -19,7 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserInfoDto create(UserDto userDto) {
+    public UserInfoDto save(UserDto userDto) {
         try {
             return UserInfoDto.from(userRepository.save(userDto.toEntity()));
         } catch (Exception error) {
@@ -28,27 +28,27 @@ public class UserService {
     }
 
     public String authUser(UserDto userDto) {
-        return userRepository.findUserByEmailAndPassword(userDto.getEmail(), userDto.getPassword())
+        return userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())
                 .orElseThrow(LoginException::new).getEmail();
     }
 
     @Transactional
     public void update(UserContentsDto userContentsDto, String email) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(UserUpdateException::new);
+        User user = userRepository.findByEmail(email).orElseThrow(UserUpdateException::new);
         user.updateContents(userContentsDto.toEntity());
     }
 
-    public void delete(String email) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(LoginException::new);
+    public void deleteByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(LoginException::new);
         userRepository.delete(user);
     }
 
     public UserInfoDto findByEmail(String email) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(LoginException::new);
+        User user = userRepository.findByEmail(email).orElseThrow(LoginException::new);
         return UserInfoDto.from(user);
     }
 
-    public User findEntityByEmail(String email) {
-        return userRepository.findUserByEmail(email).orElseThrow(LoginException::new);
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(LoginException::new);
     }
 }

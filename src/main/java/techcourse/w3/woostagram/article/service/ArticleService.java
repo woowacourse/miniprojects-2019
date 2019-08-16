@@ -28,14 +28,14 @@ public class ArticleService {
 
     @Transactional
     public Long save(ArticleDto articleDto, String email) {
-        User user = userService.findEntityByEmail(email);
+        User user = userService.findUserByEmail(email);
         String filePath = fileService.saveMultipartFile(articleDto.getImageFile());
         Article article = ArticleAssembler.toArticle(articleDto, filePath.split("miniprojects-2019")[1], user);
         articleRepository.save(article);
         return article.getId();
     }
 
-    public ArticleDto get(Long articleId) {
+    public ArticleDto findById(Long articleId) {
         return ArticleAssembler.toArticleDto(articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new));
     }
 
@@ -45,7 +45,7 @@ public class ArticleService {
         article.updateContents(articleDto.getContents());
     }
 
-    public void remove(Long articleId) {
+    public void deleteById(Long articleId) {
         articleRepository.deleteById(articleId);
     }
 }
