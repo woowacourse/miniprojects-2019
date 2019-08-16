@@ -72,10 +72,8 @@
                                         <li>
                                             <img class="thumb-img img-circle" th:src="${session.member.profileImage}" alt="">
                                             <div class="info">
-                                                <p th:text="${session.member.nickName}" class="title no-pdd-vertical text-bold inline-block font-size-15"></p>
-                                            </div>
-                                            <div class="info">
-                                                <text style="font-size: 12px; color: gray;">새 글 쓰기</text>
+                                                <p th:text="${session.member.nickName}" class="title no-pdd-vertical text-bold inline-block font-size-15 mrg-btm-0"></p>
+                                                <p class="mrg-btm-0" style="font-size: 12px; color: gray;">새 글 쓰기</p>
                                             </div>
                                         </li>
                                     </ul>
@@ -121,7 +119,6 @@
     </div>
 </div>
 
-<script></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
@@ -133,7 +130,7 @@
     function goBackToIndexPage(event) {
         event.preventDefault();
     
-        if (confirm("작성하신 게시물을 취소하고 돌아가시겠습니까?") == true) {
+        if (confirm("작성하신 게시물을 취소하고 돌아가시겠습니까?") === true) {
             articleForm.setAttribute("method", "get");
             articleForm.setAttribute("action", "/");
             articleFormMethod.remove();
