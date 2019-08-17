@@ -5,24 +5,23 @@ import com.woowacourse.dsgram.service.ArticleApiService;
 import com.woowacourse.dsgram.service.FileService;
 import com.woowacourse.dsgram.service.dto.ArticleRequest;
 import com.woowacourse.dsgram.service.vo.FileInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/articles")
 public class ArticleApiController {
 
-    @Autowired
-    ArticleApiService articleApiService;
+    private ArticleApiService articleApiService;
+    private FileService fileService;
 
-    @Autowired
-    FileService fileService;
+    public ArticleApiController(ArticleApiService articleApiService, FileService fileService) {
+        this.articleApiService = articleApiService;
+        this.fileService = fileService;
+    }
 
     @PostMapping
-    @ResponseBody
     public ResponseEntity<Article> create(ArticleRequest articleRequest) {
         FileInfo fileInfo = fileService.save(articleRequest.getFile());
         Article article = convertFrom(articleRequest, fileInfo);
@@ -34,5 +33,12 @@ public class ArticleApiController {
         return new Article(articleRequest.getContents(), fileInfo.getFileName(), fileInfo.getFilePath());
     }
 
+    @GetMapping("/file")
+    public ResponseEntity<byte[]> showArticleFile(@PathVariable long articleId) {
+        Article article = articleApiService.findById(articleId);
+        byte[] base64 = fileService.readFile(article);
+
+        return new ResponseEntity<>(base64, HttpStatus.OK);
+    }
 
 }
