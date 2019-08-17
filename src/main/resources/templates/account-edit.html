@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input id="userName" class="form-control text-bold" name="name"
-                                               th:value="${user.userName}">
+                                               th:value="${user.userName}" minlength="2" maxlength="10">
                                     </div>
                                 </div>
                                 <hr>
@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input id="nickName" class="form-control text-bold" name="nickname" type="text"
-                                               th:value="${user.nickName}">
+                                               th:value="${user.nickName}" minlength="2" maxlength="10">
                                     </div>
                                 </div>
                                 <hr>
@@ -80,7 +80,7 @@
                                     <div class="col-md-8">
                                         <input id="password" class="form-control text-bold" name="password"
                                                type="password"
-                                               th:value="${user.password}">
+                                               th:value="${user.password}" minlength="4" maxlength="16">
                                     </div>
                                 </div>
                                 <hr>
