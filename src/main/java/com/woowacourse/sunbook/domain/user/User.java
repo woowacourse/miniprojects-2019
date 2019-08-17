@@ -1,21 +1,17 @@
 package com.woowacourse.sunbook.domain.user;
 
+import com.woowacourse.sunbook.domain.BaseEntity;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
 
-@Entity
-@Getter
-@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Getter
+@Entity
+public class User extends BaseEntity {
 
     @Embedded
     private UserEmail userEmail;
