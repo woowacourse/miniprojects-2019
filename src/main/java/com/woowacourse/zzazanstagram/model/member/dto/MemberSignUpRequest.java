@@ -2,6 +2,7 @@ package com.woowacourse.zzazanstagram.model.member.dto;
 
 import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 public class MemberSignUpRequest {
@@ -9,6 +10,7 @@ public class MemberSignUpRequest {
     private String name;
 
     @NotBlank
+    @Email
     private String email;
 
     @NotBlank

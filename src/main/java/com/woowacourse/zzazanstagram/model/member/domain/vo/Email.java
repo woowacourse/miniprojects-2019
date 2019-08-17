@@ -9,7 +9,6 @@ import javax.persistence.Embeddable;
 public class Email {
     private static final String EMAIL_REGEX = "^[_a-zA-Z0-9-.]+@[.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
 
-    @javax.validation.constraints.Email
     @Column(name = "email", unique = true)
     private String email;
 
