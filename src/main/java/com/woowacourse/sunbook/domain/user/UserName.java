@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+@NoArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "name")
 @Embeddable
-@NoArgsConstructor
 public class UserName {
     public static final String NAME_PATTERN = "^(?!.*[~`!@#$%\\^&*()-])(?!.*\\d).{2,25}$";
     public static final String NAME_EXCEPTION_MESSAGE = "올바르지 않은 이름입니다.";

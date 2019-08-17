@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+@NoArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "password")
 @Embeddable
-@NoArgsConstructor
 public class UserPassword {
     public static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~`$@$!%?&])[A-Za-z\\d$@$!%?&]{8,20}$";
     public static final String PASSWORD_EXCEPTION_MESSAGE = "올바른 비밀번호가 아닙니다.";
