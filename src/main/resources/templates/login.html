@@ -1,22 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <th:block th:replace = "common-head :: common-head"></th:block>
+    <th:block th:replace = "fragments/common-head :: common-head"></th:block>
+    <
 </head>
 <body>
-<header id="header" class="header navbar">
-    <div class="header-container max-width-lg mx-auto">
-        <ul class="nav-left mrg-left-0 padding-15">
-            <li>
-                <img class="logo desktop-view" src="/images/logo/instgram_logo.png">
-                <div class="width-40px mobile-view overflow-hidden">
-                    <img class="logo" src="/images/logo/instgram_logo.png">
-                </div>
-            </li>
-        </ul>
-    </div>
-</header>
-
 <div class="authentication">
     <div class="sign-in-2">
         <div class="container-fluid no-pdd-horizon">
@@ -30,13 +18,12 @@
                                         <div class="card-body">
                                             <div class="pdd-horizon-30 pdd-vertical-30">
                                                 <div class="mrg-btm-30">
-                                                    <h2 class="text-center text-dark no-mrg-vertical mrg-btm-15">
-                                                        로그인</h2>
+                                                    <img class = "logo" src = "/images/logo/instagram_logo_text.png">
                                                 </div>
                                                 <form action="/users/login" method="post">
                                                     <div class="form-group">
                                                         <label class="text-normal text-dark">Email Address</label>
-                                                        <input type="email" name="email" class="form-control" required>
+                                                        <input  type="email" name="email" class="form-control" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="text-normal text-dark">Password</label>
