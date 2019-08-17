@@ -32,16 +32,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/index.css">
-    
-    <style>
-        #zzazanstagram {
-            background-image: url("https://www.instagram.com/static/images/homepage/home-phones@2x.png/9364675fb26a.png");
-            background-repeat:no-repeat;
-            background-size: contain;
-            width: 454px;
-            height: 618px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/zzazan.css">
 </head>
 <body>
 <div>
@@ -49,9 +40,9 @@
         <div class="main-content">
             <div class="container-fluid max-width-lg mx-auto">
                 <div class="row">
-                    <div class="col-lg-10 mx-auto" style="float: left; clear: none;">
-                        <div id="zzazanstagram" class="pdd-right-35" style="display: inline-block; margin-top: 30px;">
-                            <div class="carousel slide" data-ride="carousel" data-interval="3000" style="width: 244px; display: inline-block; margin: 96px 0 0 149px;">
+                    <div class="col-lg-10 mx-auto float-left clear-none">
+                        <div id="zzazanstagram" class="pdd-right-35 mrg-top-30 inline-block">
+                            <div id="main-carousel-slide" class="carousel slide inline-block" data-ride="carousel" data-interval="3000">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
                                         <img src="/images/default/zzazanstagram_main1.jpg" class="d-block w-100" alt="">
@@ -69,12 +60,12 @@
                             </div>
                         </div>
 	                    
-                        <div class="card" style="width: 350px; display: inline-block; position: absolute;">
-                            <div class="card-title" style="margin-top: 30px;">
-                                <img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png" style="margin-left: 85px;">
-                                <h5 style="margin: 20px 0 0 40px;">친구들의 사진을 보려면 가입하세요 :)</h5>
+                        <div id="signup-card" class="card inline-block absolute">
+                            <div class="card-title mrg-top-30">
+                                <img class="logo desktop-view mrg-top-5 mrg-left-85" src="/images/logo/zzazanstagram.png">
+                                <h5 id="signup-greeting-message">친구들의 사진을 보려면 가입하세요 :)</h5>
                             </div>
-                            <div class="card-body" style="padding-top: 0">
+                            <div class="card-body pdd-top-0">
                                 <form id="signup-form" action="/members" method="post" class="form-horizontal mrg-top-40">
                                     <div class="form-group row">
                                         <div class="col-md-12">
@@ -101,21 +92,21 @@
                                             <input type="text" name="name" class="form-control" id="signup-form-name" placeholder="이름" required pattern="[A-Za-zㄱ-ㅎㅏ-ㅣ가-힣]{2,10}">
                                         </div>
                                     </div>
-                                    <div class="form-group row" style="margin-bottom: 15px;">
+                                    <div class="form-group row mrg-btm-15">
                                         <div class="col-md-12">
                                             <input type="text" name="profile" class="form-control" id="signup-form-profile" placeholder="프로필 사진 URL">
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn-inverse btn-primary btn-sm" style="width: 308px; height: 30px; font-size: 12px; padding: 0;">가입하기</button>
+                                    <button id="signup-card-submit-btn" type="submit" class="btn-inverse btn-primary btn-sm">가입하기</button>
                                 </form>
                             </div>
                         </div>
     
-                        <div class="card" style="width: 350px; display: inline-block; position: absolute; margin-top: 590px;">
-                            <div class="card-body" style="padding-left: 90px;">
+                        <div id="signup-to-login-card" class="card absolute inline-block">
+                            <div class="card-body pdd-left-90">
                                 <form action="/login" method="get">
                                     <text class="card-title">계정이 있으신가요?</text>
-                                    <button type="submit" class="btn-inverse btn-primary btn-xs" style="margin-left: 5px;">로그인</button>
+                                    <button type="submit" class="btn-inverse btn-primary btn-xs mrg-left-5">로그인</button>
                                 </form>
                             </div>
                         </div>
@@ -133,13 +124,12 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl" crossorigin="anonymous"></script>
 <script>
     
-    const form = document.querySelector("#signup-from");
+    const form = document.querySelector("#signup-form");
     const email = document.querySelector("#signup-form-email");
     const password = document.querySelector("#signup-form-password");
     const passwordConfirm = document.querySelector("#signup-form-password-confirm");
     const nickName = document.querySelector("#signup-form-nick-name");
     const name = document.querySelector("#signup-form-name");
-    const profile = document.querySelector("#signup-form-profile");
     
     function setCustomValidityMessage(el, message) {
         if (el.validity.valueMissing || el.validity.patternMismatch) {
@@ -149,19 +139,19 @@
         el.setCustomValidity('');
     }
     
-    email.addEventListener("input", function (event) {
+    email.addEventListener("input", function () {
         setCustomValidityMessage(email, "올바른 이메일 주소를 입력해 주세요.");
     });
 
-    password.addEventListener("input", function (event) {
+    password.addEventListener("input", function () {
         setCustomValidityMessage(password, "알파벳 소문자, 대문자, 특수문자를 모두 포함하여 8자리 이상으로 작성해 주세요.");
     });
 
-    nickName.addEventListener("input", function (event) {
+    nickName.addEventListener("input", function () {
         setCustomValidityMessage(nickName, "닉네임은 2~10자 사이로 입력해 주세요.");
     });
 
-    name.addEventListener("input", function (event) {
+    name.addEventListener("input", function () {
         setCustomValidityMessage(name, "이름은 2~10자 사이로 입력해 주세요.");
     });
 
