@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-import static com.woowacourse.zzazanstagram.util.SessionKeys.MEMBER;
+import static com.woowacourse.zzazanstagram.web.SessionKeys.MEMBER;
 
 @Controller
 @RequestMapping("/login")

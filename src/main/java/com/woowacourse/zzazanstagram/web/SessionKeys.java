@@ -1,4 +1,4 @@
-package com.woowacourse.zzazanstagram.util;
+package com.woowacourse.zzazanstagram.web;
 
 public class SessionKeys {
     public static final String MEMBER = "member";
