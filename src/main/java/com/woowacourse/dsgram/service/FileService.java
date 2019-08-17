@@ -18,17 +18,17 @@ import java.util.UUID;
 public class FileService {
 
     @Value("${ARTICLE_UPLOAD_PATH}")
-    private String ARTICLE_UPLOAD_PATH;
+    private String articleUploadPath;
 
     @Value("${TOMCAT_PATH}")
-    private String TOMCAT_PATH;
+    private String tomcatPath;
 
     @Value("${BASE_DIR}")
-    private String BASE_DIR;
+    private String baseDir;
 
     public FileInfo save(MultipartFile multiFile) {
         String fileName = UUID.randomUUID().toString() + multiFile.getOriginalFilename();
-        String filePath = BASE_DIR + TOMCAT_PATH + ARTICLE_UPLOAD_PATH;
+        String filePath = baseDir + tomcatPath + articleUploadPath;
 
         makeDirectory(filePath);
         saveFile(multiFile, fileName, filePath);
