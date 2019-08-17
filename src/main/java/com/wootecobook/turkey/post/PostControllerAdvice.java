@@ -1,7 +1,7 @@
 package com.wootecobook.turkey.post;
 
 import com.wootecobook.turkey.commons.ErrorMessage;
-import com.wootecobook.turkey.post.controller.PostApiController;
+import com.wootecobook.turkey.post.controller.api.PostApiController;
 import com.wootecobook.turkey.post.controller.exception.PostBadRequestException;
 import com.wootecobook.turkey.post.service.exception.NotFoundPostException;
 import org.springframework.http.ResponseEntity;

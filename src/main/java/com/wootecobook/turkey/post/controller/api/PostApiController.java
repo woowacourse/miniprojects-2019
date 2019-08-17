@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.post.controller;
+package com.wootecobook.turkey.post.controller.api;
 
 import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.post.controller.exception.PostBadRequestException;
