@@ -47,7 +47,8 @@ class ArticleTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"https://image.shutterstock.com/image-photo/white-transparent-leaf-on-mirror-600w-1029171697.jpg", "https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-600w-1048185397.jpg"})
+    @ValueSource(strings = {"https://image.shutterstock.com/image-photo/white-transparent-leaf-on-mirror-600w-1029171697.jpg",
+            "https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-600w-1048185397.jpg"})
     void 이미지_url_정상_체크(String imageUrl) {
         assertThatCode(() ->
                 new Article(Image.of(imageUrl), contents, author))

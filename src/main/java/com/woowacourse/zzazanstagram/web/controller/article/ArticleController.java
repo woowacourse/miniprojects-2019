@@ -1,4 +1,4 @@
-package com.woowacourse.zzazanstagram.model.article.controller;
+package com.woowacourse.zzazanstagram.web.controller.article;
 
 import com.woowacourse.zzazanstagram.model.article.dto.ArticleRequest;
 import com.woowacourse.zzazanstagram.model.article.service.ArticleService;

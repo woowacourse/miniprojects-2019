@@ -1,6 +1,6 @@
 package com.woowacourse.zzazanstagram.model.member.domain.vo;
 
-import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
+import com.woowacourse.zzazanstagram.model.member.exception.MemberPasswordFormatException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ public class Password {
 
     private String validatePassword(final String password) {
         if (!password.matches(PASSWORD_REGEX)) {
-            throw new MemberException("잘못된 형식의 비밀번호입니다.");
+            throw new MemberPasswordFormatException("잘못된 형식의 비밀번호입니다.");
         }
         return encrypt(password);
     }

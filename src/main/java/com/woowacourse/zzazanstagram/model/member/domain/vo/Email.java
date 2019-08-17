@@ -1,6 +1,6 @@
 package com.woowacourse.zzazanstagram.model.member.domain.vo;
 
-import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
+import com.woowacourse.zzazanstagram.model.member.exception.MemberEmailFormatException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -25,7 +25,7 @@ public class Email {
 
     private String validateEmail(final String email) {
         if (!email.matches(EMAIL_REGEX)) {
-            throw new MemberException("잘못된 형식의 이메일입니다.");
+            throw new MemberEmailFormatException("잘못된 형식의 이메일입니다.");
         }
         return email;
     }

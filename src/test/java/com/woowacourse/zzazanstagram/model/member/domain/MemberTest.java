@@ -1,6 +1,6 @@
 package com.woowacourse.zzazanstagram.model.member.domain;
 
-import com.woowacourse.zzazanstagram.model.member.domain.vo.*;
+import com.woowacourse.zzazanstagram.model.member.domain.vo.Password;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -78,14 +78,8 @@ class MemberTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sdfsdfsdf", "notUrl"})
-    void 프로필_url_비정상_체크(String profile) {
-        assertThrows(IllegalArgumentException.class, () ->
-                Member.MemberBuilder.aMember().profile(profile));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"https://image.shutterstock.com/image-photo/white-transparent-leaf-on-mirror-600w-1029171697.jpg", "https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-600w-1048185397.jpg"})
+    @ValueSource(strings = {"https://image.shutterstock.com/image-photo/white-transparent-leaf-on-mirror-600w-1029171697.jpg",
+            "https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-600w-1048185397.jpg"})
     void 프로필_url_정상_체크(String profile) {
         assertThatCode(() ->
                 Member.MemberBuilder.aMember().profile(profile))
