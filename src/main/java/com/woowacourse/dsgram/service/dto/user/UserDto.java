@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -24,9 +23,6 @@ public class UserDto {
 
     @Size(min = 4, max = 16, message = "비밀번호는 4~16자")
     private String password;
-
-    @Email(message = "이메일 양식")
-    private String email;
 
     private String webSite;
     private String intro;

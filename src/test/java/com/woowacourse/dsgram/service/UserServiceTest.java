@@ -7,6 +7,7 @@ import com.woowacourse.dsgram.service.dto.user.AuthUserDto;
 import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
+import com.woowacourse.dsgram.service.exception.NotFoundUserException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -109,24 +110,21 @@ public class UserServiceTest {
     void 유저_정보_실패_없는_유저() {
         given(userRepository.findById(any())).willReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> userService.update(any(), userDto, loginUserDto));
+        assertThrows(NotFoundUserException.class, () -> userService.update(any(), userDto, loginUserDto));
     }
 
-    //TODO
+    @Test
+    void 남의_정보를_수정() {
+        given(userRepository.findById(any())).willReturn(Optional.of(user));
+        given(userRepository.countByNickName(any())).willReturn(0L);
+        assertThrows(InvalidUserException.class, () -> userService.update(any(), userDto, loginUserDto));
+    }
+
     @Test
     void 유저_수정_실패_닉네임_중복() {
         given(userRepository.findById(any())).willReturn(Optional.of(user));
         given(userRepository.countByNickName(any())).willReturn(1L);
-        assertThrows(RuntimeException.class, () -> userService.update(any(), userDto, loginUserDto));
+        assertThrows(InvalidUserException.class, () -> userService.update(any(), userDto, loginUserDto));
     }
 
-    //TODO
-    @Test
-    void 유저_수정_실패_이메일_중복() {
-        given(userRepository.findById(any())).willReturn(Optional.of(user));
-        given(userRepository.countByNickName(any())).willReturn(1L);
-        given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
-
-        assertThrows(RuntimeException.class, () -> userService.update(any(), userDto, loginUserDto));
-    }
 }
