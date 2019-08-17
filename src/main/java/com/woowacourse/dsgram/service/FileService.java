@@ -1,6 +1,8 @@
 package com.woowacourse.dsgram.service;
 
+import com.woowacourse.dsgram.domain.Article;
 import com.woowacourse.dsgram.service.exception.FileUploadException;
+import com.woowacourse.dsgram.service.exception.NotFoundFileException;
 import com.woowacourse.dsgram.service.vo.FileInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -8,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
 import java.util.UUID;
 
 @Service
@@ -46,5 +50,17 @@ public class FileService {
         } catch (IOException e) {
             throw new FileUploadException("파일저장경로를 찾지못했습니다.", e);
         }
+    }
+
+    public byte[] readFile(Article article) {
+        File file = new File(article.getFilePath() + "/" + article.getFileName());
+
+        try {
+            byte[] bytes = Files.readAllBytes(file.toPath());
+            return Base64.getEncoder().encode(bytes);
+        } catch (IOException e) {
+            throw new NotFoundFileException("파일을 찾지 못했습니다.", e);
+        }
+
     }
 }
