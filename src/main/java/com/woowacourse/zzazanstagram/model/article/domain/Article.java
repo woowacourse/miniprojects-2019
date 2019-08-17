@@ -25,10 +25,6 @@ public class Article extends BaseEntity {
         this.author = author;
     }
 
-    public static Article from(final Image image, final Contents contents, final Member author) {
-        return new Article(image, contents, author);
-    }
-
     public Image getImage() {
         return image;
     }
