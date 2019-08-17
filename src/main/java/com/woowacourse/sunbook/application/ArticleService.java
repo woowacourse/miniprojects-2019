@@ -5,6 +5,7 @@ import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.domain.article.ArticleRepository;
 import com.woowacourse.sunbook.presentation.excpetion.NotFoundArticleException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,30 +15,45 @@ import java.util.stream.Collectors;
 
 @Service
 public class ArticleService {
-
     private final ArticleRepository articleRepository;
 
+    @Autowired
     public ArticleService(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
 
+    @Transactional
     public ArticleResponseDto save(ArticleFeature articleFeature) {
-        Article savedArticle = articleRepository.save(new Article(articleFeature.getContents(), articleFeature.getImageUrl(), articleFeature.getVideoUrl()));
-        return new ArticleResponseDto(savedArticle.getId(), savedArticle.getArticleFeature(), savedArticle.getUpdatedTime());
+        Article savedArticle = articleRepository.save(new Article(articleFeature));
+
+        return ArticleResponseDto.builder()
+                .id(savedArticle.getId())
+                .articleFeature(savedArticle.getArticleFeature())
+                .updatedTime(savedArticle.getUpdatedTime())
+                .build();
     }
 
     @Transactional
     public ArticleResponseDto modify(long articleId, ArticleFeature articleFeature) {
         Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
         article.update(articleFeature);
-        return new ArticleResponseDto(articleId, articleFeature, article.getUpdatedTime());
+
+        return ArticleResponseDto.builder()
+                .id(article.getId())
+                .articleFeature(article.getArticleFeature())
+                .updatedTime(article.getUpdatedTime())
+                .build();
     }
 
     public List<ArticleResponseDto> findAll() {
         return Collections.unmodifiableList(
                 articleRepository.findAll().stream()
-                        .map(article -> new ArticleResponseDto(article.getId(), article.getArticleFeature(),
-                                article.getUpdatedTime()))
+                        .map(article -> ArticleResponseDto.builder()
+                                .id(article.getId())
+                                .articleFeature(article.getArticleFeature())
+                                .updatedTime(article.getUpdatedTime())
+                                .build()
+                        )
                         .collect(Collectors.toList())
         );
     }
