@@ -14,7 +14,7 @@ public class ArticleAssembler {
         Image image = Image.of(dto.getImage());
         Contents contents = Contents.of(dto.getContents());
 
-        return Article.from(image, contents, author);
+        return new Article(image, contents, author);
     }
 
     public static ArticleResponse toDto(Article article) {
