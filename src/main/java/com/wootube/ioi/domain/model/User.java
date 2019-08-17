@@ -1,13 +1,19 @@
 package com.wootube.ioi.domain.model;
 
+import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.validator.Password;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
 
 @Entity
 @Getter
@@ -40,5 +46,17 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public User matchPassword(String password) {
+        if (!password.equals(this.password)) {
+            throw new NotMatchPasswordException();
+        }
+        return this;
+    }
+
+    public User updateName(String name) {
+        this.name = name;
+        return this;
     }
 }

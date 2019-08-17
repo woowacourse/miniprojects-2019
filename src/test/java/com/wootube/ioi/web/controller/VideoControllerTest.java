@@ -1,7 +1,7 @@
 package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.web.config.TestConfig;
-import io.findify.s3mock.S3Mock;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +18,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import java.net.URI;
+
+import io.findify.s3mock.S3Mock;
 
 @AutoConfigureWebTestClient
 @Import(TestConfig.class)
