@@ -1,8 +1,8 @@
 package com.woowacourse.sunbook.presentation;
 
 import com.woowacourse.sunbook.application.UserService;
-import com.woowacourse.sunbook.application.dto.UserRequestDto;
-import com.woowacourse.sunbook.application.dto.UserResponseDto;
+import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
+import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

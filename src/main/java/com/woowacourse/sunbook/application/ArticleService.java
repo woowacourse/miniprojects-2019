@@ -1,6 +1,6 @@
 package com.woowacourse.sunbook.application;
 
-import com.woowacourse.sunbook.application.dto.ArticleResponseDto;
+import com.woowacourse.sunbook.application.dto.article.ArticleResponseDto;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.domain.article.ArticleRepository;

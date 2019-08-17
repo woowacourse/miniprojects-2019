@@ -1,10 +1,11 @@
 package com.woowacourse.sunbook.application;
 
-import com.woowacourse.sunbook.application.dto.UserRequestDto;
-import com.woowacourse.sunbook.application.dto.UserResponseDto;
+import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
+import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
 import com.woowacourse.sunbook.application.exception.LoginException;
-import com.woowacourse.sunbook.domain.user.*;
+import com.woowacourse.sunbook.domain.user.User;
+import com.woowacourse.sunbook.domain.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
