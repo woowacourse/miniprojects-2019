@@ -1,6 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.8.BUILD-SNAPSHOT'
-	id 'java'
+    id 'org.springframework.boot' version '2.1.8.BUILD-SNAPSHOT'
+    id 'java'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -10,19 +10,19 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
-	maven { url 'https://repo.spring.io/snapshot' }
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
 }
 
 dependencies {
@@ -30,17 +30,30 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.passay', name: 'passay', version: '1.5.0'
+    implementation 'org.modelmapper:modelmapper:0.7.8'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation "org.apache.tomcat.embed:tomcat-embed-el"
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	
-	runtimeOnly 'mysql:mysql-connector-java'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation group: 'io.findify', name: 's3mock_2.12', version: '0.2.5'
+
+
+    runtimeOnly 'mysql:mysql-connector-java'
 	runtimeOnly 'com.h2database:h2'
-	
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	
+    
 	annotationProcessor 'org.projectlombok:lombok'
 	
 	compileOnly 'org.projectlombok:lombok'
+    
+    compile('org.springframework.cloud:spring-cloud-starter-aws')
+    
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-aws:2.0.0.RC2'
+    }
 }
