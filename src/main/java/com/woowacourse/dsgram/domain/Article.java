@@ -1,9 +1,13 @@
 package com.woowacourse.dsgram.domain;
 
 
+import lombok.Getter;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
+@Getter
 public class Article {
 
     @Id
@@ -30,19 +34,26 @@ public class Article {
         this.filePath = filePath;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", contents='" + contents + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", filePath='" + filePath + '\'' +
+                '}';
     }
 
-    public String getContents() {
-        return contents;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return Objects.equals(id, article.id);
     }
 
-    public String getFileName() {
-        return fileName;
-    }
-
-    public String getFilePath() {
-        return filePath;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, contents, fileName, filePath);
     }
 }
