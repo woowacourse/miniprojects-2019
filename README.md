@@ -58,7 +58,7 @@ $ java -jar build/libs/edd-0.0.1-SNAPSHOT.jar
 **frontend/js/common.js**:
 
 ```javascript
-// ... wootubeCtx.constants
+// ... Api
 BASE_URL: 'http://localhost:8080'
 ```
 
