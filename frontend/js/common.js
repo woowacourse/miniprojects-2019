@@ -32,7 +32,9 @@ const Api = function () {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     }
-    const baseUrl = '/api/v1'
+
+    const baseUrl = '/api'
+    
     const request = (url, method, body) => {
         return fetch(url, {
             method: method,
@@ -49,15 +51,15 @@ const Api = function () {
     }
     
     const requestVideos = (filter) => {
-        return requestWithoutBody(`${baseUrl}/videos?filter=${filter}&page=0&limit=6`,'GET')
+        return requestWithoutBody(`${baseUrl}/v1/videos?filter=${filter}&page=0&limit=6`,'GET')
     }
 
     const requestVideo = (videoId) => {
-        return requestWithoutBody(`${baseUrl}/videos/${videoId}`,'GET')
+        return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}`,'GET')
     }
 
     const saveVideo = (dataBody) => {
-        return request(`${baseUrl}/videos`, 'POST', dataBody)
+        return request(`${baseUrl}/v1/videos`, 'POST', dataBody)
     }
 
     return {
