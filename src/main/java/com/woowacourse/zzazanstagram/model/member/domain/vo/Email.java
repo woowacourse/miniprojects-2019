@@ -13,7 +13,7 @@ public class Email {
     private String email;
 
     private Email(final String email) {
-        this.email = validateEmail(email);
+        this.email = validate(email);
     }
 
     private Email() {
@@ -23,11 +23,15 @@ public class Email {
         return new Email(email);
     }
 
-    private String validateEmail(final String email) {
-        if (!email.matches(EMAIL_REGEX)) {
+    private String validate(final String email) {
+        if (isMismatch(email)) {
             throw new MemberEmailFormatException("잘못된 형식의 이메일입니다.");
         }
         return email;
+    }
+
+    private boolean isMismatch(String email) {
+        return !email.matches(EMAIL_REGEX);
     }
 
     public String getEmail() {
