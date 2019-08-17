@@ -16,8 +16,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
-public class ArticleServiceTest {
-
+class ArticleServiceTest {
     private static final long ARTICLE_ID = 1L;
 
     @Mock

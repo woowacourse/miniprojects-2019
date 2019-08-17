@@ -21,7 +21,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class LoginServiceTest {
+class LoginServiceTest {
+
     @InjectMocks
     private LoginService loginService;
 

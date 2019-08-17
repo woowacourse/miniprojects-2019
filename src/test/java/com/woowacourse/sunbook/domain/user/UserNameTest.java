@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserNameTest {
+
     @Test
     void 생성() {
         UserName userName = new UserName("에이든");

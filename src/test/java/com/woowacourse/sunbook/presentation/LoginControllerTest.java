@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import reactor.core.publisher.Mono;
 
-public class LoginControllerTest extends TestTemplate {
+class LoginControllerTest extends TestTemplate {
     private static final String USER_EMAIL = "ddu0422@naver.com";
     private static final String NEW_USER_EMAIL = "ddu0422@gmail.com";
     private static final String USER_NAME = "mir";

@@ -3,7 +3,7 @@ package com.woowacourse.sunbook.presentation;
 import com.woowacourse.sunbook.presentation.template.TestTemplate;
 import org.junit.jupiter.api.Test;
 
-public class UserControllerTest extends TestTemplate {
+class UserControllerTest extends TestTemplate {
 
     @Test
     void 로그인_회원가입_페이지_이동() {
