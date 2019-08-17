@@ -6,8 +6,8 @@ import com.woowacourse.sunbook.domain.user.UserName;
 import com.woowacourse.sunbook.domain.user.UserPassword;
 import com.woowacourse.sunbook.presentation.template.TestTemplate;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import reactor.core.publisher.Mono;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 
 class LoginControllerTest extends TestTemplate {
     private static final String USER_EMAIL = "ddu0422@naver.com";
@@ -27,15 +27,7 @@ class LoginControllerTest extends TestTemplate {
 
     @Test
     void 로그인_성공() {
-        webTestClient.post().uri("/api/signin")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(userLoginRequestDto), UserRequestDto.class)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
+        respondApi(request(HttpMethod.POST, "/api/signin", userLoginRequestDto, HttpStatus.OK))
                 .jsonPath("$..email").isEqualTo(USER_EMAIL)
                 .jsonPath("$..name").isEqualTo(USER_NAME)
                 ;
@@ -43,30 +35,14 @@ class LoginControllerTest extends TestTemplate {
 
     @Test
     void 로그인_실패() {
-        webTestClient.post().uri("/api/signin")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(userWrongRequestDto), UserRequestDto.class)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
+        respondApi(request(HttpMethod.POST, "/api/signin", userWrongRequestDto, HttpStatus.OK))
                 .jsonPath("$.errorMessage").isEqualTo("로그인 실패")
                 ;
     }
 
     @Test
     void 회원가입_성공() {
-        webTestClient.post().uri("/api/signup")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(userSignInRequestDto), UserRequestDto.class)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
+        respondApi(request(HttpMethod.POST, "/api/signup", userSignInRequestDto, HttpStatus.OK))
                 .jsonPath("$..email").isEqualTo(NEW_USER_EMAIL)
                 .jsonPath("$..name").isEqualTo(USER_NAME)
                 ;
@@ -74,15 +50,7 @@ class LoginControllerTest extends TestTemplate {
 
     @Test
     void 중복된_이메일로_인한_회원가입_실패() {
-        webTestClient.post().uri("/api/signup")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(userLoginRequestDto), UserRequestDto.class)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
+        respondApi(request(HttpMethod.POST, "/api/signup", userLoginRequestDto, HttpStatus.OK))
                 .jsonPath("$.errorMessage").isEqualTo("중복된 이메일입니다.")
                 ;
     }

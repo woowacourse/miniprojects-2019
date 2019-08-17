@@ -3,8 +3,8 @@ package com.woowacourse.sunbook.presentation;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.presentation.template.TestTemplate;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import reactor.core.publisher.Mono;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 
 import static org.hamcrest.Matchers.hasItem;
 
@@ -20,13 +20,7 @@ class ArticleControllerTest extends TestTemplate {
 
     @Test
     void 게시글_전체_조회() {
-        webTestClient.get().uri("/api/articles")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
+        respondApi(request(HttpMethod.GET, "/api/articles", Void.class, HttpStatus.OK))
                 .jsonPath("$..contents").value(hasItem(CONTENTS))
                 .jsonPath("$..imageUrl").value(hasItem(IMAGE_URL))
                 .jsonPath("$..videoUrl").value(hasItem(VIDEO_URL))
@@ -36,15 +30,7 @@ class ArticleControllerTest extends TestTemplate {
     @Test
     void 게시글_정상_작성() {
         ArticleFeature articleFeature = new ArticleFeature(CONTENTS, IMAGE_URL, VIDEO_URL);
-        webTestClient.post().uri("/api/articles")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(articleFeature), ArticleFeature.class)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
+        respondApi(request(HttpMethod.POST, "/api/articles", articleFeature, HttpStatus.OK))
                 .jsonPath("$..contents").isEqualTo(CONTENTS)
                 .jsonPath("$..imageUrl").isEqualTo(IMAGE_URL)
                 .jsonPath("$..videoUrl").isEqualTo(VIDEO_URL)
@@ -54,15 +40,7 @@ class ArticleControllerTest extends TestTemplate {
     @Test
     void 게시글_업데이트() {
         ArticleFeature updatedArticleFeature = new ArticleFeature(UPDATE_CONTENTS, UPDATE_IMAGE_URL, UPDATE_VIDEO_URL);
-        webTestClient.put().uri("/api/articles/2")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(updatedArticleFeature), ArticleFeature.class)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody()
+        respondApi(request(HttpMethod.PUT, "/api/articles/2", updatedArticleFeature, HttpStatus.OK))
                 .jsonPath("$..contents").isEqualTo(UPDATE_CONTENTS)
                 .jsonPath("$..imageUrl").isEqualTo(UPDATE_IMAGE_URL)
                 .jsonPath("$..videoUrl").isEqualTo(UPDATE_VIDEO_URL)
@@ -71,10 +49,6 @@ class ArticleControllerTest extends TestTemplate {
 
     @Test
     void 게시글_정상_삭제() {
-        webTestClient.delete().uri("/api/articles/3")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                ;
+        request(HttpMethod.DELETE, "/api/articles/3", Void.class, HttpStatus.OK);
     }
 }
