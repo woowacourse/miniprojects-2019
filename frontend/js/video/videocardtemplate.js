@@ -1,6 +1,6 @@
 function addVideoCardTemplate(data, number, categorie) {
     const dateDifference = wootubeCtx.util.calculateDate(data[number].createDate)
-    const vidioCardTemplate = 
+    const videoCardTemplate = 
     `<div class="col-lg-2 padding-2">
         <div class="card bg-transparent no-border">
             <div class="card-media">
@@ -20,7 +20,7 @@ function addVideoCardTemplate(data, number, categorie) {
         </div>
     </div>`
     const videoCards = document.getElementById(categorie)
-    videoCards.insertAdjacentHTML('beforeend', vidioCardTemplate)
+    videoCards.insertAdjacentHTML('beforeend', videoCardTemplate)
 }
 
 function addVideoCardTemplates(data, categorie) {
@@ -28,3 +28,4 @@ function addVideoCardTemplates(data, categorie) {
         addVideoCardTemplate(data, i, categorie)
     }
 }
+

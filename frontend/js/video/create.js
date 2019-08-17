@@ -23,8 +23,8 @@ const videoApp = (function () {
             body.title = document.getElementById('title').value;
             body.contents = document.getElementById('contents').value;
             const dataBody = JSON.stringify(body);
-
-            wootubeCtx.util.api.post('/v1/videos', dataBody)
+        
+            api.saveVideo(dataBody)
             .then(response => response.json())
             .then(data => saveVideo(data))
         }
