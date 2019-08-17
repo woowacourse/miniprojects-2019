@@ -13,7 +13,7 @@ public class NickName {
     private String nickName;
 
     private NickName(final String name) {
-        this.nickName = validateName(name);
+        this.nickName = validate(name);
     }
 
     private NickName() {
@@ -23,7 +23,7 @@ public class NickName {
         return new NickName(name);
     }
 
-    private String validateName(final String name) {
+    private String validate(final String name) {
         if (isMismatch(name)) {
             throw new MemberNickNameFormatException("이름은 2자 이상 10자 이하입니다.");
         }

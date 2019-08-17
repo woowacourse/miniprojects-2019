@@ -9,7 +9,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.woowacourse.zzazanstagram.util.SessionKeys.MEMBER;
+import static com.woowacourse.zzazanstagram.web.SessionKeys.MEMBER;
 
 public class SessionArgumentResolver implements HandlerMethodArgumentResolver {
     @Override

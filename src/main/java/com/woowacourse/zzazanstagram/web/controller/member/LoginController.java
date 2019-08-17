@@ -7,12 +7,14 @@ import com.woowacourse.zzazanstagram.model.member.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-import static com.woowacourse.zzazanstagram.util.SessionKeys.MEMBER;
+import static com.woowacourse.zzazanstagram.web.SessionKeys.MEMBER;
 
 @Controller
+@RequestMapping("/login")
 public class LoginController {
     private final LoginService loginService;
 
@@ -20,12 +22,12 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @GetMapping("/login")
+    @GetMapping
     public String loginForm() {
         return "login";
     }
 
-    @PostMapping("/login")
+    @PostMapping
     public String login(MemberLoginRequest memberLoginRequest, HttpSession httpSession) {
         MemberResponse memberResponse = loginService.find(memberLoginRequest);
         httpSession.setAttribute(MEMBER, new MemberSession(memberResponse.getEmail(), memberResponse.getNickName(), memberResponse.getProfileImage()));

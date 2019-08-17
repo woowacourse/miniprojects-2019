@@ -33,11 +33,11 @@ public class Article extends BaseEntity {
         return contents;
     }
 
-    public String image() {
+    public String getImageValue() {
         return image.getUrl();
     }
 
-    public String contents() {
+    public String getContentsValue() {
         return contents.getContents();
     }
 

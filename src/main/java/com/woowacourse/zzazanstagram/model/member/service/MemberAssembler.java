@@ -6,7 +6,7 @@ import com.woowacourse.zzazanstagram.model.member.dto.MemberSignUpRequest;
 
 public class MemberAssembler {
     static MemberResponse assemble(Member member) {
-        return new MemberResponse(member.nickName(), member.name(), member.email(), member.profileImage());
+        return new MemberResponse(member.getNickNameValue(), member.getNameValue(), member.getEmailValue(), member.getProfileImageValue());
     }
 
     static Member toEntity(MemberSignUpRequest memberSignupRequest) {
