@@ -60,15 +60,9 @@ const USER_APP = (() => {
                         window.location.href = '/login';
                     }
                     if (response.status === 400) {
-                        throw response;
+                        errorHandler(response);
                     }
                 })
-                .catch(error => {
-                    error.json()
-                        .then(exception => {
-                            alert(exception.message)
-                        });
-                });
         };
 
         const updateUser = function (event) {
@@ -94,14 +88,9 @@ const USER_APP = (() => {
                 }
 
                 if (response.status === 400) {
-                    throw response;
+                    errorHandler(response);
                 }
-            }).catch(error => {
-                error.json()
-                    .then(exception => {
-                        alert(exception.message)
-                    });
-            });
+            })
         };
 
         const login = function (event) {
@@ -122,20 +111,23 @@ const USER_APP = (() => {
                     return;
                 }
                 if (response.status === 400) {
-                    throw response;
+                    errorHandler(response);
                 }
-            }).catch(error => {
-                error.json()
-                    .then(exception => {
-                        alert(exception.message)
-                    });
-            });
+            })
         };
+
+        const errorHandler = function(error) {
+            error.json()
+                .then(exception => {
+                    alert(exception.message)
+                });
+        }
 
         return {
             saveUser: saveUser,
             updateUser: updateUser,
             login: login,
+            errorHandler: errorHandler,
         }
     };
 
