@@ -7,35 +7,35 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserTest {
-    private User user1;
+    private User user;
     private User updateUser;
 
     @BeforeEach
     void setUp() {
-        user1 = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르"));
+        user = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르"));
     }
 
     @Test
     void 이메일_변경() {
         updateUser = new User(new UserEmail("eara12sa@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르"));
-        user1.updateEmail(user1, updateUser.getUserEmail());
+        user.updateEmail(user, updateUser.getUserEmail());
 
-        assertEquals(user1.getUserEmail(), updateUser.getUserEmail());
+        assertEquals(user.getUserEmail(), updateUser.getUserEmail());
     }
 
     @Test
     void 비밀번호_변경() {
         updateUser = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("1q2w3e4r!A"), new UserName("미르"));
-        user1.updatePassword(user1, updateUser.getUserPassword());
+        user.updatePassword(user, updateUser.getUserPassword());
 
-        assertEquals(user1.getUserPassword(), updateUser.getUserPassword());
+        assertEquals(user.getUserPassword(), updateUser.getUserPassword());
     }
 
     @Test
     void 이름_변경() {
         updateUser = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("마르"));
-        user1.updateName(user1, updateUser.getUserName());
+        user.updateName(user, updateUser.getUserName());
 
-        assertEquals(user1.getUserName(), updateUser.getUserName());
+        assertEquals(user.getUserName(), updateUser.getUserName());
     }
 }

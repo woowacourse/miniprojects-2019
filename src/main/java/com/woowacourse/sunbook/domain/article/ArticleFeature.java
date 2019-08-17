@@ -1,50 +1,52 @@
 package com.woowacourse.sunbook.domain.article;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@EqualsAndHashCode
 @Embeddable
 public class ArticleFeature {
-
-    private final static Pattern URL_PATTERN = Pattern.compile("^(https?):\\/\\/([^:\\/\\s]+)(:([^\\/]*))?((\\/[^\\s/\\/]+)*)?\\/?([^#\\s\\?]*)(\\?([^#\\s]*))?(#(\\w*))?$");
-
-    @Column(nullable = false)
-    private final String contents;
+    private static final Pattern URL_PATTERN = Pattern.compile("^(https?):\\/\\/([^:\\/\\s]+)(:([^\\/]*))?((\\/[^\\s/\\/]+)*)?\\/?([^#\\s\\?]*)(\\?([^#\\s]*))?(#(\\w*))?$");
+    private static final String EMPTY = "";
 
     @Column(nullable = false)
-    private final String imageUrl;
+    private String contents;
 
     @Column(nullable = false)
-    private final String videoUrl;
+    private String imageUrl;
 
-    private ArticleFeature() {
-        this.contents = "";
-        this.imageUrl = "";
-        this.videoUrl = "";
-    }
+    @Column(nullable = false)
+    private String videoUrl;
 
-    public ArticleFeature(String contents, String imageUrl, String videoUrl) {
-        empty(contents, imageUrl, videoUrl);
+    public ArticleFeature(final String contents, final String imageUrl, final String videoUrl) {
+        checkEmpty(contents, imageUrl, videoUrl);
+        validateUrl(imageUrl);
+        validateUrl(videoUrl);
         this.contents = contents;
         this.imageUrl = imageUrl;
         this.videoUrl = videoUrl;
     }
 
-    private void empty(String contents, String imageUrl, String videoUrl) {
-        if ("".equals(contents) && "".equals(imageUrl) && "".equals(videoUrl)) {
+    private void checkEmpty(final String contents, final String imageUrl, final String videoUrl) {
+        if (EMPTY.equals(contents) && EMPTY.equals(imageUrl) && EMPTY.equals(videoUrl)) {
             throw new IllegalArgumentException("내용이 없습니다.");
         }
     }
 
-    private void validateUrl(String url) {
+    private void validateUrl(final String url) {
         Matcher matcher = URL_PATTERN.matcher(url);
-        if (!matcher.find()) {
-            throw new IllegalArgumentException("유효하지 않은 url입니다.");
+        if (matcher.find()) {
+            return;
         }
+        throw new IllegalArgumentException("유효하지 않은 url입니다.");
     }
 }
