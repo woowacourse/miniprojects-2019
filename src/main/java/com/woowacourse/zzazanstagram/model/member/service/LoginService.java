@@ -4,7 +4,7 @@ import com.woowacourse.zzazanstagram.model.member.domain.Member;
 import com.woowacourse.zzazanstagram.model.member.domain.vo.Email;
 import com.woowacourse.zzazanstagram.model.member.dto.MemberLoginRequest;
 import com.woowacourse.zzazanstagram.model.member.dto.MemberResponse;
-import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
+import com.woowacourse.zzazanstagram.model.member.exception.MemberLoginFailException;
 import com.woowacourse.zzazanstagram.model.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class LoginService {
     private Member checkEnrolledMember(MemberLoginRequest request) {
         return findByEmail(request.getEmail())
                 .filter(m -> m.isMatchPassword(request.getPassword()))
-                .orElseThrow(() -> new MemberException(ERROR_ILLEGAL_LOGIN_MESSAGE));
+                .orElseThrow(() -> new MemberLoginFailException(ERROR_ILLEGAL_LOGIN_MESSAGE));
     }
 
     private Optional<Member> findByEmail(String email) {

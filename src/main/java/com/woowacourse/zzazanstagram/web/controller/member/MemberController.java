@@ -1,4 +1,4 @@
-package com.woowacourse.zzazanstagram.model.member.controller;
+package com.woowacourse.zzazanstagram.web.controller.member;
 
 import com.woowacourse.zzazanstagram.model.member.dto.MemberSignUpRequest;
 import com.woowacourse.zzazanstagram.model.member.service.MemberService;

@@ -1,6 +1,6 @@
 package com.woowacourse.zzazanstagram.model.member.domain.vo;
 
-import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
+import com.woowacourse.zzazanstagram.model.member.exception.MemberNickNameFormatException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,7 +13,7 @@ public class NickName {
     private String nickName;
 
     private NickName(final String name) {
-        this.nickName = validateName(name);
+        this.nickName = validate(name);
     }
 
     private NickName() {
@@ -23,19 +23,15 @@ public class NickName {
         return new NickName(name);
     }
 
-    private String validateName(final String name) {
+    private String validate(final String name) {
         if (isMismatch(name)) {
-            throw new MemberException("이름은 2자 이상 10자 이하입니다.");
+            throw new MemberNickNameFormatException("이름은 2자 이상 10자 이하입니다.");
         }
         return name;
     }
 
     private boolean isMismatch(String name) {
         return !name.matches(NICK_NAME_REGEX);
-    }
-
-    public NickName updateName(String name) {
-        return new NickName(name);
     }
 
     public String getNickName() {

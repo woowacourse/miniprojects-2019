@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static com.woowacourse.zzazanstagram.util.SessionKeys.MEMBER;
+import static com.woowacourse.zzazanstagram.web.SessionKeys.MEMBER;
 
 public class LoginInterceptor implements HandlerInterceptor {
     @Override

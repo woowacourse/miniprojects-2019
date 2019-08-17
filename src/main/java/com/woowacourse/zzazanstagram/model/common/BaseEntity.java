@@ -33,18 +33,6 @@ public abstract class BaseEntity {
         return lastModifiedDate;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

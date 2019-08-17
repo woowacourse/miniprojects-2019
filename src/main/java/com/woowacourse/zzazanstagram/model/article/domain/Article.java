@@ -25,10 +25,6 @@ public class Article extends BaseEntity {
         this.author = author;
     }
 
-    public static Article from(final Image image, final Contents contents, final Member author) {
-        return new Article(image, contents, author);
-    }
-
     public Image getImage() {
         return image;
     }
@@ -37,11 +33,11 @@ public class Article extends BaseEntity {
         return contents;
     }
 
-    public String image() {
+    public String getImageValue() {
         return image.getUrl();
     }
 
-    public String contents() {
+    public String getContentsValue() {
         return contents.getContents();
     }
 
