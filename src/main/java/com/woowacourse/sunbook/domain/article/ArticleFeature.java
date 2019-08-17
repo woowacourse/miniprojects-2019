@@ -44,7 +44,7 @@ public class ArticleFeature {
 
     private void validateUrl(final String url) {
         Matcher matcher = URL_PATTERN.matcher(url);
-        if (matcher.find()) {
+        if (matcher.find() || EMPTY.equals(url)) {
             return;
         }
         throw new IllegalArgumentException("유효하지 않은 url입니다.");
