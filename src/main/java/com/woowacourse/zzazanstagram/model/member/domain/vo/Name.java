@@ -1,6 +1,6 @@
 package com.woowacourse.zzazanstagram.model.member.domain.vo;
 
-import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
+import com.woowacourse.zzazanstagram.model.member.exception.MemberNameFormatException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -25,13 +25,9 @@ public class Name {
 
     private String validateName(final String name) {
         if (!name.matches(NAME_REGEX)) {
-            throw new MemberException("이름은 2자 이상 10자 이하입니다.");
+            throw new MemberNameFormatException("이름은 2자 이상 10자 이하입니다.");
         }
         return name;
-    }
-
-    public Name updateName(String name) {
-        return new Name(name);
     }
 
     public String getName() {

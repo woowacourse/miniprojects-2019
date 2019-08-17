@@ -1,6 +1,5 @@
 package com.woowacourse.zzazanstagram.model.article.domain;
 
-import com.woowacourse.zzazanstagram.model.article.domain.Article;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Contents;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Image;
 import com.woowacourse.zzazanstagram.model.member.domain.Member;
@@ -49,7 +48,8 @@ class ArticleTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"https://image.shutterstock.com/image-photo/white-transparent-leaf-on-mirror-600w-1029171697.jpg", "https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-600w-1048185397.jpg"})
+    @ValueSource(strings = {"https://image.shutterstock.com/image-photo/white-transparent-leaf-on-mirror-600w-1029171697.jpg",
+            "https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-600w-1048185397.jpg"})
     void 이미지_url_정상_체크(String imageUrl) {
         assertThatCode(() ->
                 Article.from(Image.of(imageUrl), contents, author))

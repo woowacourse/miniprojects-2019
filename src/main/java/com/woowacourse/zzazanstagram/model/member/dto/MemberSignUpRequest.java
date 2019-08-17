@@ -1,5 +1,7 @@
 package com.woowacourse.zzazanstagram.model.member.dto;
 
+import org.hibernate.validator.constraints.URL;
+
 import javax.validation.constraints.NotBlank;
 
 public class MemberSignUpRequest {
@@ -15,6 +17,7 @@ public class MemberSignUpRequest {
     @NotBlank
     private String password;
 
+    @URL
     private String profile;
 
     public String getName() {

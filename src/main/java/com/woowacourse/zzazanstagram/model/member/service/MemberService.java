@@ -4,11 +4,10 @@ import com.woowacourse.zzazanstagram.model.member.domain.Member;
 import com.woowacourse.zzazanstagram.model.member.domain.vo.Email;
 import com.woowacourse.zzazanstagram.model.member.domain.vo.NickName;
 import com.woowacourse.zzazanstagram.model.member.dto.MemberSignUpRequest;
-import com.woowacourse.zzazanstagram.model.member.exception.MemberException;
+import com.woowacourse.zzazanstagram.model.member.exception.MemberNotFoundException;
+import com.woowacourse.zzazanstagram.model.member.exception.MemberSaveException;
 import com.woowacourse.zzazanstagram.model.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -19,12 +18,8 @@ public class MemberService {
     }
 
     public Member findMemberByEmail(String email) {
-        return findByEmail(email)
-                .orElseThrow(() -> new MemberException("잘못된 접근입니다."));
-    }
-
-    private Optional<Member> findByEmail(String email) {
-        return memberRepository.findByEmail(Email.of(email));
+        return memberRepository.findByEmail(Email.of(email))
+                .orElseThrow(() -> new MemberNotFoundException("잘못된 접근입니다."));
     }
 
     public void save(MemberSignUpRequest memberSignupRequest) {
@@ -35,18 +30,14 @@ public class MemberService {
     }
 
     private void checkEnrolledEmail(String email) {
-        if (findByEmail(email).isPresent()) {
-            throw new MemberException("이미 존재하는 이메일 입니다.");
+        if (memberRepository.existsByEmail(Email.of(email))) {
+            throw new MemberSaveException("이미 존재하는 이메일 입니다.");
         }
     }
 
     private void checkEnrolledNickName(String nickName) {
-        if (findByNickName(nickName).isPresent()) {
-            throw new MemberException("이미 존재하는 닉네임 입니다.");
+        if (memberRepository.existsByNickName(NickName.of(nickName))) {
+            throw new MemberSaveException("이미 존재하는 닉네임 입니다.");
         }
-    }
-
-    private Optional<Member> findByNickName(String nickName) {
-        return memberRepository.findByNickName(NickName.of(nickName));
     }
 }

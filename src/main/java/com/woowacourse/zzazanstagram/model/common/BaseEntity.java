@@ -33,10 +33,6 @@ public abstract class BaseEntity {
         return lastModifiedDate;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
