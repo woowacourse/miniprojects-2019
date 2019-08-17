@@ -1,6 +1,6 @@
 package com.woowacourse.sunbook.presentation;
 
-import com.woowacourse.sunbook.application.UserService;
+import com.woowacourse.sunbook.application.LoginService;
 import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +14,16 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 public class LoginController {
-    private final UserService userService;
+    private final LoginService loginService;
 
     @Autowired
-    public LoginController(final UserService userService) {
-        this.userService = userService;
+    public LoginController(final LoginService loginService) {
+        this.loginService = loginService;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> signUp(@RequestBody UserRequestDto userRequestDto) {
-        UserResponseDto signUpUser = userService.save(userRequestDto);
+        UserResponseDto signUpUser = loginService.save(userRequestDto);
 
         return new ResponseEntity<>(signUpUser, HttpStatus.OK);
     }
@@ -31,7 +31,7 @@ public class LoginController {
     @PostMapping("/signin")
     public ResponseEntity<UserResponseDto> signIn(HttpSession httpSession,
                                                   @RequestBody UserRequestDto userRequestDto) {
-        UserResponseDto loginUser = userService.login(userRequestDto);
+        UserResponseDto loginUser = loginService.login(userRequestDto);
         httpSession.setAttribute("loginUser", loginUser);
 
         return new ResponseEntity<>(loginUser, HttpStatus.OK);

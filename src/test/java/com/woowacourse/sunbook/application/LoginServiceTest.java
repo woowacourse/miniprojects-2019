@@ -21,9 +21,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class UserServiceTest {
+public class LoginServiceTest {
     @InjectMocks
-    private UserService userService;
+    private LoginService loginService;
 
     @Mock
     private UserRepository userRepository;
@@ -38,7 +38,7 @@ public class UserServiceTest {
     void 사용자_생성_성공() {
         given(userRepository.save(any(User.class))).willReturn(user);
 
-        userService.save(userRequestDto);
+        loginService.save(userRequestDto);
 
         verify(userRepository, times(1)).save(any(User.class));
     }
@@ -49,7 +49,7 @@ public class UserServiceTest {
         given(userRepository.existsByUserEmail(any(UserEmail.class))).willReturn(true);
 
         assertThrows(DuplicateEmailException.class, () -> {
-            userService.save(userRequestDto);
+            loginService.save(userRequestDto);
         });
     }
 
@@ -59,7 +59,7 @@ public class UserServiceTest {
         given(userRequestDto.getUserPassword()).willReturn(mock(UserPassword.class));
         given(userRepository.findByUserEmailAndUserPassword(any(UserEmail.class), any(UserPassword.class))).willReturn((Optional.of(user)));
 
-        userService.login(userRequestDto);
+        loginService.login(userRequestDto);
 
         verify(userRepository, times(1)).findByUserEmailAndUserPassword(any(UserEmail.class), any(UserPassword.class));
     }
@@ -71,7 +71,7 @@ public class UserServiceTest {
         given(userRepository.findByUserEmailAndUserPassword(any(UserEmail.class), any(UserPassword.class))).willReturn((Optional.empty()));
 
         assertThrows(LoginException.class, () -> {
-            userService.login(userRequestDto);
+            loginService.login(userRequestDto);
         });
     }
 }

@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-public class UserService {
-    private UserRepository userRepository;
+public class LoginService {
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public LoginService(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -56,10 +56,4 @@ public class UserService {
                 .userName(user.getUserName())
                 .build();
     }
-
-//    public UserResponseDto update(long loginUserId, UserEmail email, UserPassword password, UserName name) {
-//        User loginUser = userRepository.findById(loginUserId).
-//                orElseThrow();
-//        User user = userRepository.findByUserEmail()
-//    }
 }
