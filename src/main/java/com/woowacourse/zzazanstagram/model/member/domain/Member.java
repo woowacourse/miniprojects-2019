@@ -40,19 +40,19 @@ public class Member extends BaseEntity {
         return profileImage;
     }
 
-    public String name() {
+    public String getNameValue() {
         return name.getName();
     }
 
-    public String email() {
+    public String getEmailValue() {
         return email.getEmail();
     }
 
-    public String nickName() {
+    public String getNickNameValue() {
         return nickName.getNickName();
     }
 
-    public String profileImage() {
+    public String getProfileImageValue() {
         return profileImage.getUrl();
     }
 

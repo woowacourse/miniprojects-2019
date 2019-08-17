@@ -24,10 +24,10 @@ public class ArticleAssembler {
 
         return ArticleResponse.ArticleResponseBuilder.anArticleResponse()
                 .id(id)
-                .image(article.image())
-                .contents(article.contents())
-                .nickName(article.getAuthor().nickName())
-                .profileImage(article.getAuthor().profileImage())
+                .image(article.getImageValue())
+                .contents(article.getContentsValue())
+                .nickName(article.getAuthor().getNickNameValue())
+                .profileImage(article.getAuthor().getProfileImageValue())
                 .createdDate(createdDate)
                 .lastModifiedDate(lastModifiedDate)
                 .build();
