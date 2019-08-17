@@ -23,21 +23,16 @@ public class MemberService {
     }
 
     public void save(MemberSignUpRequest memberSignupRequest) {
-        checkEnrolledEmail(memberSignupRequest.getEmail());
-        checkEnrolledNickName(memberSignupRequest.getNickName());
+        if (checkEnrolledEmailOrNickName(memberSignupRequest)) {
+            throw new MemberSaveException("이미 존재하는 이메일 또는 닉네임 입니다.");
+        }
         Member member = MemberAssembler.toEntity(memberSignupRequest);
         memberRepository.save(member);
     }
 
-    private void checkEnrolledEmail(String email) {
-        if (memberRepository.existsByEmail(Email.of(email))) {
-            throw new MemberSaveException("이미 존재하는 이메일 입니다.");
-        }
-    }
-
-    private void checkEnrolledNickName(String nickName) {
-        if (memberRepository.existsByNickName(NickName.of(nickName))) {
-            throw new MemberSaveException("이미 존재하는 닉네임 입니다.");
-        }
+    private boolean checkEnrolledEmailOrNickName(MemberSignUpRequest memberSignupRequest) {
+        NickName nickName = NickName.of(memberSignupRequest.getNickName());
+        Email email = Email.of(memberSignupRequest.getEmail());
+        return memberRepository.existsByNickNameOrEmail(nickName, email);
     }
 }
