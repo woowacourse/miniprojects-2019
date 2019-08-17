@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
+
     @GetMapping("/")
     public String signUpPage() {
         return "index";

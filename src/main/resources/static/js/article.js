@@ -150,7 +150,7 @@ function addArticle(url, data) {
 function saveArticle() {
     const contents = document.getElementById("article-contents");
     if (contents) {
-        addArticle("/articles", {
+        addArticle("/api/articles", {
             contents: contents.value,
             imageUrl: "",
             videoUrl: "",
@@ -164,7 +164,7 @@ function showModal(article) {
     const updateArea = document.getElementById('article-update-contents');
     const articleId = article.getAttribute('data-article-id');
     updateArea.innerText = article.querySelector('span[data-object="article-contents"]').innerText;
-    api.put("/articles/" + articleId,)
+    api.put("/api/articles/" + articleId,)
 }
 
 
@@ -177,7 +177,7 @@ articleList.addEventListener('click', function (event) {
     if (target.closest('li[data-btn="delete"]')) {
         const article = target.closest('div[data-object="article"]');
         const articleId = article.getAttribute('data-article-id');
-        api.delete('/articles/' + articleId);
+        api.delete('/api/articles/' + articleId);
         article.remove();
     }
 
@@ -190,7 +190,7 @@ articleList.addEventListener('click', function (event) {
 const updateBtn = document.getElementById('update-btn');
 
 window.addEventListener('DOMContentLoaded', function () {
-    return api.get("/articles")
+    return api.get("/api/articles")
         .then(response => response.json())
         .then(data => {
             data.forEach(article => {

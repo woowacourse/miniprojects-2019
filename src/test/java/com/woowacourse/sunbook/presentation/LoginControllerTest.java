@@ -27,7 +27,7 @@ class LoginControllerTest extends TestTemplate {
 
     @Test
     void 로그인_성공() {
-        webTestClient.post().uri("/signin")
+        webTestClient.post().uri("/api/signin")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userLoginRequestDto), UserRequestDto.class)
                 .exchange()
@@ -43,7 +43,7 @@ class LoginControllerTest extends TestTemplate {
 
     @Test
     void 로그인_실패() {
-        webTestClient.post().uri("/signin")
+        webTestClient.post().uri("/api/signin")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userWrongRequestDto), UserRequestDto.class)
                 .exchange()
@@ -58,7 +58,7 @@ class LoginControllerTest extends TestTemplate {
 
     @Test
     void 회원가입_성공() {
-        webTestClient.post().uri("/signup")
+        webTestClient.post().uri("/api/signup")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userSignInRequestDto), UserRequestDto.class)
                 .exchange()
@@ -74,7 +74,7 @@ class LoginControllerTest extends TestTemplate {
 
     @Test
     void 중복된_이메일로_인한_회원가입_실패() {
-        webTestClient.post().uri("/signup")
+        webTestClient.post().uri("/api/signup")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(userLoginRequestDto), UserRequestDto.class)
                 .exchange()

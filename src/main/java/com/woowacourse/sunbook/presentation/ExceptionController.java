@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ExceptionController {
+
     @ExceptionHandler({DuplicateEmailException.class, LoginException.class, InvalidValueException.class})
     public ResponseEntity<ErrorMessage> responseExceptionMessage(RuntimeException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());

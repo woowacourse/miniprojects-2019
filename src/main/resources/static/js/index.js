@@ -5,7 +5,7 @@ function login() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
-    fetch('/signin' , {
+    fetch('/api/signin' , {
         headers: {
             'Content-type': 'application/json; charset=UTF-8'
         },
@@ -31,7 +31,7 @@ function signup() {
     const email = document.getElementById('signup-email');
     const password = document.getElementById('signup-password');
 
-    fetch('/signup', {
+    fetch('/api/signup', {
         headers: {
             'Content-type': 'application/json; charset=UTF-8'
         },
