@@ -10,7 +10,7 @@ const save = function () {
         return;
     }
 
-    let postForm = document.getElementById("saveForm");
+    let postForm = document.getElementById("save-form");
     let formData  = new FormData(postForm);
 
     fetch ('/articles', {
