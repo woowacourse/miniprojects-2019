@@ -20,3 +20,11 @@
     width: 24px;
     height: 24px;
 }
+
+.new-article a{
+    line-height:37px !important;
+}
+.new-article img{
+    width:30px;
+
+}
