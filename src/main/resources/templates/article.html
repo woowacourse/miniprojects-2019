@@ -111,10 +111,9 @@
             </div>
         </div>
     </div>
-
 <script th:inline="javascript">
     let articleId = [[${article.id}]];
-    let articleFileName = [[${article.fileName}]]
+    let articleFileName = [[${article.fileName}]];
 
     const b64StringToBlob = (b64Data, contentType = '', sliceSize = 512) => {
         const byteCharacters = atob(b64Data);

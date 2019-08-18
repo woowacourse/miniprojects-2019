@@ -54,15 +54,14 @@ const USER_APP = (() => {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json; charset=UTF-8'},
                 body: JSON.stringify(userBasicInfo)
+            }).then(response => {
+                if (response.status === 200) {
+                    window.location.href = '/login';
+                }
+                if (response.status === 400) {
+                    errorHandler(response);
+                }
             })
-                .then(response => {
-                    if (response.status === 200) {
-                        window.location.href = '/login';
-                    }
-                    if (response.status === 400) {
-                        errorHandler(response);
-                    }
-                })
         };
 
         const updateUser = function (event) {
@@ -121,7 +120,7 @@ const USER_APP = (() => {
                 .then(exception => {
                     alert(exception.message)
                 });
-        }
+        };
 
         return {
             saveUser: saveUser,
