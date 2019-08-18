@@ -1,7 +1,7 @@
 $.fn.serializeObject = function() {
-  var result = {}
-  var extend = function(i, element) {
-    var node = result[element.name]
+  let result = {}
+  let extend = function(i, element) {
+    let node = result[element.name]
     if ("undefined" !== typeof node && node !== null) {
       if ($.isArray(node)) {
         node.push(element.value)
