@@ -17,7 +17,7 @@ public class LoggingAspect {
     @Pointcut("execution(* com.wootecobook.turkey.*.controller..*Controller.*(..))")
     public void loggingForController() {}
 
-    @Pointcut("execution(* com.wootecobook.turkey.*.*Advice.*(..))")
+    @Pointcut("execution(* com.wootecobook.turkey..*Advice.*handleException(..))")
     public void loggingForException() {
     }
 
