@@ -25,7 +25,7 @@ const signup = async e => {
 }
 
 const clear = async e => {
-	document.getElementById("form-1-1").value = ""
-	document.getElementById("form-1-2").value = ""
-	document.getElementById("form-1-3").value = ""
+	document.getElementById("name-form").value = ""
+	document.getElementById("email-form").value = ""
+	document.getElementById("password-form").value = ""
 }
