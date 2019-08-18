@@ -1,7 +1,7 @@
 package com.woowacourse.dsgram.web.controller;
 
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
-import com.woowacourse.dsgram.service.dto.user.signUpUserRequest;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -25,14 +25,14 @@ public class AbstractControllerTest {
                 .getFirst("Set-Cookie");
     }
 
-    WebTestClient.ResponseSpec defaultSignUp(signUpUserRequest signUpUserRequest, boolean willIncrease) {
+    WebTestClient.ResponseSpec defaultSignUp(SignUpUserRequest signUpUserRequest, boolean willIncrease) {
         if (willIncrease) {
             AUTO_INCREMENT++;
         }
 
         return webTestClient.post().uri("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(signUpUserRequest), signUpUserRequest.class)
+                .body(Mono.just(signUpUserRequest), SignUpUserRequest.class)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange();
     }

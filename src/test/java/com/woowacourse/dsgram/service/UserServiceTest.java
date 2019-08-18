@@ -5,7 +5,7 @@ import com.woowacourse.dsgram.domain.UserRepository;
 import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
-import com.woowacourse.dsgram.service.dto.user.signUpUserRequest;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 import com.woowacourse.dsgram.service.exception.NotFoundUserException;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @ExtendWith(SpringExtension.class)
 public class UserServiceTest {
-    private final signUpUserRequest signUpUserRequest = signUpUserRequest.builder()
+    private final SignUpUserRequest signUpUserRequest = SignUpUserRequest.builder()
             .email("buddy@buddy.com")
             .userName("김버디")
             .nickName("buddy_")

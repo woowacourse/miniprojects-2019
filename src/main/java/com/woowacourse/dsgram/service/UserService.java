@@ -6,7 +6,7 @@ import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import com.woowacourse.dsgram.service.assembler.UserAssembler;
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
-import com.woowacourse.dsgram.service.dto.user.signUpUserRequest;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 import com.woowacourse.dsgram.service.exception.DuplicatedAttributeException;
 import com.woowacourse.dsgram.service.exception.NotFoundUserException;
@@ -21,7 +21,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void save(signUpUserRequest signUpUserRequest) {
+    public void save(SignUpUserRequest signUpUserRequest) {
         checkDuplicatedAttributes(signUpUserRequest.getNickName(), signUpUserRequest.getEmail());
         userRepository.save(UserAssembler.toEntity(signUpUserRequest));
     }

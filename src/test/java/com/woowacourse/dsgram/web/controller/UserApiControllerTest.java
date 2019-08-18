@@ -2,7 +2,7 @@ package com.woowacourse.dsgram.web.controller;
 
 
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
-import com.woowacourse.dsgram.service.dto.user.signUpUserRequest;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,10 +11,10 @@ import reactor.core.publisher.Mono;
 
 class UserApiControllerTest extends AbstractControllerTest {
 
-    private signUpUserRequest signUpUserRequest;
+    private SignUpUserRequest signUpUserRequest;
     private AuthUserRequest authUserRequest;
     private String sessionCookie;
-    private signUpUserRequest anotherUser;
+    private SignUpUserRequest anotherUser;
 
     @BeforeEach
     void setUp() {
@@ -40,7 +40,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void signUp_duplicatedEmail_thrown_exception() {
-        signUpUserRequest anotherUser = signUpUserRequest.builder()
+        SignUpUserRequest anotherUser = signUpUserRequest.builder()
                 .userName("서오상씨")
                 .email(signUpUserRequest.getEmail())
                 .nickName("ooooohsang")
@@ -52,7 +52,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void signUp_blankEmail_thrown_exception() {
-        signUpUserRequest anotherUser = signUpUserRequest.builder()
+        SignUpUserRequest anotherUser = signUpUserRequest.builder()
                 .userName("서오상씨")
                 .email("")
                 .nickName("os94")
@@ -64,7 +64,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void signUp_InvalidEmail_thrown_exception() {
-        signUpUserRequest anotherUser = signUpUserRequest.builder()
+        SignUpUserRequest anotherUser = signUpUserRequest.builder()
                 .userName("서오상씨")
                 .email("@@")
                 .nickName("os94")
@@ -76,7 +76,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void signUp_duplicatedNickName_thrown_exception() {
-        signUpUserRequest anotherUser = signUpUserRequest.builder()
+        SignUpUserRequest anotherUser = signUpUserRequest.builder()
                 .userName("솔로스")
                 .email("anotherEmail@naver.com")
                 .nickName(signUpUserRequest.getNickName())

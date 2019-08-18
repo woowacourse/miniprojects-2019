@@ -2,11 +2,11 @@ package com.woowacourse.dsgram.service.assembler;
 
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
-import com.woowacourse.dsgram.service.dto.user.signUpUserRequest;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 
 public class UserAssembler {
-    public static User toEntity(signUpUserRequest signUpUserRequest) {
+    public static User toEntity(SignUpUserRequest signUpUserRequest) {
         return User.builder()
                 .email(signUpUserRequest.getEmail())
                 .nickName(signUpUserRequest.getNickName())

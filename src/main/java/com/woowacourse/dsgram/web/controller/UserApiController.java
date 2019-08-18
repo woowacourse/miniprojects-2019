@@ -3,7 +3,7 @@ package com.woowacourse.dsgram.web.controller;
 import com.woowacourse.dsgram.service.UserService;
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
-import com.woowacourse.dsgram.service.dto.user.signUpUserRequest;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 import com.woowacourse.dsgram.web.argumentresolver.UserSession;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class UserApiController {
     }
 
     @PostMapping
-    public ResponseEntity signUp(@RequestBody @Valid signUpUserRequest signUpUserRequest, BindingResult bindingResult) {
+    public ResponseEntity signUp(@RequestBody @Valid SignUpUserRequest signUpUserRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
             throw new InvalidPatternException(fieldError.getDefaultMessage());
