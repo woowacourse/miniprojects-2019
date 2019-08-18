@@ -1,6 +1,6 @@
 package techcourse.fakebook.domain.comment;
 
-import techcourse.fakebook.domain.DateTime;
+import techcourse.fakebook.domain.BaseEntity;
 import techcourse.fakebook.domain.article.Article;
 import techcourse.fakebook.domain.user.User;
 
@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class Comment extends DateTime {
+public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
