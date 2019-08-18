@@ -1,9 +1,9 @@
 package com.woowacourse.dsgram.web.controller;
 
 import com.woowacourse.dsgram.service.UserService;
-import com.woowacourse.dsgram.service.dto.user.AuthUserDto;
-import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
-import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
+import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
+import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
+import com.woowacourse.dsgram.service.dto.user.signUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 import com.woowacourse.dsgram.web.argumentresolver.UserSession;
 import org.springframework.http.HttpStatus;
@@ -26,12 +26,12 @@ public class UserApiController {
     }
 
     @PostMapping
-    public ResponseEntity signUp(@RequestBody @Valid SignUpUserDto signUpUserDto, BindingResult bindingResult) {
+    public ResponseEntity signUp(@RequestBody @Valid signUpUserRequest signUpUserRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
             throw new InvalidPatternException(fieldError.getDefaultMessage());
         }
-        userService.save(signUpUserDto);
+        userService.save(signUpUserRequest);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -39,18 +39,18 @@ public class UserApiController {
     public ResponseEntity update(@PathVariable long userId,
                                  @RequestBody @Valid UserDto updatedUserDto,
                                  BindingResult bindingResult,
-                                 @UserSession LoginUserDto loginUserDto) {
+                                 @UserSession LoginUserRequest loginUserRequest) {
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
             throw new RuntimeException(fieldError.getDefaultMessage());
         }
-        userService.update(userId, updatedUserDto, loginUserDto);
+        userService.update(userId, updatedUserDto, loginUserRequest);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthUserDto authUserDto, HttpSession httpSession) {
-        httpSession.setAttribute("sessionUser", userService.login(authUserDto));
+    public ResponseEntity login(@RequestBody AuthUserRequest authUserRequest, HttpSession httpSession) {
+        httpSession.setAttribute("sessionUser", userService.login(authUserRequest));
         return new ResponseEntity(HttpStatus.OK);
     }
 }

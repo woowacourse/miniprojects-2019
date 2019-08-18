@@ -1,6 +1,5 @@
 package com.woowacourse.dsgram.web.config;
 
-import com.woowacourse.dsgram.service.dto.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.woowacourse.dsgram.service.dto;
+package com.woowacourse.dsgram.web.config;
 
 import lombok.Getter;
 

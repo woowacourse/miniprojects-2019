@@ -4,9 +4,9 @@ import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.domain.UserRepository;
 import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import com.woowacourse.dsgram.service.assembler.UserAssembler;
-import com.woowacourse.dsgram.service.dto.user.AuthUserDto;
-import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
-import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
+import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
+import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
+import com.woowacourse.dsgram.service.dto.user.signUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 import com.woowacourse.dsgram.service.exception.DuplicatedAttributeException;
 import com.woowacourse.dsgram.service.exception.NotFoundUserException;
@@ -21,9 +21,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void save(SignUpUserDto signUpUserDto) {
-        checkDuplicatedAttributes(signUpUserDto.getNickName(), signUpUserDto.getEmail());
-        userRepository.save(UserAssembler.toEntity(signUpUserDto));
+    public void save(signUpUserRequest signUpUserRequest) {
+        checkDuplicatedAttributes(signUpUserRequest.getNickName(), signUpUserRequest.getEmail());
+        userRepository.save(UserAssembler.toEntity(signUpUserRequest));
     }
 
     private void checkDuplicatedAttributes(String nickName, String email) {
@@ -35,9 +35,9 @@ public class UserService {
         }
     }
 
-    public UserDto findUserInfoById(long userId, LoginUserDto loginUserDto) {
+    public UserDto findUserInfoById(long userId, LoginUserRequest loginUserRequest) {
         User user = findById(userId);
-        user.checkEmail(loginUserDto.getEmail());
+        user.checkEmail(loginUserRequest.getEmail());
         return UserAssembler.toDto(findById(userId));
     }
 
@@ -47,10 +47,10 @@ public class UserService {
     }
 
     @Transactional
-    public void update(long userId, UserDto userDto, LoginUserDto loginUserDto) {
+    public void update(long userId, UserDto userDto, LoginUserRequest loginUserRequest) {
         User user = findById(userId);
         checkDuplicatedNickName(userDto, user);
-        user.update(UserAssembler.toEntity(userDto), loginUserDto.getEmail());
+        user.update(UserAssembler.toEntity(userDto), loginUserRequest.getEmail());
     }
 
     private void checkDuplicatedNickName(UserDto userDto, User user) {
@@ -60,10 +60,10 @@ public class UserService {
         }
     }
 
-    public LoginUserDto login(AuthUserDto authUserDto) {
-        User user = userRepository.findByEmail(authUserDto.getEmail())
+    public LoginUserRequest login(AuthUserRequest authUserRequest) {
+        User user = userRepository.findByEmail(authUserRequest.getEmail())
                 .orElseThrow(() -> new InvalidUserException("회원정보가 일치하지 않습니다."));
-        user.checkPassword(authUserDto.getPassword());
+        user.checkPassword(authUserRequest.getPassword());
         return UserAssembler.toAuthUserDto(user);
     }
 }

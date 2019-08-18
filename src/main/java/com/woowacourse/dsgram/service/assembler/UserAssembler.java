@@ -1,17 +1,17 @@
 package com.woowacourse.dsgram.service.assembler;
 
 import com.woowacourse.dsgram.domain.User;
-import com.woowacourse.dsgram.service.dto.user.LoginUserDto;
-import com.woowacourse.dsgram.service.dto.user.SignUpUserDto;
+import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
+import com.woowacourse.dsgram.service.dto.user.signUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 
 public class UserAssembler {
-    public static User toEntity(SignUpUserDto signUpUserDto) {
+    public static User toEntity(signUpUserRequest signUpUserRequest) {
         return User.builder()
-                .email(signUpUserDto.getEmail())
-                .nickName(signUpUserDto.getNickName())
-                .password(signUpUserDto.getPassword())
-                .userName(signUpUserDto.getUserName())
+                .email(signUpUserRequest.getEmail())
+                .nickName(signUpUserRequest.getNickName())
+                .password(signUpUserRequest.getPassword())
+                .userName(signUpUserRequest.getUserName())
                 .intro("")
                 .webSite("")
                 .build();
@@ -38,8 +38,8 @@ public class UserAssembler {
                 .build();
     }
 
-    public static LoginUserDto toAuthUserDto(User user) {
-        return LoginUserDto.builder()
+    public static LoginUserRequest toAuthUserDto(User user) {
+        return LoginUserRequest.builder()
                 .nickName(user.getNickName())
                 .userName(user.getUserName())
                 .email(user.getEmail())
