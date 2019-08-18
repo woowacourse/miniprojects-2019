@@ -61,7 +61,7 @@ class CommentRepositoryTest {
         final Pageable pageable = PageRequest.of(0, size);
 
         // when
-        final Page<Comment> comments = commentRepository.findAllByPostId(post.getId(), pageable);
+        final Page<Comment> comments = commentRepository.findAllByPostIdAndParentIdIsNull(post.getId(), pageable);
         final long expectedSize = comments
                 .stream()
                 .filter(co -> co.getParent() == null)
