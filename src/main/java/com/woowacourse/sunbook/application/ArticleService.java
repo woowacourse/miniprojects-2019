@@ -5,6 +5,7 @@ import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.domain.article.ArticleRepository;
 import com.woowacourse.sunbook.presentation.excpetion.NotFoundArticleException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +17,19 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleService {
     private final ArticleRepository articleRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public ArticleService(ArticleRepository articleRepository) {
+    public ArticleService(ArticleRepository articleRepository, ModelMapper modelMapper) {
         this.articleRepository = articleRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Transactional
     public ArticleResponseDto save(ArticleFeature articleFeature) {
         Article savedArticle = articleRepository.save(new Article(articleFeature));
 
-        return ArticleResponseDto.builder()
-                .id(savedArticle.getId())
-                .articleFeature(savedArticle.getArticleFeature())
-                .updatedTime(savedArticle.getUpdatedTime())
-                .build();
+        return modelMapper.map(savedArticle, ArticleResponseDto.class);
     }
 
     @Transactional
@@ -38,22 +37,13 @@ public class ArticleService {
         Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
         article.update(articleFeature);
 
-        return ArticleResponseDto.builder()
-                .id(article.getId())
-                .articleFeature(article.getArticleFeature())
-                .updatedTime(article.getUpdatedTime())
-                .build();
+        return modelMapper.map(article, ArticleResponseDto.class);
     }
 
     public List<ArticleResponseDto> findAll() {
         return Collections.unmodifiableList(
                 articleRepository.findAll().stream()
-                        .map(article -> ArticleResponseDto.builder()
-                                .id(article.getId())
-                                .articleFeature(article.getArticleFeature())
-                                .updatedTime(article.getUpdatedTime())
-                                .build()
-                        )
+                        .map(article -> modelMapper.map(article, ArticleResponseDto.class))
                         .collect(Collectors.toList())
         );
     }

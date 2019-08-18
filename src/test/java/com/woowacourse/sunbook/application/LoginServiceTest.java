@@ -1,6 +1,7 @@
 package com.woowacourse.sunbook.application;
 
 import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
+import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
 import com.woowacourse.sunbook.application.exception.LoginException;
 import com.woowacourse.sunbook.domain.user.User;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -30,14 +32,22 @@ class LoginServiceTest {
     private UserRepository userRepository;
 
     @Mock
+    private ModelMapper modelMapper;
+
+    @Mock
     private UserRequestDto userRequestDto;
+
+    @Mock
+    private UserResponseDto userResponseDto;
 
     @Mock
     private User user;
 
     @Test
     void 사용자_생성_성공() {
+        given(modelMapper.map(userRequestDto, User.class)).willReturn(user);
         given(userRepository.save(any(User.class))).willReturn(user);
+        given(modelMapper.map(user, UserResponseDto.class)).willReturn(mock(UserResponseDto.class));
 
         loginService.save(userRequestDto);
 
@@ -59,6 +69,7 @@ class LoginServiceTest {
         given(userRequestDto.getUserEmail()).willReturn(mock(UserEmail.class));
         given(userRequestDto.getUserPassword()).willReturn(mock(UserPassword.class));
         given(userRepository.findByUserEmailAndUserPassword(any(UserEmail.class), any(UserPassword.class))).willReturn((Optional.of(user)));
+        given(modelMapper.map(user, UserResponseDto.class)).willReturn(userResponseDto);
 
         loginService.login(userRequestDto);
 
