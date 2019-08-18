@@ -14,6 +14,6 @@ public class LogoutController {
     @GetMapping
     public String logout(HttpSession session, UserSession userSession) {
         session.removeAttribute(UserSession.LOGIN_USER);
-        return "index";
+        return "redirect:/";
     }
 }

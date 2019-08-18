@@ -43,7 +43,7 @@ class LogoutControllerTest {
     void logoutTestWhenLogin() throws Exception {
         mockMvc.perform(get("/logout")
                 .sessionAttr(UserSession.LOGIN_USER, userSession))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test

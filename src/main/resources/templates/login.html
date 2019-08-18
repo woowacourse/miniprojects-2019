@@ -1,49 +1,26 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="common/header::mainHead"></head>
+
+<head th:replace="/common/header::mainHead"></head>
+
 <body>
-<div id="wootecobook-app">
-    <header th:replace="common/headline::headline"></header>
-    <div class="container-fluid max-width-lg mx-auto mrg-top-70" id="main-content">
-        <div class="row">
-            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="left-placeholder-container">
-            </div>
-            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                <div class="login-area">
-                    <div class="card widget-compose">
-                        <p class="border bottom width-100 pdd-btm-5 text-bold">로그인</p>
-                        <form accept-charset="UTF-8" action="/login"
-                              class="form-horizontal pdd-right-30 align-items-center" id="login-form" method="post">
-                            <div class="form-group row">
-                                <label class="col-md-3 control-label text-right" for="email">이메일</label>
-                                <div class="col-md-9">
-                                    <input autofocus class="form-control" id="email" name="email" placeholder="email"
-                                           required type="email">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 control-label text-right" for="password">패스워드</label>
-                                <div class="col-md-9">
-                                    <input autofocus class="form-control" id="password" name="password"
-                                           placeholder="password"
-                                           required type="password">
-                                </div>
-                            </div>
-                            <div class="form-group text-right">
-                                <button class="btn btn-success btn-lg btn-rounded" type="submit">로그인</button>
-                            </div>
-                        </form>
-                    </div>
+    <div id="wootecobook-app">
+        <header th:replace="/layout/headline::headline"></header>
+        <div class="container-fluid max-width-lg mx-auto mrg-top-70" id="main-content">
+            <div class="row">
+                <!-- 왼쪽 프로필 영역 left-profile-->
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="left-placeholder-container">
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pdd-right-0">
-                <!-- placeholder-->
+                <!-- 가운데 콘텐츠 영역 center-container -->
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                    <div th:replace="/layout/login-area"></div>
+                </div>
+                <!-- 오른쪽 사이드바 영역 right-sidebar -->
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pdd-right-0">
+                </div>
             </div>
         </div>
     </div>
-</div>
-<th:block th:include="common/cdns"></th:block>
-<script type="text/javascript">
-
-</script>
+    <th:block th:include="/common/cdns"></th:block>
 </body>
+
 </html>

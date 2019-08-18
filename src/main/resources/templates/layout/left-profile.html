@@ -1,13 +1,6 @@
 <div id="left-profile-container" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="left">
-        <div class="left-profile">
-            <a th:if="${session.loggedInUser}" class="pointer">
-                <img class="img-circle width-25px" src="https://raw.githubusercontent.com/woowacourse/miniprojects/master/wootecobook/images/default/eastjun_profile.jpg">
-                <div class="left-name-edit pointer">
-                    <a th:text="${session.loggedInUser.name}" class="left-name">이름</a>
-                </div>
-            </a>
-        </div>
+
         <div class="left-menus">
             <ul class="left-sub-menus">
                 <li class="left-sub-sub-menus mrg-btm-5 pointer">

@@ -28,6 +28,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -97,11 +98,12 @@ class UserControllerTest {
         given(userService.modify(BASE_ID, userUpdateDto, userSession))
                 .willReturn(user);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/users/" + BASE_ID)
+        mockMvc.perform(put("/users/" + BASE_ID)
                 .sessionAttr(UserSession.LOGIN_USER, userSession)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(new ObjectMapper().writeValueAsString(userUpdateDto)))
-                .andExpect(status().isOk());
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("name",userUpdateDto.getName())
+                .param("email",userUpdateDto.getEmail()))
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -110,11 +112,12 @@ class UserControllerTest {
         given(userService.modify(MISMATCH_ID, userUpdateDto, userSession))
                 .willThrow(NotValidUserException.class);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/users/" + MISMATCH_ID)
+        mockMvc.perform(put("/users/" + MISMATCH_ID)
                 .sessionAttr(UserSession.LOGIN_USER, userSession)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(new ObjectMapper().writeValueAsString(userUpdateDto)))
-                .andExpect(status().isNotFound());
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("name",userUpdateDto.getName())
+                .param("email",userUpdateDto.getEmail()))
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -123,11 +126,12 @@ class UserControllerTest {
         given(userService.modify(BASE_ID, userUpdateDto, userSession))
                 .willThrow(UserNotFoundException.class);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/users/" + BASE_ID)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+        mockMvc.perform(put("/users/" + BASE_ID)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .sessionAttr(UserSession.LOGIN_USER, userSession)
-                .content(new ObjectMapper().writeValueAsString(userUpdateDto)))
-                .andExpect(status().isNotFound());
+                .param("name",userUpdateDto.getName())
+                .param("email",userUpdateDto.getEmail()))
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test

@@ -7,7 +7,7 @@
                 <span>님이 그룹에 링크를 공유했습니다.</span>
                 <span class="sub-title">15시간</span>
                 <a aria-expanded="false" class="pointer absolute top-0 right-0" data-toggle="dropdown">
-                                        <span class="btn-icon text-dark">
+                    <span class="btn-icon text-dark">
                                             <i class="ti-more font-size-16"></i>
                                         </span>
                 </a>
@@ -35,12 +35,12 @@
         const url = document.location.href;
 
         fetch(url + "/posts/" + id, {
-            method: "DELETE",
-            headers: {
-                "Accept": "application/json",
-                "Content-type": "application/json"
-            }
-        })
+                method: "DELETE",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-type": "application/json"
+                }
+            })
             .then(res => console.log(res.json()))
             .then(body => {
                 location.reload();
