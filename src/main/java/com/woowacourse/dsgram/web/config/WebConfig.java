@@ -1,7 +1,9 @@
 package com.woowacourse.dsgram.web.config;
 
 import com.woowacourse.dsgram.web.argumentresolver.UserSessionArgumentResolver;
-import com.woowacourse.dsgram.web.interceptor.AuthInterceptor;
+import com.woowacourse.dsgram.web.interceptor.AuthenticatedUserInterceptor;
+import com.woowacourse.dsgram.web.interceptor.UnauthenticatedUserInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

@@ -25,10 +25,6 @@ public class SignUpUserRequest {
     @Size(min = 4, max = 16, message = "비밀번호는 4~16자")
     private String password;
 
-    @Email(message = "이메일 양식")
-    @NotBlank(message = "이메일은 필수입니다.")
-    private String email;
-
     @Builder
     public SignUpUserRequest(String nickName, String userName, String password, String email) {
         this.nickName = nickName;

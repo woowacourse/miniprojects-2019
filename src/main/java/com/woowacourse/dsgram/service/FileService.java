@@ -17,10 +17,10 @@ import java.util.UUID;
 @Service
 public class FileService {
 
-    @Value("${ARTICLE_UPLOAD_PATH}")
+    @Value("${article.upload.path}")
     private String articleUploadPath;
 
-    @Value("${TOMCAT_PATH}")
+    @Value("${tomcat.path}")
     private String tomcatPath;
 
     @Value("${BASE_DIR}")

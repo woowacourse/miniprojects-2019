@@ -77,7 +77,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public LoginUserDto oauth(String code) {
+    public LoginUserRequest oauth(String code) {
         String accessToken = githubClient.getToken(code);
 
         String email = githubClient.getUserEmail(accessToken);
