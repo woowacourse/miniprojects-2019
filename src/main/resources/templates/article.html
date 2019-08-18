@@ -132,7 +132,7 @@
         return blob;
     };
 
-    fetch('/articles/' + articleId + "/file", {
+    fetch('/api/articles/' + articleId + "/file", {
         method: "GET",
     }).then(response => {
         response.arrayBuffer().then(function (buffer) {

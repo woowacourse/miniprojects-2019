@@ -13,7 +13,7 @@ const save = function () {
     let postForm = document.getElementById("saveForm");
     let formData  = new FormData(postForm);
 
-    fetch ('/articles', {
+    fetch ('/api/articles', {
         method: "POST",
         body: formData
     }).then(response => {
