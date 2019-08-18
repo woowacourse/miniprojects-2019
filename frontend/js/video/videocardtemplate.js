@@ -24,8 +24,8 @@ function addVideoCardTemplate(data, number, categorie) {
 }
 
 function addVideoCardTemplates(data, categorie) {
-    for(let i =0; i < Math.min(6, data.length); i++) {
-        addVideoCardTemplate(data, i, categorie)
+    for(let i =0; i < Math.min(6, data.content.length); i++) {
+        addVideoCardTemplate(data.content, i, categorie)
     }
 }
 

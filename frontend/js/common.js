@@ -51,7 +51,7 @@ const Api = function () {
     }
     
     const requestVideos = (filter) => {
-        return requestWithoutBody(`${baseUrl}/v1/videos?filter=${filter}&page=0&limit=6`,'GET')
+        return requestWithoutBody(`${baseUrl}/v1/videos?page=0&size=6&sort=${filter},DESC`,'GET')
     }
 
     const requestVideo = (videoId) => {

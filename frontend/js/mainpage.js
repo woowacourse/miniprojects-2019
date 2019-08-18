@@ -3,5 +3,5 @@ loadVideoCards = function (filter) {
     .then(response => response.json())
     .then(json => addVideoCardTemplates(json,'dateVideoCard') )
     }
-    loadVideoCards('date')
+    loadVideoCards('createDate')
 
