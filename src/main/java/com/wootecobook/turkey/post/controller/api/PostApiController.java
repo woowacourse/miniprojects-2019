@@ -1,7 +1,6 @@
 package com.wootecobook.turkey.post.controller.api;
 
 import com.wootecobook.turkey.commons.resolver.UserSession;
-import com.wootecobook.turkey.post.controller.exception.PostBadRequestException;
 import com.wootecobook.turkey.post.service.PostService;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,10 +28,7 @@ public class PostApiController {
 
     @PostMapping
     public ResponseEntity<PostResponse> create(@RequestBody @Valid PostRequest postRequest,
-                                               BindingResult bindingResult, UserSession userSession) {
-        if (bindingResult.hasErrors()) {
-            throw new PostBadRequestException();
-        }
+                                               UserSession userSession) {
 
         PostResponse postResponse = postService.save(postRequest, userSession.getId());
         final URI uri = linkTo(PostApiController.class).toUri(); //todo: uri 적절한가
@@ -48,10 +43,7 @@ public class PostApiController {
 
     @PutMapping("/{postId}")
     public ResponseEntity<PostResponse> update(@PathVariable Long postId, @RequestBody @Valid PostRequest postRequest,
-                                               BindingResult bindingResult, UserSession userSession) {
-        if (bindingResult.hasErrors()) {
-            throw new PostBadRequestException();
-        }
+                                               UserSession userSession) {
 
         PostResponse postResponse = postService.update(postRequest, postId, userSession.getId());
 
