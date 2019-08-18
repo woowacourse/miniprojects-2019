@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserDto {
-    // TODO: 2019-08-14 전부 다 embedded로...?
+
     @NotNull
     private long id;
 

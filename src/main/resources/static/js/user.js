@@ -108,9 +108,8 @@ const USER_APP = (() => {
                 intro: intro.value,
             };
 
-            const ifSucceed = () => window.location.href = '/users/' + userId.value + '/edit';
+            const ifSucceed = () => window.location.href = '/';
 
-            // TODO redirect `SLOWS`~
             connector.fetchTemplate('/api/users/' + userId.value,
                 connector.PUT,
                 userDto,

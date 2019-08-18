@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -45,11 +47,6 @@ public class ArticleApiServiceTest {
     }
 
     @Test
-    void 게시글_생성_실패() {
-        // todo : 게시글 생성 실패 케이스 논의 필요
-    }
-
-    @Test
     void 게시글_조회_성공() {
         given(articleRepository.findById(any())).willReturn(Optional.of(article));
         articleApiService.findById(1L);
@@ -58,8 +55,7 @@ public class ArticleApiServiceTest {
 
     @Test
     void 게시글_조회_실패() {
-        // todo : article을 create했으면 테스트가 실패해야 되는데 성공함..
         articleApiService.create(article);
-        assertThrows(JpaException.class, () -> articleApiService.findById(1L));
+        assertThrows(EntityNotFoundException.class, () -> articleApiService.findById(1L));
     }
 }

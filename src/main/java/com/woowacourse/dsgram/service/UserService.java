@@ -90,7 +90,7 @@ public class UserService {
     }
 
     private User saveOauthUser(String accessToken, String email) {
-        // TODO: 2019-08-16 Nick name을 확인해야 하나...? DB를 따로 관리해야하나...?
+        // TODO: 2019-08-16 OAUTH 로그인시 nickName null/중복 처리
         JsonElement userInfo = githubClient.getUserInformation(accessToken);
         return userRepository.save(UserAssembler.toEntity(email, userInfo.getAsJsonObject()));
     }

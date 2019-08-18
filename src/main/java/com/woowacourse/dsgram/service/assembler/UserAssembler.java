@@ -33,8 +33,8 @@ public class UserAssembler {
         return User.builder()
                 .email(email)
                 .nickName(userInfo.get("login").getAsString())
-                // TODO: 2019-08-16 ID, Password 는 오또카지...?
-                .password("일단아무거나")
+                // TODO: OAUTH로그인시 ID 중복처리 및 Password 설정 필요
+                .password("Random password")
                 .webSite(userInfo.get("html_url").getAsString())
                 .userName(ifBlankName(userInfo))
                 .build();
