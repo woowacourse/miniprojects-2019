@@ -20,6 +20,7 @@ const Article = (function () {
         const initContent = () => {
             articleService.loadContent();
         }
+
         const init = function () {
             modifyButton()
             modifyFormButton()
@@ -34,16 +35,15 @@ const Article = (function () {
 
     const ArticleService = function () {
         const request = new Request("/api/articles");
-
         const loadContent = () =>
-            request.get("/"+ articleId,
-                (status,data) => {
+            request.get("/" + articleId,
+                (status, data) => {
                     const img = new Image();
                     img.src = data.imageUrl;
-                    document.getElementById("pic").src =  img.src;
-                    img.onload=imageResize(img);
+                    document.getElementById("pic").src = img.src;
+                    img.onload = imageResize(img);
                     document.querySelectorAll(".profile-name").forEach(
-                        (element)=>{
+                        (element) => {
                             element.innerText = data.userInfoDto.userContentsDto.userName;
                         }
                     )
@@ -64,17 +64,17 @@ const Article = (function () {
             request.put('/', {
                 id: articleId,
                 contents: contents
-            },(status, data)=>{
+            }, (status, data) => {
                 DomUtil.active(".contents-section")
                 DomUtil.inactive(".modify-input");
                 DomUtil.inactive(".modify-btn");
                 document.querySelector(".contents-para").innerText = contents;
             })
         }
-        const remove    = () => {
+        const remove = () => {
             const form = document.createElement('form');
             form.method = 'post';
-            form.action = '/articles/'+ articleId;
+            form.action = '/articles/' + articleId;
             const deleteMethod = document.createElement('input');
             deleteMethod.name = '_method';
             deleteMethod.value = 'delete';
@@ -84,15 +84,16 @@ const Article = (function () {
             form.submit();
         }
 
-        const imageResize = (img)=>{
+        const imageResize = (img) => {
             const element = document.querySelector("#pic");
             const width = img.naturalWidth;
             const height = img.naturalHeight;
-            if(width>=height){
+            if (width >= height) {
                 return element.classList.add("img-parallel")
             }
             element.classList.add("img-vertical");
         }
+
 
         return {
             loadContent: loadContent,
@@ -100,14 +101,14 @@ const Article = (function () {
             remove: remove,
             modify: modify,
             modalActive: modalActive,
-            imageResize:imageResize
+            imageResize: imageResize,
+            previewImage: previewImage
         }
     }
     const init = () => {
         const articleController = new ArticleController();
         articleController.init();
     };
-
     return {
         init: init
     }

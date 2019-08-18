@@ -22,7 +22,8 @@
 }
 
 .new-article a{
-    line-height:37px !important;
+    line-height:38px !important;
+    margin-left:-1px;
 }
 .new-article img{
     width:30px;
