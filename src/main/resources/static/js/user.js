@@ -30,7 +30,45 @@ const USER_APP = (() => {
         }
     };
 
+    const FetchApi = function () {
+        const POST = 'POST';
+        const PUT = 'PUT';
+
+        const fetchTemplate = function (requestUrl, method, body, ifSucceed) {
+            fetch(requestUrl, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(body)
+            }).then(response => {
+                if (response.status === 200) {
+                    ifSucceed();
+                    return;
+                }
+                if (response.status === 400) {
+                    errorHandler(response);
+                }
+            });
+        };
+
+        const errorHandler = function(error) {
+            error.json()
+                .then(exception => {
+                    alert(exception.message)
+                });
+        };
+
+        return {
+            POST: POST,
+            PUT: PUT,
+            fetchTemplate: fetchTemplate,
+        }
+    };
+
     const UserService = function () {
+        const connector = new FetchApi();
 
         const email = document.getElementById('email');
         const nickName = document.getElementById('nickName');
@@ -50,18 +88,12 @@ const USER_APP = (() => {
                 password: password.value,
             };
 
-            fetch('/api/users', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json; charset=UTF-8'},
-                body: JSON.stringify(userBasicInfo)
-            }).then(response => {
-                if (response.status === 200) {
-                    window.location.href = '/login';
-                }
-                if (response.status === 400) {
-                    errorHandler(response);
-                }
-            })
+            const ifSucceed = () => window.location.href = '/login';
+
+            connector.fetchTemplate('/api/users',
+                connector.POST,
+                userBasicInfo,
+                ifSucceed);
         };
 
         const updateUser = function (event) {
@@ -76,20 +108,13 @@ const USER_APP = (() => {
                 intro: intro.value,
             };
 
-            fetch('/api/users/' + userId.value, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json; charset=UTF-8'},
-                body: JSON.stringify(userDto)
-            }).then(response => {
-                if (response.status === 200) {
-                    // TODO 슬로스꺼ㄹ로 이동->index로 이동
-                    window.location.href = '/';
-                }
+            const ifSucceed = () => window.location.href = '/users/' + userId.value + '/edit';
 
-                if (response.status === 400) {
-                    errorHandler(response);
-                }
-            })
+            // TODO redirect `SLOWS`~
+            connector.fetchTemplate('/api/users/' + userId.value,
+                connector.PUT,
+                userDto,
+                ifSucceed);
         };
 
         const login = function (event) {
@@ -100,33 +125,18 @@ const USER_APP = (() => {
                 password: password.value,
             };
 
-            fetch('/api/users/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json; charset=UTF-8'},
-                body: JSON.stringify(userBasicInfo)
-            }).then(response => {
-                if (response.status === 200) {
-                    window.location.href = '/';
-                    return;
-                }
-                if (response.status === 400) {
-                    errorHandler(response);
-                }
-            })
-        };
+            const ifSucceed = () => window.location.href = '/';
 
-        const errorHandler = function(error) {
-            error.json()
-                .then(exception => {
-                    alert(exception.message)
-                });
+            connector.fetchTemplate('/api/users/login',
+                connector.POST,
+                userBasicInfo,
+                ifSucceed);
         };
 
         return {
             saveUser: saveUser,
             updateUser: updateUser,
             login: login,
-            errorHandler: errorHandler,
         }
     };
 
