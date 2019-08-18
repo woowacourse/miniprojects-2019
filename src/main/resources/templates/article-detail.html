@@ -1,52 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang = "ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <th:block th:replace = "fragments/common-head :: common-head"></th:block>
-    <link rel="stylesheet" href = "/css/article-detail.css">
+    <th:block th:replace="fragments/common-head :: common-head"></th:block>
+    <link rel="stylesheet" href="/css/article-detail.css">
 </head>
 <body>
-    <th:block th:replace="fragments/header :: index-header"></th:block>
-    <div class="detail-con">
-        <div class="inner-con">
-            <div class="pic-con">
-                <img id="pic" src="" />
-            </div>
-            <div class="text-con">
-                <div class="author-con">
-                    <button class = "modal-btn" type ="button"/>
+<th:block th:replace="fragments/header :: index-header"></th:block>
+<div class="detail-con">
+    <div class="inner-con">
+        <div class="pic-con">
+            <img id="pic" src=""/>
+        </div>
+        <div class="text-con common-flex">
+            <header class="author-con common-flex">
+                <div class="profile">
+                    <img src="/images/default/eastjun_profile.jpg">
+                    <div class="profile-text">
+                        <span class="profile-name"></span>
+                    </div>
                 </div>
-                <div class="contents-con">
-                    <p class = "contents-para"></p>
-                    <input class="contents-input inactive" type = "text"/>
-                    <button  class ="contents-modify-btn inactive" type = "button" >modify</button>
+                <button class="modal-btn" type="button"/>
+            </header>
+            <section class="contents-section common-flex">
+                <div class="contents-con common-flex">
+                    <div class="contents-inner">
+                        <div class="profile">
+                            <img src="/images/default/eastjun_profile.jpg">
+                            <div class="profile-text">
+                                <span class="profile-name"></span>
+                                <span class="contents-para"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="social-con">
                 </div>
-            </div>
-        </div>
-        <footer>
+            </section>
 
-        </footer>
-        <div class = "modal inactive">
-            <div class="modal-dialog-inner">
-                <div class = "modal-dialog-custom common-flex">
-                    <button class = "create-modify-btn" tabindex="0">수정하기</button>
-                    <button class="contents-remove-btn delete-btn"  type = "button" tabindex="0">삭제하기</button>
-                </div>
+            <div class ="modify-con padding-15">
+                <textarea class="modify-input inactive" type="text" placeholder="문구 입력..."></textarea>
+                <button class="modify-btn inactive button-none" type="button">완료</button>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
-    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script th:inline="javascript">
-        let articleId = [[${articleId}]];
-    </script>
-    <script src = "/js/util.js"></script>
-    <script src = "/js/modal.js"></script>
-    <script src = "/js/common.js"></script>
-    <script src = "/js/article.js"></script>
+    <footer>
+
+    </footer>
+    <div class="modal inactive modal-animation">
+        <div class="modal-dialog-inner">
+            <div class="modal-dialog-custom common-flex">
+                <button class="create-modify-btn" tabindex="0">수정하기</button>
+                <button class="contents-remove-btn delete-btn font-cap" type="button" tabindex="0">삭제하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+        integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script th:inline="javascript">
+    let articleId = [[${articleId}]];
+</script>
+<script src="/js/util.js"></script>
+<script src="/js/modal.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/article.js"></script>
 </body>
 </html>

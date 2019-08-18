@@ -17,30 +17,38 @@
         display: none;
     }
 }
-*{
-    border-sizing:border-box;
+
+* {
+    border-sizing: border-box;
 }
 
 body,
 button,
 input,
-textarea{
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+textarea {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-size: 14px;
 }
-body{
-    overflow:scroll;
+
+.font-cap {
+    color: #ed4956;
+    font-weight: 700;
+}
+
+body {
+    overflow: scroll;
 }
 
 header ul.nav-right li, header ul.nav-left li {
     height: 76px;
 }
 
-.active{
-     display:block !important;
+.active {
+    display: block !important;
 }
-.inactive{
-    display:none  !important;
+
+.inactive {
+    display: none !important;
 }
 
 .add-comment textarea::placeholder {
@@ -54,7 +62,7 @@ header ul.nav-right li, header ul.nav-left li {
 }
 
 .activated-heart {
-    color:#ed4956;
+    color: #ed4956;
 }
 
 .hashtag {
@@ -66,7 +74,7 @@ header ul.nav-right li, header ul.nav-left li {
 }
 
 
-.common-flex{
+.common-flex {
     -webkit-box-align: stretch;
     -webkit-align-items: stretch;
     -ms-flex-align: stretch;
@@ -91,7 +99,7 @@ header ul.nav-right li, header ul.nav-left li {
     position: relative;
 }
 
-.center-flex{
+.center-flex {
     -webkit-box-align: center;
     -webkit-align-items: center;
     -ms-flex-align: center;
@@ -117,49 +125,72 @@ header ul.nav-right li, header ul.nav-left li {
     position: relative;
 }
 
-.modal{
-    display:flex;
-    position:fixed;
+.modal {
+    display: flex;
+    position: fixed;
     justify-content: center;
     align-items: center;
-    width:100%;
-    height:100%;
-    background-color:rgba(0,0,0,0.5);
-    z-index:9999;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
 }
 
-.modal-btn{
+.modal-animation {
+    animation: IGCoreModalShow .1s ease-out;
+}
+
+@keyframes IGCoreModalShow {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2)
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
+
+.modal-btn {
     background-image: url(/images/common/modal_button.png);
     background-repeat: no-repeat;
-    background-position:center;
+    background-position: center;
     background-size: contain;
     background-color: transparent;
-    border:none;
+    border: none;
     width: 18px;
     height: 18px;
 }
+
 .modal-btn:hover {
-    background-color:transparent;
+    background-color: transparent;
 }
 
-.modal-dialog-custom{
-    width:430px;
-    background-color:white;
+.modal-dialog-custom {
+    width: 400px;
+    background-color: white;
     border-radius: 12px;
 }
-.modal-dialog-inner{
+
+.modal-dialog-inner {
 
 }
-.modal-dialog-custom button:first-child{
-    border-top:0;
+
+.modal-dialog-custom button:first-child {
+    border-top: 0;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
-.modal-dialog-custom button:last-child{
+
+.modal-dialog-custom button:last-child {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
-.modal-dialog-custom button{
+
+.modal-dialog-custom button {
+    font-size: 14px;
     background-color: transparent;
     border-bottom: 0;
     border-left: 0;
@@ -178,15 +209,15 @@ header ul.nav-right li, header ul.nav-left li {
     vertical-align: middle;
 }
 
-.delete-btn{
-    color:red;
+.delete-btn {
+    color: red;
 }
 
-button:hover{
-    background-color: rgb(230,230,230);
+button:hover {
+    background-color: rgb(230, 230, 230);
 }
 
-button{
+button {
     -webkit-appearance: button;
     -webkit-writing-mode: horizontal-tb !important;
     text-rendering: auto;
@@ -203,7 +234,6 @@ button{
     background-color: buttonface;
     box-sizing: border-box;
     margin: 0em;
-    font: 400 11px system-ui;
     padding: 1px 7px 2px;
     border-width: 1px;
     border-style: solid;
@@ -211,18 +241,18 @@ button{
     border-image: initial;
 }
 
-.button-none{
-    background-color:transparent;
+.button-none {
+    background-color: transparent;
     color: #3897f0;
     font-weight: 600;
-    border:0;
-    font-size:14px;
+    border: 0;
+    font-size: 14px;
 }
 
-.button-none:hover{
-    background-color:transparent;
+.button-none:hover {
+    background-color: transparent;
 }
 
-.border-con{
+.border-con {
     border: 1px solid #e6e6e6;
 }

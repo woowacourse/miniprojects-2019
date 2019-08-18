@@ -10,7 +10,7 @@ const Article = (function () {
             button.addEventListener('click', articleService.createModifyInput);
         }
         const modifyButton = () => {
-            const button = document.querySelector(".contents-modify-btn");
+            const button = document.querySelector(".modify-btn");
             button.addEventListener('click', articleService.modify);
         }
         const removeButton = () => {
@@ -38,28 +38,36 @@ const Article = (function () {
         const loadContent = () =>
             request.get("/"+ articleId,
                 (status,data) => {
-                    document.getElementById("pic").src =  data.imageUrl;
+                    const img = new Image();
+                    img.src = data.imageUrl;
+                    document.getElementById("pic").src =  img.src;
+                    img.onload=imageResize(img);
+                    document.querySelectorAll(".profile-name").forEach(
+                        (element)=>{
+                            element.innerText = data.userInfoDto.userContentsDto.userName;
+                        }
+                    )
                     document.querySelector(".contents-para").innerText = data.contents;
                 })
         const modalActive = () => {
             modal.active()
         }
         const createModifyInput = () => {
-            DomUtil.inactive(".contents-para")
-            DomUtil.active(".contents-input")
-            DomUtil.active(".contents-modify-btn")
+            DomUtil.inactive(".contents-section")
+            DomUtil.active(".modify-input")
+            DomUtil.active(".modify-btn")
             modal.inactive();
         }
 
         const modify = () => {
-            let contents = document.querySelector(".contents-input").value;
+            let contents = document.querySelector(".modify-input").value;
             request.put('/', {
                 id: articleId,
                 contents: contents
             },(status, data)=>{
-                DomUtil.active(".contents-para")
-                DomUtil.inactive(".contents-input");
-                DomUtil.inactive(".contents-modify-btn");
+                DomUtil.active(".contents-section")
+                DomUtil.inactive(".modify-input");
+                DomUtil.inactive(".modify-btn");
                 document.querySelector(".contents-para").innerText = contents;
             })
         }
@@ -76,12 +84,23 @@ const Article = (function () {
             form.submit();
         }
 
+        const imageResize = (img)=>{
+            const element = document.querySelector("#pic");
+            const width = img.naturalWidth;
+            const height = img.naturalHeight;
+            if(width>=height){
+                return element.classList.add("img-parallel")
+            }
+            element.classList.add("img-vertical");
+        }
+
         return {
             loadContent: loadContent,
             createModifyInput: createModifyInput,
             remove: remove,
             modify: modify,
-            modalActive: modalActive
+            modalActive: modalActive,
+            imageResize:imageResize
         }
     }
     const init = () => {
