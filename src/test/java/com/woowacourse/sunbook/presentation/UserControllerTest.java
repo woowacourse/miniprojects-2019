@@ -14,7 +14,7 @@ class UserControllerTest extends TestTemplate {
 
     @Test
     void 메인_페이지_이동() {
-        request(HttpMethod.GET, "/sunbook", Void.class, HttpStatus.OK);
+        request(HttpMethod.GET, "/newsfeed", Void.class, HttpStatus.OK);
     }
 
     @Test

@@ -22,8 +22,8 @@ public class UserController {
         return new RedirectView("/");
     }
 
-    @GetMapping("/sunbook")
+    @GetMapping("/newsfeed")
     public String sunbookPage() {
-        return "sunbook";
+        return "newsfeed";
     }
 }

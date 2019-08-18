@@ -74,7 +74,7 @@ const IndexApp = (() => {
                 if (json.hasOwnProperty('errorMessage')) {
                     alert(json.errorMessage);
                 } else {
-                    location.href='/sunbook';
+                    location.href='/newsfeed';
                 }
             })
         };
@@ -118,23 +118,11 @@ const IndexApp = (() => {
 
     const IndexApi = function () {
         const login = (data) => {
-            return fetch('/api/signin' , {
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                method: 'POST',
-                body: JSON.stringify(data)
-            })
+            return Api.post('/api/signin', data);
         };
 
         const signUp = (data) => {
-            return fetch('/api/signup', {
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                method: 'POST',
-                body: JSON.stringify(data)
-            });
+            return Api.post('/api/signup', data);
         };
 
         return {
