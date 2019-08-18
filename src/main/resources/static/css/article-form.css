@@ -1,6 +1,46 @@
-#form-con{
-    height:100%;
-    max-width: 512px;
+.form-inner{
+    min-width: 450px;
     margin: 0 auto;
-    background-color:gray;
+    background-color:white;
+}
+
+.form-con{
+    height:100vh;
+    display:flex;
+    align-items: center;
+}
+
+.form-nav{
+    height:50px;
+    padding-right:15px;
+    flex-direction:row;
+    justify-content: flex-end;
+    border-bottom:1px solid #e6e6e6;
+}
+
+.form-nav button{
+    font-size:15px;
+}
+
+.form-image{
+    height:500px;
+    border-bottom:1px solid #e6e6e6;
+}
+
+.form-image-label{
+    width: 120px;
+    height:300px;
+    border-radius: 5px;
+}
+
+.form-text{
+    padding:20px;
+}
+.form-text textarea{
+    border:0;
+    width:100%;
+    height:150px;
+    vertical-align:middle;
+    resize: none;
+    outline: none;
 }

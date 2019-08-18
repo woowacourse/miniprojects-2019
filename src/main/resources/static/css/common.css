@@ -125,13 +125,26 @@ header ul.nav-right li, header ul.nav-left li {
     z-index:9999;
 }
 
+.modal-btn{
+    background-image: url(/images/common/modal_button.png);
+    background-repeat: no-repeat;
+    background-position:center;
+    background-size: contain;
+    background-color: transparent;
+    border:none;
+    width: 18px;
+    height: 18px;
+}
+.modal-btn:hover {
+    background-color:transparent;
+}
+
 .modal-dialog-custom{
     width:430px;
     background-color:white;
     border-radius: 12px;
 }
 .modal-dialog-inner{
-
 
 }
 .modal-dialog-custom button:first-child{
@@ -193,4 +206,20 @@ button{
     border-style: solid;
     border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
     border-image: initial;
+}
+
+.button-none{
+    background-color:transparent;
+    color: #3897f0;
+    font-weight: 600;
+    border:0;
+    font-size:14px;
+}
+
+.button-none:hover{
+    background-color:transparent;
+}
+
+.border-con{
+    border: 1px solid #e6e6e6;
 }
