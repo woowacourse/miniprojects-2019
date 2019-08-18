@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class signUpUserRequest {
+public class SignUpUserRequest {
     @Size(min = 2, max = 10, message = "닉네임은 2~10자")
     private String nickName;
 
@@ -26,7 +26,7 @@ public class signUpUserRequest {
     private String email;
 
     @Builder
-    public signUpUserRequest(@Size(min = 2, max = 10) String nickName, @Size(min = 2, max = 10) String userName, @Size(min = 4, max = 16) String password, @Email @NotBlank String email) {
+    public SignUpUserRequest(String nickName, String userName, String password, String email) {
         this.nickName = nickName;
         this.userName = userName;
         this.password = password;

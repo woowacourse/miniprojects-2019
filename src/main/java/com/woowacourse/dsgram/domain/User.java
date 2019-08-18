@@ -41,7 +41,7 @@ public class User {
     private String intro;
 
     @Builder
-    public User(@Email @NotBlank String email, @Size(min = 2, max = 10) String nickName, @Size(min = 2, max = 10) String userName, @Size(min = 4, max = 16) String password, String webSite, String intro) {
+    public User(String email, String nickName, String userName, String password, String webSite, String intro) {
         this.email = email;
         this.nickName = nickName;
         this.userName = userName;
