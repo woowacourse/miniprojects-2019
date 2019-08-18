@@ -1,44 +1,23 @@
 package com.woowacourse.dsgram.service.dto;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+@Setter
 public class ArticleRequest {
 
-    private String contents;
     private String hashtag;
+    private String contents;
     private MultipartFile file;
-
-    public ArticleRequest() {
-    }
 
     public ArticleRequest(String contents, String hashtag, MultipartFile file) {
         this.contents = contents;
         this.hashtag = hashtag;
-        this.file = file;
-    }
-
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public String getHashtag() {
-        return hashtag;
-    }
-
-    public void setHashtag(String hashtag) {
-        this.hashtag = hashtag;
-    }
-
-    public MultipartFile getFile() {
-        return file;
-    }
-
-    public void setFile(MultipartFile file) {
         this.file = file;
     }
 
