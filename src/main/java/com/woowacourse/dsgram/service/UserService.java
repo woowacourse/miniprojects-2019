@@ -27,10 +27,10 @@ public class UserService {
     }
 
     private void checkDuplicatedAttributes(String nickName, String email) {
-        if (userRepository.countByNickName(nickName) > 0) {
+        if (userRepository.existsByNickName(nickName)) {
             throw new DuplicatedAttributeException("이미 사용중인 닉네임입니다.");
         }
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.existsByEmail(email)) {
             throw new DuplicatedAttributeException("이미 사용중인 이메일입니다.");
         }
     }
@@ -55,7 +55,7 @@ public class UserService {
 
     private void checkDuplicatedNickName(UserDto userDto, User user) {
         if (!user.equalsNickName(userDto.getNickName()) &&
-                userRepository.countByNickName(userDto.getNickName()) > 0) {
+                userRepository.existsByNickName(userDto.getNickName())) {
             throw new DuplicatedAttributeException("이미 사용중인 닉네임입니다.");
         }
     }

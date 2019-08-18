@@ -7,6 +7,7 @@ import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
+import com.woowacourse.dsgram.service.exception.DuplicatedAttributeException;
 import com.woowacourse.dsgram.service.exception.NotFoundUserException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -62,16 +64,17 @@ public class UserServiceTest {
 
     @Test
     void 유저_저장_실패_닉네임_중복() {
-        given(userRepository.countByNickName(any())).willReturn(1L);
+        given(userRepository.existsByNickName(any())).willReturn(true);
 
         assertThrows(RuntimeException.class, () -> {userService.save(signUpUserRequest);});
     }
 
     @Test
     void 유저_저장_실패_이메일_중복() {
-        given(userRepository.findByEmail(any())).willReturn(Optional.empty());
+        given(userRepository.existsByNickName(anyString())).willReturn(false);
+        given(userRepository.existsByEmail(anyString())).willReturn(true);
 
-        assertThrows(RuntimeException.class, () -> userService.save(signUpUserRequest));
+        assertThrows(DuplicatedAttributeException.class, () -> userService.save(signUpUserRequest));
     }
 
     @Test
@@ -116,14 +119,14 @@ public class UserServiceTest {
     @Test
     void 남의_정보를_수정() {
         given(userRepository.findById(any())).willReturn(Optional.of(user));
-        given(userRepository.countByNickName(any())).willReturn(0L);
+        given(userRepository.existsByNickName(any())).willReturn(false);
         assertThrows(InvalidUserException.class, () -> userService.update(any(), userDto, loginUserRequest));
     }
 
     @Test
     void 유저_수정_실패_닉네임_중복() {
         given(userRepository.findById(any())).willReturn(Optional.of(user));
-        given(userRepository.countByNickName(any())).willReturn(1L);
+        given(userRepository.existsByNickName(any())).willReturn(true);
         assertThrows(InvalidUserException.class, () -> userService.update(any(), userDto, loginUserRequest));
     }
 
