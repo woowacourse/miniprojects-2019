@@ -25,7 +25,7 @@ public class AlreadyLoginedInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (sessionUser.isPresent()) {
-            response.sendRedirect("/timeline");
+            response.sendRedirect("/newsfeed");
             return false;
         }
         return true;

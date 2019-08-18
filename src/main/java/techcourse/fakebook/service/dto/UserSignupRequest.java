@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@EqualFields(baseField = "password", matchField = "reconfirmPassword")
+//@EqualFields(baseField = "password", matchField = "reconfirmPassword")
 public class UserSignupRequest {
     @NotBlank(message = "* 이메일을 작성해주세요!")
     @Email(message = "* 이메일 양식을 지켜주세요!")

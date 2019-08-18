@@ -29,7 +29,6 @@ public class ControllerTestHelper {
                 "성",
                 "이름",
                 "Password!1",
-                "Password!1",
                 "gender",
                 "birth");
 
@@ -42,7 +41,6 @@ public class ControllerTestHelper {
         return webTestClient.post().uri("/users")
                 .body(BodyInserters.fromFormData("email", userSignupRequest.getEmail())
                         .with("password", userSignupRequest.getPassword())
-                        .with("reconfirmPassword", userSignupRequest.getReconfirmPassword())
                         .with("lastName", userSignupRequest.getLastName())
                         .with("firstName", userSignupRequest.getFirstName())
                         .with("gender", userSignupRequest.getGender())

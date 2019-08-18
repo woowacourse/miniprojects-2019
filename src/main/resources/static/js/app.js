@@ -228,7 +228,7 @@ const App = (() => {
       if (content.length != 0 && (event.keyCode === ENTER || event.which === ENTER || event.key === ENTER)) {
         try {
           textbox.value = ""
-          const comment = (await axios.post(BASE_URL + "/articles/" + id + "/comments", {
+          const comment = (await axios.post(BASE_URL + "/api/articles/" + id + "/comments", {
             "content": content
           })).data
           document.getElementById("comments-" + id).insertAdjacentHTML(
@@ -246,7 +246,7 @@ const App = (() => {
 
     const remove = async id => {
       try {
-        await axios.delete(BASE_URL + "/comments/" + id)
+        await axios.delete(BASE_URL + "/api/comments/" + id)
         document.getElementById("comments-" + id).remove()
       } catch (e) {}
     }

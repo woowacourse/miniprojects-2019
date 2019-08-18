@@ -34,7 +34,7 @@ class UserWebControllerTest extends ControllerTestHelper {
                         .with("gender", otherUserSignupRequest.getGender())
                         .with("birth", otherUserSignupRequest.getBirth())
                 )
-                .exchange().expectHeader().valueMatches("location", ".*/timeline");
+                .exchange().expectHeader().valueMatches("location", ".*/newsfeed");
     }
 
     @Test

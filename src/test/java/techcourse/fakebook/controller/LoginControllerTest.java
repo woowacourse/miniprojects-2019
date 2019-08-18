@@ -33,7 +33,7 @@ class LoginControllerTest extends ControllerTestHelper {
                 )
                 .exchange()
                 .expectStatus()
-                .isFound().expectHeader().valueMatches("location", ".*/timeline");
+                .isFound().expectHeader().valueMatches("location", ".*/newsfeed");
     }
 
     @Test
