@@ -1,6 +1,6 @@
 package com.woowacourse.sunbook.presentation;
 
-import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
+import com.woowacourse.sunbook.application.user.dto.UserRequestDto;
 import com.woowacourse.sunbook.domain.user.UserEmail;
 import com.woowacourse.sunbook.domain.user.UserName;
 import com.woowacourse.sunbook.domain.user.UserPassword;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-class LoginControllerTest extends TestTemplate {
+class LoginApiControllerTest extends TestTemplate {
     private static final String USER_EMAIL = "ddu0422@naver.com";
     private static final String NEW_USER_EMAIL = "ddu0422@gmail.com";
     private static final String USER_NAME = "mir";

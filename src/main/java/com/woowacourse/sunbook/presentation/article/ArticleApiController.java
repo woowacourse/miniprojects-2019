@@ -1,7 +1,7 @@
-package com.woowacourse.sunbook.presentation;
+package com.woowacourse.sunbook.presentation.article;
 
-import com.woowacourse.sunbook.application.ArticleService;
-import com.woowacourse.sunbook.application.dto.article.ArticleResponseDto;
+import com.woowacourse.sunbook.application.article.ArticleService;
+import com.woowacourse.sunbook.application.article.dto.ArticleResponseDto;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,11 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/articles")
-public class ArticleController {
+public class ArticleApiController {
     private final ArticleService articleService;
 
     @Autowired
-    public ArticleController(ArticleService articleService) {
+    public ArticleApiController(ArticleService articleService) {
         this.articleService = articleService;
     }
 

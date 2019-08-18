@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.application.dto.user;
+package com.woowacourse.sunbook.application.user.dto;
 
 import com.woowacourse.sunbook.domain.user.UserEmail;
 import com.woowacourse.sunbook.domain.user.UserName;

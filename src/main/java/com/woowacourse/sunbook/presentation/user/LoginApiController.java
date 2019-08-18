@@ -1,8 +1,8 @@
-package com.woowacourse.sunbook.presentation;
+package com.woowacourse.sunbook.presentation.user;
 
-import com.woowacourse.sunbook.application.LoginService;
-import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
-import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
+import com.woowacourse.sunbook.application.user.LoginService;
+import com.woowacourse.sunbook.application.user.dto.UserRequestDto;
+import com.woowacourse.sunbook.application.user.dto.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api")
-public class LoginController {
+public class LoginApiController {
     private final LoginService loginService;
 
     @Autowired
-    public LoginController(final LoginService loginService) {
+    public LoginApiController(final LoginService loginService) {
         this.loginService = loginService;
     }
 

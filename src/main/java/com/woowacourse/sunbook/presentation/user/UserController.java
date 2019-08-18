@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.presentation;
+package com.woowacourse.sunbook.presentation.user;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

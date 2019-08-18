@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.application.dto.article;
+package com.woowacourse.sunbook.application.article.dto;
 
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import lombok.Getter;
