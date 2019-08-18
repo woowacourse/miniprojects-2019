@@ -1,7 +1,7 @@
 package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
-import com.woowacourse.dsgram.domain.ArticleRepositoy;
+import com.woowacourse.dsgram.domain.ArticleRepository;
 import com.woowacourse.dsgram.service.exception.JpaException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class ArticleApiServiceTest {
     private ArticleApiService articleApiService;
 
     @Mock
-    ArticleRepositoy articleRepositoy;
+    ArticleRepository articleRepository;
 
 
     @BeforeEach
@@ -37,11 +37,11 @@ public class ArticleApiServiceTest {
 
     @Test
     void 게시글_생성_성공() {
-        given(articleRepositoy.save(article)).willReturn(article);
+        given(articleRepository.save(article)).willReturn(article);
 
         articleApiService.create(article);
 
-        verify(articleRepositoy).save(article);
+        verify(articleRepository).save(article);
     }
 
     @Test
@@ -51,9 +51,9 @@ public class ArticleApiServiceTest {
 
     @Test
     void 게시글_조회_성공() {
-        given(articleRepositoy.findById(any())).willReturn(Optional.of(article));
+        given(articleRepository.findById(any())).willReturn(Optional.of(article));
         articleApiService.findById(1L);
-        verify(articleRepositoy).findById(anyLong());
+        verify(articleRepository).findById(anyLong());
     }
 
     @Test
