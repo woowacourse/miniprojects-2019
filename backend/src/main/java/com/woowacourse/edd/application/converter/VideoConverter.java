@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;
 
-@Component
 public class VideoConverter {
 
     public Video toEntity(VideoSaveRequestDto requestDto) {

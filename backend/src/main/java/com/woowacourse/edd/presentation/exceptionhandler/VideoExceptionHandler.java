@@ -12,7 +12,7 @@ public class VideoExceptionHandler {
     @ResponseBody
     @ExceptionHandler(ErrorResponseException.class)
     public ResponseEntity<ErrorResponse> handleErrorResponse(ErrorResponseException e) {
-        return ResponseEntity.badRequest()
+        return ResponseEntity.status(e.getStatus())
             .body(new ErrorResponse("FAIL", e.getMessage()));
     }
 }

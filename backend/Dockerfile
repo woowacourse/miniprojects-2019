@@ -9,7 +9,6 @@ WORKDIR /usr/src/app/build
 RUN ./gradlew --parallel build
 RUN mv ./build/libs/$JAR_NAME /usr/src/app
 RUN mv ./docker-entrypoint.sh /usr/src/app
-RUN mv ./src/main/resources/application-production.yml /usr/src/app/application.yml
 
 WORKDIR /usr/src/app
 RUN rm -rf build

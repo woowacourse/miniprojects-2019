@@ -125,7 +125,7 @@ public class VideoControllerTests extends EddApplicationTests {
     void find_video_by_id_not_found() {
         webTestClient.get().uri("/v1/videos/100")
             .exchange()
-            .expectStatus().isBadRequest()
+            .expectStatus().isNotFound()
             .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
             .expectBody()
             .jsonPath("$.result").isEqualTo("FAIL")

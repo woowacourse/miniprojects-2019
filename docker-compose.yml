@@ -15,6 +15,7 @@ services:
     container_name: app-db
     volumes:
       - ./db_data:/var/lib/mysql
+      - ./scripts/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     environment:
       - MYSQL_ROOT_PASSWORD=p@ssW0rd
       - MYSQL_DATABASE=wootube

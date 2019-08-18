@@ -5,4 +5,4 @@ while ! nc -z db 3306; do
     sleep 5
 done
 
-java -jar $JAR_NAME
+java -jar -Dspring.profiles.active=production $JAR_NAME

@@ -12,22 +12,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
 @Service
+@Transactional
 public class VideoService {
 
     private static final String CREATE_DATE = "createDate";
     private final VideoRepository videoRepository;
-    private final VideoConverter videoConverter;
+
+    private final VideoConverter videoConverter = new VideoConverter();
 
     @Autowired
-    public VideoService(VideoRepository videoRepository, VideoConverter videoConverter) {
+    public VideoService(VideoRepository videoRepository) {
         this.videoRepository = videoRepository;
-        this.videoConverter = videoConverter;
     }
 
     public VideoResponse save(VideoSaveRequestDto requestDto) {
@@ -36,6 +38,7 @@ public class VideoService {
         return videoConverter.toResponse(video);
     }
 
+    @Transactional(readOnly = true)
     public List<VideoPreviewResponse> findVideosByDate(int page, int limit) {
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(CREATE_DATE).descending());
         Page<Video> foundVideos = videoRepository.findAll(pageRequest);
@@ -45,11 +48,13 @@ public class VideoService {
             .collect(toList());
     }
 
+    @Transactional(readOnly = true)
     public VideoResponse find(long id) {
         Video video = findById(id);
         return videoConverter.toResponse(video);
     }
 
+    @Transactional(readOnly = true)
     private Video findById(long id) {
         return videoRepository.findById(id).orElseThrow(VideoNotFoundException::new);
     }
