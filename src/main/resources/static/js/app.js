@@ -1,7 +1,6 @@
 const App = (() => {
   "use strict"
-
-  const BASE_URL = "http://localhost:8080"
+  const BASE_URL = `http://${window.location.host}`
   const ARTICLE_TEMPLATE_HTML =
     '<div id="article-{{id}}" class="card widget-feed padding-15">' +
       '<div class="feed-header">' +
