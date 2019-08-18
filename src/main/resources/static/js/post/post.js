@@ -67,7 +67,6 @@ const createPostDOM = (post) => {
     return div
 }
 
-window.onload = initLoad
 document.addEventListener('scroll', infinityScroll);
 
 const postOperateButton = (function () {
@@ -178,3 +177,4 @@ const postOperateButton = (function () {
 })();
 
 postOperateButton.init();
+initLoad();
