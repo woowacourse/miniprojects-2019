@@ -2,19 +2,19 @@ const Article = (function () {
     const ArticleController = function () {
         const articleService = new ArticleService();
         const modalButton = () => {
-            const button = document.querySelector('#modal-btn');
+            const button = document.querySelector('.modal-btn');
             button.addEventListener('click', articleService.modalActive);
         }
         const modifyFormButton = () => {
-            const button = document.querySelector("#create-modify-btn")
+            const button = document.querySelector(".create-modify-btn")
             button.addEventListener('click', articleService.createModifyInput);
         }
         const modifyButton = () => {
-            const button = document.querySelector("#contents-modify-btn");
+            const button = document.querySelector(".contents-modify-btn");
             button.addEventListener('click', articleService.modify);
         }
         const removeButton = () => {
-            const button = document.querySelector("#contents-remove-btn");
+            const button = document.querySelector(".contents-remove-btn");
             button.addEventListener('click', articleService.remove);
         }
         const initContent = () => {
@@ -33,38 +33,47 @@ const Article = (function () {
     }
 
     const ArticleService = function () {
-        const loadContent = () =>
-            request.get('/api/articles/' + articleId)
-                .then(response => {
-                    console.log(response);
-                    document.getElementById("pic").src =  response.data.imageUrl;
-                    document.getElementById("contents-para").innerText = response.data.contents;
-                })
+        const request = new Request("/api/articles");
 
+        const loadContent = () =>
+            request.get("/"+ articleId,
+                (status,data) => {
+                    document.getElementById("pic").src =  data.imageUrl;
+                    document.querySelector(".contents-para").innerText = data.contents;
+                })
         const modalActive = () => {
             modal.active()
         }
         const createModifyInput = () => {
-            document.getElementById("contents-para").classList.add("pace-inactive");
-            document.getElementById("contents-input").classList.remove("pace-inactive");
-            document.getElementById("contents-modify-btn").classList.remove("pace-inactive");
+            DomUtil.inactive(".contents-para")
+            DomUtil.active(".contents-input")
+            DomUtil.active(".contents-modify-btn")
             modal.inactive();
         }
 
         const modify = () => {
-            let contents = document.getElementById("contents-input").value;
-            request.put('/api/articles', {
+            let contents = document.querySelector(".contents-input").value;
+            request.put('/', {
                 id: articleId,
                 contents: contents
-            }).then(() => {
-                document.getElementById("contents-para").classList.remove("pace-inactive");
-                document.getElementById("contents-input").classList.add("pace-inactive");
-                document.getElementById("contents-modify-btn").classList.add("pace-inactive");
-                document.getElementById("contents-para").innerText = contents;
+            },(status, data)=>{
+                DomUtil.active(".contents-para")
+                DomUtil.inactive(".contents-input");
+                DomUtil.inactive(".contents-modify-btn");
+                document.querySelector(".contents-para").innerText = contents;
             })
         }
-        const remove = () => {
-            request.delete('/articles/' + articleId);
+        const remove    = () => {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = '/articles/'+ articleId;
+            const deleteMethod = document.createElement('input');
+            deleteMethod.name = '_method';
+            deleteMethod.value = 'delete';
+            document.body.appendChild(form);
+            form.appendChild(deleteMethod);
+            form.style.display = "none";
+            form.submit();
         }
 
         return {

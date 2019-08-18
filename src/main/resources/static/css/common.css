@@ -33,6 +33,13 @@ header ul.nav-right li, header ul.nav-left li {
     height: 76px;
 }
 
+.active{
+     display:block !important;
+}
+.inactive{
+    display:none  !important;
+}
+
 .add-comment textarea::placeholder {
     color: #666;
 }
