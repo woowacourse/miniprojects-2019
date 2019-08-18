@@ -33,7 +33,7 @@ public class ArticleApiController {
         return new Article(articleRequest.getContents(), fileInfo.getFileName(), fileInfo.getFilePath());
     }
 
-    @GetMapping("/file")
+    @GetMapping("{articleId}/file")
     public ResponseEntity<byte[]> showArticleFile(@PathVariable long articleId) {
         Article article = articleApiService.findById(articleId);
         byte[] base64 = fileService.readFile(article);
