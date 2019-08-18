@@ -59,7 +59,7 @@ class UserApiControllerTest extends AbstractControllerTest {
                 .password("tjdhtkd12!")
                 .build();
 
-        checkExceptionMessage(defaultSignUp(anotherUser, false), "이메일은 필수입니다.");
+        checkExceptionMessage(defaultSignUp(anotherUser, false), "이메일 양식");
     }
 
     @Test
