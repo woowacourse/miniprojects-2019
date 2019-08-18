@@ -64,7 +64,7 @@ public class Comment extends BaseEntity {
             throw new CommentUpdateFailException();
         }
         validateDelete();
-        this.contents = other.getContents();
+        this.contents = other.contents;
     }
 
     public void delete() {
