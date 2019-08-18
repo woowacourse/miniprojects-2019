@@ -3,6 +3,7 @@ package com.woowacourse.edd.presentation.controller;
 import com.woowacourse.edd.EddApplicationTests;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.utils.Utils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.reactive.server.StatusAssertions;
@@ -20,18 +21,22 @@ public class VideoControllerTests extends EddApplicationTests {
     private final String DEFAULT_VIDEO_TITLE = "제목";
     private final String DEFAULT_VIDEO_CONTENTS = "내용";
     private final String VIDEOS_URI = "/v1/videos";
-    private final LocalDateTime localDateTime = LocalDateTime.now();
+    private final LocalDateTime DEFAULT_VIDEO_DATETIME = LocalDateTime.now();
+
+    @BeforeEach
+    void setUp() {
+        save();
+    }
 
     @Test
     void find_video_by_id() {
-        save();
         findVideo("/1").isOk()
             .expectBody()
             .jsonPath("$.id").isNotEmpty()
             .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
             .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
             .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
-            .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(localDateTime));
+            .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(DEFAULT_VIDEO_DATETIME));
     }
 
     @Test
@@ -41,7 +46,18 @@ public class VideoControllerTests extends EddApplicationTests {
 
     @Test
     void find_videos_by_date() {
-        findVideos(0,6,"createDate","DESC").isOk();
+        saveVideo(new VideoSaveRequestDto("111", "tilte1", "contents1"));
+        saveVideo(new VideoSaveRequestDto("222", "tilte2", "contents2"));
+        saveVideo(new VideoSaveRequestDto("333", "tilte3", "contents3"));
+        saveVideo(new VideoSaveRequestDto("444", "tilte4", "contents4"));
+        saveVideo(new VideoSaveRequestDto("555", "tilte5", "contents5"));
+        saveVideo(new VideoSaveRequestDto("666", "tilte6", "contents6"));
+
+        findVideos(0,6,"createDate","DESC").isOk().expectBody()
+            .jsonPath("$.content.length()").isEqualTo(6)
+            .jsonPath("$.content[0].youtubeId").isEqualTo("666")
+            .jsonPath("$.content[3].youtubeId").isEqualTo("333")
+            .jsonPath("$.content[5].youtubeId").isEqualTo("111");
     }
 
     @Test
@@ -49,12 +65,12 @@ public class VideoControllerTests extends EddApplicationTests {
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
         saveVideo(videoSaveRequestDto).isCreated()
-                .expectBody()
-                .jsonPath("$.id").isNotEmpty()
-                .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
-                .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
-                .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
-                .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(localDateTime));
+            .expectBody()
+            .jsonPath("$.id").isNotEmpty()
+            .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
+            .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
+            .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
+            .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(DEFAULT_VIDEO_DATETIME));
     }
 
     @Test

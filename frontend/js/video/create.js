@@ -32,7 +32,7 @@ const videoApp = (function () {
         const saveVideo = function (data) {
             if (data.result) {
                 // error
-                console.log('error');
+                alert(data.message);
                 return false;
             }
 

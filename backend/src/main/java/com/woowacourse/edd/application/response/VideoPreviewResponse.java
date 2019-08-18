@@ -3,10 +3,10 @@ package com.woowacourse.edd.application.response;
 
 public class VideoPreviewResponse {
 
-    private Long id;
-    private String youtubeId;
-    private String title;
-    private String createDate;
+    private final Long id;
+    private final String youtubeId;
+    private final String title;
+    private final String createDate;
 
     public VideoPreviewResponse(Long id, String youtubeId, String title, String createDate) {
         this.id = id;

@@ -5,6 +5,7 @@ import com.woowacourse.edd.application.response.VideoPreviewResponse;
 import com.woowacourse.edd.application.response.VideoResponse;
 import com.woowacourse.edd.application.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +31,13 @@ public class VideoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<VideoPreviewResponse>> findVideos(@RequestParam Pageable pageable) {
+    public ResponseEntity<Page<VideoPreviewResponse>> findVideos(final Pageable pageable) {
         return ResponseEntity.ok(videoService.findByPageRequest(pageable));
     }
 
     @PostMapping
     public ResponseEntity<VideoResponse> saveVideo(@RequestBody VideoSaveRequestDto requestDto) {
         VideoResponse response = videoService.save(requestDto);
-        return ResponseEntity.created(URI.create("/detail.html?id=" + response.getId())).body(response);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
