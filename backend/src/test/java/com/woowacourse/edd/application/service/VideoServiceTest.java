@@ -7,6 +7,7 @@ import com.woowacourse.edd.domain.vo.Contents;
 import com.woowacourse.edd.domain.vo.Title;
 import com.woowacourse.edd.domain.vo.YoutubeId;
 import com.woowacourse.edd.repository.VideoRepository;
+import com.woowacourse.edd.utils.Utils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,14 +45,9 @@ class VideoServiceTest {
 
     @Test
     void save() {
-        VideoResponse videoResponse = new VideoResponse(DEFAULT_VIDEO_ID, "1234", "title", "contents", getFormedDate(DEFAULT_VIDEO_CREATE_DATE));
+        VideoResponse videoResponse = new VideoResponse(DEFAULT_VIDEO_ID, "1234", "title", "contents", Utils.getFormedDate(DEFAULT_VIDEO_CREATE_DATE));
         when(videoRepository.save(any())).thenReturn(video);
 
         assertThat(service.save(new VideoSaveRequestDto("1234", "title", "contents"))).isEqualTo(videoResponse);
-    }
-
-    private String getFormedDate(LocalDateTime date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHH");
-        return date.format(formatter);
     }
 }
