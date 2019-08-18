@@ -74,6 +74,19 @@ public class User {
     public boolean equalsNickName(String nickName) {
         return this.nickName.equals(nickName);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", webSite='" + webSite + '\'' +
+                ", intro='" + intro + '\'' +
+                '}';
+    }
 }
 
 
