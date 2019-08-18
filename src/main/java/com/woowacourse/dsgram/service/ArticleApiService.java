@@ -18,11 +18,7 @@ public class ArticleApiService {
     }
 
     public Article create(Article article) {
-        try {
-            return articleRepositoy.save(article);
-        } catch (DataAccessException exception) {
-            throw new JpaException("게시글 생성에 실패하였습니다.", exception);
-        }
+        return articleRepositoy.save(article);
     }
 
     @Transactional(readOnly = true)
