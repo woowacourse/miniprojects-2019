@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Lob;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,12 +19,15 @@ public class ArticleFeature {
     private static final Pattern URL_PATTERN = Pattern.compile("^(https?):\\/\\/([^:\\/\\s]+)(:([^\\/]*))?((\\/[^\\s/\\/]+)*)?\\/?([^#\\s\\?]*)(\\?([^#\\s]*))?(#(\\w*))?$");
     private static final String EMPTY = "";
 
+    @Lob
     @Column(nullable = false)
     private String contents;
 
+    @Lob
     @Column(nullable = false)
     private String imageUrl;
 
+    @Lob
     @Column(nullable = false)
     private String videoUrl;
 
