@@ -40,16 +40,16 @@ public class Video {
         return id;
     }
 
-    public YoutubeId getYoutubeId() {
-        return youtubeId;
+    public String getYoutubeId() {
+        return youtubeId.getYoutubeId();
     }
 
-    public Title getTitle() {
-        return title;
+    public String getTitle() {
+        return title.getTitle();
     }
 
-    public Contents getContents() {
-        return contents;
+    public String getContents() {
+        return contents.getContents();
     }
 
     public LocalDateTime getCreateDate() {
@@ -59,11 +59,11 @@ public class Video {
     @Override
     public String toString() {
         return "Video{" +
-            "id=" + id +
-            ", youtubeId=" + youtubeId +
-            ", title=" + title +
-            ", contents=" + contents +
-            ", createDate=" + createDate +
-            '}';
+                "id=" + id +
+                ", youtubeId=" + youtubeId +
+                ", title=" + title +
+                ", contents=" + contents +
+                ", createDate=" + createDate +
+                '}';
     }
 }

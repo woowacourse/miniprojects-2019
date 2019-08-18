@@ -1,4 +1,4 @@
-package com.woowacourse.edd.application.dto;
+package com.woowacourse.edd.application.response;
 
 
 public class VideoPreviewResponse {
