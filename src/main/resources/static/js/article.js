@@ -58,10 +58,7 @@ const ArticleApp = (() => {
                 .catch(error => console.log("error: " + error));
         };
 
-        const add = (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-
+        const add = () => {
             const contents = document.getElementById("article-contents");
             const data = {
                 contents: contents.value,
@@ -84,9 +81,6 @@ const ArticleApp = (() => {
         };
 
         const update = (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-
             const target = event.target;
             if (target.closest('li[data-btn="update"]')) {
                 const article = target.closest('div[data-object="article"]');
@@ -95,9 +89,6 @@ const ArticleApp = (() => {
         };
 
         const remove = (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-
             const target = event.target;
             if (target.closest('li[data-btn="delete"]')) {
                 const article = target.closest('div[data-object="article"]');
@@ -110,9 +101,6 @@ const ArticleApp = (() => {
         };
 
         const showModal = (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-
             const target = event.target;
             const article = target.closest('div[data-object="article"]');
             const updateArea = document.getElementById('article-update-contents');
