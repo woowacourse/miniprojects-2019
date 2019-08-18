@@ -61,14 +61,14 @@ class CommentRepositoryTest {
         final Pageable pageable = PageRequest.of(0, size);
 
         // when
-        final Page<Comment> comments = commentRepository.findAllByPostId(post.getId(), pageable);
-        final long expectedSize = comments
+        final Page<Comment> comments = commentRepository.findAllByPostIdAndParentIdIsNull(post.getId(), pageable);
+        final long actualSize = comments
                 .stream()
-                .filter(co -> co.getParent() == null)
+                .filter(co -> !co.getParent().isPresent())
                 .count();
 
         // then
-        assertThat(comments).hasSize((int) expectedSize);
+        assertThat(actualSize).isEqualTo(comments.getTotalElements());
     }
 
     @Test
@@ -79,12 +79,12 @@ class CommentRepositoryTest {
 
         // when
         final Page<Comment> comments = commentRepository.findAllByParentId(comment.getId(), pageable);
-        final long expectedSize = comments
+        final long actualSize = comments
                 .stream()
-                .filter(co -> co.getParent() != null)
+                .filter(co -> co.getParent().isPresent())
                 .count();
 
         // then
-        assertThat(comments).hasSize((int) expectedSize);
+        assertThat(actualSize).isEqualTo(comments.getTotalElements());
     }
 }

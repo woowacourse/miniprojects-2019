@@ -162,14 +162,14 @@ class CommentServiceTest {
         final Page page = mock(Page.class);
         final Pageable pageable = mock(Pageable.class);
 
-        when(commentRepository.findAllByPostId(POST_ID, pageable)).thenReturn(page);
+        when(commentRepository.findAllByPostIdAndParentIdIsNull(POST_ID, pageable)).thenReturn(page);
         when(page.map(any())).thenReturn(page);
 
         // when
         commentService.findCommentResponsesByPostId(POST_ID, pageable);
 
         // then
-        verify(commentRepository).findAllByPostId(POST_ID, pageable);
+        verify(commentRepository).findAllByPostIdAndParentIdIsNull(POST_ID, pageable);
     }
 
     @Test

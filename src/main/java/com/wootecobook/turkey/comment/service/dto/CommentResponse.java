@@ -37,7 +37,7 @@ public class CommentResponse {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .contents(comment.getContents())
-                .parentId(comment.getParentCommentId())
+                .parentId(comment.getParentCommentId().orElse(null))
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();

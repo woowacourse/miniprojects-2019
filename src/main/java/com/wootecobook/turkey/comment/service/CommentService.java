@@ -37,7 +37,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public Page<CommentResponse> findCommentResponsesByPostId(final Long postId, final Pageable pageable) {
-        return commentRepository.findAllByPostId(postId, pageable)
+        return commentRepository.findAllByPostIdAndParentIdIsNull(postId, pageable)
                 .map(CommentResponse::from);
     }
 

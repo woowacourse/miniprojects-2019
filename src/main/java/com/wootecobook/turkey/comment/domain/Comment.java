@@ -13,6 +13,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -64,7 +65,7 @@ public class Comment extends BaseEntity {
             throw new CommentUpdateFailException();
         }
         validateDelete();
-        this.contents = other.getContents();
+        this.contents = other.contents;
     }
 
     public void delete() {
@@ -79,7 +80,14 @@ public class Comment extends BaseEntity {
         }
     }
 
-    public Long getParentCommentId() {
-        return getParent() == null ? null : getParent().getId();
+    public Optional<Comment> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    public Optional<Long> getParentCommentId() {
+        if (parent == null) {
+            return Optional.empty();
+        }
+        return Optional.of(parent.getId());
     }
 }
