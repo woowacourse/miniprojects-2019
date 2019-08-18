@@ -19,8 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -111,23 +110,24 @@ public class UserServiceTest {
 
     @Test
     void 유저_정보_실패_없는_유저() {
-        given(userRepository.findById(any())).willReturn(Optional.empty());
+        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        assertThrows(NotFoundUserException.class, () -> userService.update(any(), userDto, loginUserRequest));
+        assertThrows(NotFoundUserException.class, () -> userService.update(anyLong(), userDto, loginUserRequest));
     }
 
     @Test
     void 남의_정보를_수정() {
-        given(userRepository.findById(any())).willReturn(Optional.of(user));
-        given(userRepository.existsByNickName(any())).willReturn(false);
-        assertThrows(InvalidUserException.class, () -> userService.update(any(), userDto, loginUserRequest));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+        given(userRepository.existsByNickName(anyString())).willReturn(false);
+        assertThrows(InvalidUserException.class, () -> userService.update(anyLong(), userDto, new LoginUserRequest("user@gmail","user","user")));
     }
 
     @Test
     void 유저_수정_실패_닉네임_중복() {
         given(userRepository.findById(any())).willReturn(Optional.of(user));
         given(userRepository.existsByNickName(any())).willReturn(true);
-        assertThrows(InvalidUserException.class, () -> userService.update(any(), userDto, loginUserRequest));
+
+        assertThrows(DuplicatedAttributeException.class, () -> userService.update(anyLong(), userDto, loginUserRequest));
     }
 
 }
