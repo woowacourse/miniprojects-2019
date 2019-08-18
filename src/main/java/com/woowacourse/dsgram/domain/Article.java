@@ -19,7 +19,7 @@ public class Article {
     @Column(nullable = false)
     private String contents;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 240)
     private String fileName;
 
     @Column(nullable = false)
