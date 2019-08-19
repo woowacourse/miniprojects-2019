@@ -27,7 +27,6 @@ public class LoginService {
     public UserResponseDto save(UserRequestDto userRequestDto) {
         checkDuplicateEmail(userRequestDto);
         User user = userRepository.save(modelMapper.map(userRequestDto, User.class));
-
         return modelMapper.map(user, UserResponseDto.class);
     }
 
