@@ -1,0 +1,21 @@
+spring:
+  devtools:
+    livereload:
+      enabled: false
+    restart:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:mysql://db:3306/wootube?characterEncoding=UTF-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: p@ssW0rd
+
+logging.level.org.springframework.boot.autoconfigure: INFO

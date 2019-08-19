@@ -1,0 +1,45 @@
+body, html {
+    background: white;
+    min-height: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+
+.form-wrapper {
+    border: 1px solid #dedce0;
+    margin: 0 auto;
+    width: 450px;
+    padding: 24px 24px;
+    border-radius: 8px;
+}
+
+.form-header {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto 24px;
+}
+
+.form-header h1 {
+    font-size: 24px;
+    margin: 12px 0;
+    text-align: center;
+}
+
+.form-header img {
+    width: 126px;
+    height: auto;
+}
+
+.form-wrapper input {
+    margin: 18px auto;
+}
+
+.form-wrapper .btn-signin {
+    margin-top: 24px;
+}
