@@ -4,13 +4,14 @@ import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
-import com.wootecobook.turkey.user.service.exception.NotFoundUserException;
 import com.wootecobook.turkey.user.service.exception.SignUpException;
 import com.wootecobook.turkey.user.service.exception.UserDeleteException;
 import com.wootecobook.turkey.user.service.exception.UserMismatchException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import javax.persistence.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -113,12 +114,12 @@ class UserServiceTest {
 
     @Test
     void 없는_유저_id로_조회() {
-        assertThrows(NotFoundUserException.class, () -> userService.findUserResponseById(Long.MAX_VALUE));
+        assertThrows(EntityNotFoundException.class, () -> userService.findUserResponseById(Long.MAX_VALUE));
     }
 
     @Test
     void 없는_유저_email로_조회() {
-        assertThrows(NotFoundUserException.class, () -> userService.findByEmail("invalid@invalid.invalid"));
+        assertThrows(EntityNotFoundException.class, () -> userService.findByEmail("invalid@invalid.invalid"));
     }
 
     @Test

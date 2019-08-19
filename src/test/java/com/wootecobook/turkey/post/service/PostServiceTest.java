@@ -5,7 +5,6 @@ import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostRepository;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
-import com.wootecobook.turkey.post.service.exception.NotFoundPostException;
 import com.wootecobook.turkey.post.service.exception.NotPostOwnerException;
 import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.domain.UserRepository;
@@ -18,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -73,7 +73,7 @@ class PostServiceTest {
 
     @Test
     void 존재하지_않는_post_조회_예외_테스트() {
-        assertThrows(NotFoundPostException.class, () -> postService.findById(NOT_FOUND_POST_ID));
+        assertThrows(EntityNotFoundException.class, () -> postService.findById(NOT_FOUND_POST_ID));
     }
 
     @Test
@@ -108,7 +108,7 @@ class PostServiceTest {
 
     @Test
     void 없는_게시글_수정_예외_테스트() {
-        assertThrows(NotFoundPostException.class, () ->
+        assertThrows(EntityNotFoundException.class, () ->
                 postService.update(postRequest, NOT_FOUND_POST_ID, author.getId()));
     }
 
@@ -129,7 +129,7 @@ class PostServiceTest {
 
     @Test
     void 없는_post_삭제_예외_테스트() {
-        assertThrows(NotFoundPostException.class, () -> postService.delete(NOT_FOUND_POST_ID, author.getId()));
+        assertThrows(EntityNotFoundException.class, () -> postService.delete(NOT_FOUND_POST_ID, author.getId()));
     }
 
     @Test

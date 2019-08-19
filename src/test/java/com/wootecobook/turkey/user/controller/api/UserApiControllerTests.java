@@ -2,6 +2,7 @@ package com.wootecobook.turkey.user.controller.api;
 
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.user.controller.BaseControllerTests;
+import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static com.wootecobook.turkey.user.domain.UserValidator.*;
-import static com.wootecobook.turkey.user.service.exception.NotFoundUserException.NOT_FOUND_USER_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.UserMismatchException.USER_MISMATCH_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -187,7 +187,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getMessage()).isEqualTo(NOT_FOUND_USER_MESSAGE);
+        assertThat(errorMessage.getMessage()).isEqualTo(UserService.NOT_FOUND_MESSAGE);
     }
 
 

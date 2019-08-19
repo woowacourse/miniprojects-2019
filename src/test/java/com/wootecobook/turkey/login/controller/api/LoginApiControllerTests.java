@@ -3,6 +3,7 @@ package com.wootecobook.turkey.login.controller.api;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
 import com.wootecobook.turkey.user.controller.BaseControllerTests;
+import com.wootecobook.turkey.user.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import reactor.core.publisher.Mono;
 
 import static com.wootecobook.turkey.login.service.exception.LoginFailException.LOGIN_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.domain.User.INVALID_PASSWORD_MESSAGE;
-import static com.wootecobook.turkey.user.service.exception.NotFoundUserException.NOT_FOUND_USER_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -65,7 +65,7 @@ class LoginApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(errorMessage.getMessage()).contains(LOGIN_FAIL_MESSAGE, NOT_FOUND_USER_MESSAGE);
+        assertThat(errorMessage.getMessage()).contains(LOGIN_FAIL_MESSAGE, UserService.NOT_FOUND_MESSAGE);
     }
 
     @Test

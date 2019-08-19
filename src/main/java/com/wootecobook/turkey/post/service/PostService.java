@@ -5,7 +5,6 @@ import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostRepository;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
-import com.wootecobook.turkey.post.service.exception.NotFoundPostException;
 import com.wootecobook.turkey.post.service.exception.NotPostOwnerException;
 import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.service.UserService;
@@ -14,10 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @Transactional
 public class PostService {
 
+    private static final String NOT_FOUND_MESSAGE = "존재하지 않는 게시글입니다.";
+    
     private final PostRepository postRepository;
     private final UserService userService;
 
@@ -36,7 +39,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public Post findById(Long id) {
         return postRepository.findById(id)
-                .orElseThrow(NotFoundPostException::new);
+                .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
     }
 
     @Transactional(readOnly = true)

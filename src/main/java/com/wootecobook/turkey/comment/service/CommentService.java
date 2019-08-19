@@ -5,7 +5,6 @@ import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
-import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
 import com.wootecobook.turkey.comment.service.exception.CommentSaveException;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.service.PostService;
@@ -16,9 +15,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @Transactional
 public class CommentService {
+
+    private static final String NOT_FOUND_MESSAGE = "해당 댓글을 찾을 수 없습니다.";
 
     private final PostService postService;
     private final UserService userService;
@@ -32,7 +35,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public Comment findById(final Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
+        return commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
     }
 
     @Transactional(readOnly = true)

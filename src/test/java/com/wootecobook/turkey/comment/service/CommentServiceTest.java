@@ -6,7 +6,6 @@ import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
-import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.service.PostService;
@@ -21,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -149,10 +149,10 @@ class CommentServiceTest {
     void 존재하지_않는_댓글_조회_예외처리() {
         // given
         final Long commentId = 2101725L;
-        when(commentRepository.findById(commentId)).thenThrow(CommentNotFoundException.class);
+        when(commentRepository.findById(commentId)).thenThrow(EntityNotFoundException.class);
 
         // when & then
-        assertThrows(CommentNotFoundException.class, () -> commentService.findById(commentId));
+        assertThrows(EntityNotFoundException.class, () -> commentService.findById(commentId));
         verify(commentRepository).findById(commentId);
     }
 
