@@ -12,7 +12,10 @@ class UserControllerTest extends AbstractControllerTests {
     private static final String TEST_EMAIL = "a@naver.com";
     private static final String TEST_EMAIL2 = "test2@test.com";
     private static final String TEST_PASSWORD = "Aa1234!!";
-    private static final String BAD_PASSWROD = "abc";
+    private static final String BAD_PASSWORD = "abc";
+
+    @Autowired
+    private WebTestClient webTestClient;
 
     @BeforeEach
     void setUp() {
