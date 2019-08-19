@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>SunBook</title>
+    <meta charset="UTF-8">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+<div id="navwrapper">
+    <div id="navbar">
+        <table class="tablewrapper">
+            <tr>
+                <td class="row1">이메일</td>
+                <td class="row1">비밀번호</td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="login-email" type="email" class="inputtext">
+                </td>
+                <td>
+                    <input id="login-password" type="password" class="inputtext">
+                </td>
+                <td>
+                    <div id="login-btn" class="button">로그인</div>
+                </td>
+            </tr>
+        </table>
+
+        <h1 class="logowrapper">SunBook</h1>
+
+    </div>
+</div>
+
+<div id="contentwrapper">
+    <div id="content">
+
+        <div id="leftbod">
+            <div class="connect bolder">
+                <img src="/images/network.png" alt="network" class="iconwrap"/>
+            </div>
+        </div>
+
+        <div id="rightbod">
+            <div class="signup bolder">Sign Up</div>
+            <div class="free bolder">빠르고 쉽게 사용가능</div>
+
+            <div class="formbox">
+                <input type="text" id="signup-first-name" class="inputbody in1" placeholder="First name">
+                <input type="text" id="signup-last-name" class="inputbody in1 fr" placeholder="Last name">
+            </div>
+            <div class="formbox">
+                <input type="email" id="signup-email" class="inputbody in2" placeholder="Email">
+            </div>
+            <div class="formbox">
+                <input type="password" id="signup-password" class="inputbody in2" placeholder="New password">
+            </div>
+            <div class="formbox">
+                <div class="bday">생년월일</div>
+            </div>
+            <div class="formbox">
+              <span data-type="selectors">
+                <span>
+                  <select title="Year" class="selectbody fl" data-object="select-year">
+                      <option value="0" selected="1">년</option>
+                  </select>
+                  <select title="Month" class="selectbody fl" data-object="select-month">
+                      <option value="0" selected="1">월</option>
+                  </select>
+                  <select title="Day" class="selectbody fl" data-object="select-day">
+                      <option value="0" selected="1">일</option>
+                  </select>
+                </span>
+              </span>
+                <div class="fb1 why h">Why do I need to provide my birthday?</div>
+            </div>
+            <div class="formbox mt1">
+                  <span data-type="radio" class="spanpad">
+                    <input type="radio" id="fem" class="m0">
+                    <label for="fem" class="gender">여
+                    </label>
+                    <input type="radio" id="male" class="m0">
+                    <label for="male" class="gender">남
+                    </label>
+                  </span>
+            </div>
+            <div class="formbox">
+                <div class="agree">
+                    By clicking Sign Up, you agree to our
+                    <div class="link">Terms</div>
+                    and that you have read our
+                    <div class="link">Data Use Policy</div>
+                    , including our
+                    <div class="link">Cookie Use</div>
+                    .
+                </div>
+            </div>
+            <div class="formbox">
+                <button type="button" id="signup-btn" class="signbut bolder">Sign Up</button>
+            </div>
+            <div class="formbox">
+                <div class="create">
+                    <div class="link h">Create a Page</div>
+                    for a celebrity, band or business.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/common-api.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+</body>
+
+</html>
