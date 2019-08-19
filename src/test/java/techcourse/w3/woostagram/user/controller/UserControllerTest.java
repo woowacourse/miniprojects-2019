@@ -14,9 +14,6 @@ class UserControllerTest extends AbstractControllerTests {
     private static final String TEST_PASSWORD = "Aa1234!!";
     private static final String BAD_PASSWORD = "abc";
 
-    @Autowired
-    private WebTestClient webTestClient;
-
     @BeforeEach
     void setUp() {
         loginRequest(TEST_EMAIL, TEST_PASSWORD);
@@ -61,7 +58,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void create_mismatch_isFail() {
-        assertThat(postFormRequest("/users/signup", UserDto.class, TEST_EMAIL2, BAD_PASSWROD)
+        assertThat(postFormRequest("/users/signup", UserDto.class, TEST_EMAIL2, BAD_PASSWORD)
                 .getStatus()
                 .is3xxRedirection()).isTrue();
     }
