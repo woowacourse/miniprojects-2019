@@ -3,6 +3,7 @@ package techcourse.w3.woostagram.article.domain;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import techcourse.w3.woostagram.common.support.AuditLog;
 import techcourse.w3.woostagram.user.domain.User;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @EqualsAndHashCode(of = "id")
 @ToString
-public class Article {
+public class Article extends AuditLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

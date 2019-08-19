@@ -12,6 +12,8 @@ import techcourse.w3.woostagram.user.support.LoggedInUser;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import static techcourse.w3.woostagram.user.support.UserEmailArgumentResolver.LOGGED_IN_USER_SESSION_KEY;
+
 @Controller
 @RequestMapping("users")
 public class UserController {
@@ -29,7 +31,7 @@ public class UserController {
     @PostMapping("login")
     public String login(UserDto userDto, HttpSession httpSession) {
         String email = userService.authUser(userDto);
-        httpSession.setAttribute("email", email);
+        httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, email);
         return "redirect:/";
     }
 
