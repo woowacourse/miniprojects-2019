@@ -157,6 +157,7 @@ class UserApiControllerTests extends BaseControllerTests {
 
         UserResponse userResponse = webTestClient.get()
                 .uri(USER_API_URI_WITH_SLASH + id)
+                .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -171,8 +172,14 @@ class UserApiControllerTests extends BaseControllerTests {
 
     @Test
     void 없는_유저_조회() {
+        String email = "nonUser@delete.del";
+        String name = "nonUser";
+
+        addUser(name, email, VALID_USER_PASSWORD);
+
         ErrorMessage errorMessage = webTestClient.get()
                 .uri(USER_API_URI_WITH_SLASH + Long.MAX_VALUE)
+                .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)

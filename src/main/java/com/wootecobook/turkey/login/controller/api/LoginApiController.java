@@ -1,6 +1,5 @@
 package com.wootecobook.turkey.login.controller.api;
 
-import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.login.service.LoginService;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class LoginApiController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(UserSession userSession, HttpSession httpSession) {
+    public ResponseEntity logout(HttpSession httpSession) {
         httpSession.removeAttribute(USER_SESSION_KEY);
         return ResponseEntity.ok().build();
     }

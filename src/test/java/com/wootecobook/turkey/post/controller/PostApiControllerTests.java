@@ -70,6 +70,7 @@ class PostApiControllerTests extends BaseControllerTests {
     @Test
     void 페이지_조회_정상_로직_테스트() {
         webTestClient.get().uri(POST_URL)
+                .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isOk();
     }
