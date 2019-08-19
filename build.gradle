@@ -57,6 +57,10 @@ dependencies {
 
     // Util
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
+    // aws
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
+    implementation 'com.amazonaws:aws-java-sdk-s3'
 }
 
 test {
