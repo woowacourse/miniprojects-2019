@@ -6,7 +6,6 @@ import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
-import techcourse.w3.woostagram.common.service.AwsS3Service;
 import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.service.UserService;

@@ -1,8 +1,6 @@
 package techcourse.w3.woostagram;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -17,25 +15,17 @@ import java.net.URL;
 public class AwsTest {
     private AmazonS3 s3;
     private String bucketName;
-    private String accessKey;
-    private String secretKey;
     private String fileName;
     private String fileContent;
 
     @BeforeEach
     void setUp() {
         bucketName = "woowahan-crews";
-        accessKey = "AKIA4IVPY73FVPHOTMEH";
-        secretKey = "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";
         fileName = "moomin.png";
         fileContent = "moomin";
 
         s3 = AmazonS3ClientBuilder
             .standard()
-            .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(
-                    accessKey,
-                    secretKey
-            )))
             .withRegion(Regions.AP_NORTHEAST_2)
             .build();
     }

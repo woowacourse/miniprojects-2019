@@ -1,8 +1,6 @@
 package techcourse.w3.woostagram.common.service;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -22,8 +20,6 @@ import java.util.UUID;
 @Service
 public class AwsS3Service implements StorageService {
     private static final String AWS_S3_URL = "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com";
-    private static final String ACCESS_KEY = "AKIA4IVPY73FVPHOTMEH";
-    private static final String SECRET_KEY = "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";
     private static final String BUCKET_NAME = "woowahan-crews";
     private static final List<String> VALID_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
     private static final String PATH_DELIMITER = ".";
@@ -32,10 +28,6 @@ public class AwsS3Service implements StorageService {
     public AwsS3Service() {
         this.s3 = AmazonS3ClientBuilder
             .standard()
-            .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(
-                    ACCESS_KEY,
-                    SECRET_KEY
-            )))
             .withRegion(Regions.AP_NORTHEAST_2)
             .build();
     }
