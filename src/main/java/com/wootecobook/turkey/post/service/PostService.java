@@ -20,7 +20,7 @@ import javax.persistence.EntityNotFoundException;
 public class PostService {
 
     private static final String NOT_FOUND_MESSAGE = "존재하지 않는 게시글입니다.";
-    
+
     private final PostRepository postRepository;
     private final UserService userService;
 
