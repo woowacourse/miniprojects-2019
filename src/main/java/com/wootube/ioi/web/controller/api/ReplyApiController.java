@@ -1,19 +1,13 @@
 package com.wootube.ioi.web.controller.api;
 
+import java.net.URI;
+
 import com.wootube.ioi.service.ReplyService;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
 import com.wootube.ioi.service.dto.ReplyResponseDto;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/videos/{videoId}/comments/{commentId}")
 @RestController
