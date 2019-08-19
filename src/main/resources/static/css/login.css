@@ -1,0 +1,90 @@
+.con{
+    flex-direction: row;
+}
+.screen-fade-in{
+-webkit-transition: opacity 1.5s ease-in;
+transition: opacity 1.5s ease-in;
+z-index: 2;
+}
+
+.screen-visible{
+    opacity: 1;
+    visibility: visible;
+}
+
+.screen{
+    height: 427px;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    visibility: hidden;
+    width: 240px;
+}
+
+.phone-con{
+    height:618px;
+    align-self: center;
+    background-image: url("/images/login/phone.png");
+    background-position: 0 0;
+    background-size: 454px 618px;
+    -webkit-flex-basis: 454px;
+    -ms-flex-preferred-sizes: 454px;
+    flex-basis: 454px;
+    height: 618px;
+    margin-left: -35px;
+    margin-right: -15px;
+}
+
+.phone-body{
+    margin: 99px 0 0 151px;
+}
+
+.logo-con{
+    align-items: center;
+}
+
+.login-form-card{
+    min-width:350px;
+    position: relative;
+    background-color: #fff;
+    margin-bottom: 10px;
+    border: 1px solid #e6ecf5;
+    border-radius: 1px;
+    transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+}
+
+.login-btn-con{
+    margin-top:30px;
+}
+.login-btn{
+    width:100%;
+    height:30px;
+    background-color: #3897f0;
+    border: 1px solid #3897f0;
+    border-radius: 4px;
+    color: #fff;
+    position: relative;
+    font-weight:600;
+    font-size:14px;
+}
+.login-btn:hover{
+    background-color: #3897f0;
+}
+
+.login-body{
+    border-radius: 1px;
+}
+
+.login-form input{
+    font-size:12px;
+    height:36px;
+}
+.download-con{
+    padding-top:10px;
+}
+.download-con img{
+    display:inline;
+    width:136px;
+}

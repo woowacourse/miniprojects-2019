@@ -1,0 +1,31 @@
+.header {
+    background-color: white;
+    padding: 0 16px;
+    height: 76px;
+    top: 0px;
+}
+
+.logo {
+    width: 170px;
+    height: auto;
+    line-height: 76px;
+    position: relative;
+}
+
+.user-profile {
+    height: 43px;
+}
+
+.profile-img {
+    width: 24px;
+    height: 24px;
+}
+
+.new-article a{
+    line-height:40px !important;
+    margin-left:-1px;
+}
+.new-article img{
+    width:30px;
+
+}

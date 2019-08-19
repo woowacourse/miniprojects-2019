@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <th:block th:replace="fragments/common-head :: common-head"></th:block>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<div class="authentication">
+    <div class="sign-in-2">
+        <div class="container-fluid no-pdd-horizon">
+            <div class="row">
+                <div class="col-md-10 mr-auto ml-auto">
+                    <div class="row">
+                        <div class="mr-auto ml-auto full-height height-100 d-flex align-items-center">
+                            <div class="con center-flex full-height">
+
+                                <div class="phone-con common-flex">
+                                    <div class="phone-body">
+                                        <img class="" src="/images/login/screen0.jpg">
+                                    </div>
+                                </div>
+
+                                <div class="login-form-con">
+                                    <div class="login-form-card min-widtt-">
+                                        <div class="card-body">
+                                            <div class="pdd-horizon-20 pdd-vertical-20">
+                                                <div class=" logo-con common-flex mrg-btm-30">
+                                                    <img class="logo" src="/images/logo/instagram_logo_text.png">
+                                                </div>
+                                                <form class="login-form" action="/users/login" method="post">
+                                                    <div class="form-group">
+                                                        <label class="text-normal text-dark">Email Address</label>
+                                                        <input type="email" name="email" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="text-normal text-dark">Password</label>
+                                                        <input type="password" name="password" class="form-control"
+                                                               placeholder="Password" required>
+                                                    </div>
+                                                    <div th:if="${error}" th:text="${message}"
+                                                         class="alert alert-danger" role="alert"></div>
+                                                    <div class="login-btn-con common-flex form-group">
+                                                        <div class="login-btn-inner">
+                                                            <button type="submit"
+                                                                    class="login-btn ">
+                                                                로그인
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="sign-con login-form-card text-center">
+                                        <div class="pdd-horizon-20 pdd-vertical-20">
+                                        <div class="text-dark font-size-14">
+                                            <span>계정이 없으신가요? </span>
+                                            <a href="/users/signup/form" class=" text-bold text-info pointer">가입하기</a>
+                                        </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="download-con text-center">
+                                        <div class="text-dark">
+                                            <p>앱을 다운로드 하세요 </p>
+                                            <img src="/images/login/apple.png">
+                                            <img src="/images/login/google.png">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+        integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+<script src = "/js/screenSlide.js"></script>
+</body>
+</html>

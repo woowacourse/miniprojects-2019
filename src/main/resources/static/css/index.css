@@ -1,0 +1,22 @@
+.add-comment textarea::placeholder {
+    color: #666;
+}
+
+.mini-profile-img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.activated-heart {
+    color:#ed4956;
+}
+
+.hashtag {
+    color: #003569;
+}
+
+.search-input .advanced-search .search-wrapper .search-result-item {
+    height: 40px;
+}
+
