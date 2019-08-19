@@ -1,11 +1,11 @@
 const modal = {
     inactive() {
         const modalContainer = document.querySelector('.modal');
-        modalContainer.classList.add('pace-inactive');
+        modalContainer.classList.add('inactive');
     },
     active() {
         const modalContainer = document.querySelector('.modal');
-        modalContainer.classList.remove('pace-inactive')
+        modalContainer.classList.remove('inactive')
     }
 }
 

@@ -1,22 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <th:block th:replace = "common-head :: common-head"></th:block>
+    <th:block th:replace="fragments/common-head :: common-head"></th:block>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-<header id="header" class="header navbar">
-    <div class="header-container max-width-lg mx-auto">
-        <ul class="nav-left mrg-left-0 padding-15">
-            <li>
-                <img class="logo desktop-view" src="/images/logo/instgram_logo.png">
-                <div class="width-40px mobile-view overflow-hidden">
-                    <img class="logo" src="/images/logo/instgram_logo.png">
-                </div>
-            </li>
-        </ul>
-    </div>
-</header>
-
 <div class="authentication">
     <div class="sign-in-2">
         <div class="container-fluid no-pdd-horizon">
@@ -24,16 +12,22 @@
                 <div class="col-md-10 mr-auto ml-auto">
                     <div class="row">
                         <div class="mr-auto ml-auto full-height height-100 d-flex align-items-center">
-                            <div class="vertical-align full-height">
-                                <div class="table-cell">
-                                    <div class="card min-width-480px">
+                            <div class="con center-flex full-height">
+
+                                <div class="phone-con common-flex">
+                                    <div class="phone-body">
+                                        <img class="" src="/images/login/screen0.jpg">
+                                    </div>
+                                </div>
+
+                                <div class="login-form-con">
+                                    <div class="login-form-card min-widtt-">
                                         <div class="card-body">
-                                            <div class="pdd-horizon-30 pdd-vertical-30">
-                                                <div class="mrg-btm-30">
-                                                    <h2 class="text-center text-dark no-mrg-vertical mrg-btm-15">
-                                                        로그인</h2>
+                                            <div class="pdd-horizon-20 pdd-vertical-20">
+                                                <div class=" logo-con common-flex mrg-btm-30">
+                                                    <img class="logo" src="/images/logo/instagram_logo_text.png">
                                                 </div>
-                                                <form action="/users/login" method="post">
+                                                <form class="login-form" action="/users/login" method="post">
                                                     <div class="form-group">
                                                         <label class="text-normal text-dark">Email Address</label>
                                                         <input type="email" name="email" class="form-control" required>
@@ -45,17 +39,35 @@
                                                     </div>
                                                     <div th:if="${error}" th:text="${message}"
                                                          class="alert alert-danger" role="alert"></div>
-                                                    <div class="form-group">
-                                                        <button type="submit"
-                                                                class="btn btn-info btn-block border-radius-6 font-size-16 text-white">
-                                                            로그인
-                                                        </button>
+                                                    <div class="login-btn-con common-flex form-group">
+                                                        <div class="login-btn-inner">
+                                                            <button type="submit"
+                                                                    class="login-btn ">
+                                                                로그인
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </form>
-                                                <div class="text-dark">
-                                                    <a href="/users/signup/form" class="text-info pointer mrg-left-5">회원가입</a>
-                                                </div>
                                             </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="sign-con login-form-card text-center">
+                                        <div class="pdd-horizon-20 pdd-vertical-20">
+                                        <div class="text-dark font-size-14">
+                                            <span>계정이 없으신가요? </span>
+                                            <a href="/users/signup/form" class=" text-bold text-info pointer">가입하기</a>
+                                        </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="download-con text-center">
+                                        <div class="text-dark">
+                                            <p>앱을 다운로드 하세요 </p>
+                                            <img src="/images/login/apple.png">
+                                            <img src="/images/login/google.png">
                                         </div>
                                     </div>
                                 </div>
@@ -79,7 +91,6 @@
         integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
-
+<script src = "/js/screenSlide.js"></script>
 </body>
-
 </html>
