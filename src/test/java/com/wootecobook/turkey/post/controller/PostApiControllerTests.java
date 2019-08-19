@@ -1,16 +1,15 @@
 package com.wootecobook.turkey.post.controller;
 
+import com.wootecobook.turkey.commons.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
-import com.wootecobook.turkey.user.controller.BaseControllerTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -39,7 +38,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         PostResponse postResponse = webTestClient.post().uri(POST_URL)
                 .cookie(JSESSIONID, jSessionId)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
                 .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
                 .expectStatus().isCreated()
@@ -56,7 +55,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         ErrorMessage errorMessage = webTestClient.post().uri(POST_URL)
                 .cookie(JSESSIONID, jSessionId)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
                 .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
@@ -83,7 +82,7 @@ class PostApiControllerTests extends BaseControllerTests {
         PostRequest postUpdateRequest = new PostRequest("chelsea");
         PostResponse postResponse = webTestClient.put().uri(POST_URL + "/{postId}", postId)
                 .cookie(JSESSIONID, jSessionId)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
                 .body(Mono.just(postUpdateRequest), PostRequest.class)
                 .exchange()
                 .expectStatus().isOk()
@@ -102,7 +101,7 @@ class PostApiControllerTests extends BaseControllerTests {
         PostRequest postUpdateRequest = new PostRequest("");
         webTestClient.put().uri(POST_URL + "/{postId}", postId)
                 .cookie(JSESSIONID, jSessionId)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
                 .body(Mono.just(postUpdateRequest), PostRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -132,7 +131,7 @@ class PostApiControllerTests extends BaseControllerTests {
     private Long addPost(PostRequest postRequest) {
         PostResponse postResponse = webTestClient.post().uri(POST_URL)
                 .cookie(JSESSIONID, jSessionId)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
                 .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
                 .expectStatus().isCreated()

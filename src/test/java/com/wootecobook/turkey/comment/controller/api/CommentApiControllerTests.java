@@ -4,16 +4,15 @@ import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
+import com.wootecobook.turkey.commons.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
-import com.wootecobook.turkey.user.controller.BaseControllerTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -40,7 +39,7 @@ class CommentApiControllerTests extends BaseControllerTests {
         PostRequest postRequest = new PostRequest("contents");
 
         PostResponse postResponse = webTestClient.post().uri("/api/posts")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
                 .cookie(JSESSIONID, jSessionId)
                 .body(Mono.just(postRequest), PostRequest.class)
                 .exchange()
@@ -70,11 +69,11 @@ class CommentApiControllerTests extends BaseControllerTests {
 
         // when & then
         webTestClient.get().uri(uri + "?size={size}&page={page}", size, page)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MEDIA_TYPE)
                 .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody()
                 .jsonPath("$.size").isEqualTo(size)
                 .jsonPath("$.number").isEqualTo(page)
@@ -89,11 +88,11 @@ class CommentApiControllerTests extends BaseControllerTests {
 
         // when & then
         webTestClient.get().uri(uri + "/{id}/children?size={size}&page={page}", commentId, size, page)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MEDIA_TYPE)
                 .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody()
                 .jsonPath("$.size").isEqualTo(size)
                 .jsonPath("$.number").isEqualTo(page)
@@ -122,7 +121,7 @@ class CommentApiControllerTests extends BaseControllerTests {
                 .body(Mono.just(commentUpdate), CommentUpdate.class)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(CommentResponse.class)
                 .returnResult()
                 .getResponseBody();
@@ -163,12 +162,12 @@ class CommentApiControllerTests extends BaseControllerTests {
 
         // when
         final CommentResponse commentResponse = webTestClient.post().uri(uri)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MEDIA_TYPE)
                 .cookie(JSESSIONID, jSessionId)
                 .body(Mono.just(commentCreate), CommentCreate.class)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectHeader().valueMatches("Location", ".*" + uri)
                 .expectBody(CommentResponse.class)
                 .returnResult()
@@ -181,12 +180,12 @@ class CommentApiControllerTests extends BaseControllerTests {
 
     private Long addComment(CommentCreate commentCreate) {
         final CommentResponse commentResponse = webTestClient.post().uri(uri)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MEDIA_TYPE)
                 .cookie(JSESSIONID, jSessionId)
                 .body(Mono.just(commentCreate), CommentCreate.class)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectHeader().valueMatches("Location", ".*" + uri)
                 .expectBody(CommentResponse.class)
                 .returnResult()

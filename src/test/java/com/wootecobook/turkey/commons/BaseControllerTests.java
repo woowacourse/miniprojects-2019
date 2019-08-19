@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.user.controller;
+package com.wootecobook.turkey.commons;
 
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
@@ -13,6 +13,7 @@ public abstract class BaseControllerTests {
     protected static final String VALID_USER_PASSWORD = "P@ssw0rd";
     protected static final String VALID_USER_EMAIL = "email@gmail.com";
     protected static final String VALID_USER_NAME = "name";
+    protected static final MediaType MEDIA_TYPE = MediaType.APPLICATION_JSON_UTF8;
 
     private static final String USER_API_URI = "/api/users";
     private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
@@ -29,8 +30,8 @@ public abstract class BaseControllerTests {
 
         UserResponse result = webTestClient.post()
                 .uri(USER_API_URI)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectBody(UserResponse.class)
@@ -54,8 +55,8 @@ public abstract class BaseControllerTests {
                 .build();
 
         return webTestClient.post().uri("/login")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(loginRequest), LoginRequest.class)
                 .exchange()
                 .returnResult(String.class)

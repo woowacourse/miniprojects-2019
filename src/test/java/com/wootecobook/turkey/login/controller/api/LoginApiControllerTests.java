@@ -1,15 +1,14 @@
 package com.wootecobook.turkey.login.controller.api;
 
+import com.wootecobook.turkey.commons.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
-import com.wootecobook.turkey.user.controller.BaseControllerTests;
 import com.wootecobook.turkey.user.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -39,8 +38,8 @@ class LoginApiControllerTests extends BaseControllerTests {
 
         webTestClient.post()
                 .uri("/login")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(loginRequest), LoginRequest.class)
                 .exchange()
                 .expectStatus().isOk();
@@ -55,12 +54,12 @@ class LoginApiControllerTests extends BaseControllerTests {
 
         ErrorMessage errorMessage = webTestClient.post()
                 .uri("/login")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(loginRequest), LoginRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
@@ -77,12 +76,12 @@ class LoginApiControllerTests extends BaseControllerTests {
 
         ErrorMessage errorMessage = webTestClient.post()
                 .uri("/login")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(loginRequest), LoginRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();

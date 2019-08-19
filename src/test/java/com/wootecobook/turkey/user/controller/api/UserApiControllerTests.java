@@ -1,14 +1,13 @@
 package com.wootecobook.turkey.user.controller.api;
 
+import com.wootecobook.turkey.commons.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
-import com.wootecobook.turkey.user.controller.BaseControllerTests;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -37,12 +36,12 @@ class UserApiControllerTests extends BaseControllerTests {
 
         UserResponse userResponse = webTestClient.post()
                 .uri(USER_API_URI)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(UserResponse.class)
                 .returnResult()
                 .getResponseBody();
@@ -66,12 +65,12 @@ class UserApiControllerTests extends BaseControllerTests {
 
         ErrorMessage errorMessage = webTestClient.post()
                 .uri(USER_API_URI)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
@@ -89,12 +88,12 @@ class UserApiControllerTests extends BaseControllerTests {
 
         ErrorMessage errorMessage = webTestClient.post()
                 .uri(USER_API_URI)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
@@ -112,12 +111,12 @@ class UserApiControllerTests extends BaseControllerTests {
 
         ErrorMessage errorMessage = webTestClient.post()
                 .uri(USER_API_URI)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
@@ -135,12 +134,12 @@ class UserApiControllerTests extends BaseControllerTests {
 
         ErrorMessage errorMessage = webTestClient.post()
                 .uri(USER_API_URI)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
                 .body(Mono.just(userRequest), UserRequest.class)
                 .exchange()
                 .expectStatus().isBadRequest()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
@@ -160,7 +159,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(UserResponse.class)
                 .returnResult()
                 .getResponseBody();
@@ -182,7 +181,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
@@ -217,7 +216,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
