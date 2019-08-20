@@ -42,4 +42,12 @@ public class ArticleService {
 
         log.info("{} create() >> {}", TAG, article);
     }
+
+    public ArticleResponse getArticleResponse(Long articleId) {
+        return ArticleAssembler.toDto(findArticleById(articleId));
+    }
+
+    public Article findArticleById(Long articleId) {
+        return articleRepository.findById(articleId).orElseThrow(() -> new ArithmeticException("해당 게시글을 찾을 수 없습니다."));
+    }
 }

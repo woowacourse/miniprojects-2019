@@ -3,9 +3,13 @@ package com.woowacourse.zzazanstagram.model.article.domain;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Contents;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Image;
 import com.woowacourse.zzazanstagram.model.common.BaseEntity;
+import com.woowacourse.zzazanstagram.model.like.domain.Ddabong;
 import com.woowacourse.zzazanstagram.model.member.domain.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 public class Article extends BaseEntity {
@@ -15,6 +19,9 @@ public class Article extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author", nullable = false, foreignKey = @ForeignKey(name = "fk_article_to_member"))
     private Member author;
+
+    @OneToMany(mappedBy = "article", orphanRemoval = true)
+    private List<Ddabong> ddabongs = new ArrayList<>();
 
     protected Article() {
     }
@@ -43,5 +50,9 @@ public class Article extends BaseEntity {
 
     public Member getAuthor() {
         return author;
+    }
+
+    public List<Ddabong> getDdabongs() {
+        return Collections.unmodifiableList(ddabongs);
     }
 }
