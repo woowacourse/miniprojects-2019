@@ -13,9 +13,7 @@ const editArticle = function (cardContents, articleId) {
         connector.PUT,
         header,
         JSON.stringify(articleInfo),
-        function () {
-        location.replace(window.location.href);
-        console.log('url', window.location.href)});
+        () => window.location.reload());
 };
 
 document.getElementById('cards').addEventListener('click', event => {
@@ -30,5 +28,22 @@ document.getElementById('cards').addEventListener('click', event => {
         cardContents.children[0].style.display = 'none';
         cardContents.children[1].style.display = 'block';
         cardContents.children[1].children[1].addEventListener('click', function() { editArticle(cardContents, articleId) }, false);
+    }
+});
+
+document.getElementById('cards').addEventListener('click', event => {
+    let target = event.target;
+    if (target.tagName === 'I' || target.tagName === 'SPAN') {
+        target = target.parentNode;
+    }
+    const articleId = target.getAttribute('data-id');
+
+    if (target.classList.contains('article-delete')) {
+        if (confirm("삭제하시겠습니까?") === true) {
+        const connector = FETCH_APP.fetchApi();
+        connector.fetchTemplateWithoutBody('/api/articles/' + articleId,
+            connector.DELETE,
+            () => window.location.href = '/');
+        }
     }
 });

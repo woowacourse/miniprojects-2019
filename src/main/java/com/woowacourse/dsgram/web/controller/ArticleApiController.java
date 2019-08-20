@@ -50,6 +50,12 @@ public class ArticleApiController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @DeleteMapping("{articleId}")
+    public ResponseEntity delete(@PathVariable long articleId, @UserSession LoginUserRequest loginUserRequest) {
+        articleApiService.delete(articleId, loginUserRequest);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     private Article convertFrom(ArticleRequest articleRequest, FileInfo fileInfo, LoginUserRequest loginUserRequest) {
         User user = userService.findUserById(loginUserRequest.getId());
         return new Article(articleRequest.getContents(), fileInfo.getFileName(), fileInfo.getFilePath(), user);

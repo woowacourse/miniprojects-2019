@@ -38,6 +38,21 @@ public class ArticleApiService {
 
     @Transactional
     public Article update(long articleId, ArticleEditRequest articleEditRequest, LoginUserRequest loginUserRequest) {
-        return findById(articleId).update(loginUserRequest.getId(), articleEditRequest.getContents());
+        Article article = checkAuthor(articleId, loginUserRequest);
+        return article.update(articleEditRequest.getContents());
+    }
+
+    @Transactional
+    public void delete(long articleId, LoginUserRequest loginUserRequest) {
+        Article article = checkAuthor(articleId, loginUserRequest);
+        articleRepository.delete(article);
+    }
+
+    private Article checkAuthor(long articleId, LoginUserRequest loginUserRequest) {
+        Article article = findById(articleId);
+        if (article.notEqualAuthorId(loginUserRequest.getId())) {
+            throw new InvalidUserException("글 작성자만 수정, 삭제가 가능합니다.");
+        }
+        return article;
     }
 }

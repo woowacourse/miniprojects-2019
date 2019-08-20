@@ -75,6 +75,10 @@ public class User {
         return this.nickName.equals(nickName);
     }
 
+    public boolean notEqualId(long id) {
+        return this.id != id;
+    }
+
     @Override
     public String toString() {
         return "User{" +

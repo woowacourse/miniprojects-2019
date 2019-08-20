@@ -21,7 +21,7 @@
                     <i class="ti-pencil pdd-right-10 text-dark"></i>
                     <span class="">게시글 수정</span>
                 </a>
-                <a th:id="'article-delete-' + ${article.id}" class="pointer article-delete">
+                <a th:id="'article-delete-' + ${article.id}" th:data-id='${article.id}' class="pointer article-delete">
                     <i class="ti-trash pdd-right-10 text-dark"></i>
                     <span class="">게시글 삭제</span>
                 </a>
