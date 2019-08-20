@@ -60,4 +60,14 @@ public class AwsS3Service implements StorageService {
         }
         return fileExtension;
     }
+
+    @Override
+    public void deleteFile(String fileUrl) {
+        String fileName = fileUrl.split(AWS_S3_URL + "/")[1];
+        try {
+            s3.deleteObject(BUCKET_NAME, fileName);
+        } catch (AmazonServiceException e) {
+            System.err.println(e.getErrorMessage());
+        }
+    }
 }
