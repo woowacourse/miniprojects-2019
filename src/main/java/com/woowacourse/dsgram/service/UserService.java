@@ -4,6 +4,7 @@ import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.domain.UserRepository;
 import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import com.woowacourse.dsgram.service.assembler.UserAssembler;
+import com.woowacourse.dsgram.service.dto.oauth.OAuthUserInfoResponse;
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
@@ -11,7 +12,6 @@ import com.woowacourse.dsgram.service.dto.user.UserDto;
 import com.woowacourse.dsgram.service.exception.DuplicatedAttributeException;
 import com.woowacourse.dsgram.service.exception.NotFoundUserException;
 import com.woowacourse.dsgram.service.oauth.GithubClient;
-import com.woowacourse.dsgram.service.dto.oauth.OAuthUserInfoResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,10 +53,11 @@ public class UserService {
     }
 
     @Transactional
-    public void update(long userId, UserDto userDto, LoginUserRequest loginUserRequest) {
+    public LoginUserRequest update(long userId, UserDto userDto, LoginUserRequest loginUserRequest) {
         User user = findById(userId);
         checkDuplicatedNickName(userDto, user);
         user.update(UserAssembler.toEntity(userDto), loginUserRequest.getEmail());
+        return UserAssembler.toLoginUser(user);
     }
 
     private void checkDuplicatedNickName(UserDto userDto, User user) {
@@ -70,7 +71,7 @@ public class UserService {
         User user = findByEmail(authUserRequest.getEmail())
                 .orElseThrow(() -> new InvalidUserException("회원정보가 일치하지 않습니다."));
         user.checkPassword(authUserRequest.getPassword());
-        return UserAssembler.toAuthUserDto(user);
+        return UserAssembler.toLoginUser(user);
     }
 
     private Optional<User> findByEmail(String email) {
@@ -85,9 +86,9 @@ public class UserService {
         Optional<User> optionalUser = findByEmail(email);
         if (optionalUser.isPresent()) {
             optionalUser.ifPresent(User::changeToOAuthUser);
-            return UserAssembler.toAuthUserDto(optionalUser.get());
+            return UserAssembler.toLoginUser(optionalUser.get());
         }
-        return UserAssembler.toAuthUserDto(saveOauthUser(accessToken, email));
+        return UserAssembler.toLoginUser(saveOauthUser(accessToken, email));
     }
 
     private User saveOauthUser(String accessToken, String email) {

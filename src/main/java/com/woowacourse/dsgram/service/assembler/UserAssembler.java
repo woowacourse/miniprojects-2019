@@ -56,7 +56,7 @@ public class UserAssembler {
                 .build();
     }
 
-    public static LoginUserRequest toAuthUserDto(User user) {
+    public static LoginUserRequest toLoginUser(User user) {
         return LoginUserRequest.builder()
                 .nickName(user.getNickName())
                 .userName(user.getUserName())

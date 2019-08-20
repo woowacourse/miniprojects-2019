@@ -40,12 +40,13 @@ public class UserApiController {
     public ResponseEntity update(@PathVariable long userId,
                                  @RequestBody @Valid UserDto updatedUserDto,
                                  BindingResult bindingResult,
-                                 @UserSession LoginUserRequest loginUserRequest) {
+                                 @UserSession LoginUserRequest loginUserRequest,
+                                 HttpSession httpSession) {
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
             throw new RuntimeException(fieldError.getDefaultMessage());
         }
-        userService.update(userId, updatedUserDto, loginUserRequest);
+        httpSession.setAttribute("sessionUser", userService.update(userId, updatedUserDto, loginUserRequest));
         return new ResponseEntity(HttpStatus.OK);
     }
 
