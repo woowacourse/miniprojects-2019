@@ -14,7 +14,7 @@ import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
-import techcourse.w3.woostagram.common.service.FileService;
+import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserContents;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -35,7 +35,7 @@ class ArticleServiceTest {
     @Mock
     private UserService userService;
     @Mock
-    private FileService fileService;
+    private StorageService storageService;
     private Article article;
     private User user;
 
@@ -65,7 +65,7 @@ class ArticleServiceTest {
                 .imageFile(multipartFile)
                 .build();
 
-        when(fileService.saveMultipartFile(multipartFile)).thenReturn("aaminiprojects-2019bb");
+        when(storageService.saveMultipartFile(multipartFile)).thenReturn("aaminiprojects-2019bb");
         when(userService.findUserByEmail(USER_EMAIL)).thenReturn(user);
         when(articleRepository.save(article)).thenReturn(article);
         articleService.save(articleDto, USER_EMAIL);
@@ -80,7 +80,7 @@ class ArticleServiceTest {
                 .contents("Test article")
                 .imageFile(multipartFile)
                 .build();
-        when(fileService.saveMultipartFile(multipartFile)).thenThrow(InvalidExtensionException.class);
+        when(storageService.saveMultipartFile(multipartFile)).thenThrow(InvalidExtensionException.class);
         assertThrows(InvalidExtensionException.class, () -> articleService.save(articleDto, USER_EMAIL));
     }
 
