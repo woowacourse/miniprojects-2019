@@ -67,4 +67,8 @@ public class UserService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(LoginException::new);
     }
+
+    public User findById(long targetId) {
+        return userRepository.findById(targetId).orElseThrow(LoginException::new);
+    }
 }

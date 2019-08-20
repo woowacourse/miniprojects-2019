@@ -18,20 +18,20 @@ public class LoginConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/users/signup/form")
-                .excludePathPatterns("/users/signup")
-                .excludePathPatterns("/users/login")
-                .excludePathPatterns("/users/login/form")
-                .excludePathPatterns("/css/**")
-                .excludePathPatterns("/js/**")
-                .excludePathPatterns("/images/**");
-
-        registry.addInterceptor(logonInterceptor)
-                .addPathPatterns("/users/signup/form")
-                .addPathPatterns("/users/signup")
-                .addPathPatterns("/users/login")
-                .addPathPatterns("/users/login/form");
+//        registry.addInterceptor(loginInterceptor)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/users/signup/form")
+//                .excludePathPatterns("/users/signup")
+//                .excludePathPatterns("/users/login")
+//                .excludePathPatterns("/users/login/form")
+//                .excludePathPatterns("/css/**")
+//                .excludePathPatterns("/js/**")
+//                .excludePathPatterns("/images/**");
+//
+//        registry.addInterceptor(logonInterceptor)
+//                .addPathPatterns("/users/signup/form")
+//                .addPathPatterns("/users/signup")
+//                .addPathPatterns("/users/login")
+//                .addPathPatterns("/users/login/form");
     }
 }
