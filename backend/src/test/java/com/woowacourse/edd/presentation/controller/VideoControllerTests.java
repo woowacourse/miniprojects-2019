@@ -53,7 +53,7 @@ public class VideoControllerTests extends EddApplicationTests {
         saveVideo(new VideoSaveRequestDto("555", "tilte5", "contents5"));
         saveVideo(new VideoSaveRequestDto("666", "tilte6", "contents6"));
 
-        findVideos(0,6,"createDate","DESC").isOk().expectBody()
+        findVideos(0, 6, "createDate", "DESC").isOk().expectBody()
             .jsonPath("$.content.length()").isEqualTo(6)
             .jsonPath("$.content[0].youtubeId").isEqualTo("666")
             .jsonPath("$.content[3].youtubeId").isEqualTo("333")
@@ -108,9 +108,9 @@ public class VideoControllerTests extends EddApplicationTests {
     }
 
     private StatusAssertions findVideos(int page, int size, String sort, String direction) {
-        return executeGet(VIDEOS_URI + "?page="+page+"&size="+size+"&sort="+sort+","+direction)
-                .exchange()
-                .expectStatus();
+        return executeGet(VIDEOS_URI + "?page=" + page + "&size=" + size + "&sort=" + sort + "," + direction)
+            .exchange()
+            .expectStatus();
     }
 
     private StatusAssertions saveVideo(VideoSaveRequestDto videoSaveRequestDto) {
@@ -130,8 +130,8 @@ public class VideoControllerTests extends EddApplicationTests {
 
     private void assertFailNotFound(StatusAssertions statusAssertions, String errorMessage) {
         WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
-                .isNotFound()
-                .expectBody();
+            .isNotFound()
+            .expectBody();
 
         checkErrorResponse(bodyContentSpec, errorMessage);
     }

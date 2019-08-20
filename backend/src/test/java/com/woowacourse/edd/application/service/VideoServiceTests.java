@@ -3,9 +3,6 @@ package com.woowacourse.edd.application.service;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.response.VideoResponse;
 import com.woowacourse.edd.domain.Video;
-import com.woowacourse.edd.domain.vo.Contents;
-import com.woowacourse.edd.domain.vo.Title;
-import com.woowacourse.edd.domain.vo.YoutubeId;
 import com.woowacourse.edd.repository.VideoRepository;
 import com.woowacourse.edd.utils.Utils;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +20,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class VideoServiceTest {
+class VideoServiceTests {
 
     private static final Long DEFAULT_VIDEO_ID = 100L;
     private static final LocalDateTime DEFAULT_VIDEO_CREATE_DATE = LocalDateTime.of(2019, 7, 5, 15, 20);
@@ -38,7 +35,7 @@ class VideoServiceTest {
 
     @BeforeEach
     void init() {
-        video = spy(new Video(new YoutubeId("1234"), new Title("title"), new Contents("contents")));
+        video = spy(new Video("1234", "title", "contents"));
         when(video.getId()).thenReturn(100L);
         when(video.getCreateDate()).thenReturn(DEFAULT_VIDEO_CREATE_DATE);
     }

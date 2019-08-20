@@ -6,7 +6,8 @@ const wootubeCtx = {
             return params;
         },
         calculateDate: function (responseDate) {
-            const videoDate = new Date(responseDate.substr(0, 4), responseDate.substr(4, 2), responseDate.substr(6, 2), responseDate.substr(8, 2))
+            const localResponseDate = moment.utc(responseDate,'YYYYMMDDHH').local().format('YYYYMMDDHH')
+            const videoDate = new Date(localResponseDate.substr(0, 4), localResponseDate.substr(4, 2), localResponseDate.substr(6, 2), localResponseDate.substr(8, 2))
             const currentDate = new Date()
             const yearDifference = currentDate.getFullYear() - videoDate.getFullYear()
             const monthDifference = currentDate.getMonth() + 1 - videoDate.getMonth()
