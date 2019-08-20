@@ -2,21 +2,26 @@ package techcourse.w3.woostagram.user.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserRepository;
-import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
+import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
 import techcourse.w3.woostagram.user.exception.UserUpdateException;
 
+import java.util.Objects;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final StorageService storageService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(final UserRepository userRepository, final StorageService storageService) {
         this.userRepository = userRepository;
+        this.storageService = storageService;
     }
 
     public UserInfoDto save(UserDto userDto) {
@@ -33,9 +38,20 @@ public class UserService {
     }
 
     @Transactional
-    public void update(UserContentsDto userContentsDto, String email) {
+    public void update(UserUpdateDto userUpdateDto, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(UserUpdateException::new);
-        user.updateContents(userContentsDto.toEntity());
+        String fileUrl = userUpdateDto.getOriginalImageFile();
+        if (!userUpdateDto.getImageFile().isEmpty()) {
+            deleteFile(fileUrl);
+            fileUrl = storageService.saveMultipartFile(userUpdateDto.getImageFile());
+        }
+        user.updateContents(userUpdateDto.toEntity(fileUrl));
+    }
+
+    private void deleteFile(String fileUrl) {
+        if (Objects.nonNull(fileUrl)) {
+            storageService.deleteFile(fileUrl);
+        }
     }
 
     public void deleteByEmail(String email) {
