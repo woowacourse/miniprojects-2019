@@ -47,6 +47,7 @@ public class ControllerTestHelper {
 
     protected ResponseSpec signup(UserSignupRequest userSignupRequest) {
         return webTestClient.post().uri("/users")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters.fromFormData("email", userSignupRequest.getEmail())
                         .with("password", userSignupRequest.getPassword())
                         .with("lastName", userSignupRequest.getLastName())
