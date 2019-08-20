@@ -67,10 +67,20 @@ const Api = function () {
         return request(`${baseUrl}/v1/videos`, 'POST', dataBody)
     }
 
+    const updateVideo = (dataBody, vidoeId) => {
+        return request(`${baseUrl}/v1/videos/${vidoeId}`, 'PUT', dataBody)
+    }
+
+    const deleteVideo = (videoId) => {
+        return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}`, 'DELETE')
+    }
+
     return {
         requestVideos: requestVideos,
         requestVideo: requestVideo,
-        saveVideo: saveVideo
+        saveVideo: saveVideo,
+        updateVideo:updateVideo,
+        deleteVideo:deleteVideo
     }
 
 }
