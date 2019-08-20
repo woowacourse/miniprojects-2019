@@ -133,7 +133,7 @@ public class AbstractControllerTests {
     }
 
     protected void loginRequest(String email, String password) {
-        EntityExchangeResult<byte[]> result = postFormRequest("/users/login", UserDto.class,email, password);
+        EntityExchangeResult<byte[]> result = postFormRequest("/users/login", UserDto.class, email, password);
         this.cookie = result
                 .getResponseHeaders()
                 .getFirst("Set-Cookie");

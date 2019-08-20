@@ -34,6 +34,16 @@
                     </div>
                 </div>
                 <div class="social-con">
+                    <div class="comment-list"></div>
+
+                    <div class="add-comment relative">
+                        <textarea rows="1" class="form-control text-dark padding-15 comment-input" placeholder="댓글 달기..."></textarea>
+                        <div class="absolute top-5 right-0">
+                            <button class="comment-create-btn btn btn-default no-border text-gray">게시</button>
+                        </div>
+                    </div>
+
+
                 </div>
             </section>
 
@@ -41,6 +51,7 @@
                 <textarea class="modify-input inactive" type="text" placeholder="문구 입력..."></textarea>
                 <button class="modify-btn inactive button-none" type="button">완료</button>
             </div>
+
         </div>
     </div>
     <footer>
@@ -62,6 +73,7 @@
         integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
 <script th:inline="javascript">
     let articleId = [[${articleId}]];
 </script>
@@ -69,5 +81,6 @@
 <script src="/js/modal.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/article.js"></script>
+<script src="/js/comment.js"></script>
 </body>
 </html>

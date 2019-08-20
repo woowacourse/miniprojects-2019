@@ -12,7 +12,7 @@ import java.util.Optional;
 import static techcourse.w3.woostagram.user.support.UserEmailArgumentResolver.LOGGED_IN_USER_SESSION_KEY;
 
 @Component
-public class LogonInterceptor extends HandlerInterceptorAdapter {
+public class LoggedInInterceptor extends HandlerInterceptorAdapter {
     private static final Logger log = LoggerFactory.getLogger(LoginInterceptor.class);
 
     @Override
