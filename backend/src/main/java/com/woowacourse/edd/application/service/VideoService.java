@@ -2,8 +2,10 @@ package com.woowacourse.edd.application.service;
 
 import com.woowacourse.edd.application.converter.VideoConverter;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
+import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import com.woowacourse.edd.application.response.VideoPreviewResponse;
 import com.woowacourse.edd.application.response.VideoResponse;
+import com.woowacourse.edd.application.response.VideoUpdateResponse;
 import com.woowacourse.edd.domain.Video;
 import com.woowacourse.edd.exceptions.VideoNotFoundException;
 import com.woowacourse.edd.repository.VideoRepository;
@@ -44,5 +46,16 @@ public class VideoService {
 
     private Video findById(long id) {
         return videoRepository.findById(id).orElseThrow(VideoNotFoundException::new);
+    }
+
+    public VideoUpdateResponse update(Long id, VideoUpdateRequestDto requestDto) {
+        Video video = findById(id);
+        video.update(requestDto.getYoutubeId(), requestDto.getTitle(), requestDto.getContents());
+        return videoConverter.toUpdateResponse(video);
+    }
+
+    public void delete(Long id) {
+        findById(id);
+        videoRepository.deleteById(id);
     }
 }

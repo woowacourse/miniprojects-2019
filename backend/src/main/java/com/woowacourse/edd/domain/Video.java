@@ -30,7 +30,8 @@ public class Video {
     @Column(nullable = false)
     private LocalDateTime createDate;
 
-    private Video() { }
+    private Video() {
+    }
 
     public Video(String youtubeId, String title, String contents) {
         checkYoutubeId(youtubeId);
@@ -57,6 +58,15 @@ public class Video {
         if (Objects.isNull(youtubeId) || youtubeId.trim().isEmpty()) {
             throw new InvalidYoutubeIdException();
         }
+    }
+
+    public void update(String youtubeId, String title, String contents) {
+        checkYoutubeId(youtubeId);
+        checkTitle(title);
+        checkContents(contents);
+        this.youtubeId = youtubeId;
+        this.title = title;
+        this.contents = contents;
     }
 
     public Long getId() {

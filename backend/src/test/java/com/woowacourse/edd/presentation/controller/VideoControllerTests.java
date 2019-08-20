@@ -2,10 +2,12 @@ package com.woowacourse.edd.presentation.controller;
 
 import com.woowacourse.edd.EddApplicationTests;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
+import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import com.woowacourse.edd.utils.Utils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -101,6 +103,52 @@ public class VideoControllerTests extends EddApplicationTests {
         assertFailBadRequest(saveVideo(videoSaveRequestDto), "내용은 한 글자 이상이어야합니다");
     }
 
+    @Test
+    void update() {
+        save();
+
+        Long id = 2L;
+        String youtubeId = "updateYoutubeId";
+        String title = "updateTitle";
+        String contetns = "updateContents";
+
+        VideoUpdateRequestDto videoUpdateRequestDto = new VideoUpdateRequestDto(youtubeId, title, contetns);
+
+        updateVideo(id, videoUpdateRequestDto)
+            .isOk()
+            .expectHeader()
+            .valueMatches("location", VIDEOS_URI + "/" + id)
+            .expectBody()
+            .jsonPath("$.id").isEqualTo(id);
+
+    }
+
+    @Test
+    void update_invalid_id() {
+        Long id = 100L;
+
+        VideoUpdateRequestDto videoUpdateRequestDto = new VideoUpdateRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
+
+        assertFailNotFound(updateVideo(id, videoUpdateRequestDto), "그런 비디오는 존재하지 않아!");
+    }
+
+    @Test
+    void delete() {
+        EntityExchangeResult<byte[]> res = saveVideo(new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS))
+            .isCreated()
+            .expectBody()
+            .returnResult();
+
+        String[] id = res.getResponseHeaders().getLocation().toASCIIString().split("/");
+
+        deleteVideo(Long.valueOf(id[id.length - 1])).isNoContent();
+    }
+
+    @Test
+    void delete_invalid_id() {
+        assertFailNotFound(deleteVideo(100L), "그런 비디오는 존재하지 않아!");
+    }
+
     private StatusAssertions findVideo(String uri) {
         return executeGet(VIDEOS_URI + uri)
             .exchange()
@@ -116,6 +164,19 @@ public class VideoControllerTests extends EddApplicationTests {
     private StatusAssertions saveVideo(VideoSaveRequestDto videoSaveRequestDto) {
         return executePost(VIDEOS_URI)
             .body(Mono.just(videoSaveRequestDto), VideoSaveRequestDto.class)
+            .exchange()
+            .expectStatus();
+    }
+
+    private StatusAssertions updateVideo(Long id, VideoUpdateRequestDto videoUpdateRequestDto) {
+        return executePut(VIDEOS_URI + "/" + id)
+            .body(Mono.just(videoUpdateRequestDto), VideoUpdateRequestDto.class)
+            .exchange()
+            .expectStatus();
+    }
+
+    private StatusAssertions deleteVideo(Long id) {
+        return executeDelete(VIDEOS_URI + "/" + id)
             .exchange()
             .expectStatus();
     }
@@ -145,7 +206,15 @@ public class VideoControllerTests extends EddApplicationTests {
         return webTestClient.get().uri(uri);
     }
 
+    private WebTestClient.RequestBodySpec executePut(String uri) {
+        return webTestClient.put().uri(uri);
+    }
+
     private WebTestClient.RequestBodySpec executePost(String uri) {
         return webTestClient.post().uri(uri);
+    }
+
+    private WebTestClient.RequestHeadersSpec executeDelete(String uri) {
+        return webTestClient.delete().uri(uri);
     }
 }

@@ -33,7 +33,8 @@ public class User {
 
     private Boolean isDeleted;
 
-    private User() { }
+    private User() {
+    }
 
     public User(String name, String email, String password, Boolean isDeleted) {
         this.name = name;

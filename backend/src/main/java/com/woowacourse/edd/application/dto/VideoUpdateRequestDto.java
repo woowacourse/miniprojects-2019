@@ -1,15 +1,14 @@
 package com.woowacourse.edd.application.dto;
 
-public class VideoSaveRequestDto {
-
+public class VideoUpdateRequestDto {
     private String youtubeId;
     private String title;
     private String contents;
 
-    private VideoSaveRequestDto() {
+    public VideoUpdateRequestDto() {
     }
 
-    public VideoSaveRequestDto(String youtubeId, String title, String contents) {
+    public VideoUpdateRequestDto(String youtubeId, String title, String contents) {
         this.youtubeId = youtubeId;
         this.title = title;
         this.contents = contents;

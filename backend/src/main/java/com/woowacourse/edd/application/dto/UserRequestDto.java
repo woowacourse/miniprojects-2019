@@ -14,7 +14,8 @@ public class UserRequestDto {
     @Pattern(regexp = "[a-zA-Z0-9!@#$%^&*(),.?\\\":{}|<>]{8,}", message = "비밀번호는 8자이상의 영문 대,소문자, 특수문자의 조합이여야 합니다.")
     private String password;
 
-    private UserRequestDto() { }
+    private UserRequestDto() {
+    }
 
     public UserRequestDto(String name, String email, String password) {
         this.name = name;
