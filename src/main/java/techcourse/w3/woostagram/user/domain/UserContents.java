@@ -22,6 +22,7 @@ public class UserContents {
     @Lob
     private String contents;
 
+    @Column(length = 1000)
     private String profile;
 
     @Builder
