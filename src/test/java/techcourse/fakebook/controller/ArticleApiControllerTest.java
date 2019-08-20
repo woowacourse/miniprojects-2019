@@ -32,25 +32,25 @@ public class ArticleApiControllerTest extends ControllerTestHelper {
                 cookie(cookie).
                 body(articleRequest).
         when().
-                post("/articles").
+                post("/api/articles").
         then().
                 statusCode(201).
                 body("content", equalTo(articleRequest.getContent()));
     }
 
     @Test
-    void 글을_잘_삭제하는지_확인() {
+    void 글을_잘_삭제하는지_확인한다() {
         given().
                 port(port).
                 cookie(cookie).
         when().
-                delete("/articles/2").
+                delete("/api/articles/2").
         then().
                 statusCode(204);
     }
 
     @Test
-    void 글을_잘_수정하는지_확인() {
+    void 글을_잘_수정하는지_확인한다() {
         ArticleRequest articleRequest = new ArticleRequest("수정된 글입니다.");
 
         given().
@@ -59,7 +59,7 @@ public class ArticleApiControllerTest extends ControllerTestHelper {
                 cookie(cookie).
                 body(articleRequest).
         when().
-                put("/articles/1").
+                put("/api/articles/1").
         then().
                 statusCode(200).
                 body("content", equalTo(articleRequest.getContent()));
