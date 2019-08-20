@@ -445,23 +445,62 @@
         integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
         crossorigin="anonymous"></script>
 <script>
-    document.querySelector('.search-toggle').addEventListener('click', toggleSearchInput)
-    document.querySelector(".search-input input").addEventListener("keyup", showSearchedList)
+    const MYPAGE = (function () {
 
-    function toggleSearchInput(event) {
-        event.preventDefault();
-        document.querySelector('.search-box').classList.toggle('active')
-        document.querySelector(".search-input").classList.toggle("active")
-        document.querySelector(".search-input input").focus()
-    }
+        const MyPageController = function () {
+            const myPageService = new MyPageService();
 
-    function showSearchedList(event) {
-        if (event.target.value.length > 0) {
-            document.querySelector(".advanced-search").classList.add("active")
-        } else {
-            document.querySelector(".advanced-search").classList.remove("active")
+            const toggleSearchInput = function () {
+                document.querySelector('.search-toggle').addEventListener('click', myPageService.toggleSearchInput);
+            };
+
+            const showSearchedList = function () {
+                document.querySelector(".search-input input").addEventListener("keyup", myPageService.showSearchedList);
+            };
+
+            const init = function () {
+                toggleSearchInput();
+                showSearchedList();
+            };
+
+            return {
+                init: init,
+            }
+        };
+
+        const MyPageService = function () {
+            const toggleSearchInput = function (event) {
+                event.preventDefault();
+                document.querySelector('.search-box').classList.toggle('active')
+                document.querySelector(".search-input").classList.toggle("active")
+                document.querySelector(".search-input input").focus()
+            };
+
+            const showSearchedList = function (event) {
+                if (event.target.value.length > 0) {
+                    document.querySelector(".advanced-search").classList.add("active")
+                } else {
+                    document.querySelector(".advanced-search").classList.remove("active")
+                }
+            };
+
+            return {
+                toggleSearchInput: toggleSearchInput,
+                showSearchedList: showSearchedList,
+            }
+        };
+
+        const init = function () {
+            const myPageController = new MyPageController();
+            myPageController.init();
+        };
+
+        return {
+            init: init,
         }
-    }
+    })();
+
+    MYPAGE.init();
 </script>
 </body>
 </html>
