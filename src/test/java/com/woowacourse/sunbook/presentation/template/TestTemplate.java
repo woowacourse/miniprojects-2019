@@ -1,5 +1,9 @@
 package com.woowacourse.sunbook.presentation.template;
 
+import com.woowacourse.sunbook.application.user.dto.UserRequestDto;
+import com.woowacourse.sunbook.domain.user.UserEmail;
+import com.woowacourse.sunbook.domain.user.UserName;
+import com.woowacourse.sunbook.domain.user.UserPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+
+import java.util.Objects;
 
 import static org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec;
 import static org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
@@ -20,6 +26,12 @@ public class TestTemplate {
     @Autowired
     protected WebTestClient webTestClient;
 
+    protected UserRequestDto userRequestDto = new UserRequestDto(
+            new UserEmail("ddu0422@naver.com"),
+            new UserName("mir"),
+            new UserPassword("asdf1234!A")
+    );
+
     protected ResponseSpec request(HttpMethod method, String uri, Object object, HttpStatus httpStatus) {
         return webTestClient.method(method).uri(uri)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -29,10 +41,34 @@ public class TestTemplate {
                 .isEqualTo(httpStatus)
                 ;
     }
+
+    protected ResponseSpec loginAndRequest(HttpMethod method, String url, Object object, HttpStatus httpStatus, String sessionId) {
+        return webTestClient.method(method).uri(url)
+                .cookie("JSESSIONID", sessionId)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(object), Object.class)
+                .exchange()
+                .expectStatus()
+                .isEqualTo(httpStatus)
+                ;
+    }
+
     protected BodyContentSpec respondApi(ResponseSpec responseSpec) {
         return responseSpec
                 .expectHeader()
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody();
+                .expectBody()
+                ;
+    }
+
+    protected String loginSessionId(Object object) {
+        return Objects.requireNonNull(webTestClient.method(HttpMethod.POST).uri("/api/signin")
+                .body(Mono.just(object), Object.class)
+                .exchange()
+                .returnResult(String.class)
+                .getResponseCookies()
+                .getFirst("JSESSIONID"))
+                .getValue()
+                ;
     }
 }
