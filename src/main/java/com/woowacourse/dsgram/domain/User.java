@@ -86,5 +86,3 @@ public class User {
         return this.nickName.equals(nickName);
     }
 }
-
-
