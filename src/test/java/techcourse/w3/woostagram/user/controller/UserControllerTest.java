@@ -21,6 +21,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void loginForm_empty_isOk() {
+        clearCookie();
         assertThat(getRequest("/users/login/form")
                 .getStatus()
                 .is2xxSuccessful())
@@ -29,6 +30,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void login_correct_isRedirect() {
+        clearCookie();
         assertThat(postFormRequest("/users/login", UserDto.class, TEST_EMAIL, TEST_PASSWORD)
                 .getStatus()
                 .is3xxRedirection()).isTrue();
@@ -36,6 +38,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void login_mismatch_isFail() {
+        clearCookie();
         assertThat(postFormRequest("/users/login", UserDto.class, TEST_EMAIL2, TEST_PASSWORD)
                 .getStatus()
                 .is3xxRedirection()).isTrue();
@@ -43,6 +46,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void createForm_empty_isOk() {
+        clearCookie();
         assertThat(getRequest("/users/signup/form")
                 .getStatus()
                 .is2xxSuccessful())
@@ -51,6 +55,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void create_correct_isOk() {
+        clearCookie();
         assertThat(postFormRequest("/users/signup", UserDto.class, TEST_EMAIL2, TEST_PASSWORD)
                 .getStatus()
                 .is3xxRedirection()).isTrue();
@@ -58,6 +63,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void create_mismatch_isFail() {
+        clearCookie();
         assertThat(postFormRequest("/users/signup", UserDto.class, TEST_EMAIL2, BAD_PASSWORD)
                 .getStatus()
                 .is3xxRedirection()).isTrue();
