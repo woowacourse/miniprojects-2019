@@ -39,4 +39,14 @@ public class FollowRestController {
         followService.remove(email, userId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/num/from/{userId}")
+    public ResponseEntity<Integer> readNumberOfFollowers(@PathVariable Long userId) {
+        return ResponseEntity.ok(followService.getFollowers(userId).size());
+    }
+
+    @GetMapping("/num/to/{userId}")
+    public ResponseEntity<Integer> readNumberOfFollowing(@PathVariable Long userId) {
+        return ResponseEntity.ok(followService.getFollowing(userId).size());
+    }
 }
