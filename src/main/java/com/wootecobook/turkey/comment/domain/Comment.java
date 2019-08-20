@@ -13,6 +13,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Entity
@@ -41,6 +43,9 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_comment_to_comment"))
     private Comment parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Comment> children = new ArrayList<>();
 
     @Builder
     public Comment(final String contents, final User user, final Post post, final Comment parent) {
@@ -78,6 +83,10 @@ public class Comment extends BaseEntity {
         if (this.isDeleted) {
             throw new AlreadyDeleteException(this.getId());
         }
+    }
+
+    public int getCountOfChildren() {
+        return children.size();
     }
 
     public Optional<Comment> getParent() {

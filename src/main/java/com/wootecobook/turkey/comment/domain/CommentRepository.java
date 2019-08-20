@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    Page<Comment> findAllByParentId(@Param("parentId") Long parentId, Pageable pageable);
+    Page<Comment> findAllByParentIdAndIsDeletedIsFalse(@Param("parentId") Long parentId, Pageable pageable);
 
-    Page<Comment> findAllByPostIdAndParentIdIsNull(@Param("postId") Long postId, Pageable pageable);
+    Page<Comment> findAllByPostIdAndParentIdIsNullAndIsDeletedIsFalse(@Param("postId") Long postId, Pageable pageable);
 }
