@@ -66,7 +66,8 @@ public abstract class RequestTemplate {
 
     public void saveOtherMember(String nickName, String email) {
         webTestClient.post().uri("/members")
-                .body(WebTestHelper.userSignUpForm(email,
+                .body(WebTestHelper.userSignUpForm(
+                        email,
                         "otherUser",
                         "https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-600w-1048185397.jpg",
                         nickName,

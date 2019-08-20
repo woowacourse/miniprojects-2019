@@ -10,6 +10,7 @@ import com.woowacourse.zzazanstagram.model.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,11 +23,19 @@ public class FollowService {
         this.followRepository = followRepository;
     }
 
-    // TODO unfollow 분기
+    // TODO refactoring
     public void save(FollowRequest followRequest) {
         Member followee = findMember(followRequest.getFolloweeId());
         Member follower = findMember(followRequest.getFollowerId());
         Follow follow = new Follow(followee, follower);
+
+        Optional<Follow> maybeFollow = followRepository.findByFolloweeAndFollower(followee, follower);
+
+        if (maybeFollow.isPresent()) {
+            followRepository.delete(maybeFollow.get());
+            return;
+        }
+
         followRepository.save(follow);
     }
 
