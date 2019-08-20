@@ -26,6 +26,10 @@ const wootubeCtx = {
             }
         }
     },
+    constants : {
+        videoPageSize : 6,
+        videoChannelPageSize : 18
+    }
 }
 
 const Api = function () {
@@ -35,7 +39,7 @@ const Api = function () {
     }
 
     const baseUrl = '/api'
-    
+
     const request = (url, method, body) => {
         return fetch(url, {
             method: method,
@@ -51,8 +55,8 @@ const Api = function () {
         })
     }
     
-    const requestVideos = (filter) => {
-        return requestWithoutBody(`${baseUrl}/v1/videos?page=0&size=6&sort=${filter},DESC`,'GET')
+    const requestVideos = (page, size, sort) => {
+        return requestWithoutBody(`${baseUrl}/v1/videos?page=${page}&size=${size}&sort=${sort},DESC`,'GET')
     }
 
     const requestVideo = (videoId) => {

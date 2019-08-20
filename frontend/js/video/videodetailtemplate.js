@@ -14,8 +14,10 @@ function addVideoDetailTemplate(data) {
         <hr>
         <div class="form-group row">
             <div class="col-md-2">
+            <a href="/video-channel.html">
                 <img class="banner-owner-img img-circle relative"
                     src="./images/default/eastjun_big.jpg" alt="">
+             </a>
             </div>
             <div class="col-md-10">
                 <span class="text-bold">로비로비</span><br>

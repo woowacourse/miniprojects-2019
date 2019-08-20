@@ -30,7 +30,7 @@ function addHeader(headerElement){
                     </a>
                 </li>
                 <li class="user-profile">
-                    <a href="/">
+                    <a href="/video-channel.html">
                         <img class="profile-img img-fluid" src="./images/default/eastjun_profile.jpg" alt="">
                     </a>
                 </li>

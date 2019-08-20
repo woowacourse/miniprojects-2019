@@ -109,27 +109,64 @@
                     <div class="col-md-10">
                         <a class="main-banner-cover">
                             <div class="cover-img bg" style="background-image: url('images/default/main_banner_bg.png')"></div>
+                            <div class="width-100 relative">
+                                <img class="banner-owner-img img-circle relative bottom-30" src="./images/default/eastjun_big.jpg" alt="">
+                                <div class="banner-info d-inline-block relative">
+                                    <span class="font-size-17 text-bold relative left-40 bottom-20">우아한테크코스 도서관리 시스템</span>
+                                    <span class="absolute mrg-vertical-5 left-40">eastjun</span>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 </div>
 
-                <div class="mrg-top-20">
-                    <h3 class="text-bold height-40px">최신 동영상</h3>
+                <div id="tab-area">
+                    <div class="card-block">
+                        <div class="padding-20">
+                        </div>
+                        <div class="tab-danger">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a href="#tab-danger-1" class="nav-link active show" role="tab" data-toggle="tab" aria-selected="true">홈</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#tab-danger-2" class="nav-link" role="tab" data-toggle="tab" aria-selected="false">정보</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active show" id="tab-danger-1">
+                                    <div class="pdd-horizon-15 pdd-vertical-20">
+                                        <p id="tab-videos-area">
+                                            <div id="dateVideoCard" class="row pdd-horizon-10"></div>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab-danger-2">
+                                    <div class="pdd-horizon-15 pdd-vertical-20">
+                                        <p>
+                                            <button id="btn-update" type="button" class="btn btn-default"> 
+                                                    <i class="ti-pencil"></i>
+                                            </button>
+                                            <button id="btn-submit" type="button" class="d-none btn btn-default"> 
+                                                    <i class="ti-check"></i>
+                                            </button>
+                                            <br>
+                                            이름 : <span id="user-name">로비</span>
+                                            <input type="text" name="name" id="update-name" class="d-none">
+                                            <br>
+                                            이메일 : <span id="user-email">aaa@mail.com</span>
+                                            <input type="text" name="email" id="update-email" class="d-none">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div id="dateVideoCard" class="row pdd-horizon-10">
-                </div>
-                <div class="mrg-top-20">
-                    <h3 class="text-bold height-40px">인기 동영상</h3>
-                </div>
-
-                <div id="popularVideoCard" class="row pdd-horizon-10"></div>
-                
             </div>
         </div>
     </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
@@ -139,7 +176,7 @@
 <script src="./js/common.js"></script>
 <script src="./js/headerTemplate.js"></script>
 <script src="./js/video/videocardtemplate.js"></script>
-<script src="./js/mainpage.js"></script>
+<script src="./js/channelpage.js"></script>
 <script>
     addHeader(document.querySelector(".header-wrapper"))
     document.querySelector(".side-nav-toggle").addEventListener("click", sideNavToggle)
