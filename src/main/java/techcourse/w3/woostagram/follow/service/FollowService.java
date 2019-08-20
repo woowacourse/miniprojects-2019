@@ -2,6 +2,7 @@ package techcourse.w3.woostagram.follow.service;
 import org.springframework.stereotype.Service;
 import techcourse.w3.woostagram.follow.domain.Follow;
 import techcourse.w3.woostagram.follow.domain.FollowRepository;
+import techcourse.w3.woostagram.follow.exception.FollowNotFoundException;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -22,7 +23,7 @@ public class FollowService {
     }
 
     @Transactional
-    public void addFollow(String email, long targetId){
+    public void add(String email, long targetId){
         User user = userService.findUserByEmail(email);
         User targetUser = userService.findById(targetId);
         Follow follow = Follow.builder()
@@ -33,16 +34,22 @@ public class FollowService {
     }
 
     public List<UserInfoDto> getFollowers(Long id){
-        return getUserInfoDtos(id, (Follow follow) -> UserInfoDto.from(follow.getFrom()));
+        User user = userService.findById(id);
+        List<Follow> followers = followRepository.findAllByTo(user);
+        return followers.stream().map((Follow follow) -> UserInfoDto.from(follow.getFrom())).collect(Collectors.toList());
     }
 
     public List<UserInfoDto> getFollowing(Long id){
-        return getUserInfoDtos(id, (Follow follow) -> UserInfoDto.from(follow.getTo()));
+        User user = userService.findById(id);
+        List<Follow> followers = followRepository.findAllByFrom(user);
+        return followers.stream().map((Follow follow) -> UserInfoDto.from(follow.getTo())).collect(Collectors.toList());
     }
 
-    private List<UserInfoDto> getUserInfoDtos(Long id, Function<Follow, UserInfoDto> mapper) {
-        User user = userService.findById(id);
-        List<Follow> followers = followRepository.findAllByTo(user);
-        return followers.stream().map(mapper).collect(Collectors.toList());
+    public void remove(String email, Long targetId) {
+        User user = userService.findUserByEmail(email);
+        User targetUser = userService.findById(targetId);
+        Follow following = followRepository.findByFromAndTo(user, targetUser).orElseThrow(FollowNotFoundException::new);
+        following.nullify();
+        followRepository.delete(following);
     }
 }
