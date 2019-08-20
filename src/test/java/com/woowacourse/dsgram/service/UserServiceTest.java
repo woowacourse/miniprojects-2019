@@ -43,7 +43,7 @@ public class UserServiceTest {
     private final AuthUserRequest authUserRequest = new AuthUserRequest("buddy@buddy.com", "Aa12345!");
 
     private final UserDto userDto = new UserDto(1L, "김버디", "buddy_2", "Aa12345!", "www.website.com", "intro");
-    private final LoginUserRequest loginUserRequest = new LoginUserRequest("buddy@buddy.com", "buddy_", "김버디");
+    private final LoginUserRequest loginUserRequest = new LoginUserRequest(1L, "buddy@buddy.com", "buddy_", "김버디");
 
 
     @InjectMocks
@@ -106,7 +106,7 @@ public class UserServiceTest {
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
 
         UserDto userDto = new UserDto(1L, "김버디", "buddy_2", "Aa12345!", "www.website.com", "intro");
-        LoginUserRequest loginUserRequest = new LoginUserRequest("buddy@buddy.com", "buddy_", "김버디");
+        LoginUserRequest loginUserRequest = new LoginUserRequest(1L, "buddy@buddy.com", "buddy_", "김버디");
         assertDoesNotThrow(() -> userService.update(1L, userDto, loginUserRequest));
     }
 
@@ -121,7 +121,7 @@ public class UserServiceTest {
     void 남의_정보를_수정() {
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         given(userRepository.existsByNickName(anyString())).willReturn(false);
-        assertThrows(InvalidUserException.class, () -> userService.update(anyLong(), userDto, new LoginUserRequest("user@gmail", "user", "user")));
+        assertThrows(InvalidUserException.class, () -> userService.update(anyLong(), userDto, new LoginUserRequest(1L, "user@gmail", "user", "user")));
     }
 
     @Test

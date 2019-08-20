@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 public class ArticleApiService {
@@ -25,5 +26,10 @@ public class ArticleApiService {
         return articleRepository
                 .findById(articleId)
                 .orElseThrow(() -> new EntityNotFoundException(articleId + "번 게시글을 조회하지 못했습니다."));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Article> findAll() {
+        return articleRepository.findAll();
     }
 }

@@ -16,7 +16,7 @@
                 <div class="container-fluid max-width-lg mx-auto">
                     <div class="row">
                         <div class="col-lg-7 mx-auto">
-
+                            <button type="button" id="write-article-button" class="btn btn-outline-primary">피드 작성</button>
                             <div class="card widget-feed no-pdd mrg-btm-70">
                                 <div class="feed-header padding-15">
                                     <ul class="list-unstyled list-info">
@@ -45,9 +45,9 @@
                                     </ul>
                                 </div>
                                 <div class="feed-body no-pdd">
-                                    <img id="article-image" class="img-fluid" src="" alt=""
+                                    <img th:id="'article-image-' + ${article.id}" class="img-fluid" src="" alt=""
                                          style="display: none; width: 100%;">
-                                    <video id="article-video" controls autoplay loop src=""
+                                    <video th:id="'article-video-' + ${article.id}" controls autoplay loop src=""
                                            style="display: none; width: 100%;">
                                     </video>
                                 </div>
@@ -111,60 +111,31 @@
             </div>
         </div>
     </div>
+<script src="/js/write-article.js"></script>
 <script src="/js/fetchApi.js"></script>
+<script src="/js/fileLoadApi.js"></script>
 <script th:inline="javascript">
     let articleId = [[${article.id}]];
     let articleFileName = [[${article.fileName}]];
 
-    const b64StringToBlob = (b64Data, contentType = '', sliceSize = 512) => {
-        const byteCharacters = atob(b64Data);
-        const byteArrays = [];
-
-        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            const slice = byteCharacters.slice(offset, offset + sliceSize);
-            const byteNumbers = new Array(slice.length);
-            for (let i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-        }
-        const blob = new Blob(byteArrays, {type: contentType});
-        return blob;
-    };
-
     const connector = FETCH_APP.fetchApi();
+    const fileLoader = FILE_LOAD_APP.fileLoadApi();
+
     const loadFile = response => {
         response.arrayBuffer().then(function (buffer) {
             const bytes = new Uint8Array(buffer);
             let binary = '';
             bytes.forEach((b) => binary += String.fromCharCode(b));
 
-            const blob = b64StringToBlob(binary);
+            const blob = fileLoader.b64StringToBlob(binary);
             const blobUrl = URL.createObjectURL(blob);
 
-            setSrcAttribute(blobUrl, articleFileName);
+            fileLoader.setSrcAttribute(blobUrl, articleFileName, articleId);
         });
     };
-    connector.fetchTemplateWithoutBody('/api/articles/' + articleId + "/file", connector.GET, loadFile);
 
-    function setSrcAttribute(url, fileName) {
-        let words = fileName.split('.');
-        let extension = words[words.length - 1];
-
-        let imageExtensions = ['jpg', 'png', 'jpeg'];
-        let videoExtensions = ['avi', 'mp4'];
-
-        if (imageExtensions.includes(extension)) {
-            let articleImage = document.getElementById('article-image');
-            articleImage.style.display = "block";
-            articleImage.src = url;
-        }
-        if (videoExtensions.includes(extension)) {
-            let articleVideo = document.getElementById('article-video');
-            articleVideo.style.display = "block";
-            articleVideo.src = url;
-        }
+    window.onload = function () {
+        connector.fetchTemplateWithoutBody('/api/articles/' + articleId + "/file", connector.GET, loadFile);
     }
 </script>
 </th:block>

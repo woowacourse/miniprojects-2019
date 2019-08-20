@@ -2,6 +2,7 @@ package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
 import com.woowacourse.dsgram.domain.ArticleRepository;
+import com.woowacourse.dsgram.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,14 @@ public class ArticleApiServiceTest {
 
     @BeforeEach
     void setUp() {
+        User user = User.builder()
+                .userName("test")
+                .nickName("test")
+                .email("test@gmail.com")
+                .password("test123")
+                .webSite("")
+                .intro("")
+                .build();
         article = new Article("contents", "fileName", "filePath", user);
     }
 
