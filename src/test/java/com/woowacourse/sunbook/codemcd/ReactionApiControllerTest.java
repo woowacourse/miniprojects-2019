@@ -66,4 +66,19 @@ public class ReactionApiControllerTest extends TestTemplate {
                 .jsonPath("$.numberOfGood").isEqualTo(1L)
                 ;
     }
+
+    @Test
+    void 좋아요_취소_정상() {
+        respondApi(request(HttpMethod.POST, "/api/articles/4/good",
+                reactionDto, HttpStatus.OK))
+                .jsonPath("$.numberOfGood").isEqualTo(1L)
+        ;
+
+        ReactionDto savedGood = new ReactionDto(1L);
+
+        respondApi(request(HttpMethod.POST, "/api/articles/4/good",
+                savedGood, HttpStatus.OK))
+                .jsonPath("$.numberOfGood").isEqualTo(0L)
+        ;
+    }
 }

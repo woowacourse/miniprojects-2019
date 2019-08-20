@@ -26,6 +26,7 @@ public class ReactionArticleService {
         //Article article = modelMapper.map(articleService.findById(articleId), Article.class);
         Article article = articleService.findById(articleId);
         Long currentOfCount = requestReactionDto.getNumberOfGood();
+        System.out.println(currentOfCount);
         // 해당 게시글 작성자와 현제 세션 유저가 같은지 확인(checkSameUser)
         // 이미 좋아요가 있으면 해당 객체 삭제
         if (reactionArticleRepository.existsByArticle(article)) {
