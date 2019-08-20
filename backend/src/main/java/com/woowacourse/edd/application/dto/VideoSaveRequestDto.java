@@ -12,8 +12,7 @@ public class VideoSaveRequestDto {
         this.contents = contents;
     }
 
-    public VideoSaveRequestDto() {
-    }
+    private VideoSaveRequestDto() { }
 
     public String getYoutubeId() {
         return youtubeId;
