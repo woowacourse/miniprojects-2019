@@ -9,7 +9,6 @@ import techcourse.w3.woostagram.comment.dto.CommentDto;
 import techcourse.w3.woostagram.comment.exception.CommentNotFoundException;
 import techcourse.w3.woostagram.common.exception.UnauthorizedException;
 import techcourse.w3.woostagram.user.domain.User;
-import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
 
 import java.util.List;
