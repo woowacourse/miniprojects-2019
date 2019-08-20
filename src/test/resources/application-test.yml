@@ -17,3 +17,11 @@ spring:
                 format_sql: true
                 show_sql: true
                 use_sql_comments: true
+cloud:
+    aws:
+        s3:
+            bucket: sunbook
+        region:
+            static: ap-northeast-2
+        stack:
+            auto: false
