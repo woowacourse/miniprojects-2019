@@ -47,4 +47,8 @@ public class ArticleService {
     public void deleteById(Long articleId) {
         articleRepository.deleteById(articleId);
     }
+
+    public Article findArticleById(Long articleId) {
+        return articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new);
+    }
 }
