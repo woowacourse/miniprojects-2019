@@ -60,6 +60,21 @@ const USER_APP = (() => {
             });
         };
 
+        const fetchWithFileTemplate = function (requestUrl, method, body, ifSucceed) {
+            fetch(requestUrl, {
+                method: method,
+                body: body
+            }).then(response => {
+                if (response.status === 200) {
+                    ifSucceed();
+                    return;
+                }
+                if (response.status === 400) {
+                    errorHandler(response);
+                }
+            });
+        }
+
         const errorHandler = function(error) {
             error.json()
                 .then(exception => {
@@ -71,6 +86,7 @@ const USER_APP = (() => {
             POST: POST,
             PUT: PUT,
             fetchTemplate: fetchTemplate,
+            fetchWithFileTemplate: fetchWithFileTemplate,
         }
     };
 
@@ -84,6 +100,7 @@ const USER_APP = (() => {
         const userId = document.getElementById('userId');
         const webSite = document.getElementById('webSite');
         const intro = document.getElementById('intro');
+        const imageInput = document.getElementById("img-upload");
         const profileImage = document.getElementById('profile-image');
 
         const saveUser = function (event) {
@@ -96,16 +113,30 @@ const USER_APP = (() => {
                 password: password.value,
             };
 
-            const ifSucceed = () => window.location.href = '/login';
+            const goLogin = () => window.location.href = '/login';
 
             connector.fetchTemplate('/api/users',
                 connector.POST,
                 userBasicInfo,
-                ifSucceed);
+                goLogin);
         };
 
         const updateUser = function (event) {
             event.preventDefault();
+
+            const formData = new FormData();
+
+            formData.append("nickName", nickName.value);
+            formData.append("userName", userName.value);
+            formData.append("intro", intro.value);
+
+            if (imageInput.files.length !== 0) {
+                formData.append("file", imageInput.files[0]);
+            }
+
+            formData.append("webSite", webSite.value);
+            formData.append("id", userId.value);
+            formData.append("password", password.value);
 
             const userDto = {
                 nickName: nickName.value,
@@ -114,14 +145,16 @@ const USER_APP = (() => {
                 webSite: webSite.value,
                 password: password.value,
                 intro: intro.value,
+                file: imageInput.files[0],
             };
 
-            const ifSucceed = () => window.location.href = '/';
 
-            connector.fetchTemplate('/api/users/' + userId.value,
+            const goIndex = () => window.location.href = '/';
+
+            connector.fetchWithFileTemplate('/api/users/' + userId.value,
                 connector.PUT,
-                userDto,
-                ifSucceed);
+                formData,
+                goIndex);
         };
 
         const login = function (event) {
