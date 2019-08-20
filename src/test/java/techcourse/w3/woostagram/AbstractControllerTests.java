@@ -152,4 +152,8 @@ public class AbstractControllerTests {
             assertThat(body.contains(arg)).isTrue();
         }
     }
+
+    protected void clearCookie() {
+        cookie = "";
+    }
 }
