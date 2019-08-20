@@ -26,11 +26,18 @@ public class ReactionArticleService {
         ReactionArticle reactionArticle = new ReactionArticle(article.getAuthor(), article);
         reactionArticle.addGood();
         reactionArticleRepository.save(reactionArticle);
-        ReactionDto reactionDto = new ReactionDto(true);
+        ReactionDto reactionDto = new ReactionDto(true, 0L);
         return reactionDto;
     }
 
     private void checkSameUser(Article article, User author) {
         // article 에 있는 isSame() 메소드 호출해서 확인하기
+    }
+
+    public ReactionDto getCount(Long articleId) {
+        Article article = articleService.findById(articleId);
+        Long countOfGood = reactionArticleRepository.countByArticle(article);
+        ReactionDto reactionDto = new ReactionDto(true, countOfGood);
+        return reactionDto;
     }
 }

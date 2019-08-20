@@ -6,8 +6,10 @@ import lombok.Getter;
 public class ReactionDto {
 
     private Boolean hasGood;
+    private Long numberOfGood;
 
-    public ReactionDto(Boolean hasGood) {
+    public ReactionDto(Boolean hasGood, Long numberOfGood) {
         this.hasGood = hasGood;
+        this.numberOfGood = numberOfGood;
     }
 }

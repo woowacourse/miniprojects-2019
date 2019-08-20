@@ -20,7 +20,6 @@ public class ReactionApiControllerTest extends TestTemplate {
     private UserPassword userPassword = new UserPassword(USER_PASSWORD);
 
     private UserRequestDto userLoginRequestDto = new UserRequestDto(userEmail, userName, userPassword);
-    private ReactionDto reactionDto = new ReactionDto(true);
 
     @BeforeEach
     void setUp() {
@@ -29,19 +28,34 @@ public class ReactionApiControllerTest extends TestTemplate {
         respondApi(request(HttpMethod.POST, "/api/signin", userLoginRequestDto, HttpStatus.OK))
                 .jsonPath("$..email").isEqualTo(USER_EMAIL)
                 .jsonPath("$..name").isEqualTo(USER_NAME)
-        ;
+                ;
 
         // 게시글은 data.sql로 미리 넣어둠
     }
 
     @Test
     void 좋아요_정상_동작() {
-        respondApi(request(HttpMethod.POST, "api/articles/1/good",
-                reactionDto, HttpStatus.OK));
+        ReactionDto reactionDto = new ReactionDto(true, 0L);
+        respondApi(request(HttpMethod.POST, "/api/articles/1/good",
+                reactionDto, HttpStatus.OK))
+        .jsonPath("$.hasGood").isEqualTo(true)
+        ;
     }
 
     @Test
     void 좋아요_개수_정상_조회() {
+        ReactionDto reactionDto = new ReactionDto(true, 1L);
 
+        // 좋아요 누르기(TestTemplate로 분리하기)
+        respondApi(request(HttpMethod.POST, "/api/articles/1/good",
+                reactionDto, HttpStatus.OK))
+                .jsonPath("$.hasGood").isEqualTo(true)
+                ;
+
+        // 좋아요 조회
+        respondApi(request(HttpMethod.GET, "/api/articles/1/good",
+                reactionDto, HttpStatus.OK))
+                .jsonPath("$.numberOfGood").isEqualTo(1L)
+                ;
     }
 }
