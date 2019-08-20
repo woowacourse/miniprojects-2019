@@ -10,8 +10,8 @@ const ArticleApp = (() => {
         };
 
         const showUpdateModal = () => {
-            const updateBtn = document.getElementById('update-btn');
-            updateBtn.addEventListener('click', articleService.showModal);
+            const articleList = document.getElementById('article-list');
+            articleList.addEventListener('click', articleService.showModal);
         };
 
         const remove = () => {
@@ -58,15 +58,17 @@ const ArticleApp = (() => {
                 .catch(error => console.log("error: " + error));
         };
 
-        const add = () => {
+        const add = (event) => {
             const contents = document.getElementById("article-contents");
-            const data = {
+
+            if(AppStorage.check('article-add-run')) return;
+            AppStorage.set('article-add-run', true);
+
+            articleApi.add({
                 contents: contents.value,
                 imageUrl: "",
                 videoUrl: "",
-            };
-
-            articleApi.add(data)
+            })
                 .then(response => response.json())
                 .then((article) => {
                     document.getElementById('article-list')
@@ -77,6 +79,7 @@ const ArticleApp = (() => {
                             "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
                             "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png"
                         }));
+                    AppStorage.set('article-add-run', false);
                 });
         };
 
@@ -102,10 +105,15 @@ const ArticleApp = (() => {
 
         const showModal = (event) => {
             const target = event.target;
-            const article = target.closest('div[data-object="article"]');
-            const updateArea = document.getElementById('article-update-contents');
-            const articleId = article.getAttribute('data-article-id');
-            updateArea.innerText = article.querySelector('span[data-object="article-contents"]').innerText;
+            if (target.closest('li[data-btn="update"]')) {
+                const article = target.closest('div[data-object="article"]');
+                const updateArea = document.getElementById('article-update-contents');
+                const articleId = article.getAttribute('data-article-id');
+                updateArea.innerText = article.querySelector('span[data-object="article-contents"]').innerText;
+
+                const showModalBtn = document.getElementById('show-article-modal-btn');
+                showModalBtn.click();
+            }
         };
 
         return {

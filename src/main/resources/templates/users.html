@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="utf-8">
     <title>wootecobook</title>
@@ -90,18 +90,25 @@
             </ul>
         </div>
     </header>
-    <div id="main-content" class="container-fluid max-width-lg mx-auto mrg-top-70">
-        <div class="row">
+    <div class="container-fluid max-width-lg mx-auto">
+        <div class="row jumbo mrg-top-30">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="d-flex">
+                    <div class="pdd-right-5">
+                        <img class="jumbo-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
+                    </div>
+                    <div class="mr-auto align-self-end"><span class="font-size-50">EastJun</span></div>
+                    <div class="align-self-end">
+                        <button type="button" class="btn btn-info" id="user-update-form-btn">
+                            프로필 수정
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mrg-top-30">
             <div id="left-profile-container" class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                 <div class="left">
-                    <div class="left-profile">
-                        <a class="pointer">
-                            <img class="img-circle width-25px" src="/images/default/eastjun_profile.jpg">
-                            <div class="left-name-edit pointer">
-                                <a class="left-name">eastjun</a>
-                            </div>
-                        </a>
-                    </div>
                     <div class="left-menus">
                         <ul class="left-sub-menus">
                             <li class="left-sub-sub-menus mrg-btm-5 pointer">
@@ -127,7 +134,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
                 <div class="social-feeds">
                     <div class="card widget-compose">
                         <p class="border bottom width-100 pdd-btm-5 text-bold">게시물 만들기</p>
@@ -163,53 +170,53 @@
                         </ul>
                     </div>
                 </div>
+
                 <div id="article-list"></div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pdd-right-0">
-                <div class="card">
-                    <h5 class="card-title mrg-top-15 mrg-btm-0 mrg-horizon-15">스토리</h5>
-                    <div class="card-body">
-                        <ul class="list-unstyled list-info">
-                            <li class="story-user-list mrg-btm-10">
-                                <img class="thumb-img img-circle img-circle-blue border"
-                                     src="/images/default/plus_btn.png" alt="">
-                                <div class="info mrg-left-5">
-                                    <a href=""
-                                       class="title no-pdd-vertical text-semibold inline-block text-bold text-link-color">스토리에
-                                        추가</a>
-                                    <span class="sub-title">사진, 동영상을 공유하거나 글을 남겨보세요</span>
-                                </div>
-                            </li>
-                            <li class="story-user-list mrg-btm-10">
-                                <img class="thumb-img img-circle img-circle-blue"
-                                     src="https://avatars2.githubusercontent.com/u/46308585?s=460&v=4" alt="">
-                                <div class="info mrg-left-5 pdd-top-5">
-                                    <a href="" class="title no-pdd-vertical text-semibold inline-block text-bold">CU</a>
-                                    <span class="sub-title">18시간전</span>
-                                </div>
-                            </li>
-                            <li class="story-user-list mrg-btm-10">
-                                <img class="thumb-img img-circle img-circle-blue"
-                                     src="/images/default/eastjun_profile.jpg" alt="">
-                                <div class="info mrg-left-5 pdd-top-5">
-                                    <a href="" class="title no-pdd-vertical text-semibold inline-block text-bold">Eastjun</a>
-                                    <span class="sub-title">18시간전</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="border top">
-                        <div class="pdd-vertical-15 pdd-horizon-20 text-center">
-                            <a href="" class="text-semibold text-dark">More...</a>
-                        </div>
-                    </div>
+        </div>
+    </div>
+</div>
+<!--modal start-->
+<input type="hidden" id="show-user-update-modal-btn" data-toggle="modal" data-target="#user-update-modal">
+<div class="modal fade" id="user-update-modal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="text-bold">프로필 수정</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="user-update-now-password" class="col-form-label">현재 비밀번호</label>
+                    <input type="password" class="form-control" id="user-update-now-password" required>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="user-update-email" class="col-form-label">이메일</label>
+                    <input type="email" class="form-control" id="user-update-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-update-last-name" class="col-form-label">성</label>
+                    <input type="text" class="form-control" id="user-update-last-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-update-first-name" class="col-form-label">이름</label>
+                    <input type="text" class="form-control" id="user-update-first-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-update-change-password" class="col-form-label">변경할 비밀번호:</label>
+                    <input type="password" class="form-control" id="user-update-change-password">
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-info btn-sm" id="user-update-btn" data-dismiss="modal">Update</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- modal start -->
 <input type="hidden" id="show-article-modal-btn" data-toggle="modal" data-target="#article-update-modal">
 <div class="modal fade" id="article-update-modal" style="display: none;" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -218,8 +225,8 @@
                 <h4>게시글 수정</h4>
             </div>
             <div class="modal-body">
-                <textarea id="article-update-contents"
-                          class="resize-none form-control border bottom resize-none"></textarea>
+                                <textarea id="article-update-contents"
+                                          class="resize-none form-control border bottom resize-none"></textarea>
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
@@ -320,7 +327,8 @@
         </div>
     </div>
 </div>
-<!-- modal end -->
+<!--modal end-->
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
@@ -330,7 +338,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/header.js"></script>
-<script src="/js/article-template.js"></script>
-<script src="/js/article.js"></script>
+<script src="/js/users.js"></script>
 </body>
 </html>

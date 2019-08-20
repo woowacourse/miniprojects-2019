@@ -17,7 +17,7 @@ const template = (function () {
                                         <li data-btn="update">
                                             <a class="pointer">
                                                 <i class="ti-pencil pdd-right-10 text-dark"></i>
-                                                <span id="article-update-{{id}}" data-toggle="modal" data-target="#default-modal">게시글 수정</span>
+                                                <span id="article-update-{{id}}">게시글 수정</span>
                                             </a>
                                         </li>
                                         <li data-btn="delete">
