@@ -295,7 +295,12 @@ const postOperateButton = (function () {
                     .then(comment => {
                         const parentNode = commentItem.parentNode
                         const div = document.createElement('div')
-                        div.innerHTML = commentTemplate(comment)
+                        if (commentItem.classList.contains('child-comment')) {
+                            div.innerHTML = childCommentTemplate(comment)
+                        } else {
+                            div.innerHTML = commentTemplate(comment)
+                        }
+
                         parentNode.removeChild(commentItem)
                         parentNode.appendChild(div)
                     })
@@ -322,7 +327,7 @@ const postOperateButton = (function () {
             const toggleChildCommentForm = (event) => {
                 const commentsContainer = event.target.closest('li')
                 const form = event.target.closest('.comment-item').querySelector('.add-comment')
-                if (event.target.classList.contains('toggle-child') && form ===null) {
+                if (event.target.classList.contains('toggle-child') && form === null) {
                     const div = document.createElement('div')
                     div.innerHTML = commentFormTemplate
                     commentsContainer.appendChild(div)
