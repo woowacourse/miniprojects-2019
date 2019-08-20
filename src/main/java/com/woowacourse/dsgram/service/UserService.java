@@ -41,6 +41,11 @@ public class UserService {
         }
     }
 
+    public User findUserById(long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(NotFoundUserException::new);
+    }
+
     public UserDto findUserInfoById(long userId, LoginUserRequest loginUserRequest) {
         User user = findById(userId);
         user.checkEmail(loginUserRequest.getEmail());
@@ -49,7 +54,7 @@ public class UserService {
 
     private User findById(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException("회원을 찾을 수 없습니다."));
+                .orElseThrow(NotFoundUserException::new);
     }
 
     @Transactional

@@ -32,7 +32,7 @@ public class ArticleApiServiceTest {
 
     @BeforeEach
     void setUp() {
-        article = new Article("contents", "fileName", "filePath");
+        article = new Article("contents", "fileName", "filePath", user);
     }
 
     @Test

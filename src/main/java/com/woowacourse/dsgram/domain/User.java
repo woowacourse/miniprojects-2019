@@ -23,7 +23,7 @@ public class User {
     private String email;
 
     @Size(min = 2, max = 10)
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String nickName;
 
     @Size(min = 2, max = 10)
