@@ -7,7 +7,8 @@ import com.woowacourse.zzazanstagram.model.like.repository.DdabongRepository;
 import com.woowacourse.zzazanstagram.model.member.domain.Member;
 import com.woowacourse.zzazanstagram.model.member.service.MemberService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class DdabongService {
@@ -21,16 +22,16 @@ public class DdabongService {
         this.memberService = memberService;
     }
 
-    @Transactional
     public String saveOrRemove(Long articleId, String memberEmail) {
         Article article = articleService.findArticleById(articleId);
         Member member = memberService.findMemberByEmail(memberEmail);
-        Ddabong ddabong = new Ddabong(article, member);
+        Optional<Ddabong> ddabong = ddabongRepository.findByArticleAndMember(article, member);
 
-        if (article.hasDdabong(ddabong)) {
-            return delete(article, ddabong);
+        if (ddabong.isPresent()) {
+            return delete(article, ddabong.get());
         }
-        return save(article, ddabong);
+
+        return save(article, new Ddabong(article, member));
     }
 
     private String delete(Article article, Ddabong ddabong) {
@@ -41,7 +42,6 @@ public class DdabongService {
 
     private String save(Article article, Ddabong ddabong) {
         ddabongRepository.save(ddabong);
-        article.addDdabong(ddabong);
         return article.getDdabongCount();
     }
 }

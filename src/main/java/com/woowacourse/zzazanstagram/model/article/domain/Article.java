@@ -36,16 +36,8 @@ public class Article extends BaseEntity {
         return String.valueOf(ddabongs.size());
     }
 
-    public boolean hasDdabong(Ddabong ddabong) {
-        return ddabongs.contains(ddabong);
-    }
-
     public void deleteDdabong(Ddabong ddabong) {
         ddabongs.remove(ddabong);
-    }
-
-    public void addDdabong(Ddabong ddabong) {
-        ddabongs.add(ddabong);
     }
 
     public Image getImage() {
