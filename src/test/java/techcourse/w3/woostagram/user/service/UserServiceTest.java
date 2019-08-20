@@ -10,6 +10,7 @@ import techcourse.w3.woostagram.user.domain.UserRepository;
 import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
+import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
 import techcourse.w3.woostagram.user.exception.UserUpdateException;
@@ -30,6 +31,7 @@ class UserServiceTest {
 
     private UserDto userDto;
     private UserContentsDto userContentsDto;
+    private UserUpdateDto userUpdateDto;
 
     @BeforeEach
     void setUp() {
@@ -40,6 +42,11 @@ class UserServiceTest {
 
         userContentsDto = UserContentsDto.builder()
                 .userName("aaa")
+                .build();
+
+        userUpdateDto = UserUpdateDto.builder()
+                .userName("woowacrews")
+                .contents("woostagram")
                 .build();
     }
 
@@ -58,14 +65,14 @@ class UserServiceTest {
     @Test
     void update_correct_success() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
-        userService.update(userContentsDto, userDto.getEmail());
+        userService.update(userUpdateDto, userDto.getEmail());
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
     }
 
     @Test
     void update_empty_fail() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
-        assertThrows(UserUpdateException.class, () -> userService.update(userContentsDto, userDto.getEmail()));
+        assertThrows(UserUpdateException.class, () -> userService.update(userUpdateDto, userDto.getEmail()));
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
     }
 

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
 import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
+import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -77,9 +78,16 @@ class UserControllerTest extends AbstractControllerTests {
                 .is2xxSuccessful()).isTrue();
     }
 
+//    @Test
+//    void update_correct_isOk() {
+//        assertThat(putFormRequest("/users", UserContentsDto.class, "a", "b", "c", "d")
+//                .getStatus()
+//                .is3xxRedirection()).isTrue();
+//    }
+
     @Test
     void update_correct_isOk() {
-        assertThat(putFormRequest("/users", UserContentsDto.class, "a", "b", "c", "d")
+        assertThat(putFormRequest("/users", UserUpdateDto.class, "a", "b", "c", "d")
                 .getStatus()
                 .is3xxRedirection()).isTrue();
     }
