@@ -81,7 +81,7 @@
                                     </p>
                                 </div>
                                 <div class="feed-contents pdd-left-15">
-                                    <p th:text="${article.contents}"></p>
+                                    <p id="contents" th:text="${article.contents}"></p>
                                 </div>
                                 <div class="feed-footer">
                                     <div class="comment">
@@ -169,6 +169,20 @@
             articleVideo.src = url;
         }
     }
+
+    const hashTag = () => {
+        const contents = document.getElementById('contents');
+        const contentsHtml = contents.innerHTML;
+        const regex = new RegExp('#([0-9a-zA-Z가-힣_]{2,30})', 'g');
+
+        let tag = contentsHtml.match(regex);
+        tag.forEach(tag => {
+            contents.innerHTML = contents.innerHTML.replace(tag, '<a href="">' + tag + '</a>')
+        });
+    };
+
+    window.addEventListener('DOMContentLoaded', hashTag)
+
 </script>
 </th:block>
 </html>
