@@ -37,7 +37,7 @@ public class UserAssembler {
                 .password(String.valueOf(email.hashCode()))
                 .webSite(userInfo.getHtml_url())
                 .userName(ifBlankName(userInfo.getName()))
-                .isOAuthUser(true)
+                .isOauthUser(true)
                 .build();
     }
 

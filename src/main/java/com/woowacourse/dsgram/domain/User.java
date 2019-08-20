@@ -42,17 +42,17 @@ public class User {
     private String intro;
 
     @Column(columnDefinition = "boolean default false")
-    private boolean isOAuthUser;
+    private boolean isOauthUser;
 
     @Builder
-    public User(String email, String nickName, String userName, String password, String webSite, String intro, boolean isOAuthUser) {
+    public User(String email, String nickName, String userName, String password, String webSite, String intro, boolean isOauthUser) {
         this.email = email;
         this.nickName = nickName;
         this.userName = userName;
         this.password = password;
         this.webSite = webSite;
         this.intro = intro;
-        this.isOAuthUser = isOAuthUser;
+        this.isOauthUser = isOauthUser;
     }
 
     public void update(User updatedUser, String sessionEmail) {
