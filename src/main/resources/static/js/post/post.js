@@ -238,12 +238,8 @@ const postOperateButton = (function () {
 
                 const postId = contentsArea.closest(".card").dataset.id
                 const commentsContainer = contentsArea.closest('.card').querySelector('.comment-list')
-                console.log('commentsContainer', commentsContainer)
-                console.log(event.target)
                 const parentComment = event.target.closest('.parent-comment');
                 const parentId = parentComment === null ? null : parentComment.dataset.id
-
-                console.log('parentId - ', parentId)
 
                 const commentCreate = {
                     "contents": contents,
@@ -269,14 +265,9 @@ const postOperateButton = (function () {
             }
 
             const toggleCommentUpdate = (event) => {
-                console.log('toggleCommentUpdate')
-                console.log(event.target)
-
                 const buttonContainer = event.target.closest("a")
                 if (buttonContainer.classList.contains('toggle-comment-update')) {
-                    console.log('-----------------------------')
                     const commentItem = buttonContainer.closest('.comment-item')
-                    console.log(commentItem)
                     commentItem.classList.toggle('editing');
                 }
             }
@@ -293,19 +284,15 @@ const postOperateButton = (function () {
                     return
                 }
 
-                console.log('-------------------------------------------------------------')
-                console.log(event.target)
                 const postId = contentsArea.closest(".card").dataset.id
                 const commentItem = contentsArea.closest('.comment-item')
                 const commentId = commentItem.dataset.id
-                console.log(contents, postId, commentId)
                 const commentUpdate = {
                     "contents": contents,
                 }
                 api.PUT(`/api/posts/${postId}/comments/${commentId}`, commentUpdate)
                     .then(res => res.json())
                     .then(comment => {
-                        console.log(comment)
                         const parentNode = commentItem.parentNode
                         const div = document.createElement('div')
                         div.innerHTML = commentTemplate(comment)
@@ -317,9 +304,7 @@ const postOperateButton = (function () {
 
             const deleteComment = (event) => {
                 if (event.target.closest('a').classList.contains('comment-delete')) {
-                    console.log('deleteComment()', event.target)
                     const buttonContainer = event.target.closest("ul").closest("li")
-                    console.log(buttonContainer)
                     const postId = buttonContainer.closest('.card').dataset.id;
                     const commentId = buttonContainer.dataset.id;
                     api.DELETE(`/api/posts/${postId}/comments/${commentId}`)
@@ -327,10 +312,7 @@ const postOperateButton = (function () {
                             if (res.status !== 204) {
                                 throw res;
                             }
-                            console.log('delete-success - ', buttonContainer)
                             const commentCard = buttonContainer.parentNode
-                            console.log('commentCard - ', commentCard)
-                            console.log('comment parentNode', buttonContainer.parentNode)
                             commentCard.removeChild(buttonContainer);
                         })
                         .catch(error => console.error(error))
@@ -339,7 +321,6 @@ const postOperateButton = (function () {
 
             const toggleChildCommentForm = (event) => {
                 const commentsContainer = event.target.closest('li')
-                console.log(event.target)
                 const form = event.target.closest('.comment-item').querySelector('.add-comment')
                 if (event.target.classList.contains('toggle-child') && form ===null) {
                     const div = document.createElement('div')
@@ -351,17 +332,14 @@ const postOperateButton = (function () {
 
             const getChildren = (event) => {
                 if (event.target.classList.contains('get-child')) {
-                    console.log('getChildren')
                     const parentContainer = event.target.closest('div').querySelector('li');
                     const postId = event.target.closest('.card').dataset.id;
                     const parentId = parentContainer.dataset.id;
                     const size = event.target.dataset.id;
-                    console.log(postId, '----', parentId, '---------size = ', size)
 
                     api.GET(`/api/posts/${postId}/comments/${parentId}/children?size=${size}`)
                         .then(res => res.json())
                         .then(comments => {
-                            console.log(comments)
                             comments.content.forEach(comment => {
                                 const div = document.createElement('div')
                                 div.innerHTML = childCommentTemplate(comment)
@@ -383,7 +361,6 @@ const postOperateButton = (function () {
                 deleteComment: deleteComment,
                 toggleChildCommentForm: toggleChildCommentForm,
                 getChildren: getChildren,
-                updateComment: updateComment
             }
         };
 
