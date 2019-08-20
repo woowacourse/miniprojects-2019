@@ -20,14 +20,16 @@ public class ReactionApiController {
 
     @PostMapping("/articles/{articleId}/good")
     @Transactional
-    public ResponseEntity<ReactionDto> saveGood(@PathVariable Long articleId) {
-        ReactionDto reactionDto = reactionArticleService.saveGood(articleId);
-        return new ResponseEntity<>(reactionDto, HttpStatus.OK);
+    public ResponseEntity<ReactionDto> clickGood(@PathVariable Long articleId,
+                                                 @RequestBody ReactionDto reactionDto) {
+        ReactionDto resultReactionDto = reactionArticleService
+                .clickGood(articleId, reactionDto);
+        return new ResponseEntity<>(resultReactionDto, HttpStatus.OK);
     }
 
     @GetMapping("/articles/{articleId}/good")
     public ResponseEntity<ReactionDto> showGood(@PathVariable Long articleId) {
-        ReactionDto reactionDto = reactionArticleService.getCount(articleId);
+        ReactionDto reactionDto = reactionArticleService.showCount(articleId);
         return new ResponseEntity<>(reactionDto, HttpStatus.OK);
     }
 }
