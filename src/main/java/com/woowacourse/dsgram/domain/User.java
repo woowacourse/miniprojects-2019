@@ -55,8 +55,8 @@ public class User {
         this.isOAuthUser = isOAuthUser;
     }
 
-    public void update(User updatedUser, String email) {
-        checkEmail(email);
+    public void update(User updatedUser, String sessionEmail) {
+        checkEmail(sessionEmail);
         this.intro = updatedUser.intro;
         this.userName = updatedUser.userName;
         this.nickName = updatedUser.nickName;
