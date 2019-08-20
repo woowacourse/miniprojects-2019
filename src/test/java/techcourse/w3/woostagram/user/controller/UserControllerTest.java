@@ -15,8 +15,9 @@ class UserControllerTest extends AbstractControllerTests {
     private static final String TEST_PASSWORD = "Aa1234!!";
     private static final String BAD_PASSWORD = "abc";
 
+    @Override
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
         loginRequest(TEST_EMAIL, TEST_PASSWORD);
     }
 
