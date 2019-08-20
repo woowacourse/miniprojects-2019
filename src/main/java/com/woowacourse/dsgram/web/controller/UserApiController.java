@@ -52,7 +52,16 @@ public class UserApiController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthUserRequest authUserRequest, HttpSession httpSession) {
-        httpSession.setAttribute("sessionUser", userService.login(authUserRequest));
+        httpSession.setAttribute(LoginUserRequest.SESSION_USER, userService.login(authUserRequest));
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity deleteUser(@PathVariable long userId,
+                                     @UserSession LoginUserRequest loginUserRequest,
+                                     HttpSession httpSession) {
+        userService.deleteById(userId, loginUserRequest);
+        httpSession.removeAttribute(LoginUserRequest.SESSION_USER);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

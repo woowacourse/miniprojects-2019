@@ -95,4 +95,14 @@ public class UserService {
         OAuthUserInfoResponse userInfo = githubClient.getUserInformation(accessToken);
         return userRepository.save(UserAssembler.toEntity(email, userInfo));
     }
+
+    public void deleteById(long id, LoginUserRequest loginUserRequest) {
+        // TODO: 2019-08-20 OAUTH revoke?
+        User user = findByEmail(loginUserRequest.getEmail())
+                .orElseThrow(() -> new NotFoundUserException("회원을 찾을 수 없습니다."));
+        if (user.isNotSameId(id)) {
+            throw new InvalidUserException("회원정보가 일치하지 않습니다.");
+        }
+        userRepository.deleteById(id);
+    }
 }
