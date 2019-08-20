@@ -39,11 +39,11 @@ public class UserServiceTest {
             .nickName("buddy_")
             .password("Aa12345!")
             .build();
-    
-    private final AuthUserRequest authUserRequest = new AuthUserRequest("buddy@buddy.com","Aa12345!");
+
+    private final AuthUserRequest authUserRequest = new AuthUserRequest("buddy@buddy.com", "Aa12345!");
 
     private final UserDto userDto = new UserDto(1L, "김버디", "buddy_2", "Aa12345!", "www.website.com", "intro");
-    private final LoginUserRequest loginUserRequest = new LoginUserRequest("buddy@buddy.com","buddy_","김버디");
+    private final LoginUserRequest loginUserRequest = new LoginUserRequest("buddy@buddy.com", "buddy_", "김버디");
 
 
     @InjectMocks
@@ -65,7 +65,9 @@ public class UserServiceTest {
     void 유저_저장_실패_닉네임_중복() {
         given(userRepository.existsByNickName(any())).willReturn(true);
 
-        assertThrows(RuntimeException.class, () -> {userService.save(signUpUserRequest);});
+        assertThrows(RuntimeException.class, () -> {
+            userService.save(signUpUserRequest);
+        });
     }
 
     @Test
@@ -82,7 +84,7 @@ public class UserServiceTest {
 
         userService.login(authUserRequest);
 
-        verify(userRepository,times(1)).findByEmail(any());
+        verify(userRepository, times(1)).findByEmail(any());
     }
 
     @Test
@@ -96,7 +98,7 @@ public class UserServiceTest {
     void 로그인_실패_패스워드_불일치() {
         given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
 
-        assertThrows(InvalidUserException.class, () -> userService.login(new AuthUserRequest("buddy@buddy.com","exception")));
+        assertThrows(InvalidUserException.class, () -> userService.login(new AuthUserRequest("buddy@buddy.com", "exception")));
     }
 
     @Test
@@ -104,7 +106,7 @@ public class UserServiceTest {
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
 
         UserDto userDto = new UserDto(1L, "김버디", "buddy_2", "Aa12345!", "www.website.com", "intro");
-        LoginUserRequest loginUserRequest = new LoginUserRequest("buddy@buddy.com","buddy_","김버디");
+        LoginUserRequest loginUserRequest = new LoginUserRequest("buddy@buddy.com", "buddy_", "김버디");
         assertDoesNotThrow(() -> userService.update(1L, userDto, loginUserRequest));
     }
 
@@ -119,7 +121,7 @@ public class UserServiceTest {
     void 남의_정보를_수정() {
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         given(userRepository.existsByNickName(anyString())).willReturn(false);
-        assertThrows(InvalidUserException.class, () -> userService.update(anyLong(), userDto, new LoginUserRequest("user@gmail","user","user")));
+        assertThrows(InvalidUserException.class, () -> userService.update(anyLong(), userDto, new LoginUserRequest("user@gmail", "user", "user")));
     }
 
     @Test

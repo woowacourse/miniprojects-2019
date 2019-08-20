@@ -111,6 +111,7 @@
             </div>
         </div>
     </div>
+<script src="/js/fetchApi.js"></script>
 <script th:inline="javascript">
     let articleId = [[${article.id}]];
     let articleFileName = [[${article.fileName}]];
@@ -132,26 +133,22 @@
         return blob;
     };
 
-    fetch('/api/articles/' + articleId + "/file", {
-        method: "GET",
-    }).then(response => {
+    const connector = FETCH_APP.fetchApi();
+    const loadFile = response => {
         response.arrayBuffer().then(function (buffer) {
-            var bytes = new Uint8Array(buffer);
-            console.log('byte', bytes);
-
-            var binary = '';
+            const bytes = new Uint8Array(buffer);
+            let binary = '';
             bytes.forEach((b) => binary += String.fromCharCode(b));
 
             const blob = b64StringToBlob(binary);
-            console.log('blob', blob);
-
             const blobUrl = URL.createObjectURL(blob);
 
-            putSrc(blobUrl, articleFileName);
+            setSrcAttribute(blobUrl, articleFileName);
         });
-    });
+    };
+    connector.fetchTemplateWithoutBody('/api/articles/' + articleId + "/file", connector.GET, loadFile);
 
-    function putSrc(url, fileName) {
+    function setSrcAttribute(url, fileName) {
         let words = fileName.split('.');
         let extension = words[words.length - 1];
 
