@@ -3,7 +3,7 @@ const postTemplate = (post) => `
     <div class="feed-header">
         <ul class="list-unstyled list-info">
             <li>
-                <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
+                <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
                 <div class="info">
                     <a href="" class="title no-pdd-vertical text-semibold inline-block">${post.author.name}</a>
                     <span>님이 그룹에 링크를 공유했습니다.</span>
