@@ -23,6 +23,7 @@ public class UserInfoDto {
 
     public static UserInfoDto from(User user) {
         return UserInfoDto.builder()
+                .id(user.getId())
                 .email(user.getEmail())
                 .userContentsDto(UserContentsDto.from(user.getUserContents())).build();
     }

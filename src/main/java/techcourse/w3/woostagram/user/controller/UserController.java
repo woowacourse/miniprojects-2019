@@ -3,14 +3,13 @@ package techcourse.w3.woostagram.user.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
+import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.service.UserService;
 import techcourse.w3.woostagram.user.support.LoggedInUser;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import static techcourse.w3.woostagram.user.support.UserEmailArgumentResolver.LOGGED_IN_USER_SESSION_KEY;
 
@@ -61,8 +60,8 @@ public class UserController {
     }
 
     @PutMapping
-    public String update(@Valid UserContentsDto userContentsDto, @LoggedInUser String email) {
-        userService.update(userContentsDto, email);
+    public String update(UserUpdateDto userUpdateDto, @LoggedInUser String email) {
+        userService.update(userUpdateDto, email);
         return "redirect:/users/mypage";
     }
 
