@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @EqualsAndHashCode(of = {"id"})
+@ToString
 public class User {
     @Id
     @GeneratedValue
@@ -22,15 +23,15 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Size(min = 2, max = 10)
+    @Size(min = 2, max = 30)
     @Column(unique = true)
     private String nickName;
 
-    @Size(min = 2, max = 10)
+    @Size(min = 2, max = 30)
     @Column(nullable = false)
     private String userName;
 
-    @Size(min = 4, max = 16)
+    @Size(min = 4, max = 30)
     @Column(nullable = false)
     private String password;
 
@@ -40,14 +41,18 @@ public class User {
     @Lob
     private String intro;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean isOAuthUser;
+
     @Builder
-    public User(String email, String nickName, String userName, String password, String webSite, String intro) {
+    public User(String email, String nickName, String userName, String password, String webSite, String intro, boolean isOAuthUser) {
         this.email = email;
         this.nickName = nickName;
         this.userName = userName;
         this.password = password;
         this.webSite = webSite;
         this.intro = intro;
+        this.isOAuthUser = isOAuthUser;
     }
 
     public void update(User updatedUser, String email) {
@@ -57,6 +62,12 @@ public class User {
         this.nickName = updatedUser.nickName;
         this.password = updatedUser.password;
         this.webSite = updatedUser.webSite;
+    }
+
+    public void changeToOAuthUser() {
+        if (!this.isOAuthUser) {
+            this.isOAuthUser = true;
+        }
     }
 
     public void checkPassword(String password) {
@@ -73,19 +84,6 @@ public class User {
 
     public boolean equalsNickName(String nickName) {
         return this.nickName.equals(nickName);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", webSite='" + webSite + '\'' +
-                ", intro='" + intro + '\'' +
-                '}';
     }
 }
 

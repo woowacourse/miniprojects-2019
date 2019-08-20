@@ -1,6 +1,5 @@
 package com.woowacourse.dsgram.service;
 
-import com.google.gson.JsonElement;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.domain.UserRepository;
 import com.woowacourse.dsgram.domain.exception.InvalidUserException;
@@ -12,6 +11,7 @@ import com.woowacourse.dsgram.service.dto.user.UserDto;
 import com.woowacourse.dsgram.service.exception.DuplicatedAttributeException;
 import com.woowacourse.dsgram.service.exception.NotFoundUserException;
 import com.woowacourse.dsgram.service.oauth.GithubClient;
+import com.woowacourse.dsgram.service.dto.oauth.OAuthUserInfoResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,7 +67,7 @@ public class UserService {
     }
 
     public LoginUserRequest login(AuthUserRequest authUserRequest) {
-        User user = userRepository.findByEmail(authUserRequest.getEmail())
+        User user = findByEmail(authUserRequest.getEmail())
                 .orElseThrow(() -> new InvalidUserException("회원정보가 일치하지 않습니다."));
         user.checkPassword(authUserRequest.getPassword());
         return UserAssembler.toAuthUserDto(user);
@@ -77,21 +77,21 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
     public LoginUserRequest oauth(String code) {
         String accessToken = githubClient.getToken(code);
-
         String email = githubClient.getUserEmail(accessToken);
 
-        Optional<User> user = findByEmail(email);
-        if (user.isPresent()) {
-            return UserAssembler.toAuthUserDto(user.get());
+        Optional<User> optionalUser = findByEmail(email);
+        if (optionalUser.isPresent()) {
+            optionalUser.ifPresent(User::changeToOAuthUser);
+            return UserAssembler.toAuthUserDto(optionalUser.get());
         }
         return UserAssembler.toAuthUserDto(saveOauthUser(accessToken, email));
     }
 
     private User saveOauthUser(String accessToken, String email) {
-        // TODO: 2019-08-16 OAUTH 로그인시 nickName null/중복 처리
-        JsonElement userInfo = githubClient.getUserInformation(accessToken);
-        return userRepository.save(UserAssembler.toEntity(email, userInfo.getAsJsonObject()));
+        OAuthUserInfoResponse userInfo = githubClient.getUserInformation(accessToken);
+        return userRepository.save(UserAssembler.toEntity(email, userInfo));
     }
 }
