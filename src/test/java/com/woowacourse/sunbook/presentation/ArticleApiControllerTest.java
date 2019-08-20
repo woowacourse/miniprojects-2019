@@ -20,7 +20,7 @@ class ArticleApiControllerTest extends TestTemplate {
 
     @Test
     void 게시글_전체_조회() {
-        respondApi(request(HttpMethod.GET, "/api/articles", Void.class, HttpStatus.OK))
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/articles", Void.class, HttpStatus.OK, loginSessionId(userRequestDto)))
                 .jsonPath("$..contents").value(hasItem(CONTENTS))
                 .jsonPath("$..imageUrl").value(hasItem(IMAGE_URL))
                 .jsonPath("$..videoUrl").value(hasItem(VIDEO_URL))
@@ -30,7 +30,7 @@ class ArticleApiControllerTest extends TestTemplate {
     @Test
     void 게시글_정상_작성() {
         ArticleFeature articleFeature = new ArticleFeature(CONTENTS, IMAGE_URL, VIDEO_URL);
-        respondApi(request(HttpMethod.POST, "/api/articles", articleFeature, HttpStatus.OK))
+        respondApi(loginAndRequest(HttpMethod.POST, "/api/articles", articleFeature, HttpStatus.OK, loginSessionId(userRequestDto)))
                 .jsonPath("$..contents").isEqualTo(CONTENTS)
                 .jsonPath("$..imageUrl").isEqualTo(IMAGE_URL)
                 .jsonPath("$..videoUrl").isEqualTo(VIDEO_URL)
@@ -40,7 +40,7 @@ class ArticleApiControllerTest extends TestTemplate {
     @Test
     void 게시글_업데이트() {
         ArticleFeature updatedArticleFeature = new ArticleFeature(UPDATE_CONTENTS, UPDATE_IMAGE_URL, UPDATE_VIDEO_URL);
-        respondApi(request(HttpMethod.PUT, "/api/articles/2", updatedArticleFeature, HttpStatus.OK))
+        respondApi(loginAndRequest(HttpMethod.PUT, "/api/articles/2", updatedArticleFeature, HttpStatus.OK, loginSessionId(userRequestDto)))
                 .jsonPath("$..contents").isEqualTo(UPDATE_CONTENTS)
                 .jsonPath("$..imageUrl").isEqualTo(UPDATE_IMAGE_URL)
                 .jsonPath("$..videoUrl").isEqualTo(UPDATE_VIDEO_URL)
@@ -49,6 +49,6 @@ class ArticleApiControllerTest extends TestTemplate {
 
     @Test
     void 게시글_정상_삭제() {
-        request(HttpMethod.DELETE, "/api/articles/3", Void.class, HttpStatus.OK);
+        loginAndRequest(HttpMethod.DELETE, "/api/articles/3", Void.class, HttpStatus.OK, loginSessionId(userRequestDto));
     }
 }
