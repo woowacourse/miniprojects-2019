@@ -279,3 +279,7 @@ header ul.nav-right li, header ul.nav-left li {
 .composor-tools div li {
     display: flex;
 }
+
+.one-line {
+    display: block;
+}

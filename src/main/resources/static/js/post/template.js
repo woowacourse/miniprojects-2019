@@ -36,7 +36,7 @@ const postTemplate = (post) => `
     </div>
     <div class="feed-body no-pdd">
         <p class="view">
-            <span>${post.contents.contents}</span>
+            ${textFormat(post.contents.contents)}
         </p>
         <div class="edit edit-form">
             <textarea class="resize-none form-control border bottom resize-none edit">${post.contents.contents}</textarea>
@@ -130,6 +130,12 @@ const postTemplate = (post) => `
 </div>
 `
 
+const textTemplate = (text) => `
+<span class="one-line">
+    ${text}
+</span>
+`
+
 const isUpdated = (createdAt, updatedAt) => {
     const createdDate = new Date(createdAt)
     const updatedDate = new Date(updatedAt)
@@ -148,3 +154,7 @@ const dateFormat = (date, updated) => {
         (updated ? '(edited)' : '')
 }
 
+const textFormat = contentStr => {
+    const result = contentStr.split('\n').map(content => textTemplate(content))
+    return result.join('')
+}
