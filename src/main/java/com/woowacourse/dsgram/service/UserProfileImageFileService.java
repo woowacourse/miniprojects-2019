@@ -38,4 +38,9 @@ public class UserProfileImageFileService {
                 .orElseThrow(() -> new NotFoundUserImageException("유저 프로필 사진이 조회되지 않습니다."));
         userProfileImage.update(fileInfo.getFileName(), fileInfo.getFilePath());
     }
+
+    public UserProfileImage findById(long userId) {
+        return userProfileImageRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundUserImageException("유저 프로필 사진이 조회되지 않습니다."));
+    }
 }
