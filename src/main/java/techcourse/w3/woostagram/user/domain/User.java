@@ -35,12 +35,6 @@ public class User extends AuditLog {
     @Embedded
     private UserContents userContents;
 
-    @OneToMany(mappedBy = "from")
-    private List<Follow> following = new ArrayList<>();
-
-    @OneToMany(mappedBy = "to")
-    private List<Follow> followers = new ArrayList<>();
-
     @Builder
     public User(Long id, String email, String password, UserContents userContents) {
         this.id = id;
