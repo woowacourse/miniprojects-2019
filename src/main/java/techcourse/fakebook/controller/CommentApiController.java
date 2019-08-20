@@ -61,4 +61,16 @@ public class CommentApiController {
         }
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/comments/{commentId}/like/count")
+    public ResponseEntity<Integer> countLikeOfComment(@PathVariable Long commentId) {
+        Integer numberOfLike = commentService.getLikeCountOf(commentId);
+        return ResponseEntity.ok().body(numberOfLike);
+    }
+
+    @GetMapping("/articles/{articleId}/comments/count")
+    public ResponseEntity<Integer> countCommentOfArticle(@PathVariable Long articleId) {
+        Integer numberOfComment = commentService.getCommentsCountOf(articleId);
+        return ResponseEntity.ok().body(numberOfComment);
+    }
 }

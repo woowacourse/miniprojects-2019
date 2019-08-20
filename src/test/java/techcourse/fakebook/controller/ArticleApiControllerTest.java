@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import techcourse.fakebook.service.dto.ArticleRequest;
+import techcourse.fakebook.service.dto.ArticleResponse;
 import techcourse.fakebook.service.dto.LoginRequest;
 
 import static io.restassured.RestAssured.given;
@@ -63,5 +64,29 @@ public class ArticleApiControllerTest extends ControllerTestHelper {
         then().
                 statusCode(200).
                 body("content", equalTo(articleRequest.getContent()));
+    }
+
+    @Test
+    void 좋아요_개수를_잘_리턴하는지_확인한다() {
+        ArticleResponse articleResponse = writeArticle();
+
+        //좋아요를 누른다.
+        given().
+                port(port).
+                contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                cookie(cookie).
+        when().
+                post("/api/articles/" + articleResponse.getId() + "/like").
+        then().
+                statusCode(200);
+
+        given().
+                port(port).
+                cookie(cookie).
+        when().
+                get("/api/articles/" + articleResponse.getId() + "/like/count").
+        then().
+                statusCode(200).
+                body(equalTo("1"));
     }
 }

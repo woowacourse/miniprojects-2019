@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import techcourse.fakebook.domain.like.CommentLikeRepository;
 import techcourse.fakebook.service.dto.UserOutline;
 import techcourse.fakebook.exception.NotFoundCommentException;
-import techcourse.fakebook.service.dto.CommentLikeResponse;
 import techcourse.fakebook.service.dto.CommentRequest;
 import techcourse.fakebook.service.dto.CommentResponse;
 
@@ -84,5 +83,26 @@ public class CommentServiceTest {
     @Test
     void 좋아요_여부를_확인한다() {
         assertThat(commentService.isLiked(4L, userOutline)).isFalse();
+    }
+
+    @Test
+    void 좋아요_개수를_확인한다() {
+        CommentRequest commentRequest = new CommentRequest("댓글입니다.");
+        CommentResponse commentResponse = commentService.save(1L, commentRequest, userOutline);
+        Long commentId = commentResponse.getId();
+
+        commentService.like(commentId, userOutline);
+        assertThat(commentService.getLikeCountOf(commentId)).isEqualTo(1);
+
+        commentService.like(commentId, userOutline);
+        assertThat(commentService.getLikeCountOf(commentId)).isEqualTo(0);
+    }
+
+    @Test
+    void 게시글에_대한_댓글_개수를_확인한다() {
+        CommentRequest commentRequest = new CommentRequest("댓글입니다.");
+        commentService.save(1L, commentRequest, userOutline);
+
+        assertThat(commentService.getCommentsCountOf(1L)).isGreaterThanOrEqualTo(1);
     }
 }

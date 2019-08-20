@@ -4,12 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import techcourse.fakebook.service.dto.ArticleResponse;
 import techcourse.fakebook.service.dto.CommentRequest;
 import techcourse.fakebook.service.dto.CommentResponse;
 import techcourse.fakebook.service.dto.LoginRequest;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class CommentApiControllerTest extends ControllerTestHelper {
@@ -86,7 +88,7 @@ public class CommentApiControllerTest extends ControllerTestHelper {
                 port(port).
                 cookie(cookie).
         when().
-                get("/api/comments/" + comment.getId() +"/like").
+                get("/api/comments/" + comment.getId() + "/like").
         then().
                 statusCode(204);
     }
@@ -99,7 +101,7 @@ public class CommentApiControllerTest extends ControllerTestHelper {
                 port(port).
                 cookie(cookie).
         when().
-                post("/api/comments/" + comment.getId() +"/like").
+                post("/api/comments/" + comment.getId() + "/like").
         then().
                 statusCode(201);
     }
@@ -112,7 +114,7 @@ public class CommentApiControllerTest extends ControllerTestHelper {
                 port(port).
                 cookie(cookie).
         when().
-                post("/api/comments/" + comment.getId() +"/like").
+                post("/api/comments/" + comment.getId() + "/like").
         then().
                 statusCode(201);
 
@@ -120,12 +122,54 @@ public class CommentApiControllerTest extends ControllerTestHelper {
                 port(port).
                 cookie(cookie).
         when().
-                post("/api/comments/" + comment.getId() +"/like").
+                post("/api/comments/" + comment.getId() + "/like").
         then().
                 statusCode(204);
     }
 
+    @Test
+    void 좋아요_개수를_잘_불러오는지_확인한다() {
+        CommentResponse commentResponse = writeComment();
+
+        //좋아요 등록
+        given().
+                port(port).
+                cookie(cookie).
+        when().
+                post("/api/comments/" + commentResponse.getId() + "/like").
+        then().
+                statusCode(201);
+
+
+        given().
+                port(port).
+                cookie(cookie).
+        when().
+                get("/api/comments/" + commentResponse.getId() + "/like/count").
+        then().
+                statusCode(200).
+                body(equalTo("1"));
+    }
+
+    @Test
+    void 게시글에_따른_댓글_개수를_잘_불러오는지_확인한다() {
+        ArticleResponse articleResponse = writeArticle();
+        writeComment(articleResponse.getId());
+
+        given().
+                port(port).
+        when().
+                get("/api/articles/" + articleResponse.getId() + "/comments/count").
+        then().
+                statusCode(200).
+                body(equalTo("1"));
+    }
+
     private CommentResponse writeComment() {
+        return writeComment(1L);
+    }
+
+    private CommentResponse writeComment(Long articleId) {
         CommentRequest commentRequest = new CommentRequest("hello");
 
         return given().
@@ -134,6 +178,6 @@ public class CommentApiControllerTest extends ControllerTestHelper {
                 cookie(cookie).
                 body(commentRequest).
         when().
-                post("/api/articles/1/comments").as(CommentResponse.class);
+                post("/api/articles/" + articleId + "/comments").as(CommentResponse.class);
     }
 }
