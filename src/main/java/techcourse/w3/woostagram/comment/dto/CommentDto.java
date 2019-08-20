@@ -18,15 +18,13 @@ public class CommentDto {
     private String contents;
     private LocalDateTime createdDate;
     private UserInfoDto userInfoDto;
-    private Long articleId;
 
     @Builder
-    public CommentDto(Long id, String contents, LocalDateTime createdDate, UserInfoDto userInfoDto, Long articleId) {
+    public CommentDto(Long id, String contents, LocalDateTime createdDate, UserInfoDto userInfoDto) {
         this.id = id;
         this.contents = contents;
         this.createdDate = createdDate;
         this.userInfoDto = userInfoDto;
-        this.articleId = articleId;
     }
 
     public static CommentDto from(Comment comment) {
@@ -35,7 +33,6 @@ public class CommentDto {
                 .contents(comment.getContents())
                 .createdDate(comment.getCreatedDate())
                 .userInfoDto(UserInfoDto.from(comment.getUser()))
-                .articleId(comment.getArticleId())
                 .build();
     }
 

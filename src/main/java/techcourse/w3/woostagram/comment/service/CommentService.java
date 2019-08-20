@@ -9,6 +9,9 @@ import techcourse.w3.woostagram.comment.dto.CommentDto;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.service.UserService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
@@ -21,10 +24,14 @@ public class CommentService {
         this.articleService = articleService;
     }
 
-    public CommentDto save(CommentDto commentDto, String email) {
+    public CommentDto save(CommentDto commentDto, String email, Long articleId) {
         User user = userService.findUserByEmail(email);
-        Article article = articleService.findArticleById(commentDto.getArticleId());
+        Article article = articleService.findArticleById(articleId);
         Comment comment = commentRepository.save(commentDto.toEntity(user, article));
         return CommentDto.from(comment);
+    }
+
+    public List<CommentDto> findByArticleId(Long articleId) {
+        return commentRepository.findByArticle_Id(articleId).stream().map(CommentDto::from).collect(Collectors.toList());
     }
 }
