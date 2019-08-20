@@ -19,10 +19,17 @@ const USER_APP = (() => {
             loginButton ? loginButton.addEventListener('click', userService.login) : undefined;
         };
 
+        const changeImageJustOnFront = () => {
+            const imageInput = document.getElementById("img-upload");
+            imageInput ? imageInput.addEventListener("change", userService.changeImageJustOnFront) : undefined;
+
+        }
+
         const init = () => {
             signUp();
             editUser();
             login();
+            changeImageJustOnFront();
         };
 
         return {
@@ -77,6 +84,7 @@ const USER_APP = (() => {
         const userId = document.getElementById('userId');
         const webSite = document.getElementById('webSite');
         const intro = document.getElementById('intro');
+        const profileImage = document.getElementById('profile-image');
 
         const saveUser = function (event) {
             event.preventDefault();
@@ -132,10 +140,24 @@ const USER_APP = (() => {
                 ifSucceed);
         };
 
+        const changeImageJustOnFront = function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            // it's onload event and you forgot (parameters)
+            reader.onload = function (readEvent) {
+                profileImage.src = readEvent.target.result;
+
+            }
+            // you have to declare the file loading
+            reader.readAsDataURL(file);
+
+        }
+
         return {
             saveUser: saveUser,
             updateUser: updateUser,
             login: login,
+            changeImageJustOnFront: changeImageJustOnFront
         }
     };
 
