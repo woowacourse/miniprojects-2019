@@ -5,6 +5,7 @@ import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.service.ArticleApiService;
 import com.woowacourse.dsgram.service.FileService;
 import com.woowacourse.dsgram.service.UserService;
+import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
 import com.woowacourse.dsgram.service.dto.ArticleRequest;
 import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
 import com.woowacourse.dsgram.service.vo.FileInfo;
@@ -35,11 +36,6 @@ public class ArticleApiController {
         return new ResponseEntity<>(savedArticle, HttpStatus.OK);
     }
 
-    private Article convertFrom(ArticleRequest articleRequest, FileInfo fileInfo, LoginUserRequest loginUserRequest) {
-        User user = userService.findUserById(loginUserRequest.getId());
-        return new Article(articleRequest.getContents(), fileInfo.getFileName(), fileInfo.getFilePath(), user);
-    }
-
     @GetMapping("{articleId}/file")
     public ResponseEntity<byte[]> showArticleFile(@PathVariable long articleId) {
         Article article = articleApiService.findById(articleId);
@@ -48,4 +44,14 @@ public class ArticleApiController {
         return new ResponseEntity<>(base64, HttpStatus.OK);
     }
 
+    @PutMapping("{articleId}")
+    public ResponseEntity update(@PathVariable long articleId, @RequestBody ArticleEditRequest articleEditRequest, @UserSession LoginUserRequest loginUserRequest) {
+        articleApiService.update(articleId, articleEditRequest, loginUserRequest);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    private Article convertFrom(ArticleRequest articleRequest, FileInfo fileInfo, LoginUserRequest loginUserRequest) {
+        User user = userService.findUserById(loginUserRequest.getId());
+        return new Article(articleRequest.getContents(), fileInfo.getFileName(), fileInfo.getFilePath(), user);
+    }
 }

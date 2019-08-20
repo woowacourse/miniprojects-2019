@@ -29,5 +29,4 @@ public class ArticleController {
         model.addAttribute("article", article);
         return "article";
     }
-
 }

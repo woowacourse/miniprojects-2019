@@ -2,6 +2,9 @@ package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
 import com.woowacourse.dsgram.domain.ArticleRepository;
+import com.woowacourse.dsgram.domain.exception.InvalidUserException;
+import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
+import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,5 +34,10 @@ public class ArticleApiService {
     @Transactional(readOnly = true)
     public List<Article> findAll() {
         return articleRepository.findAll();
+    }
+
+    @Transactional
+    public Article update(long articleId, ArticleEditRequest articleEditRequest, LoginUserRequest loginUserRequest) {
+        return findById(articleId).update(loginUserRequest.getId(), articleEditRequest.getContents());
     }
 }

@@ -17,11 +17,11 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a class="pointer">
+                <a th:id="'article-edit-' + ${article.id}" th:data-id='${article.id}' class="pointer article-edit">
                     <i class="ti-pencil pdd-right-10 text-dark"></i>
                     <span class="">게시글 수정</span>
                 </a>
-                <a class="pointer">
+                <a th:id="'article-delete-' + ${article.id}" class="pointer article-delete">
                     <i class="ti-trash pdd-right-10 text-dark"></i>
                     <span class="">게시글 삭제</span>
                 </a>
@@ -65,8 +65,12 @@
         좋아합니다.
     </p>
 </div>
-<div class="feed-contents pdd-left-15">
+<div th:id="'article-contents-' + ${article.id}" class="feed-contents pdd-left-15">
     <p th:text="${article.contents}"></p>
+    <form style="display: none;">
+        <input type="text" th:value="${article.contents}">
+        <button type="button">수정</button>
+    </form>
 </div>
 <div class="feed-footer">
     <div class="comment">

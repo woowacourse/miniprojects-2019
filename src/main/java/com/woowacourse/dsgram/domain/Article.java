@@ -1,6 +1,7 @@
 package com.woowacourse.dsgram.domain;
 
 
+import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -49,5 +50,13 @@ public class Article {
                 ", filePath='" + filePath + '\'' +
                 ", author=" + author +
                 '}';
+    }
+
+    public Article update(long id, String contents) {
+        if (this.id != id) {
+            throw new InvalidUserException("글 작성자만 수정, 삭제가 가능합니다.");
+        }
+        this.contents = contents;
+        return this;
     }
 }
