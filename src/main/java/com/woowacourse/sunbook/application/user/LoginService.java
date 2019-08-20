@@ -4,6 +4,7 @@ import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
 import com.woowacourse.sunbook.application.exception.LoginException;
 import com.woowacourse.sunbook.application.user.dto.UserRequestDto;
 import com.woowacourse.sunbook.application.user.dto.UserResponseDto;
+import com.woowacourse.sunbook.application.user.dto.UserUpdateRequestDto;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -42,6 +43,20 @@ public class LoginService {
                 userRequestDto.getUserEmail(),
                 userRequestDto.getUserPassword()
         ).orElseThrow(LoginException::new);
+
+        return modelMapper.map(user, UserResponseDto.class);
+    }
+
+    @Transactional
+    public UserResponseDto update(UserResponseDto loginUser, UserUpdateRequestDto userUpdateRequestDto) {
+        User user = userRepository.findByUserEmailAndUserPassword(
+                loginUser.getUserEmail(),
+                userUpdateRequestDto.getUserPassword()
+        ).orElseThrow(LoginException::new);
+
+        user.updateEmail(user, userUpdateRequestDto.getUserEmail());
+        user.updateName(user, userUpdateRequestDto.getUserName());
+        user.updatePassword(user, userUpdateRequestDto.getChangePassword());
 
         return modelMapper.map(user, UserResponseDto.class);
     }

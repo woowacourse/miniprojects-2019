@@ -26,4 +26,9 @@ public class UserController {
     public String sunbookPage() {
         return "newsfeed";
     }
+
+    @GetMapping("/users")
+    public String users() {
+        return "users";
+    }
 }
