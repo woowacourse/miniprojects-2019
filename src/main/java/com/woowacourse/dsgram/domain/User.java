@@ -65,8 +65,8 @@ public class User {
     }
 
     public void changeToOAuthUser() {
-        if (!this.isOAuthUser) {
-            this.isOAuthUser = true;
+        if (!this.isOauthUser) {
+            this.isOauthUser = true;
         }
     }
 
@@ -84,5 +84,9 @@ public class User {
 
     public boolean equalsNickName(String nickName) {
         return this.nickName.equals(nickName);
+    }
+
+    public boolean isNotSameId(long id) {
+        return this.id != id;
     }
 }

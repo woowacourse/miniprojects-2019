@@ -42,7 +42,7 @@ class UserTest {
     @Test
     void OAuth사용자로_변경() {
         user.changeToOAuthUser();
-        assertThat(user.isOAuthUser()).isEqualTo(true);
+        assertThat(user.isOauthUser()).isEqualTo(true);
     }
 
     @Test
