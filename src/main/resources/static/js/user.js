@@ -126,8 +126,6 @@ const USER_APP = (() => {
 
         const deleteUser = function (event) {
             event.preventDefault();
-
-
             connector.fetchTemplate('/api/users/' + userId.value, connector.DELETE, null, () => window.location.href = '/login')
         };
 

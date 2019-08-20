@@ -46,7 +46,7 @@ public class UserApiController {
             FieldError fieldError = bindingResult.getFieldError();
             throw new RuntimeException(fieldError.getDefaultMessage());
         }
-        httpSession.setAttribute("sessionUser", userService.update(userId, updatedUserDto, loginUserRequest));
+        httpSession.setAttribute(LoginUserRequest.SESSION_USER, userService.update(userId, updatedUserDto, loginUserRequest));
         return new ResponseEntity(HttpStatus.OK);
     }
 

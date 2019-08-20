@@ -40,13 +40,13 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession httpSession) {
-        httpSession.removeAttribute("sessionUser");
+        httpSession.removeAttribute(LoginUserRequest.SESSION_USER);
         return "redirect:/login";
     }
 
     @GetMapping("/oauth")
     public String test(@RequestParam String code, HttpSession httpSession) {
-        httpSession.setAttribute("sessionUser", userService.oauth(code));
+        httpSession.setAttribute(LoginUserRequest.SESSION_USER, userService.oauth(code));
         return "redirect:/login";
     }
 }
