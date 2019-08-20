@@ -38,8 +38,4 @@ public class Comment extends AuditLog {
         this.user = user;
         this.article = article;
     }
-
-    public Long getArticleId() {
-        return article.getId();
-    }
 }

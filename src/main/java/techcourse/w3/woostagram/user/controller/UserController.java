@@ -67,7 +67,8 @@ public class UserController {
     }
 
     @DeleteMapping
-    public String delete(@LoggedInUser String email) {
+    public String delete(@LoggedInUser String email,HttpSession httpSession) {
+        httpSession.removeAttribute(LOGGED_IN_USER_SESSION_KEY);
         userService.deleteByEmail(email);
         return "redirect:/users/login/form";
     }

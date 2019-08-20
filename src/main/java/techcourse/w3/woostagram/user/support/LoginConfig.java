@@ -3,17 +3,17 @@ package techcourse.w3.woostagram.user.support;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import techcourse.w3.woostagram.user.interceptor.LogonInterceptor;
+import techcourse.w3.woostagram.user.interceptor.LoggedInInterceptor;
 import techcourse.w3.woostagram.user.interceptor.LoginInterceptor;
 
 @Configuration
 public class LoginConfig implements WebMvcConfigurer {
     private final LoginInterceptor loginInterceptor;
-    private final LogonInterceptor logonInterceptor;
+    private final LoggedInInterceptor loggedInInterceptor;
 
-    public LoginConfig(LoginInterceptor loginInterceptor, LogonInterceptor logonInterceptor) {
+    public LoginConfig(LoginInterceptor loginInterceptor, LoggedInInterceptor loggedInInterceptor) {
         this.loginInterceptor = loginInterceptor;
-        this.logonInterceptor = logonInterceptor;
+        this.loggedInInterceptor = loggedInInterceptor;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class LoginConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/js/**")
                 .excludePathPatterns("/images/**");
 
-        registry.addInterceptor(logonInterceptor)
+        registry.addInterceptor(loggedInInterceptor)
                 .addPathPatterns("/users/signup/form")
                 .addPathPatterns("/users/signup")
                 .addPathPatterns("/users/login")

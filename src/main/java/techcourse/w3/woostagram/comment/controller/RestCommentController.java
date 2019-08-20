@@ -10,7 +10,7 @@ import techcourse.w3.woostagram.user.support.LoggedInUser;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/api/comments/{articleId}")
 public class RestCommentController {
     private final CommentService commentService;
 
@@ -18,13 +18,24 @@ public class RestCommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/{articleId}")
+    @PostMapping
     public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @LoggedInUser String email, @PathVariable Long articleId) {
         return new ResponseEntity<>(commentService.save(commentDto, email, articleId), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{articleId}")
+    @GetMapping
     public ResponseEntity<List<CommentDto>> read(@PathVariable Long articleId) {
         return ResponseEntity.ok(commentService.findByArticleId(articleId));
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<CommentDto> delete(@PathVariable Long commentId, @LoggedInUser String email) {
+        commentService.deleteById(commentId, email);
+        return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

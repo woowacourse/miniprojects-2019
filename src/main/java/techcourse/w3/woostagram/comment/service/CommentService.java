@@ -6,7 +6,10 @@ import techcourse.w3.woostagram.article.service.ArticleService;
 import techcourse.w3.woostagram.comment.domain.Comment;
 import techcourse.w3.woostagram.comment.domain.CommentRepository;
 import techcourse.w3.woostagram.comment.dto.CommentDto;
+import techcourse.w3.woostagram.comment.exception.CommentNotFoundException;
+import techcourse.w3.woostagram.common.exception.UnauthorizedException;
 import techcourse.w3.woostagram.user.domain.User;
+import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
 
 import java.util.List;
@@ -33,5 +36,20 @@ public class CommentService {
 
     public List<CommentDto> findByArticleId(Long articleId) {
         return commentRepository.findByArticle_Id(articleId).stream().map(CommentDto::from).collect(Collectors.toList());
+    }
+
+    public void deleteById(Long commentId, String email) {
+        validateUser(commentId, email);
+
+        commentRepository.deleteById(commentId);
+    }
+
+    private void validateUser(Long commentId, String email) {
+        User user = userService.findUserByEmail(email);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        if (!user.equals(comment.getUser())) {
+            throw new UnauthorizedException();
+        }
     }
 }
