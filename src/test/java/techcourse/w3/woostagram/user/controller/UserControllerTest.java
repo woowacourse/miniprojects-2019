@@ -78,23 +78,16 @@ class UserControllerTest extends AbstractControllerTests {
                 .is2xxSuccessful()).isTrue();
     }
 
-//    @Test
-//    void update_correct_isOk() {
-//        assertThat(putFormRequest("/users", UserContentsDto.class, "a", "b", "c", "d")
-//                .getStatus()
-//                .is3xxRedirection()).isTrue();
-//    }
-
     @Test
     void update_correct_isOk() {
-        assertThat(putFormRequest("/users", UserUpdateDto.class, "a", "b", "c", "d")
+        assertThat(putFormRequest("/users", UserUpdateDto.class, "a", "b", "c", "d", "e")
                 .getStatus()
                 .is3xxRedirection()).isTrue();
     }
 
     @Test
     void update_mismatch_isFail() {
-        assertThat(putFormRequest("/users", UserContentsDto.class, "", "", "", "")
+        assertThat(putFormRequest("/users", UserUpdateDto.class, "", "", "", "", "")
                 .getStatus()
                 .is3xxRedirection()).isTrue();
     }

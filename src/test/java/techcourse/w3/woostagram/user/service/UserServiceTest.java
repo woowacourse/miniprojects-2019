@@ -5,7 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.multipart.MultipartFile;
+import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.UserRepository;
 import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
@@ -23,15 +28,20 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 class UserServiceTest {
+    private static final String IMAGE_FILE_URL = "image/file/url";
+
     @InjectMocks
     private UserService userService;
 
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private StorageService storageService;
+
     private UserDto userDto;
-    private UserContentsDto userContentsDto;
     private UserUpdateDto userUpdateDto;
+    private MultipartFile multipartFile;
 
     @BeforeEach
     void setUp() {
@@ -40,13 +50,13 @@ class UserServiceTest {
                 .password("Aa1234!!")
                 .build();
 
-        userContentsDto = UserContentsDto.builder()
-                .userName("aaa")
-                .build();
+        multipartFile = new MockMultipartFile(
+                "testImage", "testImage.jpg", MediaType.IMAGE_JPEG_VALUE, "<<jpg data>>".getBytes());
 
         userUpdateDto = UserUpdateDto.builder()
                 .userName("woowacrews")
                 .contents("woostagram")
+                .imageFile(multipartFile)
                 .build();
     }
 
@@ -65,6 +75,7 @@ class UserServiceTest {
     @Test
     void update_correct_success() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
+        when(storageService.saveMultipartFile(multipartFile)).thenReturn(IMAGE_FILE_URL);
         userService.update(userUpdateDto, userDto.getEmail());
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
     }
