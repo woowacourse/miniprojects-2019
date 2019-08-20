@@ -39,4 +39,9 @@ public class ReactionApiControllerTest extends TestTemplate {
         respondApi(request(HttpMethod.POST, "api/articles/1/good",
                 reactionDto, HttpStatus.OK));
     }
+
+    @Test
+    void 좋아요_개수_정상_조회() {
+
+    }
 }
