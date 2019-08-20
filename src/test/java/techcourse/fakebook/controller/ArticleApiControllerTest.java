@@ -8,7 +8,10 @@ import techcourse.fakebook.service.dto.ArticleRequest;
 import techcourse.fakebook.service.dto.ArticleResponse;
 import techcourse.fakebook.service.dto.LoginRequest;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class ArticleApiControllerTest extends ControllerTestHelper {
@@ -21,6 +24,23 @@ public class ArticleApiControllerTest extends ControllerTestHelper {
     @BeforeEach
     void setUp() {
         cookie = getCookie(login(loginRequest));
+    }
+
+    @Test
+    void 글_목록을_잘_불러오는지_확인한다() {
+        writeArticle();
+
+        List<ArticleResponse> articles = given().
+                port(port).
+        when().
+                get("/api/articles").
+        then().
+                statusCode(200).
+                extract().
+                body().
+                jsonPath().getList(".", ArticleResponse.class);
+
+        assertThat(articles.size()).isGreaterThanOrEqualTo(2);
     }
 
     @Test
