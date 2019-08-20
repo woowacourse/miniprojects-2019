@@ -48,6 +48,13 @@ public class ArticleService {
         );
     }
 
+    public Article findById(Long articleId) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(NotFoundArticleException::new);
+//        return modelMapper.map(article, ArticleResponseDto.class);
+        return article;
+    }
+
     public void remove(long articleId) {
         articleRepository.deleteById(articleId);
     }
