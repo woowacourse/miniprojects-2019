@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
 import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
+import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,6 +22,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void loginForm_empty_isOk() {
+        clearCookie();
         assertThat(getRequest("/users/login/form")
                 .getStatus()
                 .is2xxSuccessful())
@@ -29,6 +31,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void login_correct_isRedirect() {
+        clearCookie();
         assertThat(postFormRequest("/users/login", UserDto.class, TEST_EMAIL, TEST_PASSWORD)
                 .getStatus()
                 .is3xxRedirection()).isTrue();
@@ -43,6 +46,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void createForm_empty_isOk() {
+        clearCookie();
         assertThat(getRequest("/users/signup/form")
                 .getStatus()
                 .is2xxSuccessful())
@@ -79,14 +83,14 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void update_correct_isOk() {
-        assertThat(putFormRequest("/users", UserContentsDto.class, "a", "b", "c", "d")
+        assertThat(putFormRequest("/users", UserUpdateDto.class, "a", "b", "c", "d", "e")
                 .getStatus()
                 .is3xxRedirection()).isTrue();
     }
 
     @Test
     void update_mismatch_isFail() {
-        assertThat(putFormRequest("/users", UserContentsDto.class, "", "", "", "")
+        assertThat(putFormRequest("/users", UserUpdateDto.class, "", "", "", "", "")
                 .getStatus()
                 .is3xxRedirection()).isTrue();
     }

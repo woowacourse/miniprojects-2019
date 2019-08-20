@@ -1,6 +1,5 @@
 package techcourse.w3.woostagram;
 
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -12,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 public class AwsTest {
     private AmazonS3 s3;
     private String bucketName;
@@ -19,45 +20,34 @@ public class AwsTest {
     private String fileContent;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         bucketName = "woowahan-crews";
         fileName = "moomin.png";
         fileContent = "moomin";
 
         s3 = AmazonS3ClientBuilder
-            .standard()
-            .withRegion(Regions.AP_NORTHEAST_2)
-            .build();
+                .standard()
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .build();
     }
 
     @Test
     void AwsUploadTest() {
-        try {
-            s3.putObject(bucketName, fileName, fileContent);
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-            System.exit(1);
-        }
+        assertDoesNotThrow(() -> s3.putObject(bucketName, fileName, fileContent));
     }
 
     @Test
     void AwsDeleteTest() {
-        try {
-            s3.deleteObject(bucketName, fileName);
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-            System.exit(1);
-        }
+        assertDoesNotThrow(() -> s3.deleteObject(bucketName, fileName));
     }
 
     @Test
     void AwsGetTest() {
-        try {
-            s3.getObject(bucketName, fileName);
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-            System.exit(1);
-        }
+        String getTestFileName = "test.jpg";
+        assertDoesNotThrow(() -> s3.putObject(bucketName, getTestFileName, fileContent));
+        assertDoesNotThrow(() -> s3.getObject(bucketName, getTestFileName));
+        assertDoesNotThrow(() -> s3.deleteObject(bucketName, getTestFileName));
+
     }
 
     @Test
@@ -66,13 +56,7 @@ public class AwsTest {
         File file = new File("downloaded");
         FileUtils.copyURLToFile(url, file);
 
-        try {
-            s3.putObject(bucketName, fileName, file);
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-            System.exit(1);
-        }
-
+        assertDoesNotThrow(() -> s3.putObject(bucketName, fileName, file));
         file.delete();
     }
 }
