@@ -128,7 +128,8 @@ public class CommonControllerTest {
                 .getFirst("location");
 
         stopS3Mock();
-        return videoId.substring(videoId.length() - 1);
+        String[] urlValue = videoId.split("/");
+        return urlValue[urlValue.length - 1];
     }
 
     int getSavedCommentId(String sessionId, String videoId) {
