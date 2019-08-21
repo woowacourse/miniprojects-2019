@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-class UserControllerTest extends TestTemplate {
+class MainControllerTest extends TestTemplate {
 
     @Test
     void 로그인_회원가입_페이지_이동() {

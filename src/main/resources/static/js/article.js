@@ -84,15 +84,19 @@ const ArticleApp = (() => {
                 .catch(error => console.log("error: " + error));
         };
 
-        const add = () => {
+        const add = (event) => {
             const contents = document.getElementById("article-contents");
-            const data = {
+
+            if (AppStorage.check('article-add-run')) {
+                return;
+            }
+            AppStorage.set('article-add-run', true);
+
+            articleApi.add({
                 contents: contents.value,
                 imageUrl: "",
                 videoUrl: "",
-            };
-
-            articleApi.add(data)
+            })
                 .then(response => response.json())
                 .then((article) => {
                     articleApi.showGood(article.id)
@@ -109,7 +113,9 @@ const ArticleApp = (() => {
                                 "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png",
                                 "numberOfGood": numberOfGoods,
                             }));
-                    }
+                    };
+
+                    AppStorage.set('article-add-run', false);
                 });
             contents.value = "";
         };
@@ -125,6 +131,7 @@ const ArticleApp = (() => {
                 imageUrl: "",
                 videoUrl: "",
             };
+
             articleApi.update(data, articleId)
                 .then(() => {
                     read();
@@ -150,6 +157,9 @@ const ArticleApp = (() => {
                 const updateArea = document.getElementById('article-update-contents');
                 const articleId = article.getAttribute('data-article-id');
                 updateArea.value = article.querySelector('span[data-object="article-contents"]').innerText;
+
+                const showModalBtn = document.getElementById('show-article-modal-btn');
+                showModalBtn.click();
             }
         };
 

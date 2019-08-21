@@ -83,6 +83,9 @@ const IndexApp = (() => {
             event.preventDefault();
             event.stopPropagation();
 
+            if(AppStorage.check('sign-up-run')) return;
+            AppStorage.set('sign-up-run', true);
+
             const firstName = document.getElementById('signup-first-name');
             const lastName = document.getElementById('signup-last-name');
             const email = document.getElementById('signup-email');
@@ -107,6 +110,7 @@ const IndexApp = (() => {
                         password.value = "";
                         alert('가입을 완료했습니다. 로그인 하세요.');
                     }
+                    AppStorage.set('sign-up-run', false);
                 })
         };
 

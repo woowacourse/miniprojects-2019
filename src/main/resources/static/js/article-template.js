@@ -5,7 +5,7 @@ const template = (function () {
                             <li>
                                 <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
                                 <div class="info">
-                                    <a href="" class="title no-pdd-vertical text-semibold inline-block">eastjun</a>
+                                    <a href="" class="title no-pdd-vertical text-semibold inline-block">{{authorName}}</a>
                                     <span class="sub-title">{{updatedTime}}</span>
                                     <a class="pointer absolute top-0 right-0" data-toggle="dropdown"
                                        aria-expanded="false">
@@ -17,7 +17,7 @@ const template = (function () {
                                         <li data-btn="update">
                                             <a class="pointer">
                                                 <i class="ti-pencil pdd-right-10 text-dark"></i>
-                                                <span id="article-update-{{id}}" data-toggle="modal" data-target="#default-modal">게시글 수정</span>
+                                                <span id="article-update-{{id}}">게시글 수정</span>
                                             </a>
                                         </li>
                                         <li data-btn="delete">

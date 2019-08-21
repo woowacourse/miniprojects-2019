@@ -12,6 +12,6 @@ import java.time.LocalDateTime;
 public class CommentResponseDto {
     private Long id;
     private CommentFeature commentFeature;
-    private String writerName;
+    private String authorName;
     private LocalDateTime updatedTime;
 }

@@ -8,7 +8,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class UserController {
+public class MainController {
 
     @GetMapping("/")
     public String signUpPage() {
@@ -25,5 +25,10 @@ public class UserController {
     @GetMapping("/newsfeed")
     public String sunbookPage() {
         return "newsfeed";
+    }
+
+    @GetMapping("/users")
+    public String users() {
+        return "users";
     }
 }

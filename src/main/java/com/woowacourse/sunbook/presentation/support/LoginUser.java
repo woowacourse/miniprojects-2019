@@ -7,13 +7,21 @@ import lombok.Getter;
 
 @Getter
 public class LoginUser {
-    private Long id;
-    private UserEmail userEmail;
-    private UserName userName;
+    private final UserResponseDto userResponseDto;
 
-    public LoginUser(UserResponseDto userResponseDto) {
-        this.id = userResponseDto.getId();
-        this.userEmail = userResponseDto.getUserEmail();
-        this.userName = userResponseDto.getUserName();
+    public LoginUser(final UserResponseDto userResponseDto) {
+        this.userResponseDto = userResponseDto;
+    }
+
+    public Long getId() {
+        return userResponseDto.getId();
+    }
+
+    public UserEmail getEmail() {
+        return userResponseDto.getUserEmail();
+    }
+
+    public UserName getName() {
+        return userResponseDto.getUserName();
     }
 }

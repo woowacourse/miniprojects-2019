@@ -42,7 +42,7 @@ const CommentApp = (() => {
                         commentList
                             .insertAdjacentHTML('afterbegin', commentTemplate({
                                 "id": comment.id,
-                                "user-name": comment.writerName,
+                                "user-name": comment.authorName,
                                 "comment-contents": comment.commentFeature.contents,
                                 "updatedTime": comment.updatedTime,
                             }));
@@ -70,7 +70,7 @@ const CommentApp = (() => {
                             document.getElementById('comment-list')
                                 .insertAdjacentHTML('beforeend', commentTemplate({
                                     "id": comment.id,
-                                    "user-name": comment.writerName,
+                                    "user-name": comment.authorName,
                                     "comment-contents": comment.commentFeature.contents,
                                     "updatedTime": comment.updatedTime,
                                 }));
