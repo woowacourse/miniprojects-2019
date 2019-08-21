@@ -16,9 +16,17 @@ class LikesRestControllerTest extends AbstractControllerTests {
 
     @Test
     void create_correct_isOk() {
-        assertThat(postJsonRequest("/api/like/1", UserInfoDto.class, String.valueOf(1), "a@naver.com", "")
+        assertThat(postJsonRequest("/api/likes/1", UserInfoDto.class, String.valueOf(1), "a@naver.com", "")
                 .getStatus()
                 .is2xxSuccessful())
                 .isTrue();
+    }
+
+    @Test
+    void readLikedUser_correct_isOk() {
+        postJsonRequest("/api/likes/1", UserInfoDto.class, String.valueOf(1), "a@naver.com", "");
+
+        UserInfoDto[] userInfoDtos = getRequest("/api/likes/1", UserInfoDto[].class);
+        assertThat(userInfoDtos[0].getEmail()).isEqualTo("a@naver.com");
     }
 }

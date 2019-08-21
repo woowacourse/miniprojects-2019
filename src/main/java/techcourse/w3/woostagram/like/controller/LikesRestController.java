@@ -2,15 +2,15 @@ package techcourse.w3.woostagram.like.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.like.service.LikesService;
+import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.support.LoggedInUser;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/like")
+@RequestMapping("/api/likes")
 public class LikesRestController {
     private final LikesService likesService;
 
@@ -24,4 +24,8 @@ public class LikesRestController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
+    @GetMapping("/{articleId}")
+    public ResponseEntity<List<UserInfoDto>> readLikedUsers(@PathVariable Long articleId) {
+        return ResponseEntity.ok(likesService.getLikedUser(articleId));
+    }
 }

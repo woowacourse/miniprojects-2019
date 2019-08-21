@@ -24,11 +24,16 @@ public class Likes {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User selectedUser;
+    private User likeUser;
 
     @Builder
-    public Likes(Article article, User selectedUser) {
+    public Likes(Article article, User likeUser) {
         this.article = article;
-        this.selectedUser = selectedUser;
+        this.likeUser = likeUser;
+    }
+
+    public void nullify() {
+        article = null;
+        likeUser = null;
     }
 }

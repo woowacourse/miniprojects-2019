@@ -7,7 +7,11 @@ import techcourse.w3.woostagram.article.service.ArticleService;
 import techcourse.w3.woostagram.like.domain.Likes;
 import techcourse.w3.woostagram.like.domain.LikesRepository;
 import techcourse.w3.woostagram.user.domain.User;
+import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LikesService {
@@ -26,11 +30,17 @@ public class LikesService {
         User user = userService.findUserByEmail(email);
         Article article = articleService.findArticleById(articleId);
 
-        Likes like = Likes.builder()
+        Likes likes = Likes.builder()
                 .article(article)
-                .selectedUser(user)
+                .likeUser(user)
                 .build();
 
-        likesRepository.save(like);
+        likesRepository.save(likes);
+    }
+
+    public List<UserInfoDto> getLikedUser(Long articleId) {
+        Article article = articleService.findArticleById(articleId);
+        List<Likes> likedUsers = likesRepository.findAllByArticle(article);
+        return likedUsers.stream().map((Likes likes) -> UserInfoDto.from(likes.getLikeUser())).collect(Collectors.toList());
     }
 }
