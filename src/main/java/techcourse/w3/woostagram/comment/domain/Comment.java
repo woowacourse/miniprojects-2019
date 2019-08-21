@@ -39,7 +39,7 @@ public class Comment extends AuditLog {
         this.article = article;
     }
 
-    public boolean checkUserId(long loggedInUserId) {
+    public boolean isAuthor(long loggedInUserId) {
         return loggedInUserId == user.getId();
     }
 }

@@ -35,7 +35,7 @@ public class CommentDto {
                 .contents(comment.getContents())
                 .createdDate(comment.getCreatedDate())
                 .userInfoDto(UserInfoDto.from(comment.getUser()))
-                .isMain(comment.checkUserId(loggedInUserId))
+                .isMain(comment.isAuthor(loggedInUserId))
                 .build();
     }
 
