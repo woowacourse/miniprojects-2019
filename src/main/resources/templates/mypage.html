@@ -571,7 +571,7 @@
                     method: 'post',
                     url: '/follow',
                     data: formData
-                }).then(response => {
+                }).then(() => {
                     profileBlockFollowBtn.setAttribute('style', 'display: none;');
                     profileBlockUnFollowModalBtn.setAttribute('style', 'display: inline-block;');
                 });
@@ -589,15 +589,9 @@
                     method: 'post',
                     url: '/follow',
                     data: formData
-                }).then(response => {
+                }).then(() => {
                     profileBlockUnFollowModalBtn.setAttribute('style', 'display: none;');
-                    const modalFollowingCancel = document.querySelector('#modal-following-cancel');
-                    
-                    modalFollowingCancel.classList.remove('show');
-                    modalFollowingCancel.setAttribute('aria-hidden', 'true');
-					modalFollowingCancel.setAttribute('style', 'display: none;');
-					
-					document.body.classList.remove('modal-open');
+                    document.querySelector('#modal-following-cancel').click();
                     
                     if (isFollowing) {
                         profileBlockDoubleFollowBtn.setAttribute('style', 'display: inline-block;');
@@ -619,7 +613,7 @@
                     method: 'post',
                     url: '/follow',
                     data: formData
-                }).then(response => {
+                }).then(() => {
                     profileBlockDoubleFollowBtn.setAttribute('style', 'display: none;');
                     profileBlockUnFollowModalBtn.setAttribute('style', 'display: inline-block;');
                 });
