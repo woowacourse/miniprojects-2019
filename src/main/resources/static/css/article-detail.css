@@ -58,20 +58,31 @@
 }
 
 .contents-section{
-
+    justify-content: space-between;
+    height:calc(100% - 72px);
+    overflow:hidden;
 }
 
 .contents-con{
-    order: 1;
-    flex-grow: 1;
     overflow-x: hidden;
-    flex-shrink: 1;
+    overflow-y:scroll;
     min-height:0;
+    height:270px;
     padding:16px;
+    margin-right:-20px;
 }
 
 .contents-inner{
 
+}
+
+.add-comment{
+    height:54px;
+    overflow:hidden;
+}
+.add-comment textarea{
+    height:54px;
+    border:0;
 }
 
 .pic-con{
@@ -89,11 +100,11 @@
     overflow: hidden;
 }
 .img-parallel{
-    max-width:100%;
+    width:100%;
 }
 
 .img-vertical{
-    max-height:100%;
+    height:100%;
 }
 .text-con{
     position:absolute;

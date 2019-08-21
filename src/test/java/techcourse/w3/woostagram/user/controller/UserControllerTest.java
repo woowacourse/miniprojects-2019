@@ -3,7 +3,6 @@ package techcourse.w3.woostagram.user.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
-import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 
