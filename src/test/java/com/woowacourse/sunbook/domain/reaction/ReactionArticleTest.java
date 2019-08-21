@@ -8,7 +8,7 @@ import com.woowacourse.sunbook.domain.user.UserName;
 import com.woowacourse.sunbook.domain.user.UserPassword;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ReactionArticleTest {
     private final UserEmail userEmail = new UserEmail("user@naver.com");
@@ -26,5 +26,20 @@ public class ReactionArticleTest {
     @Test
     void 좋아요_정상_생성() {
         assertDoesNotThrow(() -> new ReactionArticle(author, article));
+    }
+
+    @Test
+    void 좋아요_한번_정상_누르기() {
+        ReactionArticle reactionArticle = new ReactionArticle(author, article);
+        reactionArticle.toggleGood();
+        assertTrue(reactionArticle.getHasGood());
+    }
+
+    @Test
+    void 좋아요_한번_정상_취소() {
+        ReactionArticle reactionArticle = new ReactionArticle(author, article);
+        reactionArticle.toggleGood();
+        reactionArticle.toggleGood();
+        assertFalse(reactionArticle.getHasGood());
     }
 }
