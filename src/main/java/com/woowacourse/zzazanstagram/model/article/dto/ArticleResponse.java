@@ -15,7 +15,7 @@ public class ArticleResponse {
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
     private List<CommentResponse> commentResponses;
-    //Todo 댓글, 좋아요 추가하자
+    //좋아요 추가하기
 
     public ArticleResponse() {
     }
@@ -29,16 +29,6 @@ public class ArticleResponse {
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
         this.commentResponses = commentResponses;
-    }
-
-    private ArticleResponse(Long id, String image, String contents, String nickName, String profileImage, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
-        this.id = id;
-        this.image = image;
-        this.contents = contents;
-        this.nickName = nickName;
-        this.profileImage = profileImage;
-        this.createdDate = createdDate;
-        this.lastModifiedDate = lastModifiedDate;
     }
 
     public Long getId() {
