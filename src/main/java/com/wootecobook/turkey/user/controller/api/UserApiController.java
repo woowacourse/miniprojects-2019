@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping("/api/users")
@@ -27,7 +30,9 @@ public class UserApiController {
 
     @PostMapping
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest userRequest) {
-        return new ResponseEntity<>(userService.save(userRequest), HttpStatus.CREATED);
+        UserResponse userResponse = userService.save(userRequest);
+        URI uri = linkTo(UserApiController.class).slash(userResponse.getId()).toUri();
+        return ResponseEntity.created(uri).body(userResponse);
     }
 
     @GetMapping
