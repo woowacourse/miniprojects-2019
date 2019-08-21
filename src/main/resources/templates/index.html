@@ -231,7 +231,8 @@
             };
 
             const addComment = function () {
-                document.querySelector('.btn-add-comment').addEventListener('click', indexPageService.addComment);
+                document.querySelectorAll('.btn-add-comment')
+                    .forEach(el => el.addEventListener('click', indexPageService.addComment));
             };
             const toggleHeart = function () {
                 document.querySelector('.fa-heart-o').addEventListener('click', indexPageService.toggleHeart);
@@ -277,13 +278,9 @@
             const addComment = function (event) {
                 const message = event.target.closest("div");
                 const articleId = message.id.split("-")[2];
-                console.log('articleId : ' + articleId);
 
                 const inputValue = message.querySelector("input").value;
-                console.log(inputValue);
-
-                let commentList = document.querySelector('#comment-list');
-
+                const commentList = message.parentElement.querySelector("#comment-list");
                 axios({
                     method: 'post',
                     url: '/' + articleId + '/comments/new',
