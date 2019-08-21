@@ -3,12 +3,9 @@ package com.woowacourse.edd.presentation.controller;
 import com.woowacourse.edd.application.dto.LoginRequestDto;
 import com.woowacourse.edd.application.dto.UserRequestDto;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.web.reactive.server.StatusAssertions;
-import reactor.core.publisher.Mono;
 
 import static com.woowacourse.edd.exceptions.PasswordNotMatchException.PASSWORD_NOT_MATCH_MESSAGE;
 import static com.woowacourse.edd.exceptions.UserNotFoundException.USER_NOT_FOUND_MESSAGE;
-import static com.woowacourse.edd.presentation.controller.LoginController.LOGIN_URL;
 
 public class LoginControllerTests extends BasicControllerTests {
 
@@ -47,9 +44,12 @@ public class LoginControllerTests extends BasicControllerTests {
         assertFailNotFound(requestLogin(loginRequestDto), USER_NOT_FOUND_MESSAGE);
     }
 
-    private StatusAssertions requestLogin(LoginRequestDto loginRequestDto) {
-        return executePost(LOGIN_URL).body(Mono.just(loginRequestDto), LoginRequestDto.class)
+    @Test
+    void logout() {
+        String cookie = getLoginCookie(new LoginRequestDto(DEFAULT_LOGIN_EMAIL, DEFAULT_LOGIN_PASSWORD));
+
+        executePost("/v1/logout").cookie("JSESSIONID", cookie)
             .exchange()
-            .expectStatus();
+            .expectStatus().isOk();
     }
 }

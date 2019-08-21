@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
     public static final String LOGIN_URL = "/v1/login";
+    public static final String LOGOUT_URL = "/v1/logout";
+
     private final LoginService loginService;
 
     @Autowired
@@ -24,6 +26,12 @@ public class LoginController {
     @PostMapping(LOGIN_URL)
     public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpSession session) {
         session.setAttribute("user", loginService.login(loginRequestDto));
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(LOGOUT_URL)
+    public ResponseEntity logout(HttpSession session) {
+        session.invalidate();
         return ResponseEntity.ok().build();
     }
 }

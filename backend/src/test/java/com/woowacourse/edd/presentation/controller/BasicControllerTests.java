@@ -1,5 +1,6 @@
 package com.woowacourse.edd.presentation.controller;
 
+import com.woowacourse.edd.application.dto.LoginRequestDto;
 import com.woowacourse.edd.application.dto.UserRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -9,6 +10,7 @@ import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import static com.woowacourse.edd.presentation.controller.LoginController.LOGIN_URL;
 import static com.woowacourse.edd.presentation.controller.UserController.USER_URL;
 
 @AutoConfigureWebTestClient
@@ -65,5 +67,20 @@ public class BasicControllerTests {
             .expectHeader().valueMatches("Location", USER_URL + "/\\d")
             .expectBody()
             .returnResult();
+    }
+
+    protected StatusAssertions requestLogin(LoginRequestDto loginRequestDto) {
+        return executePost(LOGIN_URL).body(Mono.just(loginRequestDto), LoginRequestDto.class)
+            .exchange()
+            .expectStatus();
+    }
+
+    protected String getLoginCookie(LoginRequestDto loginRequestDto) {
+        return requestLogin(loginRequestDto).isOk()
+            .expectBody()
+            .returnResult()
+            .getResponseCookies()
+            .getFirst("JSESSIONID")
+            .getValue();
     }
 }
