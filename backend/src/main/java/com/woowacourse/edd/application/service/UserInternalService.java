@@ -1,8 +1,6 @@
 package com.woowacourse.edd.application.service;
 
-import com.woowacourse.edd.application.converter.UserConverter;
 import com.woowacourse.edd.application.dto.UserRequestDto;
-import com.woowacourse.edd.application.response.UserResponse;
 import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.exceptions.UserNotFoundException;
 import com.woowacourse.edd.repository.UserRepository;
@@ -27,7 +25,8 @@ class UserInternalService {
 
     @Transactional(readOnly = true)
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return userRepository.findById(userId)
+            .orElseThrow(UserNotFoundException::new);
     }
 
     public User update(Long id, UserRequestDto userRequestDto) {
@@ -42,5 +41,11 @@ class UserInternalService {
             throw new UserNotFoundException();
         }
         user.delete();
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+            .filter(user -> !user.isDeleted())
+            .orElseThrow(UserNotFoundException::new);
     }
 }

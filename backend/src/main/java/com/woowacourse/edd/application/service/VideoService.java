@@ -7,13 +7,10 @@ import com.woowacourse.edd.application.response.VideoPreviewResponse;
 import com.woowacourse.edd.application.response.VideoResponse;
 import com.woowacourse.edd.application.response.VideoUpdateResponse;
 import com.woowacourse.edd.domain.Video;
-import com.woowacourse.edd.exceptions.VideoNotFoundException;
-import com.woowacourse.edd.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class VideoService {

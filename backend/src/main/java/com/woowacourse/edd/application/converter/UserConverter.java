@@ -1,6 +1,7 @@
 package com.woowacourse.edd.application.converter;
 
 import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.response.SessionUser;
 import com.woowacourse.edd.application.response.UserResponse;
 import com.woowacourse.edd.domain.User;
 
@@ -16,4 +17,7 @@ public class UserConverter {
         return new UserResponse(user.getId(), user.getName(), user.getEmail());
     }
 
+    public SessionUser toSessionUser(User user) {
+        return new SessionUser(user.getId());
+    }
 }

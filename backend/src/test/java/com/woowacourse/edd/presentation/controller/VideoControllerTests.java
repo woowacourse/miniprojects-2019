@@ -1,29 +1,24 @@
 package com.woowacourse.edd.presentation.controller;
 
-import com.woowacourse.edd.EddApplicationTests;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import com.woowacourse.edd.utils.Utils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.StatusAssertions;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
-public class VideoControllerTests extends EddApplicationTests {
-
-    @Autowired
-    private WebTestClient webTestClient;
+public class VideoControllerTests extends BasicControllerTests {
 
     private final String DEFAULT_VIDEO_YOUTUBEID = "S8e1geEpnTA";
     private final String DEFAULT_VIDEO_TITLE = "제목";
     private final String DEFAULT_VIDEO_CONTENTS = "내용";
     private final String VIDEOS_URI = "/v1/videos";
-    private final LocalDateTime DEFAULT_VIDEO_DATETIME = LocalDateTime.now();
+    private final LocalDateTime DEFAULT_VIDEO_DATETIME = LocalDateTime.now(ZoneId.of("UTC"));
 
     @BeforeEach
     void setUp() {
@@ -181,40 +176,5 @@ public class VideoControllerTests extends EddApplicationTests {
             .expectStatus();
     }
 
-    private void assertFailBadRequest(StatusAssertions statusAssertions, String errorMessage) {
-        WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
-            .isBadRequest()
-            .expectBody();
 
-        checkErrorResponse(bodyContentSpec, errorMessage);
-    }
-
-    private void assertFailNotFound(StatusAssertions statusAssertions, String errorMessage) {
-        WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
-            .isNotFound()
-            .expectBody();
-
-        checkErrorResponse(bodyContentSpec, errorMessage);
-    }
-
-    private void checkErrorResponse(WebTestClient.BodyContentSpec bodyContentSpec, String errorMessage) {
-        bodyContentSpec.jsonPath("$.result").isEqualTo("FAIL")
-            .jsonPath("$.message").isEqualTo(errorMessage);
-    }
-
-    private WebTestClient.RequestHeadersSpec<?> executeGet(String uri) {
-        return webTestClient.get().uri(uri);
-    }
-
-    private WebTestClient.RequestBodySpec executePut(String uri) {
-        return webTestClient.put().uri(uri);
-    }
-
-    private WebTestClient.RequestBodySpec executePost(String uri) {
-        return webTestClient.post().uri(uri);
-    }
-
-    private WebTestClient.RequestHeadersSpec executeDelete(String uri) {
-        return webTestClient.delete().uri(uri);
-    }
 }

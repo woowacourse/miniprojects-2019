@@ -1,11 +1,7 @@
 package com.woowacourse.edd.application.service;
 
 import com.woowacourse.edd.application.converter.VideoConverter;
-import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
-import com.woowacourse.edd.application.response.VideoPreviewResponse;
-import com.woowacourse.edd.application.response.VideoResponse;
-import com.woowacourse.edd.application.response.VideoUpdateResponse;
 import com.woowacourse.edd.domain.Video;
 import com.woowacourse.edd.exceptions.VideoNotFoundException;
 import com.woowacourse.edd.repository.VideoRepository;
@@ -38,7 +34,8 @@ class VideoInternalService {
 
     @Transactional(readOnly = true)
     public Video findById(long id) {
-        return videoRepository.findById(id).orElseThrow(VideoNotFoundException::new);
+        return videoRepository.findById(id)
+            .orElseThrow(VideoNotFoundException::new);
     }
 
     public Video update(Long id, VideoUpdateRequestDto requestDto) {

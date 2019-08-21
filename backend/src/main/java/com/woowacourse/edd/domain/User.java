@@ -1,6 +1,5 @@
 package com.woowacourse.edd.domain;
 
-import com.woowacourse.edd.application.dto.UserRequestDto;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -65,11 +64,11 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public Boolean isDeleted() {
         return isDeleted;
+    }
+
+    public boolean isNotMatchPassword(String password) {
+        return !this.password.equals(password);
     }
 }
