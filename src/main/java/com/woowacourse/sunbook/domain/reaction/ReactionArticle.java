@@ -29,7 +29,7 @@ public class ReactionArticle extends BaseEntity {
         this.hasGood = false;
     }
 
-    public void addGood() {
-        this.hasGood = true;
+    public void toggleGood() {
+        this.hasGood = !(this.hasGood);
     }
 }

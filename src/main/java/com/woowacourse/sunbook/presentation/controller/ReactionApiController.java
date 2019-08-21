@@ -20,9 +20,9 @@ public class ReactionApiController {
 
     @PostMapping
     public ResponseEntity<ReactionDto> clickGood(@PathVariable Long articleId,
-                                                 @RequestBody ReactionDto reactionDto,
                                                  LoginUser loginUser) {
-        ReactionDto resultReactionDto = reactionArticleService.clickGood(articleId, reactionDto, loginUser.getId());
+        ReactionDto resultReactionDto = reactionArticleService.
+                clickGood(articleId, loginUser.getId());
 
         return new ResponseEntity<>(resultReactionDto, HttpStatus.OK);
     }
