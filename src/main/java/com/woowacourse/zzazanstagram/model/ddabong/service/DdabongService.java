@@ -9,8 +9,6 @@ import com.woowacourse.zzazanstagram.model.member.domain.Member;
 import com.woowacourse.zzazanstagram.model.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class DdabongService {
     private final DdabongRepository ddabongRepository;
@@ -26,10 +24,10 @@ public class DdabongService {
     public DdabongResponse saveOrRemove(Long articleId, String memberEmail) {
         Article article = articleService.findArticleById(articleId);
         Member member = memberService.findByEmail(memberEmail);
-        Optional<Ddabong> ddabong = ddabongRepository.findByArticleAndMember(article, member);
+        Ddabong ddabong = ddabongRepository.findByArticleAndMember(article, member);
 
-        if (ddabong.isPresent()) {
-            return delete(article, ddabong.get());
+        if (ddabong != null) {
+            return delete(article, ddabong);
         }
 
         return save(article, new Ddabong(article, member));
