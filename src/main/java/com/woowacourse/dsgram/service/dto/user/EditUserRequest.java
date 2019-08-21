@@ -39,6 +39,14 @@ public class EditUserRequest {
     }
 
     public UserDto toUserDto() {
-        return new UserDto(id, userName, nickName, password, webSite, intro);
+
+        return UserDto.builder().id(id)
+                .userName(userName)
+                .nickName(nickName)
+                .password(password)
+                .webSite(webSite)
+                .intro(intro)
+                .build();
+
     }
 }

@@ -1,44 +1,33 @@
 package com.woowacourse.dsgram.web.controller;
 
-import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
-import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
+import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Mono;
+
+import java.util.Objects;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class ArticleApiControllerTests extends AbstractControllerTest {
 
-    private SignUpUserRequest signUpUserRequest;
-    private String sessionCookie;
+    private String cookie;
+    private long articleId;
 
     @BeforeEach
     void setUp() {
-        signUpUserRequest = signUpUserRequest.builder()
-                .userName("김버디")
-                .email(AUTO_INCREMENT + "buddy@buddy.com")
-                .nickName(AUTO_INCREMENT + "buddy")
-                .password("buddybuddy1!")
-                .build();
-
-        // 회원가입
-        defaultSignUp(signUpUserRequest, true)
-                .expectStatus().isOk();
-
-        // 로그인
-        AuthUserRequest authUserRequest = new AuthUserRequest(signUpUserRequest.getEmail(), signUpUserRequest.getPassword());
-        sessionCookie = getCookie(authUserRequest);
+        cookie = getCookieAfterSignUpAndLogin();
+        articleId = saveArticle(cookie);
     }
 
     @Test
     @DisplayName("게시글 생성 성공")
     void save() {
-        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/api/articles")
+        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/api/articles", cookie)
                 .expectStatus()
                 .isOk();
     }
@@ -46,45 +35,77 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     @Test
     @DisplayName("파일 조회 성공")
     void read() {
-        Long articleId = saveArticle();
+
         webTestClient.get().uri("/api/articles/" + articleId + "/file")
-                .header("Cookie", sessionCookie)
+                .header("Cookie", cookie)
                 .exchange()
                 .expectStatus()
-                .isOk()
-        ;
+                .isOk();
     }
 
-    private MultipartBodyBuilder createMultipartBodyBuilder() {
-        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-        bodyBuilder.part("file", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
-            @Override
-            public String getFilename() {
-                return "catImage.jpeg";
-            }
-        }, MediaType.IMAGE_JPEG);
-        bodyBuilder.part("contents", "contents");
-        bodyBuilder.part("hashtag", "hashtag");
-        return bodyBuilder;
-    }
+    @Test
+    @DisplayName("게시글 수정 성공")
+    void update() {
+        ArticleEditRequest articleEditRequest = new ArticleEditRequest("update contents");
 
-    private WebTestClient.ResponseSpec requestWithBodyBuilder(MultipartBodyBuilder bodyBuilder, HttpMethod requestMethod, String requestUri) {
-        return webTestClient.method(requestMethod)
-                .uri(requestUri)
-                .header("Cookie", sessionCookie)
-                .body(BodyInserters.fromObject(bodyBuilder.build()))
-                .exchange();
-    }
+        webTestClient.put().uri("/api/articles/" + articleId)
+                .header("Cookie", cookie)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(articleEditRequest), ArticleEditRequest.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
 
-    private Long saveArticle() {
-        Long[] articleId = new Long[1];
-
-        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/api/articles")
+        webTestClient.get().uri("/articles/" + articleId)
+                .header("Cookie", cookie)
+                .exchange()
+                .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.id")
-                .value(o -> articleId[0] = Long.parseLong(o.toString()));
-
-        return articleId[0];
+                .consumeWith(res -> {
+                    String body = new String(Objects.requireNonNull(res.getResponseBody()));
+                    assertThat(body.contains(articleEditRequest.getContents())).isTrue();
+                });
     }
 
+    @Test
+    @DisplayName("다른 사용자에 의한 게시글 수정 실패")
+    void update_By_Not_Author() {
+        ArticleEditRequest articleEditRequest = new ArticleEditRequest("update contents");
+
+        String anotherCookie = getCookieAfterSignUpAndLogin();
+
+        webTestClient.put().uri("/api/articles/" + articleId)
+                .header("Cookie", anotherCookie)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(articleEditRequest), ArticleEditRequest.class)
+                .exchange()
+                .expectStatus()
+                .isBadRequest();
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 성공")
+    void delete_by_Not_Author() {
+        webTestClient.delete().uri("/api/articles/" + articleId)
+                .header("Cookie", cookie)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        webTestClient.get().uri("/articles/" + articleId)
+                .header("Cookie", cookie)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @DisplayName("다른 사용자에 의한 게시글 삭제 실패")
+    void delete() {
+        String anotherSessionCookie = getCookieAfterSignUpAndLogin();
+        webTestClient.delete().uri("/api/articles/" + articleId)
+                .header("Cookie", anotherSessionCookie)
+                .exchange()
+                .expectStatus()
+                .isBadRequest();
+    }
 }

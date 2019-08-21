@@ -3,6 +3,7 @@ package com.woowacourse.dsgram.web.controller;
 import com.woowacourse.dsgram.domain.Article;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.service.ArticleApiService;
+import com.woowacourse.dsgram.service.ArticleFileNamingStrategy;
 import com.woowacourse.dsgram.service.FileService;
 import com.woowacourse.dsgram.service.UserService;
 import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
@@ -30,7 +31,7 @@ public class ArticleApiController {
 
     @PostMapping
     public ResponseEntity<Article> create(ArticleRequest articleRequest, @UserSession LoginUserRequest loginUserRequest) {
-        FileInfo fileInfo = fileService.save(articleRequest.getFile());
+        FileInfo fileInfo = fileService.save(articleRequest.getFile(), new ArticleFileNamingStrategy());
         Article article = convertFrom(articleRequest, fileInfo, loginUserRequest);
         Article savedArticle = articleApiService.create(article);
         return new ResponseEntity<>(savedArticle, HttpStatus.OK);

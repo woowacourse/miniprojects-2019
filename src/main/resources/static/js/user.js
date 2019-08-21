@@ -93,7 +93,6 @@ const USER_APP = (() => {
             }
 
             formData.append("webSite", webSite.value);
-            formData.append("id", userId.value);
             formData.append("password", password.value);
 
             const ifSucceed = () => window.location.href = '/';

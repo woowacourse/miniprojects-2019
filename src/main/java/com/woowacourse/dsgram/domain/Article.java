@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -31,6 +33,7 @@ public class Article {
 
     @ManyToOne
     @JoinColumn(name = "author", foreignKey = @ForeignKey(name = "fk_article_to_user"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
 
     public Article(String contents, String fileName, String filePath, User author) {
