@@ -36,19 +36,32 @@ const Article = (function () {
     const ArticleService = function () {
         const request = new Request("/api/articles");
         const loadContent = () =>
-        request.get("/" + articleId,
-            (status, data) => {
-            const img = new Image();
-        img.src = data.imageUrl;
-        document.getElementById("pic").src = img.src;
-        img.onload = imageResize(img);
-        document.querySelectorAll(".profile-name").forEach(
-            (element) => {
-            element.innerText = data.userInfoDto.userContentsDto.userName;
-    }
-    )
-        document.querySelector(".contents-para").innerText = data.contents;
-    })
+            request.get("/" + articleId,
+                (status, data) => {
+                    loadImageProcess(data.imageUrl).then((img) => {
+                            document.getElementById("pic").src = img.src
+                            imageResize(img)
+                        }
+                    )
+                    document.querySelectorAll(".profile-name").forEach(
+                        (element) => {
+                            element.innerText = data.userInfoDto.userContentsDto.userName;
+                        }
+                    )
+                    document.querySelector(".contents-para").innerText = data.contents;
+                })
+
+
+        const loadImageProcess = (src) => {
+            return new Promise((resolve, reject) => {
+                let img = new Image()
+                img.onload = () => resolve(img)
+                img.onerror = reject
+                img.src = src
+            })
+        }
+
+
         const modalActive = () => {
             modal.active()
         }
@@ -67,9 +80,9 @@ const Article = (function () {
             }, (status, data) => {
                 DomUtil.active(".contents-section")
                 DomUtil.inactive(".modify-input");
-            DomUtil.inactive(".modify-btn");
-            document.querySelector(".contents-para").innerText = contents;
-        })
+                DomUtil.inactive(".modify-btn");
+                document.querySelector(".contents-para").innerText = contents;
+            })
         }
         const remove = () => {
             const form = document.createElement('form');
@@ -88,6 +101,10 @@ const Article = (function () {
             const element = document.querySelector("#pic");
             const width = img.naturalWidth;
             const height = img.naturalHeight;
+            addResizeImageClass(element, width, height);
+        }
+
+        const addResizeImageClass = (element, width, height) => {
             if (width >= height) {
                 return element.classList.add("img-parallel")
             }
