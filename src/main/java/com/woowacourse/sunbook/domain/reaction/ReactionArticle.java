@@ -6,6 +6,8 @@ import com.woowacourse.sunbook.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -16,9 +18,11 @@ import javax.persistence.ManyToOne;
 public class ReactionArticle extends BaseEntity {
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Article article;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
 
     private Boolean hasGood;
