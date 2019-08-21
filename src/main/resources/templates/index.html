@@ -41,75 +41,74 @@
 </head>
 <body>
 <div>
-    <header id="header" class="header navbar">
-        <div class="header-container max-width-lg mx-auto">
-            <ul class="nav-left mrg-left-0 padding-15">
-                <li>
-                    <a href="/">
-                        <img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png">
-                    </a>
-                </li>
-                <li class="search-box mrg-left-20 desktop-view">
-                    <a class="search-toggle no-pdd-right" href="">
-                        <i class="search-icon ti-search pdd-right-10 font-size-25"></i>
-                        <i class="search-icon-close ti-close pdd-right-10 font-size-25"></i>
-                    </a>
-                </li>
-                <li class="search-input desktop-view">
-                    <input class="form-control mrg-top-0" type="text" placeholder="Search...">
-                    <div class="advanced-search">
-                        <div class="search-wrapper">
-                            <div class="pdd-vertical-10">
-                                <ul class="list-unstyled list-info">
-                                    <li class="search-result-item">
-                                        <a href="" class="text-dark">#우테코 1기</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-            <ul class="nav-right padding-15">
-
-                <li class="">
-                    <a class="pointer" href="/articles/new">
-                        <i class="ti-pencil-alt"></i>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer">
-                        <i class="ti-heart"></i>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer">
-                        <i class="ti-user"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </header>
-
-    <div class="page-container mrg-top-120">
-        <div class="main-content">
-            <div class="container-fluid max-width-lg mx-auto">
-                <div class="row">
-                    <div class="col-lg-7 mx-auto">
-
-                        <div th:each="article : ${articles}" class="card widget-feed no-pdd mrg-btm-70">
-                            <div class="feed-header padding-15">
-                                <input type="hidden" th:value="${article.id}" id="articleId">
-                                <ul class="list-unstyled list-info">
-                                    <li>
-                                        <img class="thumb-img img-circle" th:src="${article.profileImage}" alt="">
-                                        <div class="info">
-                                            <a th:text="${article.nickName}" href=""
-                                               class="title no-pdd-vertical text-bold inline-block font-size-15"></a>
-                                        </div>
-                                    </li>
-                                    <a class="pointer absolute top-10 right-0" data-toggle="dropdown"
-                                       aria-expanded="false">
+	<header id="header" class="header navbar">
+		<div class="header-container max-width-lg mx-auto">
+			<ul class="nav-left mrg-left-0 padding-15">
+				<li>
+					<a href="/">
+						<img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png">
+					</a>
+				</li>
+				<li class="search-box mrg-left-20 desktop-view">
+					<a class="search-toggle no-pdd-right" href="">
+						<i class="search-icon ti-search pdd-right-10 font-size-25"></i>
+						<i class="search-icon-close ti-close pdd-right-10 font-size-25"></i>
+					</a>
+				</li>
+				<li class="search-input desktop-view">
+					<input class="form-control mrg-top-0" type="text" placeholder="Search...">
+					<div class="advanced-search">
+						<div class="search-wrapper">
+							<div class="pdd-vertical-10">
+								<ul class="list-unstyled list-info">
+									<li class="search-result-item">
+										<a href="" class="text-dark">#우테코 1기</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<ul class="nav-right padding-15">
+				
+				<li class="">
+					<a class="pointer" href="/articles/new">
+						<i class="ti-pencil-alt"></i>
+					</a>
+				</li>
+				<li>
+					<a class="pointer">
+						<i class="ti-heart"></i>
+					</a>
+				</li>
+				<li>
+					<a class="pointer">
+						<i class="ti-user"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</header>
+	
+	<div class="page-container mrg-top-120">
+		<div class="main-content">
+			<div class="container-fluid max-width-lg mx-auto">
+				<div class="row">
+					<div class="col-lg-7 mx-auto">
+						
+						<div th:each="article : ${articles}" class="card widget-feed no-pdd mrg-btm-70" th:id="${article.id}">
+							<div class="feed-header padding-15">
+								<ul class="list-unstyled list-info">
+									<li>
+										<img class="thumb-img img-circle" th:src="${article.profileImage}" alt="">
+										<div class="info">
+											<a th:text="${article.nickName}" href=""
+											   class="title no-pdd-vertical text-bold inline-block font-size-15"></a>
+										</div>
+									</li>
+									<a class="pointer absolute top-10 right-0" data-toggle="dropdown"
+									   aria-expanded="false">
                                         <span class="btn-icon text-dark">
                                             <i class="ti-more font-size-16"></i>
                                         </span>
@@ -235,7 +234,9 @@
                     .forEach(el => el.addEventListener('click', indexPageService.addComment));
             };
             const toggleHeart = function () {
-                document.querySelector('.fa-heart-o').addEventListener('click', indexPageService.toggleHeart);
+                document.querySelectorAll('.fa-heart-o').forEach((el) => {
+                    el.addEventListener('click', indexPageService.toggleHeart);
+                })
             };
 
             const init = function () {
@@ -309,9 +310,10 @@
 
             const toggleHeart = function (event) {
                 event.preventDefault();
-                const articleId = document.getElementById('articleId').value;
-                const icon = document.getElementsByClassName('fa fa-heart-o');
-
+                const articleId = event.target.closest("div").id;
+                const childNodes = event.target.parentNode.parentNode.parentNode.parentNode.childNodes;
+                const ddabongCountTag = childNodes[7].childNodes[3].childNodes[3];
+                
                 axios({
                     method: 'post',
                     url: '/articles/' + articleId + '/ddabongs',
@@ -320,7 +322,6 @@
                     }
                 }).then(response => {
                     console.log(response)
-                    const ddabongCountTag = document.getElementById('ddabongCount');
                     ddabongCountTag.innerText = response.data.count;
 
                     if (response.data.clicked === false) {
