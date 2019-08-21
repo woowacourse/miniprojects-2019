@@ -32,8 +32,8 @@ public class Article extends BaseEntity {
         this.author = author;
     }
 
-    public String getDdabongCount() {
-        return String.valueOf(ddabongs.size());
+    public int getDdabongCount() {
+        return ddabongs.size();
     }
 
     public void deleteDdabong(Ddabong ddabong) {
