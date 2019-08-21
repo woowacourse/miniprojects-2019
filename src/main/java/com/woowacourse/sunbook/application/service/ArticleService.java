@@ -63,6 +63,14 @@ public class ArticleService {
         );
     }
 
+    public List<ArticleResponseDto> findAll() {
+        return Collections.unmodifiableList(
+                articleRepository.findAll().stream()
+                        .map(article -> modelMapper.map(article, ArticleResponseDto.class))
+                        .collect(Collectors.toList())
+        );
+    }
+
     public void remove(Long articleId, Long userId) {
         Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
         User user = loginService.findById(userId);

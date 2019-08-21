@@ -5,9 +5,6 @@ import com.woowacourse.sunbook.application.service.ArticleService;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.presentation.support.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +22,8 @@ public class ArticleApiController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ArticleResponseDto>> show(@PageableDefault(size = 2,
-            sort = "updatedTime", direction = Sort.Direction.DESC) Pageable pageable, LoginUser loginUser) {
-        List<ArticleResponseDto> articles = articleService.findPageByAuthor(pageable, loginUser.getId());
+    public ResponseEntity<List<ArticleResponseDto>> show() {
+        List<ArticleResponseDto> articles = articleService.findAll();
 
         return new ResponseEntity<>(articles, HttpStatus.OK);
     }

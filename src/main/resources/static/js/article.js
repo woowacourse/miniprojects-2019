@@ -77,6 +77,7 @@ const ArticleApp = (() => {
                                     "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
                                     "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png",
                                     "numberOfGood": numberOfGoods,
+                                    "authorName": article.authorName.name,
                                 }));
                         }
                     })
@@ -112,6 +113,7 @@ const ArticleApp = (() => {
                                 "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
                                 "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png",
                                 "numberOfGood": numberOfGoods,
+                                "authorName": article.authorName.name,
                             }));
                     };
 
