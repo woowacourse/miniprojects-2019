@@ -167,7 +167,7 @@
 									<span class="text-bold"> 16</span>
 								</span>
 								<span class="mrg-right-30">
-									<a class="pointer" data-toggle="modal" data-target="#modal-follower">
+									<a id="follower-btn" class="pointer" data-toggle="modal" data-target="#modal-follower">
 										<span>팔로워</span>
 										<span class="text-bold"> 91</span>
 									</a>
@@ -177,38 +177,14 @@
 												<div class="modal-header align-self-center">
 													<span class="text-bold">팔로워</span>
 												</div>
-												<ul class="list-unstyled list-info">
-                                                    <li>
-                                                        <div class="pdd-vertical-10 pdd-horizon-20 mrg-vertical-5">
-                                                            <img class="thumb-img img-circle"
-                                                                 src="https://avatars3.githubusercontent.com/u/50367798?v=4"
-                                                                 alt="">
-                                                            <div class="info">
-                                                                <span class="title lh-1-5">nickname</span>
-	                                                            <span class="sub-title">
-																	<span>name</span>
-                                                            </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="pdd-vertical-10 pdd-horizon-20 mrg-vertical-5">
-                                                            <img class="thumb-img img-circle"
-                                                                 src="https://avatars3.githubusercontent.com/u/50367798?v=4"
-                                                                 alt="">
-                                                            <div class="info">
-                                                                <span class="title lh-1-5">nickname</span>
-	                                                            <span class="sub-title">
-																	<span>name</span>
-                                                            </span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
+												<ul id="follower-ul" class="list-unstyled list-info">
                                                 </ul>
 											</div>
 										</div>
 									</div>
 								</span>
 								<span>
-									<a class="pointer" data-toggle="modal" data-target="#modal-following">
+									<a id="following-btn" class="pointer" data-toggle="modal" data-target="#modal-following">
 										<span>팔로잉</span>
 										<span class="text-bold"> 104</span>
 									</a>
@@ -218,37 +194,12 @@
 												<div class="modal-header align-self-center">
 													<span class="text-bold">팔로잉</span>
 												</div>
-												<ul class="list-unstyled list-info">
-                                                    <li>
-                                                        <div class="pdd-vertical-10 pdd-horizon-20 mrg-vertical-5">
-                                                            <img class="thumb-img img-circle"
-                                                                 src="https://avatars3.githubusercontent.com/u/50367798?v=4"
-                                                                 alt="">
-                                                            <div class="info">
-                                                                <span class="title lh-1-5">nickname</span>
-	                                                            <span class="sub-title">
-																	<span>name</span>
-                                                            </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="pdd-vertical-10 pdd-horizon-20 mrg-vertical-5">
-                                                            <img class="thumb-img img-circle"
-                                                                 src="https://avatars3.githubusercontent.com/u/50367798?v=4"
-                                                                 alt="">
-                                                            <div class="info">
-                                                                <span class="title lh-1-5">nickname</span>
-	                                                            <span class="sub-title">
-																	<span>name</span>
-                                                            </span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
+												<ul id="following-ul" class="list-unstyled list-info">
                                                 </ul>
 											</div>
 										</div>
 									</div>
 								</span>
-							
 							</div>
 							
 							<div class="mrg-btm-15 font-size-15">
@@ -444,6 +395,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"
         integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
         crossorigin="anonymous"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
     const MYPAGE = (function () {
 
@@ -457,10 +409,20 @@
             const showSearchedList = function () {
                 document.querySelector(".search-input input").addEventListener("keyup", myPageService.showSearchedList);
             };
+            
+            const showFollowingMembers = function () {
+				document.querySelector("#following-btn").addEventListener("click", myPageService.showFollowingMembers);
+			};
+            
+            const showFollowerMembers = function() {
+            	document.querySelector("#follower-btn").addEventListener("click", myPageService.showFollowerMembers);
+			};
 
             const init = function () {
                 toggleSearchInput();
                 showSearchedList();
+                showFollowingMembers();
+				showFollowerMembers();
             };
 
             return {
@@ -469,6 +431,23 @@
         };
 
         const MyPageService = function () {
+        	const followingUlTag = document.querySelector("#following-ul");
+        	const followerUlTag = document.querySelector("#follower-ul");
+        	
+        	const followMemberTemplate = function (json) {
+        		return `<div class="pdd-vertical-10 pdd-horizon-20 mrg-vertical-5">
+							<img class="thumb-img img-circle"
+							src="${json.profileImage}"
+							alt="">
+							<div class="info">
+								<span class="title lh-1-5">${json.nickName}</span>
+								<span class="sub-title">
+									<span>${json.name}</span>
+								</span>
+							</div>
+						</div>`
+			};
+        	
             const toggleSearchInput = function (event) {
                 event.preventDefault();
                 document.querySelector('.search-box').classList.toggle('active')
@@ -483,10 +462,42 @@
                     document.querySelector(".advanced-search").classList.remove("active")
                 }
             };
+            
+            const showFollowingMembers = function (event) {
+				event.preventDefault();
+				axios({
+					method: 'get',
+					url: '/follow/following/1',
+				}).then(response => {
+					followingUlTag.innerHTML = "";
+					response.data.forEach((member) => {
+						const liNode = document.createElement("LI");
+						liNode.innerHTML = followMemberTemplate(member.memberResponse);
+						followingUlTag.appendChild(liNode);
+					})
+				});
+			};
+            
+            const showFollowerMembers = function (event) {
+            	event.preventDefault();
+				axios({
+					method: 'get',
+					url: '/follow/follower/1',
+				}).then(response => {
+					followerUlTag.innerHTML = "";
+					response.data.forEach((member) => {
+						const liNode = document.createElement("LI");
+						liNode.innerHTML = followMemberTemplate(member.memberResponse);
+						followerUlTag.appendChild(liNode);
+					})
+				});
+			}
 
             return {
                 toggleSearchInput: toggleSearchInput,
                 showSearchedList: showSearchedList,
+				showFollowingMembers: showFollowingMembers,
+				showFollowerMembers: showFollowerMembers,
             }
         };
 

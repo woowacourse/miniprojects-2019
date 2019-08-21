@@ -30,7 +30,7 @@ public class LoginController {
     @PostMapping
     public String login(MemberLoginRequest memberLoginRequest, HttpSession httpSession) {
         MemberResponse memberResponse = loginService.find(memberLoginRequest);
-        httpSession.setAttribute(MEMBER, new MemberSession(memberResponse.getEmail(), memberResponse.getNickName(), memberResponse.getProfileImage()));
+        httpSession.setAttribute(MEMBER, new MemberSession(memberResponse.getId(), memberResponse.getEmail(), memberResponse.getNickName(), memberResponse.getProfileImage()));
         return "redirect:/";
     }
 }

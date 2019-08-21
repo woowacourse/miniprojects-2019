@@ -3,14 +3,24 @@ package com.woowacourse.zzazanstagram.model.member;
 import java.io.Serializable;
 
 public class MemberSession implements Serializable {
+    private Long id;
     private String email;
     private String nickName;
     private String profileImage;
 
-    public MemberSession(String email, String nickName, String profileImage) {
+    public MemberSession(Long id, String email, String nickName, String profileImage) {
+        this.id = id;
         this.email = email;
         this.nickName = nickName;
         this.profileImage = profileImage;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {
