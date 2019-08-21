@@ -37,7 +37,7 @@ public class MainService {
             List<UserInfoDto> likes = likesService.getLikedUser(article.getId());
 
             return MainArticleDto.from(article,
-                    commentService.findByArticleId(article.getId()),
+                    commentService.findByArticleId(article.getId(), userEmail),
                     article.isAuthor(user.getId()),
                     (long) likes.size(),
                     likes.contains(UserInfoDto.from(user)));

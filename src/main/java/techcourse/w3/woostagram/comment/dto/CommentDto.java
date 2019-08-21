@@ -18,15 +18,15 @@ public class CommentDto {
     private String contents;
     private LocalDateTime createdDate;
     private UserInfoDto userInfoDto;
-    private boolean isMain;
+    private boolean mine;
 
     @Builder
-    public CommentDto(Long id, String contents, LocalDateTime createdDate, UserInfoDto userInfoDto, boolean isMain) {
+    public CommentDto(Long id, String contents, LocalDateTime createdDate, UserInfoDto userInfoDto, boolean mine) {
         this.id = id;
         this.contents = contents;
         this.createdDate = createdDate;
         this.userInfoDto = userInfoDto;
-        this.isMain = isMain;
+        this.mine = mine;
     }
 
     public static CommentDto from(Comment comment, long loggedInUserId) {
@@ -35,7 +35,7 @@ public class CommentDto {
                 .contents(comment.getContents())
                 .createdDate(comment.getCreatedDate())
                 .userInfoDto(UserInfoDto.from(comment.getUser()))
-                .isMain(comment.isAuthor(loggedInUserId))
+                .mine(comment.isAuthor(loggedInUserId))
                 .build();
     }
 
