@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport"
@@ -396,7 +396,7 @@
         integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
+<script th:inline="javascript">
     const MYPAGE = (function () {
 
         const MyPageController = function () {
@@ -467,7 +467,7 @@
 				event.preventDefault();
 				axios({
 					method: 'get',
-					url: '/follow/following/1',
+					url: '/follow/following/' + [[${member.id}]]
 				}).then(response => {
 					followingUlTag.innerHTML = "";
 					response.data.forEach((member) => {
@@ -482,7 +482,7 @@
             	event.preventDefault();
 				axios({
 					method: 'get',
-					url: '/follow/follower/1',
+					url: '/follow/follower/' + [[${member.id}]]
 				}).then(response => {
 					followerUlTag.innerHTML = "";
 					response.data.forEach((member) => {

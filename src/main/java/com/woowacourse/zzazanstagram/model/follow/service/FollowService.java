@@ -60,6 +60,6 @@ public class FollowService {
     }
 
     private Member findMember(Long id) {
-        return memberService.find(id);
+        return memberService.findById(id);
     }
 }

@@ -35,7 +35,7 @@ public class ArticleService {
     }
 
     public void save(ArticleRequest dto, String email) {
-        Member author = memberService.findMemberByEmail(email);
+        Member author = memberService.findByEmail(email);
 
         Article article = ArticleAssembler.toEntity(dto, author);
         articleRepository.save(article);
