@@ -15,7 +15,7 @@ const feedInitLoad = () =
 )
 .
     then(user = > {
-        profile.style.backgroundImage = `url(${user.profile})`
+        profile.stylze.backgroundImage = `url(${user.profile})`
         return user
     }
 )
