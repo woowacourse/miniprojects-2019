@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Base64;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,11 +31,11 @@ public class FileService {
     }
 
     private String getFilePath() {
-        String path = System.getProperty("user.dir");
-        if (path == null) {
-            throw new UserDirNullException("java system 변수에 User dir이 존재하지 않습니다.");
-        }
-        return path.concat(ARTICLE_UPLOAD_PATH);
+        Optional<String> path = Optional.of(System.getProperty("user.dir"));
+
+        return path.orElseThrow(() ->
+                new UserDirNullException("java system 변수에 User dir이 존재하지 않습니다."))
+                .concat(ARTICLE_UPLOAD_PATH);
     }
 
     private void makeDirectory(String filePath) {
