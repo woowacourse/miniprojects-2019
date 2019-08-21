@@ -1,6 +1,6 @@
 package com.wootecobook.turkey.post.domain;
 
-import com.wootecobook.turkey.commons.BaseEntity;
+import com.wootecobook.turkey.commons.domain.UpdatableEntity;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.post.domain.exception.InvalidPostException;
 import com.wootecobook.turkey.post.domain.exception.PostUpdateFailException;
@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Post extends BaseEntity {
+public class Post extends UpdatableEntity {
 
     @Embedded
     private Contents contents;

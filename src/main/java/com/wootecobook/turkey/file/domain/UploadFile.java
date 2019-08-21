@@ -1,6 +1,6 @@
 package com.wootecobook.turkey.file.domain;
 
-import com.wootecobook.turkey.commons.BaseEntity;
+import com.wootecobook.turkey.commons.domain.UpdatableEntity;
 import com.wootecobook.turkey.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class UploadFile extends BaseEntity {
+public class UploadFile extends UpdatableEntity {
 
     @Embedded
     private FileFeature fileFeature;

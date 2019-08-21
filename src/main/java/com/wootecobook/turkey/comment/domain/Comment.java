@@ -3,7 +3,7 @@ package com.wootecobook.turkey.comment.domain;
 import com.wootecobook.turkey.comment.domain.exception.CommentUpdateFailException;
 import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
-import com.wootecobook.turkey.commons.BaseEntity;
+import com.wootecobook.turkey.commons.domain.UpdatableEntity;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;
 import lombok.Builder;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Comment extends BaseEntity {
+public class Comment extends UpdatableEntity {
 
     protected static final String CONTENTS_DELETE_MESSAGE = "삭제된 글입니다.";
 
