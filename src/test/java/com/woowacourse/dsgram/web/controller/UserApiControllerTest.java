@@ -222,4 +222,28 @@ class UserApiControllerTest extends AbstractControllerTest {
         checkExceptionMessage(response, "회원정보가 일치하지 않습니다.");
     }
 
+    @Test
+    void user_다른_사용자가_탈퇴_시도() {
+        SignUpUserRequest anotherUser = SignUpUserRequest.builder()
+                .userName("김희CHORE")
+                .email(AUTO_INCREMENT + "buddy@gmail.com")
+                .nickName(AUTO_INCREMENT + "chore")
+                .password("bodybuddy1!")
+                .build();
+        defaultSignUp(anotherUser, true);
+        String anotherUserCookie = getCookie(new AuthUserRequest(anotherUser.getEmail(), anotherUser.getPassword()));
+
+        webTestClient.delete().uri("/api/users/{userId}", AUTO_INCREMENT - 1)
+                .header("Cookie", anotherUserCookie)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void user_탈퇴() {
+        webTestClient.delete().uri("/api/users/{userId}", AUTO_INCREMENT)
+                .header("Cookie", sessionCookie)
+                .exchange()
+                .expectStatus().isOk();
+    }
 }

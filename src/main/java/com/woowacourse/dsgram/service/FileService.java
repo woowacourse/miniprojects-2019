@@ -3,8 +3,8 @@ package com.woowacourse.dsgram.service;
 import com.woowacourse.dsgram.domain.Article;
 import com.woowacourse.dsgram.service.exception.FileUploadException;
 import com.woowacourse.dsgram.service.exception.NotFoundFileException;
+import com.woowacourse.dsgram.service.exception.UserDirNullException;
 import com.woowacourse.dsgram.service.vo.FileInfo;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,28 +12,30 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Base64;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class FileService {
 
-    @Value("${article.upload.path}")
-    private String articleUploadPath;
-
-    @Value("${tomcat.path}")
-    private String tomcatPath;
-
-    @Value("${BASE_DIR}")
-    private String baseDir;
+    private static String ARTICLE_UPLOAD_PATH = "/articles/files";
 
     public FileInfo save(MultipartFile multiFile) {
         String fileName = UUID.randomUUID().toString() + multiFile.getOriginalFilename();
-        String filePath = baseDir + tomcatPath + articleUploadPath;
+        String filePath = getFilePath();
 
         makeDirectory(filePath);
         saveFile(multiFile, fileName, filePath);
 
         return new FileInfo(fileName, filePath);
+    }
+
+    private String getFilePath() {
+        Optional<String> path = Optional.of(System.getProperty("user.dir"));
+
+        return path.orElseThrow(() ->
+                new UserDirNullException("java system 변수에 User dir이 존재하지 않습니다."))
+                .concat(ARTICLE_UPLOAD_PATH);
     }
 
     private void makeDirectory(String filePath) {

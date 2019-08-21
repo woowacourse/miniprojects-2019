@@ -1,10 +1,10 @@
 package com.woowacourse.dsgram.service;
 
-import com.google.gson.JsonElement;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.domain.UserRepository;
 import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import com.woowacourse.dsgram.service.assembler.UserAssembler;
+import com.woowacourse.dsgram.service.dto.oauth.OAuthUserInfoResponse;
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
@@ -58,10 +58,11 @@ public class UserService {
     }
 
     @Transactional
-    public void update(long userId, UserDto userDto, LoginUserRequest loginUserRequest) {
+    public LoginUserRequest update(long userId, UserDto userDto, LoginUserRequest loginUserRequest) {
         User user = findById(userId);
         checkDuplicatedNickName(userDto, user);
         user.update(UserAssembler.toEntity(userDto), loginUserRequest.getEmail());
+        return UserAssembler.toLoginUser(user);
     }
 
     private void checkDuplicatedNickName(UserDto userDto, User user) {
@@ -72,31 +73,41 @@ public class UserService {
     }
 
     public LoginUserRequest login(AuthUserRequest authUserRequest) {
-        User user = userRepository.findByEmail(authUserRequest.getEmail())
+        User user = findByEmail(authUserRequest.getEmail())
                 .orElseThrow(() -> new InvalidUserException("회원정보가 일치하지 않습니다."));
         user.checkPassword(authUserRequest.getPassword());
-        return UserAssembler.toAuthUserDto(user);
+        return UserAssembler.toLoginUser(user);
     }
 
     private Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
     public LoginUserRequest oauth(String code) {
         String accessToken = githubClient.getToken(code);
-
         String email = githubClient.getUserEmail(accessToken);
 
-        Optional<User> user = findByEmail(email);
-        if (user.isPresent()) {
-            return UserAssembler.toAuthUserDto(user.get());
+        Optional<User> optionalUser = findByEmail(email);
+        if (optionalUser.isPresent()) {
+            optionalUser.ifPresent(User::changeToOAuthUser);
+            return UserAssembler.toLoginUser(optionalUser.get());
         }
-        return UserAssembler.toAuthUserDto(saveOauthUser(accessToken, email));
+        return UserAssembler.toLoginUser(saveOauthUser(accessToken, email));
     }
 
     private User saveOauthUser(String accessToken, String email) {
-        // TODO: 2019-08-16 OAUTH 로그인시 nickName null/중복 처리
-        JsonElement userInfo = githubClient.getUserInformation(accessToken);
-        return userRepository.save(UserAssembler.toEntity(email, userInfo.getAsJsonObject()));
+        OAuthUserInfoResponse userInfo = githubClient.getUserInformation(accessToken);
+        return userRepository.save(UserAssembler.toEntity(email, userInfo));
+    }
+
+    public void deleteById(long id, LoginUserRequest loginUserRequest) {
+        // TODO: 2019-08-20 OAUTH revoke?
+        User user = findByEmail(loginUserRequest.getEmail())
+                .orElseThrow(() -> new NotFoundUserException("회원을 찾을 수 없습니다."));
+        if (user.isNotSameId(id)) {
+            throw new InvalidUserException("회원정보가 일치하지 않습니다.");
+        }
+        userRepository.deleteById(id);
     }
 }

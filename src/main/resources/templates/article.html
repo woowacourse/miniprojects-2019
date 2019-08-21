@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/css/index.css">
 </th:block>
 
-
 <th:block layout:fragment="content">
     <div>
         <div class="page-container mrg-top-120">
@@ -52,6 +51,18 @@
 
     window.onload = function () {
         connector.fetchTemplateWithoutBody('/api/articles/' + articleId + "/file", connector.GET, loadFile);
+    }
+</script>
+<script>
+    function copyUrl(articleId) {
+        let copiedUrl = window.location.host + "/articles/" + articleId;
+        let copyTarget = document.createElement("textarea");
+        document.body.appendChild(copyTarget);
+        copyTarget.value = copiedUrl;
+        copyTarget.select();
+        document.execCommand('copy');
+        document.body.removeChild(copyTarget);
+        alert("링크가 복사되었습니다." + copiedUrl);
     }
 </script>
 </th:block>

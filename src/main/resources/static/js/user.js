@@ -14,6 +14,11 @@ const USER_APP = (() => {
             editButton ? editButton.addEventListener('click', userService.updateUser) : undefined;
         };
 
+        const deleteUser = () => {
+            const deleteButton = document.getElementById('deleteButton');
+            deleteButton ? deleteButton.addEventListener('click', userService.deleteUser) : undefined;
+        };
+
         const login = () => {
             const loginButton = document.getElementById('login-button');
             loginButton ? loginButton.addEventListener('click', userService.login) : undefined;
@@ -23,6 +28,7 @@ const USER_APP = (() => {
             signUp();
             editUser();
             login();
+            deleteUser();
         };
 
         return {
@@ -85,6 +91,11 @@ const USER_APP = (() => {
                 ifSucceed);
         };
 
+        const deleteUser = function (event) {
+            event.preventDefault();
+            connector.fetchTemplate('/api/users/' + userId.value, connector.DELETE, null, () => window.location.href = '/login')
+        };
+
         const login = function (event) {
             event.preventDefault();
 
@@ -105,6 +116,7 @@ const USER_APP = (() => {
         return {
             saveUser: saveUser,
             updateUser: updateUser,
+            deleteUser: deleteUser,
             login: login,
         }
     };
