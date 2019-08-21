@@ -30,14 +30,14 @@ public class FileServiceTests {
     @Test
     @DisplayName("파일 생성 성공 테스트")
     void save() {
-        assertThat(fileService.save(multipartFile)).isNotNull();
+        assertThat(fileService.save(multipartFile, new ArticleFileNamingStrategy())).isNotNull();
 
     }
 
     @Test
     @DisplayName("파일 조회 성공 테스트")
     void read() {
-        FileInfo fileInfo = fileService.save(multipartFile);
+        FileInfo fileInfo = fileService.save(multipartFile, new ArticleFileNamingStrategy());
         assertThat(fileService.readFile(new Article("contents", fileInfo.getFileName(), fileInfo.getFilePath(), UserTest.user))).isNotEmpty();
     }
 
