@@ -18,21 +18,24 @@ public class CommentDto {
     private String contents;
     private LocalDateTime createdDate;
     private UserInfoDto userInfoDto;
+    private boolean mine;
 
     @Builder
-    public CommentDto(Long id, String contents, LocalDateTime createdDate, UserInfoDto userInfoDto) {
+    public CommentDto(Long id, String contents, LocalDateTime createdDate, UserInfoDto userInfoDto, boolean mine) {
         this.id = id;
         this.contents = contents;
         this.createdDate = createdDate;
         this.userInfoDto = userInfoDto;
+        this.mine = mine;
     }
 
-    public static CommentDto from(Comment comment) {
+    public static CommentDto from(Comment comment, long loggedInUserId) {
         return CommentDto.builder()
                 .id(comment.getId())
                 .contents(comment.getContents())
                 .createdDate(comment.getCreatedDate())
                 .userInfoDto(UserInfoDto.from(comment.getUser()))
+                .mine(comment.isAuthor(loggedInUserId))
                 .build();
     }
 

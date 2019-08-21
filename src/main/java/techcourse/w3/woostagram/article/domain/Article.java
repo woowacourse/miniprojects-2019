@@ -39,4 +39,8 @@ public class Article extends AuditLog {
     public void updateContents(String contents) {
         this.contents = contents;
     }
+
+    public Boolean isAuthor(Long userId) {
+        return user.getId().equals(userId);
+    }
 }

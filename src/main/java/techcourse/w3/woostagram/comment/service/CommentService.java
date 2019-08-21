@@ -30,11 +30,14 @@ public class CommentService {
         User user = userService.findUserByEmail(email);
         Article article = articleService.findArticleById(articleId);
         Comment comment = commentRepository.save(commentDto.toEntity(user, article));
-        return CommentDto.from(comment);
+        return CommentDto.from(comment, user.getId());
     }
 
-    public List<CommentDto> findByArticleId(Long articleId) {
-        return commentRepository.findByArticle_Id(articleId).stream().map(CommentDto::from).collect(Collectors.toList());
+    public List<CommentDto> findByArticleId(Long articleId, String email) {
+        User loggedUser = userService.findUserByEmail(email);
+        return commentRepository.findByArticle_Id(articleId).stream()
+                .map(comment -> CommentDto.from(comment, loggedUser.getId()))
+                .collect(Collectors.toList());
     }
 
     public void deleteById(Long commentId, String email) {

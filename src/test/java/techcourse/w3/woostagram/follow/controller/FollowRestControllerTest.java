@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 
+import java.util.HashMap;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FollowRestControllerTest extends AbstractControllerTests {
@@ -13,7 +15,7 @@ class FollowRestControllerTest extends AbstractControllerTests {
     @BeforeEach
     protected void setUp() {
         super.setUp();
-        postJsonRequest("/api/follow/2", UserInfoDto.class, String.valueOf(2), "moomin@naver.com", "");
+        postJsonRequest("/api/follow/2", new HashMap<>());
     }
 
     @Test
@@ -23,18 +25,19 @@ class FollowRestControllerTest extends AbstractControllerTests {
     }
 
     @Test
-    void readFollowing_correctId_isTrue(){
+    void readFollowing_correctId_isTrue() {
         UserInfoDto[] userInfoDtos = getRequest("/api/follow/to/1", UserInfoDto[].class);
         assertThat(userInfoDtos[0].getId()).isEqualTo(2);
     }
 
     @Test
-    void create_correctTarget_isTrue(){
-        assertThat(postJsonRequest("/api/follow/2", UserInfoDto.class, String.valueOf(2), "moomin@naver.com", "").getStatus().is2xxSuccessful()).isTrue();
+    void create_correctTarget_isTrue() {
+        assertThat(postJsonRequest("/api/follow/2", new HashMap<>()).getStatus().is2xxSuccessful()).isTrue();
+
     }
 
     @Test
-    void delete_correctTarget_isTrue(){
+    void delete_correctTarget_isTrue() {
         assertThat(deleteRequest("/api/follow/2").getStatus().is2xxSuccessful()).isTrue();
     }
 
