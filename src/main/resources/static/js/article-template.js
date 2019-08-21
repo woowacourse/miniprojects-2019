@@ -42,7 +42,7 @@ const template = (function () {
                     <ul class="feed-action pdd-btm-5 border bottom">
                         <li>
                             <i class="fa fa-thumbs-o-up text-info font-size-16 mrg-left-5"></i>
-                            <span class="font-size-14 lh-2-1">67</span>
+                            <span id="good-count-{{id}}" class="font-size-14 lh-2-1">{{numberOfGood}}</span>
                         </li>
                         <li class="float-right">
                             <span class="font-size-13">공유 78회</span>
@@ -52,7 +52,7 @@ const template = (function () {
                         </li>
                     </ul>
                     <ul class="feed-action border bottom d-flex">
-                        <li class="text-center flex-grow-1">
+                        <li class="text-center flex-grow-1" data-btn="reaction-good-btn">
                             <button class="btn btn-default no-border pdd-vertical-0 no-mrg width-100">
                                 <i class="fa fa-thumbs-o-up font-size-16"></i>
                                 <span class="font-size-13">좋아요</span>

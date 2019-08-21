@@ -1,8 +1,6 @@
-package com.woowacourse.sunbook.mir.domain;
+package com.woowacourse.sunbook.domain.comment;
 
 import com.woowacourse.sunbook.domain.article.Article;
-import com.woowacourse.sunbook.domain.comment.Comment;
-import com.woowacourse.sunbook.domain.comment.CommentFeature;
 import com.woowacourse.sunbook.domain.comment.exception.MismatchAuthException;
 import com.woowacourse.sunbook.domain.user.User;
 import org.junit.jupiter.api.Test;

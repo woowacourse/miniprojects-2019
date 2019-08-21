@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.presentation;
+package com.woowacourse.sunbook.presentation.controller;
 
 import com.woowacourse.sunbook.presentation.template.TestTemplate;
 import org.junit.jupiter.api.Test;

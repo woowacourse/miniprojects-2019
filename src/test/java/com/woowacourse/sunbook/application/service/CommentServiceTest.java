@@ -1,10 +1,7 @@
-package com.woowacourse.sunbook.mir.application;
+package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.application.dto.comment.CommentResponseDto;
 import com.woowacourse.sunbook.application.exception.NotFoundArticleException;
-import com.woowacourse.sunbook.application.service.ArticleService;
-import com.woowacourse.sunbook.application.service.CommentService;
-import com.woowacourse.sunbook.application.service.LoginService;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.comment.Comment;
 import com.woowacourse.sunbook.domain.comment.CommentFeature;

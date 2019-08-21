@@ -20,19 +20,21 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    private final UserService userService;
+    private final LoginService loginService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ArticleService(final ArticleRepository articleRepository, final UserService userService, final ModelMapper modelMapper) {
+    public ArticleService(final ArticleRepository articleRepository,
+                          final LoginService loginService,
+                          final ModelMapper modelMapper) {
         this.articleRepository = articleRepository;
-        this.userService = userService;
+        this.loginService = loginService;
         this.modelMapper = modelMapper;
     }
 
     @Transactional
     public ArticleResponseDto save(ArticleFeature articleFeature, Long userId) {
-        User author = userService.findUserById(userId);
+        User author = loginService.findById(userId);
         Article savedArticle = articleRepository.save(new Article(articleFeature, author));
 
         return modelMapper.map(savedArticle, ArticleResponseDto.class);
@@ -41,17 +43,19 @@ public class ArticleService {
     @Transactional
     public ArticleResponseDto modify(long articleId, ArticleFeature articleFeature, Long userId) {
         Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
-        User user = userService.findUserById(userId);
+        User user = loginService.findById(userId);
+
         if (article.isSameUser(user)) {
             article.update(articleFeature);
 
             return modelMapper.map(article, ArticleResponseDto.class);
         }
+
         throw new MismatchAuthException();
     }
 
     public List<ArticleResponseDto> findPageByAuthor(Pageable pageable, Long userId) {
-        User foundUser = userService.findUserById(userId);
+        User foundUser = loginService.findById(userId);
         return Collections.unmodifiableList(
                 articleRepository.findAllByAuthor(pageable, foundUser).getContent().stream()
                         .map(article -> modelMapper.map(article, ArticleResponseDto.class))
@@ -61,12 +65,14 @@ public class ArticleService {
 
     public void remove(Long articleId, Long userId) {
         Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
-        User user = userService.findUserById(userId);
+        User user = loginService.findById(userId);
+
         if (article.isSameUser(user)) {
             articleRepository.deleteById(articleId);
 
             return;
         }
+
         throw new MismatchAuthException();
     }
 

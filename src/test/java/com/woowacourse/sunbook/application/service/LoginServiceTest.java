@@ -1,10 +1,9 @@
-package com.woowacourse.sunbook.application;
+package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
 import com.woowacourse.sunbook.application.exception.LoginException;
-import com.woowacourse.sunbook.application.service.LoginService;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserEmail;
 import com.woowacourse.sunbook.domain.user.UserPassword;

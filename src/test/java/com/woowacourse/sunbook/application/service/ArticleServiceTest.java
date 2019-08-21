@@ -1,9 +1,8 @@
-package com.woowacourse.sunbook.application;
+package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.application.dto.article.ArticleResponseDto;
 import com.woowacourse.sunbook.application.exception.NotFoundArticleException;
 import com.woowacourse.sunbook.application.exception.NotFoundUserException;
-import com.woowacourse.sunbook.application.service.ArticleService;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.domain.article.ArticleRepository;
@@ -53,13 +52,13 @@ class ArticleServiceTest {
     private User user;
 
     @Mock
-    private UserService userService;
+    private LoginService loginService;
 
     @Test
     void 게시글_정상_생성() {
         given(articleRepository.save(any(Article.class))).willReturn(article);
         given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
-        given(userService.findUserById(any(Long.class))).willReturn(user);
+        given(loginService.findById(any(Long.class))).willReturn(user);
 
         articleService.save(articleFeature, USER_ID);
 
@@ -68,7 +67,7 @@ class ArticleServiceTest {
 
     @Test
     void 게시글_생성시_없는_유저() {
-        given(userService.findUserById(any(Long.class))).willThrow(NotFoundUserException.class);
+        given(loginService.findById(any(Long.class))).willThrow(NotFoundUserException.class);
 
         assertThrows(NotFoundUserException.class, () -> articleService.save(articleFeature, USER_ID));
     }
@@ -77,7 +76,7 @@ class ArticleServiceTest {
     void 게시글_정상_수정() {
         given(articleRepository.findById(ARTICLE_ID)).willReturn(Optional.of(article));
         given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
-        given(userService.findUserById(any(Long.class))).willReturn(user);
+        given(loginService.findById(any(Long.class))).willReturn(user);
         given(article.isSameUser(any(User.class))).willReturn(true);
 
         articleService.modify(ARTICLE_ID, updatedArticleFeature, USER_ID);
@@ -105,7 +104,7 @@ class ArticleServiceTest {
     @Test
     void 게시글_정상_삭제() {
         given(articleRepository.findById(ARTICLE_ID)).willReturn(Optional.of(article));
-        given(userService.findUserById(any(Long.class))).willReturn(user);
+        given(loginService.findById(any(Long.class))).willReturn(user);
         given(article.isSameUser(any(User.class))).willReturn(true);
 
         articleService.remove(ARTICLE_ID, USER_ID);

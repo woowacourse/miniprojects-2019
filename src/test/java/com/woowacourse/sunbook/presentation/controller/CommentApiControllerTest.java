@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.mir.presentation;
+package com.woowacourse.sunbook.presentation.controller;
 
 import com.woowacourse.sunbook.domain.comment.CommentFeature;
 import com.woowacourse.sunbook.presentation.template.TestTemplate;

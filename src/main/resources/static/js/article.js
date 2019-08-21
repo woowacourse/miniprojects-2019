@@ -33,6 +33,12 @@ const ArticleApp = (() => {
             photoVideoBtn.addEventListener('click', articleService.temp);
         };
 
+        const clickGood = () => {
+            console.log("check");
+            const articleList = document.getElementById('article-list');
+            articleList.addEventListener('click', articleService.clickGood);
+        };
+
         const init = () => {
             add();
             showUpdateModal();
@@ -40,6 +46,7 @@ const ArticleApp = (() => {
             read();
             update();
             temp();
+            clickGood();
         };
 
         return {
@@ -57,14 +64,21 @@ const ArticleApp = (() => {
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(article => {
-                        articleList
-                            .insertAdjacentHTML('afterbegin', articleTemplate({
-                                "id": article.id,
-                                "updatedTime": article.updatedTime,
-                                "article-contents": article.articleFeature.contents,
-                                "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
-                                "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png"
-                            }));
+                        articleApi.showGood(article.id)
+                            .then(response => response.json())
+                            .then(data => showArticleList(data.numberOfGood));
+
+                        const showArticleList = function (numberOfGoods) {
+                            articleList
+                                .insertAdjacentHTML('afterbegin', articleTemplate({
+                                    "id": article.id,
+                                    "updatedTime": article.updatedTime,
+                                    "article-contents": article.articleFeature.contents,
+                                    "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
+                                    "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png",
+                                    "numberOfGood": numberOfGoods,
+                                }));
+                        }
                     })
                 })
                 .catch(error => console.log("error: " + error));
@@ -81,14 +95,21 @@ const ArticleApp = (() => {
             articleApi.add(data)
                 .then(response => response.json())
                 .then((article) => {
-                    document.getElementById('article-list')
-                        .insertAdjacentHTML('afterbegin', articleTemplate({
-                            "id": article.id,
-                            "updatedTime": article.updatedTime,
-                            "article-contents": article.articleFeature.contents,
-                            "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
-                            "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png"
-                        }));
+                    articleApi.showGood(article.id)
+                        .then(response => response.json())
+                        .then(data => showArticle(data.numberOfGood));
+
+                    const showArticle = function (numberOfGoods) {
+                        document.getElementById('article-list')
+                            .insertAdjacentHTML('afterbegin', articleTemplate({
+                                "id": article.id,
+                                "updatedTime": article.updatedTime,
+                                "article-contents": article.articleFeature.contents,
+                                "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
+                                "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png",
+                                "numberOfGood": numberOfGoods,
+                            }));
+                    }
                 });
             contents.value = "";
         };
@@ -138,6 +159,24 @@ const ArticleApp = (() => {
             inputTag.click();
         };
 
+
+        const clickGood = (event) => {
+            const target = event.target;
+            if (target.closest('li[data-btn="reaction-good-btn"]')) {
+                const article = target.closest('div[data-object="article"]');
+                const articleId = article.getAttribute('data-article-id');
+                const data = document.getElementById(`good-count-${articleId}`).innerText;
+
+                articleApi.clickGood(Number(data), articleId)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.numberOfGood);
+                        document.getElementById(`good-count-${articleId}`)
+                            .innerText = data.numberOfGood;
+                    });
+            }
+        };
+
         return {
             add: add,
             read: read,
@@ -145,6 +184,7 @@ const ArticleApp = (() => {
             remove: remove,
             showModal: showModal,
             temp: temp,
+            clickGood: clickGood,
         }
     };
 
@@ -166,11 +206,21 @@ const ArticleApp = (() => {
             return Api.put(`/api/articles/${articleId}`, data);
         };
 
+        const clickGood = (data, articleId) => {
+            return Api.post(`/api/articles/${articleId}/good`, data)
+        };
+
+        const showGood = (articleId) => {
+            return Api.get(`/api/articles/${articleId}/good`);
+        };
+
         return {
             add: add,
             remove: remove,
             render: render,
             update: update,
+            clickGood: clickGood,
+            showGood: showGood,
         };
     };
 
@@ -181,7 +231,8 @@ const ArticleApp = (() => {
 
     return {
         init: init,
-    }
+    };
+
 })();
 
 ArticleApp.init();
