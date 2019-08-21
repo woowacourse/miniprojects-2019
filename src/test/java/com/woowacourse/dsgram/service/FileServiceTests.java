@@ -1,6 +1,7 @@
 package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
+import com.woowacourse.dsgram.domain.UserTest;
 import com.woowacourse.dsgram.service.exception.NotFoundFileException;
 import com.woowacourse.dsgram.service.vo.FileInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,14 +38,14 @@ public class FileServiceTests {
     @DisplayName("파일 조회 성공 테스트")
     void read() {
         FileInfo fileInfo = fileService.save(multipartFile);
-        assertThat(fileService.readFile(new Article("contents", fileInfo.getFileName(), fileInfo.getFilePath()))).isNotEmpty();
+        assertThat(fileService.readFile(new Article("contents", fileInfo.getFileName(), fileInfo.getFilePath(), UserTest.user))).isNotEmpty();
     }
 
     @Test
     @DisplayName("파일 조회 실패 테스트")
     void readFail() {
         assertThrows(NotFoundFileException.class, () -> {
-            fileService.readFile(new Article("contents", "fileName", "notExistPath"));
+            fileService.readFile(new Article("contents", "fileName", "notExistPath",UserTest.user));
         });
     }
 

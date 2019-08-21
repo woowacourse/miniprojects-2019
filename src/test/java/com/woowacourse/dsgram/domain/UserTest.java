@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class UserTest {
+public class UserTest {
 
-    private final User user = User.builder()
+    public static final User user = User.builder()
             .email("buddy@buddy.com")
             .userName("김버디")
             .nickName("buddy_")
