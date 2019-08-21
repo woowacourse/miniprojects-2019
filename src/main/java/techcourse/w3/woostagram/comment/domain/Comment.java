@@ -38,4 +38,8 @@ public class Comment extends AuditLog {
         this.user = user;
         this.article = article;
     }
+
+    public boolean isAuthor(long loggedInUserId) {
+        return loggedInUserId == user.getId();
+    }
 }
