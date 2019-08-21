@@ -3,15 +3,13 @@ package com.wootecobook.turkey.friend.controller.api;
 import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.friend.service.FriendAskService;
 import com.wootecobook.turkey.friend.service.FriendService;
-import com.wootecobook.turkey.friend.service.dto.FriendCreate;
 import com.wootecobook.turkey.friend.service.dto.FriendAskCreate;
 import com.wootecobook.turkey.friend.service.dto.FriendAskResponse;
+import com.wootecobook.turkey.friend.service.dto.FriendCreate;
 import com.wootecobook.turkey.friend.service.dto.FriendResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -39,7 +37,7 @@ public class FriendApiController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FriendResponse>> show(UserSession userSession){
+    public ResponseEntity<List<FriendResponse>> show(UserSession userSession) {
         return ResponseEntity.ok(friendService.findAllFriendResponseByRelatingUserId(userSession.getId()));
     }
 
