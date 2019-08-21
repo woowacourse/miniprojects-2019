@@ -14,20 +14,26 @@ import java.util.List;
 public class MainArticleDto {
     private ArticleDto article;
     private List<CommentDto> comments;
-    private Boolean isMine;
+    private Boolean mine;
+    private Long likes;
+    private Boolean liking;
 
     @Builder
-    public MainArticleDto(ArticleDto article, List<CommentDto> comments, Boolean isMine) {
+    public MainArticleDto(ArticleDto article, List<CommentDto> comments, Boolean mine, Long likes, Boolean liking) {
         this.article = article;
         this.comments = comments;
-        this.isMine = isMine;
+        this.mine = mine;
+        this.likes = likes;
+        this.liking = liking;
     }
 
-    public static MainArticleDto from(Article article, List<CommentDto> comments, Boolean isMine) {
+    public static MainArticleDto from(Article article, List<CommentDto> comments, Boolean mine, Long likes, Boolean liking) {
         return MainArticleDto.builder()
                 .article(ArticleDto.from(article))
                 .comments(comments)
-                .isMine(isMine)
+                .mine(mine)
+                .likes(likes)
+                .liking(liking)
                 .build();
     }
 }
