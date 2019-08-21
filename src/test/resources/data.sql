@@ -10,5 +10,14 @@ INSERT INTO article (id, contents, image_url, video_url)
 VALUES (3, 'Deleted Contents', 'http://mblogthumb3.phinf.naver.net/MjAxNzA2MDhfODYg/MDAxNDk2ODgyNDE3NDYz.yMs2-E3-GlBu9U_4r2GMnBd1IEgVlWG2Qos9pb-2WWIg.M4JN5W9K2kMt9n76gjYQUKPBGt0eHMXE0UrvWFvr6Vgg.PNG.smartbaedal/18.png?type=w800'
        , 'https://youtu.be/5HG_CJzyX6A');
 
-INSERT INTO user (email, name, password)
-VALUES ('ddu0422@naver.com', 'mir', 'asdf1234!A');
+INSERT INTO user (id, email, name, password)
+VALUES (1, 'ddu0422@naver.com', 'mir', 'asdf1234!A');
+
+INSERT INTO user (id, email, name, password)
+VALUES (2, 'eara12sa@naver.com', 'abc', 'asdf1234!A');
+
+INSERT INTO comment (id, contents, writer_id, article_id)
+VALUES (1, '첫번째 댓글', 1, 1);
+
+INSERT INTO comment (id, contents, writer_id, article_id)
+VALUES (2, '두번째 댓글', 1, 1);

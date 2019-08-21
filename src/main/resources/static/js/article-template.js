@@ -73,32 +73,53 @@ const template = (function () {
                     </ul>
                     <div class="feed-footer">
                         <div class="comment">
-                            <ul class="list-unstyled list-info">
-                                <li class="comment-item">
-                                    <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
-                                    <div class="info">
-                                        <div class="bg-lightgray border-radius-18 padding-10 max-width-100">
-                                            <a href="" class="title text-bold inline-block text-link-color">eastjun</a>
-                                            <span>크 멋져요. MVC패턴을 직접 프로젝트에 적용해봤나요?</span>
-                                        </div>
-                                        <div class="font-size-12 pdd-left-10 pdd-top-5">
-                                            <span class="pointer text-link-color">좋아요</span>
-                                            <span>·</span>
-                                            <span class="pointer text-link-color">답글 달기</span>
-                                            <span>·</span>
-                                            <span class="pointer">2시간</span>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                            <ul id="comment-list" class="list-unstyled list-info"><!--댓글 추가 공간--></ul>
+                            <!-- 댓글 입력 공간-->
                             <div class="add-comment">
-                                <textarea rows="1" class="form-control" placeholder="댓글을 입력하세요.."></textarea>
+                                <textarea id="comment-contents" rows="1" class="form-control comment-save" placeholder="댓글을 입력하세요."></textarea>
                             </div>
                         </div>
                     </div>
                 </div>`;
 
+    const comment = `<li class="comment-item" data-object="comment" data-comment-id="{{id}}">
+                        <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="프로필이미지">
+                        <div class="info">
+                            <div class="bg-lightgray border-radius-18 padding-10 max-width-100">
+                                <a href="" class="title text-bold inline-block text-link-color">{{user-name}}</a>
+                                <span>{{comment-contents}}</span>
+                            </div>
+                            <a class="pointer absolute top-0 right-0" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="btn-icon text-dark">
+                                        <i class="ti-more font-size-16"></i>
+                                    </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li data-btn="update">
+                                    <a class="pointer">
+                                        <i class="ti-pencil pdd-right-10 text-dark"></i>
+                                        <span id="comment-update-{{id}}" data-toggle="modal" data-target="#default-modal">댓글 수정</span>
+                                    </a>
+                                </li>
+                                <li data-btn="delete">
+                                    <a class="pointer">
+                                        <i class="ti-trash pdd-right-10 text-dark"></i>
+                                        <span id="article-delete-{{id}}">댓글 삭제</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="font-size-12 pdd-left-10 pdd-top-5">
+                                <span class="pointer text-link-color">좋아요</span>
+                                <span>·</span>
+                                <span class="pointer text-link-color">답글 달기</span>
+                                <span>·</span>
+                                <span class="pointer">{{updatedTime}}</span>
+                            </div>
+                        </div>
+                    </li>`;
+
     return {
         article: article,
+        comment: comment,
     };
 })();

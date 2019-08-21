@@ -32,6 +32,12 @@ public class TestTemplate {
             new UserPassword("asdf1234!A")
     );
 
+    protected UserRequestDto otherRequestDto = new UserRequestDto(
+            new UserEmail("eara12sa@naver.com"),
+            new UserName("abc"),
+            new UserPassword("asdf1234!A")
+    );
+
     protected ResponseSpec request(HttpMethod method, String uri, Object object, HttpStatus httpStatus) {
         return webTestClient.method(method).uri(uri)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

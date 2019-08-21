@@ -45,4 +45,8 @@ public class LoginService {
 
         return modelMapper.map(user, UserResponseDto.class);
     }
+
+    public User findById(final Long id) {
+        return userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    }
 }
