@@ -110,6 +110,14 @@ header ul.nav-right li, header ul.nav-left li {
     width: 24px;
 }
 
+.dropdown-item {
+    display: -webkit-inline-box;
+}
+
+.dropdown-item > button {
+    margin-left: 10px;
+}
+
 .story-user-list {
     height: 55px;
     width: 100%;

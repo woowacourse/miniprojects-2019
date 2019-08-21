@@ -30,6 +30,11 @@ public class UserApiController {
         return new ResponseEntity<>(userService.save(userRequest), HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public ResponseEntity<List<UserResponse>> list(UserSession userSession) {
+        return ResponseEntity.ok(userService.findAllUsersWithoutCurrentUser(userSession.getId()));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id, UserSession userSession) {
         userService.delete(id, userSession.getId());

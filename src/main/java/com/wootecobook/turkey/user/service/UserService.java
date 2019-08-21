@@ -14,7 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 @Transactional
 public class UserService {
@@ -67,6 +66,13 @@ public class UserService {
 
     public List<UserResponse> findByName(String name) {
         return userRepository.findTop5ByNameIsContaining(name).stream()
+                .map(UserResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<UserResponse> findAllUsersWithoutCurrentUser(Long id) {
+        return userRepository.findAll().stream()
+                .filter(user -> !user.matchId(id))
                 .map(UserResponse::from)
                 .collect(Collectors.toList());
     }

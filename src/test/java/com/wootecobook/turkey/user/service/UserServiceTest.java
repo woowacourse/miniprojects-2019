@@ -13,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.persistence.EntityNotFoundException;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -156,5 +158,31 @@ class UserServiceTest {
     @Test
     void 다른_id_유저_삭제() {
         assertThrows(UserMismatchException.class, () -> userService.delete(1L, 2L));
+    }
+
+    @Test
+    void 자기_자신을_제외한_유저_조회() {
+        // given
+        Long currentUserId = createUser(VALID_EMAIL, VALID_NAME).getId();
+        createUser("abc@abc.abc", "abc");
+        createUser("abcd@abc.abc", "abcd");
+
+        // when
+        List<UserResponse> userResponses = userService.findAllUsersWithoutCurrentUser(currentUserId);
+
+        // then
+        userResponses.forEach(userResponse -> {
+            assertThat(userResponse.getId()).isNotEqualTo(currentUserId);
+        });
+    }
+
+    private UserResponse createUser(String email, String name) {
+        UserRequest userRequest = UserRequest.builder()
+                .email(email)
+                .name(name)
+                .password(VALID_PASSWORD)
+                .build();
+
+        return userService.save(userRequest);
     }
 }
