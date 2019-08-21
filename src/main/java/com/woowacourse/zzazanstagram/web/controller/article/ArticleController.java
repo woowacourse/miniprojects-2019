@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -36,8 +38,8 @@ public class ArticleController {
     }
 
     @PostMapping("/articles")
-    public String create(@Valid ArticleRequest dto, MemberSession memberSession) {
-        articleService.save(dto, memberSession.getEmail());
+    public String create(@Valid ArticleRequest dto, @RequestParam MultipartFile file, MemberSession memberSession) {
+        articleService.save(dto, file, memberSession.getEmail());
         return "redirect:/";
     }
 }

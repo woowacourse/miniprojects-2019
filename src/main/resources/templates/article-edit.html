@@ -73,7 +73,7 @@
 					<div class="col-lg-7 mx-auto">
 						<div class="card widget-feed no-pdd mrg-btm-70">
 							
-							<form id="article-form" method="post" action="/articles">
+							<form id="article-form" method="post" action="/articles" enctype="multipart/form-data">
 								<input id="article-form-method" type="hidden" name="_method" value="post"/>
 								<div class="feed-header padding-15">
 									<ul class="list-unstyled list-info">
@@ -95,9 +95,7 @@
                                                 <i class="ti-image font-size-22"></i>
                                             </span>
 										</div>
-										<input type="text" name="image" class="form-control" required
-										       placeholder="이미지 URL을 입력해 주세요!" aria-label="Username"
-										       aria-describedby="basic-addon1">
+										<input type="file" class="form-control" name="file">
 									</div>
 									<div class="info pdd-vertical-5">
 										<textarea rows="1" name="contents" class="form-control text-dark padding-15"

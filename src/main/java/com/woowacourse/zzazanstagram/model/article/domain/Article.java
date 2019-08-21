@@ -2,6 +2,7 @@ package com.woowacourse.zzazanstagram.model.article.domain;
 
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Contents;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Image;
+import com.woowacourse.zzazanstagram.model.comment.domain.Comment;
 import com.woowacourse.zzazanstagram.model.common.BaseEntity;
 import com.woowacourse.zzazanstagram.model.like.domain.Ddabong;
 import com.woowacourse.zzazanstagram.model.member.domain.Member;
@@ -20,6 +21,9 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "author", nullable = false, foreignKey = @ForeignKey(name = "fk_article_to_member"))
     private Member author;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
     @OneToMany(mappedBy = "article", orphanRemoval = true)
     private List<Ddabong> ddabongs = new ArrayList<>();
 
@@ -30,10 +34,11 @@ public class Article extends BaseEntity {
         this.image = image;
         this.contents = contents;
         this.author = author;
+        this.comments = new ArrayList<>();
     }
 
-    public String getDdabongCount() {
-        return String.valueOf(ddabongs.size());
+    public int getDdabongCount() {
+        return ddabongs.size();
     }
 
     public void deleteDdabong(Ddabong ddabong) {
@@ -58,6 +63,10 @@ public class Article extends BaseEntity {
 
     public Member getAuthor() {
         return author;
+    }
+
+    public List<Comment> getComments() {
+        return Collections.unmodifiableList(comments);
     }
 
     public List<Ddabong> getDdabongs() {

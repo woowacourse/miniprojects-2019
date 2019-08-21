@@ -1,5 +1,6 @@
 package com.woowacourse.zzazanstagram.web.controller.like;
 
+import com.woowacourse.zzazanstagram.model.like.dto.DdabongResponse;
 import com.woowacourse.zzazanstagram.model.like.service.DdabongService;
 import com.woowacourse.zzazanstagram.model.member.MemberSession;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,9 @@ public class DdabongController {
         this.ddabongService = ddabongService;
     }
 
-    // todo method naming
     @PostMapping("/articles/{articleId}/ddabongs")
-    public ResponseEntity<String> clickDdabong(@PathVariable Long articleId, MemberSession memberSession) {
-        String ddabongCount = ddabongService.saveOrRemove(articleId, memberSession.getEmail());
-        return new ResponseEntity<>(ddabongCount, HttpStatus.OK);
+    public ResponseEntity<DdabongResponse> clickDdabong(@PathVariable Long articleId, MemberSession memberSession) {
+        DdabongResponse ddabongResponse = ddabongService.saveOrRemove(articleId, memberSession.getEmail());
+        return new ResponseEntity<>(ddabongResponse, HttpStatus.OK);
     }
 }
