@@ -29,7 +29,6 @@ public class S3Uploader {
     private String bucket;
 
     public String upload(MultipartFile multipartFile, String dirName) {
-        //TODO 초기화를 NUll로 할 지 그대로 둘지
         File uploadFile;
         try {
             uploadFile = convert(multipartFile)
@@ -42,7 +41,6 @@ public class S3Uploader {
     }
 
     private String upload(File uploadFile, String dirName) {
-        //TODO 파일 이름 앞에 LOCALDATETIME을 UUID로 바꾸는 것 고려해보기
         String fileName = dirName + "/" + LocalDateTime.now() + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
