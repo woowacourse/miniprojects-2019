@@ -96,7 +96,7 @@ public class PostServiceTest {
         when(uploadFileService.save(any(MultipartFile.class), any(), any(User.class))).thenReturn(uploadFile);
 
         //when
-        PostRequest postRequestWithFiles = new PostRequest("post", Arrays.asList(mockMultipartFile));
+        PostRequest postRequestWithFiles = new PostRequest(defaultContents.getContents(), Arrays.asList(mockMultipartFile));
         PostResponse result = postService.save(postRequestWithFiles, author.getId());
 
         //then
