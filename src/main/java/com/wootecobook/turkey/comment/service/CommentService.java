@@ -40,13 +40,13 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public Page<CommentResponse> findCommentResponsesByPostId(final Long postId, final Pageable pageable) {
-        return commentRepository.findAllByPostIdAndParentIdIsNull(postId, pageable)
+        return commentRepository.findAllByPostIdAndParentIdIsNullAndIsDeletedIsFalse(postId, pageable)
                 .map(CommentResponse::from);
     }
 
     @Transactional(readOnly = true)
     public Page<CommentResponse> findCommentResponsesByParentId(final Long parentId, final Pageable pageable) {
-        return commentRepository.findAllByParentId(parentId, pageable)
+        return commentRepository.findAllByParentIdAndIsDeletedIsFalse(parentId, pageable)
                 .map(CommentResponse::from);
     }
 

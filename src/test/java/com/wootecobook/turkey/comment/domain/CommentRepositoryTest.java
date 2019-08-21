@@ -61,7 +61,7 @@ class CommentRepositoryTest {
         final Pageable pageable = PageRequest.of(0, size);
 
         // when
-        final Page<Comment> comments = commentRepository.findAllByPostIdAndParentIdIsNull(post.getId(), pageable);
+        final Page<Comment> comments = commentRepository.findAllByPostIdAndParentIdIsNullAndIsDeletedIsFalse(post.getId(), pageable);
         final long actualSize = comments
                 .stream()
                 .filter(co -> !co.getParent().isPresent())
@@ -78,7 +78,7 @@ class CommentRepositoryTest {
         final Pageable pageable = PageRequest.of(0, size);
 
         // when
-        final Page<Comment> comments = commentRepository.findAllByParentId(comment.getId(), pageable);
+        final Page<Comment> comments = commentRepository.findAllByParentIdAndIsDeletedIsFalse(comment.getId(), pageable);
         final long actualSize = comments
                 .stream()
                 .filter(co -> co.getParent().isPresent())
@@ -86,5 +86,20 @@ class CommentRepositoryTest {
 
         // then
         assertThat(actualSize).isEqualTo(comments.getTotalElements());
+    }
+
+    @Test
+    void 삭제후_댓글만_조회() {
+        // given
+        final int size = 10;
+        final Pageable pageable = PageRequest.of(0, size);
+
+        // when
+        final Page<Comment> actual = commentRepository.findAllByPostIdAndParentIdIsNullAndIsDeletedIsFalse(comment.getId(), pageable);
+        comment.isDeleted();
+        final Page<Comment> expected = commentRepository.findAllByPostIdAndParentIdIsNullAndIsDeletedIsFalse(comment.getId(), pageable);
+
+        // then
+        assertThat(actual.getTotalElements()).isEqualTo(expected.getTotalElements());
     }
 }

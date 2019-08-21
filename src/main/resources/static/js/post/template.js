@@ -28,7 +28,7 @@ const postTemplate = (post) => `
                                 <i class="ti-trash pdd-right-10 text-dark"></i>
                                 <span class="">게시글 삭제</span>
                             </a>
-                        </li>
+                        </li>   
                     </ul>
                 </div>
             </li>
@@ -90,9 +90,9 @@ const postTemplate = (post) => `
             </button>
         </li>
         <li class="text-center flex-grow-1">
-            <button class="btn btn-default no-border pdd-vertical-0 no-mrg width-100">
+            <button class="btn btn-default no-border pdd-vertical-0 no-mrg width-100 comment">
                 <i class="fa fa-comment-o font-size-16"></i>
-                <span  class="font-size-13">댓글</span>
+                <span  class="font-size-13 comments-button">댓글</span>
             </button>
         </li>
         <li class="text-center flex-grow-1">
@@ -104,27 +104,12 @@ const postTemplate = (post) => `
     </ul>
     <div class="feed-footer">
         <div class="comment">
-            <ul class="list-unstyled list-info">
-                <li class="comment-item">
-                    <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
-                    <div class="info">
-                        <div class="bg-lightgray border-radius-18 padding-10 max-width-100">
-                            <a href="" class="title text-bold inline-block text-link-color">eastjun</a>
-                            <span>크 멋져요. MVC패턴을 직접 프로젝트에 적용해봤나요?</span>
-                        </div>
-                        <div class="font-size-12 pdd-left-10 pdd-top-5">
-                            <span class="pointer text-link-color">좋아요</span>
-                            <span>·</span>
-                            <span class="pointer text-link-color">답글 달기</span>
-                            <span>·</span>
-                            <span class="pointer">2시간</span>
-                        </div>
-                    </div>
-                </li>
+            <ul class="list-unstyled list-info comment-list">
+
             </ul>
-            <div class="add-comment">
-                <textarea rows="1" class="form-control" placeholder="댓글을 입력하세요.."></textarea>
-            </div>
+        </div>
+        <div class="comment-form">
+        
         </div>
     </div>
 </div>
