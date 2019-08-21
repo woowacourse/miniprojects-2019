@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 @Entity
 public class Follow extends BaseEntity {
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "followee", nullable = false, foreignKey = @ForeignKey(name = "fk_follow_to_followee"))
     private Member followee;

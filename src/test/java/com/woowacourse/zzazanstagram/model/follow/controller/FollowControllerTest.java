@@ -13,7 +13,6 @@ public class FollowControllerTest extends RequestTemplate {
 
     @BeforeEach
     void setUpFollowController() {
-        saveOtherMember("2ndMember", "test2@gmail.com");
         saveOtherMember("3rdMember", "test3@gmail.com");
         saveOtherMember("4thMember", "test4@gmail.com");
         saveOtherMember("5thMember", "test5@gmail.com");
@@ -23,11 +22,11 @@ public class FollowControllerTest extends RequestTemplate {
     @Test
     void 팔로워_구하기() {
         postHeaderWithLogin("/follow")
-                .body(WebTestHelper.followForm(2L, 1L))
+                .body(WebTestHelper.followForm(4L, 3L))
                 .exchange()
                 .expectStatus().isOk();
 
-        List responseBody = getHeaderWithLogin("/follow/follower/1")
+        List responseBody = getHeaderWithLogin("/follow/follower/3")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(List.class)
@@ -40,16 +39,16 @@ public class FollowControllerTest extends RequestTemplate {
     @Test
     void 팔로잉_구하기() {
         postHeaderWithLogin("/follow")
-                .body(WebTestHelper.followForm(3L, 4L))
+                .body(WebTestHelper.followForm(5L, 6L))
                 .exchange()
                 .expectStatus().isOk();
 
         postHeaderWithLogin("/follow")
-                .body(WebTestHelper.followForm(3L, 2L))
+                .body(WebTestHelper.followForm(5L, 4L))
                 .exchange()
                 .expectStatus().isOk();
 
-        List responseBody = getHeaderWithLogin("/follow/following/3")
+        List responseBody = getHeaderWithLogin("/follow/following/5")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(List.class)

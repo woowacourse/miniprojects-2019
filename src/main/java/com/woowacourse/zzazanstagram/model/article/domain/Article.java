@@ -4,7 +4,7 @@ import com.woowacourse.zzazanstagram.model.article.domain.vo.Contents;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Image;
 import com.woowacourse.zzazanstagram.model.comment.domain.Comment;
 import com.woowacourse.zzazanstagram.model.common.BaseEntity;
-import com.woowacourse.zzazanstagram.model.like.domain.Ddabong;
+import com.woowacourse.zzazanstagram.model.ddabong.domain.Ddabong;
 import com.woowacourse.zzazanstagram.model.member.domain.Member;
 
 import javax.persistence.*;

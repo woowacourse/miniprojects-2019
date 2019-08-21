@@ -9,11 +9,11 @@ public class ProfileImage {
     @Column(name = "profile_image_url")
     private String url;
 
-    private ProfileImage(final String url) {
-        this.url = url;
+    private ProfileImage() {
     }
 
-    private ProfileImage() {
+    private ProfileImage(final String url) {
+        this.url = url;
     }
 
     public static ProfileImage of(final String url) {

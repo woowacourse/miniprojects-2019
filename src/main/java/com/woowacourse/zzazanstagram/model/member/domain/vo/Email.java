@@ -12,11 +12,11 @@ public class Email {
     @Column(name = "email", unique = true)
     private String email;
 
-    private Email(final String email) {
-        this.email = validate(email);
+    private Email() {
     }
 
-    private Email() {
+    private Email(final String email) {
+        this.email = validate(email);
     }
 
     public static Email of(final String email) {

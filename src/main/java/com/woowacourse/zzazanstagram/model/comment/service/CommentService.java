@@ -23,8 +23,8 @@ public class CommentService {
     }
 
     public CommentResponse save(CommentContents commentContents, long articleId, String email) {
-        Member member = memberService.findMemberByEmail(email);
-        Article article = articleService.findArticleById(articleId); // TODO 맘에 안 듦
+        Member member = memberService.findByEmail(email);
+        Article article = articleService.findArticleById(articleId);
 
         Comment comment = new Comment(commentContents, article, member);
         Comment saveComment = commentRepository.save(comment);
