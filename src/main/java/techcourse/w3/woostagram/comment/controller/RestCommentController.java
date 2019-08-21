@@ -24,8 +24,8 @@ public class RestCommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentDto>> read(@PathVariable Long articleId) {
-        return ResponseEntity.ok(commentService.findByArticleId(articleId));
+    public ResponseEntity<List<CommentDto>> read(@PathVariable Long articleId, @LoggedInUser String email) {
+        return ResponseEntity.ok(commentService.findByArticleId(articleId, email));
     }
 
     @DeleteMapping("/{commentId}")
