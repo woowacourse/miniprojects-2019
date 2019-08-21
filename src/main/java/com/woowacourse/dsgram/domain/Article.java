@@ -1,17 +1,22 @@
 package com.woowacourse.dsgram.domain;
 
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Entity
 @Getter
+@EqualsAndHashCode(of = "id")
 public class Article {
+    public static final String REGEX = "#([0-9a-zA-Z가-힣_]{2,30})";
 
     @Id
-    @Column(name = "article_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -34,26 +39,13 @@ public class Article {
         this.filePath = filePath;
     }
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", contents='" + contents + '\'' +
-                ", fileName='" + fileName + '\'' +
-                ", filePath='" + filePath + '\'' +
-                '}';
-    }
+    public Set<String> getKeyword() {
+        Matcher matcher = Pattern.compile(REGEX).matcher(contents);
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Article article = (Article) o;
-        return Objects.equals(id, article.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, contents, fileName, filePath);
+        Set<String> keywords = new HashSet<>();
+        while (matcher.find()) {
+            keywords.add(matcher.group());
+        }
+        return keywords;
     }
 }
