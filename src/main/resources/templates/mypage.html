@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/main}"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="/css/mypage.css" rel="stylesheet">
+</head>
+<body>
+<th:block layout:fragment="content">
+    <!-- feed container -->
+    <div class="mypage-container container-fluid max-width-lg mx-auto" id="main-content">
+        <!-- 프로필 사진 및 배경 구역 feed-header -->
+        <header class="mypage-header">
+            <div class="background pointer">
+                <span class="username">박경철</span>
+            </div>
+            <ul class="categories">
+                <li class="btn btn-default">정보</li>
+                <li class="btn btn-default">친구</li>
+                <li class="btn btn-default">사진</li>
+            </ul>
+            <div class="profile pointer" id="profile"></div>
+        </header>
+        <main class="mypage-body">
+            <section class="left-side" id="details">
+                <div class="card introduce">
+                    <div class="card-title">
+                        <i class="ti-quote-left"></i><span class="title-content"> 소개 </span><i
+                            class="ti-quote-right"></i>
+                    </div>
+                    <div class="card-block"></div>
+                </div>
+                <div class="card pictures">
+                    <div class="card-title">
+                        <i class="ti-image"></i><span class="title-content"> 사진</span>
+                    </div>
+                    <div class="card-block"></div>
+                </div>
+                <div class="card friends">
+                    <div class="card-title">
+                        <i class="ti-user"></i><span class="title-content"> 친구</span>
+                    </div>
+                    <div class="card-block"></div>
+                </div>
+            </section>
+            <section class="contents">
+                <th:block th:include="fragments/write-post"/>
+                <div class="feeds" id="contents"></div>
+            </section>
+        </main>
+    </div>
+    <th:block layout:fragment="custom-js">
+        <script src="/js/commons/api.js"></script>
+        <script src="/js/post/template.js"></script>
+        <script src="/js/post/post.js"></script>
+        <script src="/js/login/logout.js"></script>
+        <script src="/js/mypage/template.js"></script>
+        <script src="/js/mypage/mypage.js"></script>
+    </th:block>
+</body>
+</html>
