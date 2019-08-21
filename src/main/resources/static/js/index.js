@@ -1,11 +1,9 @@
-
-const getArticleTemplate =  function(userName,imageUrl,profileUrl,contents) {
-    `
-                        <div class="article-card card widget-feed no-pdd mrg-btm-70">
+const getArticleTemplate = function (userName, imageUrl, profileUrl, contents) {
+    return `<div class="article-card card widget-feed no-pdd mrg-btm-70">
                             <div class="feed-header padding-15">
                                 <ul class="list-unstyled list-info">
                                     <li>
-                                        <img class="thumb-img img-circle" src=${imageUrl}
+                                        <img class="thumb-img img-circle" src=${profileUrl}
                                              alt="">
                                         <div class="info">
                                             <a href=""
@@ -29,7 +27,7 @@ const getArticleTemplate =  function(userName,imageUrl,profileUrl,contents) {
                                 </ul>
                             </div>
                             <div class="feed-body no-pdd">
-                                <img class="img-fluid" src="/images/default/sample_img_02.jpg" alt="">
+                                <img class="img-fluid" src=${imageUrl} alt="">
                             </div>
                             <ul class="feed-action pdd-horizon-15 pdd-top-5">
                                 <li>
@@ -54,7 +52,6 @@ const getArticleTemplate =  function(userName,imageUrl,profileUrl,contents) {
                                 </li>
                             </ul>
                             <div class="feedback-status-container pdd-horizon-15">
-                                <img class="mini-profile-img" src=${profileUrl}>
                                 <p class="no-mrg pdd-left-5 d-inline-block">
                                     <span class="text-bold">11 Likes<span class="text-bold">
                                 </p>
@@ -80,22 +77,23 @@ const getArticleTemplate =  function(userName,imageUrl,profileUrl,contents) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-`
+                        </div>`
 
 }
 const Index = (function () {
+
+    const pageSize = 10;
+
     const IndexController = function () {
         const indexService = new IndexService();
+
         const loadInit = function () {
-
+            indexService.getPageData(0);
         }
-
 
 
         const init = function () {
             loadInit()
-
         }
 
         return {
@@ -106,11 +104,27 @@ const Index = (function () {
 
     const IndexService = function () {
         const indexRequest = new Request("/api/main");
-        const getPageData = (pageNum)=>{
-            indexRequest.get('?page='+pageNum+"&size=10")
+        const getPageData = (pageNum) => {
+            indexRequest.get('?page=' + pageNum + "&size=" + pageSize
+                , (status, data) => {
+                    let pagesHtml = "";
+                    for (let i = 0; i < pageSize; i++) {
+                        pagesHtml += parsingPage(data.content[i]);
+                    }
+                    const container = document.querySelector(".article-card-con")
+                    container.insertAdjacentHTML('beforeend', pagesHtml);
+                })
+        }
+
+        const parsingPage = (pageData) => {
+            console.log(pageData)
+            return getArticleTemplate(pageData.article.userInfoDto.userContentsDto.userName
+                ,pageData.article.imageUrl,
+                pageData.article.userInfoDto.userContentsDto.profile,
+                pageData.article.contents)
         }
         return {
-
+            getPageData: getPageData
         }
     }
 
