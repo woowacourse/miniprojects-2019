@@ -268,7 +268,7 @@ const postOperateButton = (function () {
                 const buttonContainer = event.target.closest("a")
                 if (buttonContainer.classList.contains('toggle-comment-update')) {
                     const commentItem = buttonContainer.closest('.comment-item')
-                    commentItem.classList.toggle('editing');
+                    commentItem.querySelector('.info').classList.toggle('editing')
                 }
             }
 
@@ -290,19 +290,15 @@ const postOperateButton = (function () {
                 const commentUpdate = {
                     "contents": contents,
                 }
+
                 api.PUT(`/api/posts/${postId}/comments/${commentId}`, commentUpdate)
                     .then(res => res.json())
                     .then(comment => {
-                        const parentNode = commentItem.parentNode
-                        const div = document.createElement('div')
-                        if (commentItem.classList.contains('child-comment')) {
-                            div.innerHTML = childCommentTemplate(comment)
-                        } else {
-                            div.innerHTML = commentTemplate(comment)
-                        }
-
-                        parentNode.removeChild(commentItem)
-                        parentNode.appendChild(div)
+                        const contentsNode = commentItem.querySelector('span');
+                        const editContentsNode = commentItem.querySelector('textarea.bg-lightgray');
+                        contentsNode.innerText = comment.contents
+                        editContentsNode.value = comment.contents
+                        commentItem.classList.toggle('editing');
                     })
                     .catch(error => console.error(error))
             }

@@ -56,7 +56,7 @@ const childCommentTemplate = (comment) => `
         <input class = "parentId" type="hidden" value="${comment.parentId}"/>
         <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
         <div class="info">
-            <div class="bg-lightgray border-radius-18 padding-10 width-70">
+            <div class="bg-lightgray border-radius-18 padding-10 width-75">
                 <a href="" class="title text-bold inline-block text-link-color">${comment.userResponse.name}</a>
                 <span>${comment.contents}</span>
             </div>
@@ -69,14 +69,14 @@ const childCommentTemplate = (comment) => `
             </div>
             
                 
-            <a class="pointer absolute top-0 right-0 view width-35" data-toggle="dropdown" aria-expanded="false">
+            <a class="pointer absolute top-0 right-0 view width-30" data-toggle="dropdown" aria-expanded="false">
                 <span class="btn-icon text-dark">
                     <i class="ti-more font-size-16"></i>
                 </span>
             </a>
             
              <div class="edit edit-form">
-                 <a class="toggle-comment-update pointer absolute top-0 right-0 edit"  aria-expanded="false">
+                 <a class="toggle-comment-update pointer absolute top-0 right-100 edit"  aria-expanded="false">
                     <i class="ti-close pdd-right-10 text-dark"></i>
                 </a>
                 <textarea class="bg-lightgray border-radius-18 padding-10 max-width-100 edit">${comment.contents}</textarea>
