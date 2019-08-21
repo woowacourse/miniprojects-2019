@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -61,5 +63,11 @@ public class UserService {
         if (userId == null || !userId.equals(sessionUserId)) {
             throw new UserMismatchException();
         }
+    }
+
+    public List<UserResponse> findByName(String name) {
+        return userRepository.findTop5ByNameIsContaining(name).stream()
+                .map(UserResponse::from)
+                .collect(Collectors.toList());
     }
 }

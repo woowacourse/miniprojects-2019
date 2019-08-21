@@ -9,12 +9,18 @@
             <li class="search-container">
                 <span class="search">
                     <form action="" method="get">
-                        <input type="text" class="searchbox" placeholder="검색">
+                        <input type="text" class="searchbox" id="searchbox" placeholder="검색">
                         <button type="submit" class="search-btn">
                             <i class="ti-search"></i>
                         </button>
                     </form>
                 </span>
+                <div class="dropdown" id="search-dropdown" style="top: 35px;">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" hidden>
+                    </button>
+                    <div class="dropdown-menu" id="dropdown-menu" style="width: 400px; left: 10px;" aria-labelledby="dropdownMenuButton">
+                    </div>
+                </div>
             </li>
         </ul>
         <ul class="nav-right">

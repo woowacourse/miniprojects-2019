@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserApiController {
@@ -32,6 +34,12 @@ public class UserApiController {
     public ResponseEntity delete(@PathVariable Long id, UserSession userSession) {
         userService.delete(id, userSession.getId());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{name}/search")
+    public ResponseEntity<List<UserResponse>> search(@PathVariable String name) {
+        List<UserResponse> userResponses = userService.findByName(name);
+        return ResponseEntity.ok(userResponses);
     }
 
 }
