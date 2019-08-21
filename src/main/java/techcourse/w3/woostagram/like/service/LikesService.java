@@ -43,4 +43,11 @@ public class LikesService {
         List<Likes> likedUsers = likesRepository.findAllByArticle(article);
         return likedUsers.stream().map((Likes likes) -> UserInfoDto.from(likes.getLikeUser())).collect(Collectors.toList());
     }
+
+    public void remove(Long articleId, Long likesId) {
+        Article article = articleService.findArticleById(articleId);
+        Likes likes = likesRepository.findByArticleAndId(article, likesId);
+        likes.nullify();
+        likesRepository.delete(likes);
+    }
 }

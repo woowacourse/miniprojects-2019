@@ -28,4 +28,10 @@ public class LikesRestController {
     public ResponseEntity<List<UserInfoDto>> readLikedUsers(@PathVariable Long articleId) {
         return ResponseEntity.ok(likesService.getLikedUser(articleId));
     }
+
+    @DeleteMapping("/{articleId}/{likesId}")
+    public ResponseEntity delete(@PathVariable Long articleId, @PathVariable Long likesId) {
+        likesService.remove(articleId, likesId);
+        return ResponseEntity.ok().build();
+    }
 }
