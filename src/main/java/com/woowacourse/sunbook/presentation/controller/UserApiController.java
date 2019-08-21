@@ -20,15 +20,13 @@ public class UserApiController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<UserResponseDto> getLoginUser(HttpSession httpSession) {
-        UserResponseDto loginUser = (UserResponseDto) httpSession.getAttribute("loginUser");
-
+    public ResponseEntity<UserResponseDto> getLoginUser(LoginUser loginUser) {
         if (loginUser == null) {
             // 예외 이름 결정 및 생성
             throw new IllegalArgumentException();
         }
 
-        return new ResponseEntity<>(loginUser, HttpStatus.OK);
+        return new ResponseEntity<>(loginUser.getUserResponseDto(), HttpStatus.OK);
     }
 
     @PutMapping("/users")
