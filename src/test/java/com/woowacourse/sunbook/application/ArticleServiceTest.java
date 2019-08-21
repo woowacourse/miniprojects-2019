@@ -48,8 +48,7 @@ class ArticleServiceTest {
         given(articleRepository.save(any(Article.class))).willReturn(article);
         given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
 
-        articleService.save(articleFeature);
-
+//        articleService.save(articleFeature);
         verify(articleRepository).save(any(Article.class));
     }
 

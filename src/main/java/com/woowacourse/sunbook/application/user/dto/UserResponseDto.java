@@ -9,4 +9,8 @@ public class UserResponseDto {
     private Long id;
     private UserEmail userEmail;
     private UserName userName;
+
+    public UserResponseDto(Long id) {
+        this.id = id;
+    }
 }

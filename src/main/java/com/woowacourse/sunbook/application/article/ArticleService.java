@@ -1,9 +1,11 @@
 package com.woowacourse.sunbook.application.article;
 
 import com.woowacourse.sunbook.application.article.dto.ArticleResponseDto;
+import com.woowacourse.sunbook.application.user.dto.UserResponseDto;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.domain.article.ArticleRepository;
+import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.presentation.excpetion.NotFoundArticleException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,10 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleResponseDto save(ArticleFeature articleFeature) {
+    public ArticleResponseDto save(ArticleFeature articleFeature, UserResponseDto loginUser) {
+        User author = modelMapper.map(loginUser, User.class);
+//        Article savedArticle = articleRepository.save(new Article(articleFeature, author));
         Article savedArticle = articleRepository.save(new Article(articleFeature));
-
         return modelMapper.map(savedArticle, ArticleResponseDto.class);
     }
 

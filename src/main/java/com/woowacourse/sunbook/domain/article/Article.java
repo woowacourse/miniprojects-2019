@@ -26,6 +26,11 @@ public class Article extends BaseEntity {
         this.articleFeature = articleFeature;
     }
 
+    public Article(ArticleFeature articleFeature, User author) {
+        this.articleFeature = articleFeature;
+        this.author = author;
+    }
+
     public void update(ArticleFeature updatedArticleFeature) {
         articleFeature = updatedArticleFeature;
     }
