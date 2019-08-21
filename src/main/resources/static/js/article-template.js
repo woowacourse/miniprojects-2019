@@ -76,7 +76,7 @@ const template = (function () {
                             <ul id="comment-list" class="list-unstyled list-info"><!--댓글 추가 공간--></ul>
                             <!-- 댓글 입력 공간-->
                             <div class="add-comment">
-                                <textarea id="comment-contents" rows="1" class="form-control comment-save" placeholder="댓글을 입력하세요."></textarea>
+                                <textarea id="comment-contents-{{id}}" rows="1" class="form-control comment-save" placeholder="댓글을 입력하세요."></textarea>
                             </div>
                         </div>
                     </div>

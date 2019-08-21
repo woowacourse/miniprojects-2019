@@ -55,7 +55,7 @@ const CommentApp = (() => {
             const target = event.target;
             const article = target.closest('div[data-object="article"]');
             const articleId = article.getAttribute('data-article-id');
-            const contents = document.getElementById("comment-contents");
+            const contents = document.getElementById("comment-contents-" + articleId);
 
             if (event.which === 13 && contents.value !== '' && event.target.classList.contains('comment-save')) {
                 if (!event.shiftKey) {
