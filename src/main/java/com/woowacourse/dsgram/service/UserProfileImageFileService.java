@@ -19,7 +19,7 @@ public class UserProfileImageFileService {
     }
 
     public void saveOrUpdate(Long userId, MultipartFile imageFile) {
-        FileInfo fileInfo = fileService.save(imageFile);
+        FileInfo fileInfo = fileService.save(imageFile, new UserImageFileNamingStrategy());
         UserProfileImage userProfileImage = new UserProfileImage(userId, fileInfo.getFileName(), fileInfo.getFilePath());
 
         if (userProfileImageRepository.existsById(userId) == false) {
