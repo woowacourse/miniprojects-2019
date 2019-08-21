@@ -13,13 +13,16 @@ public class FriendAskTest {
 
     @Test
     void Friend_생성_테스트() {
+        //given
         FriendAsk friendAsk = FriendAsk.builder()
                 .receiverId(RECEIVER_ID)
                 .senderId(SENDER_ID)
                 .build();
 
+        //when
         List<Friend> friends = friendAsk.createBidirectionalFriends();
 
+        //then
         assertThat(friends.size()).isEqualTo(2);
 
         Friend firstFriend = friends.get(0);

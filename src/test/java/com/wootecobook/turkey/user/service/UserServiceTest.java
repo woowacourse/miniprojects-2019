@@ -35,53 +35,63 @@ class UserServiceTest {
 
     @Test
     void 유저_생성() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_EMAIL)
                 .name(VALID_NAME)
                 .password(VALID_PASSWORD)
                 .build();
 
+        //when
         UserResponse userResponse = userService.save(userRequest);
 
+        //then
         assertThat(userResponse.getEmail()).isEqualTo(VALID_EMAIL);
         assertThat(userResponse.getName()).isEqualTo(VALID_NAME);
     }
 
     @Test
     void 유저_생성_이메일_에러() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email("INVALID_EMAIL")
                 .name(VALID_NAME)
                 .password(VALID_PASSWORD)
                 .build();
 
+        //when & then
         assertThrows(SignUpException.class, () -> userService.save(userRequest));
     }
 
     @Test
     void 유저_생성_이름_에러() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_EMAIL)
                 .name("1")
                 .password(VALID_PASSWORD)
                 .build();
 
+        //when & then
         assertThrows(SignUpException.class, () -> userService.save(userRequest));
     }
 
     @Test
     void 유저_생성_비밀번호_에러() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_EMAIL)
                 .name(VALID_NAME)
                 .password("1")
                 .build();
 
+        //when & then
         assertThrows(SignUpException.class, () -> userService.save(userRequest));
     }
 
     @Test
     void 유저_id로_조회() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_EMAIL)
                 .name(VALID_NAME)
@@ -90,8 +100,10 @@ class UserServiceTest {
 
         UserResponse userResponse = userService.save(userRequest);
 
+        //when
         UserResponse found = userService.findUserResponseById(userResponse.getId());
 
+        //then
         assertThat(userResponse.getId()).isEqualTo(found.getId());
         assertThat(userResponse.getEmail()).isEqualTo(found.getEmail());
         assertThat(userResponse.getName()).isEqualTo(found.getName());
@@ -99,6 +111,7 @@ class UserServiceTest {
 
     @Test
     void 유저_email로_조회() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_EMAIL)
                 .name(VALID_NAME)
@@ -107,8 +120,10 @@ class UserServiceTest {
 
         UserResponse userResponse = userService.save(userRequest);
 
+        //when
         User found = userService.findByEmail(userResponse.getEmail());
 
+        //then
         assertThat(userResponse.getId()).isEqualTo(found.getId());
         assertThat(userResponse.getEmail()).isEqualTo(found.getEmail());
         assertThat(userResponse.getName()).isEqualTo(found.getName());
@@ -116,34 +131,41 @@ class UserServiceTest {
 
     @Test
     void 없는_유저_id로_조회() {
+        //when & then
         assertThrows(EntityNotFoundException.class, () -> userService.findUserResponseById(Long.MAX_VALUE));
     }
 
     @Test
     void 없는_유저_email로_조회() {
+        //when & then
         assertThrows(EntityNotFoundException.class, () -> userService.findByEmail("invalid@invalid.invalid"));
     }
 
     @Test
     void 유저_삭제() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_EMAIL)
                 .name(VALID_NAME)
                 .password(VALID_PASSWORD)
                 .build();
 
+        //when
         UserResponse userResponse = userService.save(userRequest);
 
+        //then
         assertDoesNotThrow(() -> userService.delete(userResponse.getId(), userResponse.getId()));
     }
 
     @Test
     void 없는_유저_삭제() {
+        //when & then
         assertThrows(UserDeleteException.class, () -> userService.delete(Long.MAX_VALUE, Long.MAX_VALUE));
     }
 
     @Test
     void null_유저_삭제() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_EMAIL)
                 .name(VALID_NAME)
@@ -152,11 +174,13 @@ class UserServiceTest {
 
         UserResponse userResponse = userService.save(userRequest);
 
+        //when & then
         assertThrows(UserMismatchException.class, () -> userService.delete(null, userResponse.getId()));
     }
 
     @Test
     void 다른_id_유저_삭제() {
+        //when & then
         assertThrows(UserMismatchException.class, () -> userService.delete(1L, 2L));
     }
 

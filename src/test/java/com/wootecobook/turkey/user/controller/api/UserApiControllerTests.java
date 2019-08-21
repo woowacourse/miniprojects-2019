@@ -29,6 +29,7 @@ class UserApiControllerTests extends BaseControllerTests {
 
     @Test
     void 유저_생성() {
+        //given
         final String email = "UserApiCreate@gmail.com";
         UserRequest userRequest = UserRequest.builder()
                 .email(email)
@@ -36,6 +37,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .password(VALID_USER_PASSWORD)
                 .build();
 
+        //when
         UserResponse userResponse = webTestClient.post()
                 .uri(USER_API_URI)
                 .contentType(MEDIA_TYPE)
@@ -48,6 +50,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
+        //then
         assertThat(userResponse.getId()).isNotNull();
         assertThat(userResponse.getEmail()).isEqualTo(email);
         assertThat(userResponse.getName()).isEqualTo(VALID_USER_NAME);
@@ -55,6 +58,7 @@ class UserApiControllerTests extends BaseControllerTests {
 
     @Test
     void 중복_이메일_생성_에러() {
+        //given
         String email = "duplicated@dupli.cated";
 
         addUser(VALID_USER_NAME, email, VALID_USER_PASSWORD);
@@ -65,6 +69,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .password(VALID_USER_PASSWORD)
                 .build();
 
+        //when
         ErrorMessage errorMessage = webTestClient.post()
                 .uri(USER_API_URI)
                 .contentType(MEDIA_TYPE)
@@ -77,17 +82,20 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
+        //then
         assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE);
     }
 
     @Test
     void 유저_생성_이메일_에러() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email("test")
                 .name(VALID_USER_NAME)
                 .password(VALID_USER_PASSWORD)
                 .build();
 
+        //when
         ErrorMessage errorMessage = webTestClient.post()
                 .uri(USER_API_URI)
                 .contentType(MEDIA_TYPE)
@@ -100,17 +108,20 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
+        //then
         assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_CONSTRAINT_MESSAGE);
     }
 
     @Test
     void 유저_생성_이름_에러() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_USER_EMAIL)
                 .name("1")
                 .password(VALID_USER_PASSWORD)
                 .build();
 
+        //when
         ErrorMessage errorMessage = webTestClient.post()
                 .uri(USER_API_URI)
                 .contentType(MEDIA_TYPE)
@@ -123,17 +134,20 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
+        //then
         assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, NAME_CONSTRAINT_MESSAGE);
     }
 
     @Test
     void 유저_생성_비밀번호_에러() {
+        //given
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_USER_EMAIL)
                 .name(VALID_USER_NAME)
                 .password("1")
                 .build();
 
+        //when
         ErrorMessage errorMessage = webTestClient.post()
                 .uri(USER_API_URI)
                 .contentType(MEDIA_TYPE)
@@ -146,16 +160,19 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
+        //then
         assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, PASSWORD_CONSTRAINT_MESSAGE);
     }
 
     @Test
     void 유저_조회() {
+        //given
         String email = "show@show.show";
         String name = "show";
 
         Long id = addUser(name, email, VALID_USER_PASSWORD);
 
+        //when
         UserResponse userResponse = webTestClient.get()
                 .uri(USER_API_URI_WITH_SLASH + id)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
@@ -166,6 +183,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
+        //then
         assertThat(userResponse.getId()).isEqualTo(id);
         assertThat(userResponse.getEmail()).isEqualTo(email);
         assertThat(userResponse.getName()).isEqualTo(name);
@@ -173,11 +191,13 @@ class UserApiControllerTests extends BaseControllerTests {
 
     @Test
     void 없는_유저_조회() {
+        //given
         String email = "nonUser@delete.del";
         String name = "nonUser";
 
         addUser(name, email, VALID_USER_PASSWORD);
 
+        //when
         ErrorMessage errorMessage = webTestClient.get()
                 .uri(USER_API_URI_WITH_SLASH + Long.MAX_VALUE)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
@@ -188,17 +208,21 @@ class UserApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
+        //then
         assertThat(errorMessage.getMessage()).isEqualTo(UserService.NOT_FOUND_MESSAGE);
     }
 
 
     @Test
     void 유저_삭제() {
+        //given
         String email = "delete@delete.del";
         String name = "delete";
 
         Long id = addUser(name, email, VALID_USER_PASSWORD);
 
+
+        //when & then
         webTestClient.delete()
                 .uri(USER_API_URI_WITH_SLASH + id)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
@@ -208,11 +232,13 @@ class UserApiControllerTests extends BaseControllerTests {
 
     @Test
     void 없는_유저_삭제() {
+        //given
         String email = "deleteerror@delete.del";
         String name = "delete";
 
         Long id = addUser(name, email, VALID_USER_PASSWORD);
 
+        //when
         ErrorMessage errorMessage = webTestClient.delete()
                 .uri(USER_API_URI_WITH_SLASH + Long.MAX_VALUE)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
@@ -222,6 +248,8 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectBody(ErrorMessage.class)
                 .returnResult()
                 .getResponseBody();
+
+        //then
         assertThat(errorMessage.getMessage()).isEqualTo(USER_MISMATCH_MESSAGE);
     }
 

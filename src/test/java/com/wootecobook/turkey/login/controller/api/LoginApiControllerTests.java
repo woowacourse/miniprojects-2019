@@ -31,11 +31,13 @@ class LoginApiControllerTests extends BaseControllerTests {
 
     @Test
     void 로그인() {
+        //given
         LoginRequest loginRequest = LoginRequest.builder()
                 .email(VALID_USER_EMAIL)
                 .password(VALID_USER_PASSWORD)
                 .build();
 
+        //when & then
         webTestClient.post()
                 .uri("/login")
                 .contentType(MEDIA_TYPE)
@@ -47,11 +49,13 @@ class LoginApiControllerTests extends BaseControllerTests {
 
     @Test
     void 없는_email로_로그인() {
+        //given
         LoginRequest loginRequest = LoginRequest.builder()
                 .email("invalid@invalid.invalid")
                 .password(VALID_USER_PASSWORD)
                 .build();
 
+        //when
         ErrorMessage errorMessage = webTestClient.post()
                 .uri("/login")
                 .contentType(MEDIA_TYPE)
@@ -64,16 +68,19 @@ class LoginApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
+        //then
         assertThat(errorMessage.getMessage()).contains(LOGIN_FAIL_MESSAGE, UserService.NOT_FOUND_MESSAGE);
     }
 
     @Test
     void 잘못된_비밀번호로_로그인() {
+        //given
         LoginRequest loginRequest = LoginRequest.builder()
                 .email(VALID_USER_EMAIL)
                 .password("invalid")
                 .build();
 
+        //when
         ErrorMessage errorMessage = webTestClient.post()
                 .uri("/login")
                 .contentType(MEDIA_TYPE)
@@ -86,11 +93,13 @@ class LoginApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
+        //then
         assertThat(errorMessage.getMessage()).contains(LOGIN_FAIL_MESSAGE, INVALID_PASSWORD_MESSAGE);
     }
 
     @Test
     void 로그아웃() {
+        //when & then
         webTestClient.post()
                 .uri("/logout")
                 .cookie(JSESSIONID, logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD))
@@ -100,6 +109,7 @@ class LoginApiControllerTests extends BaseControllerTests {
 
     @Test
     void 로그인_안된_상태에서_로그아웃() {
+        //when & then
         webTestClient.post()
                 .uri("/logout")
                 .exchange()

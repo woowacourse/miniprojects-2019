@@ -13,6 +13,7 @@ class UserControllerTest {
 
     @Test
     void 회원가입_폼으로_이동() {
+        //when & then
         webTestClient.get()
                 .uri("/users/form")
                 .exchange()

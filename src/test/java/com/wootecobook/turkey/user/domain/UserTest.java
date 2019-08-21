@@ -13,23 +13,27 @@ class UserTest {
 
     @Test
     void 비밀번호_일치() {
+        //given
         User user = User.builder()
                 .email(VALID_EMAIL)
                 .name(VALID_NAME)
                 .password(VALID_PASSWORD)
                 .build();
 
+        //when & then
         assertDoesNotThrow(() -> user.matchPassword(VALID_PASSWORD));
     }
 
     @Test
     void 비밀번호_불일치() {
+        //given
         User user = User.builder()
                 .email(VALID_EMAIL)
                 .name(VALID_NAME)
                 .password(VALID_PASSWORD)
                 .build();
 
+        //when & then
         assertThrows(IllegalArgumentException.class, () -> user.matchPassword("invalid"));
     }
 }

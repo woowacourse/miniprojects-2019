@@ -69,12 +69,15 @@ public class FriendServiceTest {
 
     @Test
     void 친구_요청_수락() {
+        //given
         FriendCreate friendCreate = FriendCreate.builder()
                 .friendAskId(friendAskId)
                 .build();
 
+        //when
         List<Friend> friends = friendService.save(friendCreate);
 
+        //then
         assertThat(friends.size()).isEqualTo(2);
 
         Friend friend = friends.get(0);
