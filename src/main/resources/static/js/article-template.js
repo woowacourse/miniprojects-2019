@@ -73,7 +73,7 @@ const template = (function () {
                     </ul>
                     <div class="feed-footer">
                         <div class="comment">
-                            <ul id="comment-list" class="list-unstyled list-info"><!--댓글 추가 공간--></ul>
+                            <ul id="comment-list-{{id}}" class="list-unstyled list-info"><!--댓글 추가 공간--></ul>
                             <!-- 댓글 입력 공간-->
                             <div class="add-comment">
                                 <textarea id="comment-contents-{{id}}" rows="1" class="form-control comment-save" placeholder="댓글을 입력하세요."></textarea>
@@ -95,13 +95,13 @@ const template = (function () {
                                     </span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li data-btn="update">
+                                <li data-btn="comment-update">
                                     <a class="pointer">
                                         <i class="ti-pencil pdd-right-10 text-dark"></i>
                                         <span id="comment-update-{{id}}" data-toggle="modal" data-target="#default-modal">댓글 수정</span>
                                     </a>
                                 </li>
-                                <li data-btn="delete">
+                                <li data-btn="comment-delete">
                                     <a class="pointer">
                                         <i class="ti-trash pdd-right-10 text-dark"></i>
                                         <span id="article-delete-{{id}}">댓글 삭제</span>

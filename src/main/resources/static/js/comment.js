@@ -67,7 +67,7 @@ const CommentApp = (() => {
                         .then(response => response.json())
                         .then((comment) => {
                             console.log(comment);
-                            document.getElementById('comment-list')
+                            document.getElementById('comment-list-' + articleId)
                                 .insertAdjacentHTML('beforeend', commentTemplate({
                                     "id": comment.id,
                                     "user-name": comment.authorName,
@@ -92,12 +92,15 @@ const CommentApp = (() => {
 
         const remove = (event) => {
             const target = event.target;
-            if (target.closest('li[data-btn="delete"]')) {
+            if (target.closest('li[data-btn="comment-delete"]')) {
                 const article = target.closest('div[data-object="article"]');
                 const articleId = article.getAttribute('data-article-id');
-                commentApi.remove(articleId)
+                const comment = target.closest('li[data-object="comment"');
+                const commentId = comment.getAttribute('data-comment-id');
+
+                commentApi.remove(articleId, commentId)
                     .then(() => {
-                        article.remove();
+                        comment.remove();
                     });
             }
         };
@@ -115,8 +118,8 @@ const CommentApp = (() => {
             return Api.post(`/api/articles/${articleId}/comments`, data)
         };
 
-        const remove = (articleId) => {
-            return Api.delete(`/api/articles/${articleId}`);
+        const remove = (articleId, commentId) => {
+            return Api.delete(`/api/articles/${articleId}/comments/${commentId}`);
         };
 
         const render = () => {
