@@ -1,4 +1,5 @@
 package techcourse.w3.woostagram.follow.service;
+
 import org.springframework.stereotype.Service;
 import techcourse.w3.woostagram.follow.domain.Follow;
 import techcourse.w3.woostagram.follow.domain.FollowRepository;
@@ -9,7 +10,6 @@ import techcourse.w3.woostagram.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +23,7 @@ public class FollowService {
     }
 
     @Transactional
-    public void add(String email, long targetId){
+    public void add(String email, Long targetId){
         User user = userService.findUserByEmail(email);
         User targetUser = userService.findById(targetId);
         Follow follow = Follow.builder()
