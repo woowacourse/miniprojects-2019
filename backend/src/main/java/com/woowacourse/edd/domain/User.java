@@ -43,10 +43,10 @@ public class User {
         this.isDeleted = isDeleted;
     }
 
-    public void update(UserRequestDto userRequestDto) {
-        this.name = userRequestDto.getName();
-        this.email = userRequestDto.getEmail();
-        this.password = userRequestDto.getPassword();
+    public void update(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 
     public void delete() {

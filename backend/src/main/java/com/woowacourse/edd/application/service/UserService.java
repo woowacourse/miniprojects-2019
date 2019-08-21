@@ -11,40 +11,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserInternalService userInternalService;
     private final UserConverter userConverter = new UserConverter();
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserInternalService userInternalService) {
+        this.userInternalService = userInternalService;
     }
 
     public Long save(UserRequestDto userSaveRequestDto) {
-        User user = userConverter.toSaveEntity(userSaveRequestDto);
-        user = userRepository.save(user);
+        User user = userInternalService.save(userConverter.toSaveEntity(userSaveRequestDto));
         return user.getId();
     }
 
-    public UserResponse update(UserRequestDto userRequestDto, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        user.update(userRequestDto);
+    public UserResponse update(Long userId, UserRequestDto userRequestDto) {
+        User user = userInternalService.update(userId, userRequestDto);
         return userConverter.toResponse(user);
     }
 
     public void delete(Long id) {
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        if (user.isDeleted()) {
-            throw new UserNotFoundException();
-        }
-        user.delete();
+        userInternalService.delete(id);
     }
 
-    @Transactional(readOnly = true)
     public UserResponse findbyId(Long id) {
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User user = userInternalService.findById(id);
         return userConverter.toResponse(user);
     }
 }
+

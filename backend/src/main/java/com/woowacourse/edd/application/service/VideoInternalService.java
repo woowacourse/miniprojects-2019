@@ -16,36 +16,39 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class VideoService {
+@Transactional
+class VideoInternalService {
 
-    private final VideoInternalService videoInternalService;
+    private final VideoRepository videoRepository;
     private final VideoConverter videoConverter = new VideoConverter();
 
     @Autowired
-    public VideoService(VideoInternalService videoInternalService) {
-        this.videoInternalService = videoInternalService;
+    public VideoInternalService(VideoRepository videoRepository) {
+        this.videoRepository = videoRepository;
     }
 
-    public VideoResponse save(VideoSaveRequestDto requestDto) {
-        Video video = videoInternalService.save(videoConverter.toEntity(requestDto));
-        return videoConverter.toResponse(video);
+    public Video save(Video video) {
+        return videoRepository.save(video);
     }
 
-    public Page<VideoPreviewResponse> findByPageRequest(Pageable pageable) {
-        return videoInternalService.findAll(pageable).map(videoConverter::toPreviewResponse);
+    @Transactional(readOnly = true)
+    public Page<Video> findAll(Pageable pageable) {
+        return videoRepository.findAll(pageable);
     }
 
-    public VideoResponse findById(long id) {
-        Video video = videoInternalService.findById(id);
-        return videoConverter.toResponse(video);
+    @Transactional(readOnly = true)
+    public Video findById(long id) {
+        return videoRepository.findById(id).orElseThrow(VideoNotFoundException::new);
     }
 
-    public VideoUpdateResponse update(Long id, VideoUpdateRequestDto requestDto) {
-        Video video = videoInternalService.update(id, requestDto);
-        return videoConverter.toUpdateResponse(video);
+    public Video update(Long id, VideoUpdateRequestDto requestDto) {
+        Video video = findById(id);
+        video.update(requestDto.getYoutubeId(), requestDto.getTitle(), requestDto.getContents());
+        return video;
     }
 
     public void delete(Long id) {
-        videoInternalService.delete(id);
+        findById(id);
+        videoRepository.deleteById(id);
     }
 }
