@@ -1,5 +1,6 @@
 package com.woowacourse.zzinbros.user.web.support;
 
+import com.woowacourse.zzinbros.user.dto.UserResponseDto;
 import com.woowacourse.zzinbros.user.exception.UserNotLoggedInException;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -15,15 +16,19 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().isAssignableFrom(UserSession.class);
+        return parameter.hasParameterAnnotation(SessionInfo.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter,
+                                  ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest,
+                                  WebDataBinderFactory binderFactory) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = httpServletRequest.getSession();
-        Optional<UserSession> userSession
-                = Optional.ofNullable((UserSession) session.getAttribute(UserSession.LOGIN_USER));
-        return userSession.orElseThrow(() -> new UserNotLoggedInException("로그인 해주세요"));
+        Optional<UserResponseDto> loginUserDto
+                = Optional.ofNullable((UserResponseDto) session.getAttribute(UserSession.LOGIN_USER));
+
+        return new UserSession(loginUserDto.orElseThrow(() -> new UserNotLoggedInException("로그인 해주세요")));
     }
 }

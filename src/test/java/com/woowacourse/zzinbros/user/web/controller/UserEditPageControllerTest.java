@@ -1,11 +1,14 @@
-package com.woowacourse.zzinbros.user.web;
+package com.woowacourse.zzinbros.user.web.controller;
 
+import com.woowacourse.zzinbros.BaseTest;
 import com.woowacourse.zzinbros.user.domain.User;
-import com.woowacourse.zzinbros.user.web.support.UserSession;
 import com.woowacourse.zzinbros.user.domain.UserTest;
+import com.woowacourse.zzinbros.user.dto.UserResponseDto;
 import com.woowacourse.zzinbros.user.service.UserService;
+import com.woowacourse.zzinbros.user.web.support.LoginSessionManager;
 import com.woowacourse.zzinbros.user.web.support.UserArgumentResolver;
 import com.woowacourse.zzinbros.user.web.support.UserControllerExceptionAdvice;
+import com.woowacourse.zzinbros.user.web.support.UserSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,22 +24,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class UserEditPageControllerTest {
+class UserEditPageControllerTest extends BaseTest {
 
     MockMvc mockMvc;
 
     @Mock
     UserService userService;
 
+    @Mock
+    LoginSessionManager loginSessionManager;
+
     @InjectMocks
     UserEditPageController userEditPageController;
 
-    private UserSession userSession;
+    private UserResponseDto loginUserDto;
     private User user;
 
     @BeforeEach
     void setUp() {
-        userSession = new UserSession(UserControllerTest.BASE_ID, UserTest.BASE_NAME, UserTest.BASE_EMAIL);
+        loginUserDto = new UserResponseDto(UserControllerTest.BASE_ID, UserTest.BASE_NAME, UserTest.BASE_EMAIL);
         user = new User(UserTest.BASE_NAME, UserTest.BASE_EMAIL, UserTest.BASE_PASSWORD);
         mockMvc = MockMvcBuilders.standaloneSetup(userEditPageController)
                 .setCustomArgumentResolvers(new UserArgumentResolver())
@@ -48,7 +54,7 @@ class UserEditPageControllerTest {
     @DisplayName("사용자가 유저 수정 페이지로 이동")
     void showEditPageTest() throws Exception {
         mockMvc.perform(get("/users/" + UserControllerTest.BASE_ID + "/edit")
-                .sessionAttr(UserSession.LOGIN_USER, userSession))
+                .sessionAttr(UserSession.LOGIN_USER, loginUserDto))
                 .andExpect(status().isOk());
     }
 
