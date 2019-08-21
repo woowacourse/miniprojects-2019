@@ -326,12 +326,10 @@
                     ddabongCountTag.innerText = response.data.count;
 
                     if (response.data.clicked === false) {
-                        // 좋아요 누르기
                         event.target.classList.remove('fa-heart-o');
                         event.target.classList.add('fa-heart');
                         event.target.classList.add('activated-heart');
                     } else {
-                        // 좋아요 취소
                         event.target.classList.remove('activated-heart');
                         event.target.classList.remove('fa-heart');
                         event.target.classList.add('fa-heart-o');
