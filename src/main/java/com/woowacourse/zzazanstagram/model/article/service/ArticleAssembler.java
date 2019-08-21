@@ -10,8 +10,8 @@ import com.woowacourse.zzazanstagram.model.member.domain.Member;
 import java.time.LocalDateTime;
 
 public class ArticleAssembler {
-    public static Article toEntity(ArticleRequest dto, Member author) {
-        Image image = Image.of(dto.getImage());
+    public static Article toEntity(ArticleRequest dto, String imageUrl, Member author) {
+        Image image = Image.of(imageUrl);
         Contents contents = Contents.of(dto.getContents());
 
         return new Article(image, contents, author);
