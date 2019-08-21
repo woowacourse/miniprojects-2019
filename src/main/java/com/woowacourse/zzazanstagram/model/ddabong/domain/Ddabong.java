@@ -17,7 +17,7 @@ public class Ddabong extends BaseEntity {
     @JoinColumn(name = "author_id", foreignKey = @ForeignKey(name = "fk_like_to_member"), nullable = false)
     private Member member;
 
-    public Ddabong() {
+    protected Ddabong() {
     }
 
     public Ddabong(Article article, Member member) {
