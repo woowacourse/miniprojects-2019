@@ -12,7 +12,7 @@ const commentTemplate = (comment) => `
              <a class="toggle-comment-update pointer absolute top-0 right-0 edit"  aria-expanded="false">
                 <i class="ti-close pdd-right-10 text-dark"></i>
             </a>
-            <textarea class="bg-lightgray border-radius-18 padding-10 max-width-100 edit">${textFormat(comment.contents)}</textarea>
+            <textarea class="bg-lightgray border-radius-18 padding-10 max-width-100 edit">${comment.contents}</textarea>
             </div>
             
             <div class="font-size-12 pdd-left-10 pdd-top-5">
@@ -20,7 +20,7 @@ const commentTemplate = (comment) => `
                 <span>·</span>
                 <span class="pointer text-link-color toggle-child">답글 달기</span>
                 <span>·</span>
-                <span class="pointer">2시간</span>
+                <span class="pointer">${dateFormat(comment.updatedAt, isUpdated(comment.createdAt, comment.updatedAt))}</span>
             </div>
             
                 
@@ -65,7 +65,7 @@ const childCommentTemplate = (comment) => `
                 <span>·</span>
                 <span class="pointer text-link-color toggle-child">답글 달기</span>
                 <span>·</span>
-                <span class="pointer">2시간</span>
+                <span class="pointer">${dateFormat(comment.updatedAt, isUpdated(comment.createdAt, comment.updatedAt))}</span>
             </div>
             
                 
@@ -79,7 +79,7 @@ const childCommentTemplate = (comment) => `
                  <a class="toggle-comment-update pointer absolute top-0 right-100 edit"  aria-expanded="false">
                     <i class="ti-close pdd-right-10 text-dark"></i>
                 </a>
-                <textarea class="bg-lightgray border-radius-18 padding-10 max-width-100 edit">${textFormat(comment.contents)}</textarea>
+                <textarea class="bg-lightgray border-radius-18 padding-10 max-width-100 edit">${comment.contents}</textarea>
             </div>
             
             <ul class="dropdown-menu view">
