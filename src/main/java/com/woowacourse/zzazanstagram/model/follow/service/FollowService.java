@@ -5,6 +5,7 @@ import com.woowacourse.zzazanstagram.model.follow.dto.FollowRequest;
 import com.woowacourse.zzazanstagram.model.follow.dto.FollowResponse;
 import com.woowacourse.zzazanstagram.model.follow.repository.FollowRepository;
 import com.woowacourse.zzazanstagram.model.member.domain.Member;
+import com.woowacourse.zzazanstagram.model.member.dto.MemberRelationResponse;
 import com.woowacourse.zzazanstagram.model.member.service.MemberAssembler;
 import com.woowacourse.zzazanstagram.model.member.service.MemberService;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,12 @@ public class FollowService {
     }
 
     private Member findMember(Long id) {
-        return memberService.find(id);
+        return memberService.findById(id);
+    }
+
+    public MemberRelationResponse findRelation(Long targetMemberId, Long sessionMemberId) {
+        boolean isFollower =  followRepository.existsByFolloweeIdAndFollowerId(targetMemberId, sessionMemberId);
+        boolean isFollowing = followRepository.existsByFolloweeIdAndFollowerId(sessionMemberId, targetMemberId);
+        return new MemberRelationResponse(isFollower, isFollowing);
     }
 }

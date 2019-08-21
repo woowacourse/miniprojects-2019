@@ -25,7 +25,7 @@ public class DdabongService {
 
     public DdabongResponse saveOrRemove(Long articleId, String memberEmail) {
         Article article = articleService.findArticleById(articleId);
-        Member member = memberService.findMemberByEmail(memberEmail);
+        Member member = memberService.findByEmail(memberEmail);
         Optional<Ddabong> ddabong = ddabongRepository.findByArticleAndMember(article, member);
 
         if (ddabong.isPresent()) {
