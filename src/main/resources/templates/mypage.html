@@ -83,7 +83,7 @@
 					</a>
 				</li>
 				<li>
-					<a class="pointer" href="/mypage">
+					<a class="pointer" th:href="@{/members/{nickName}(nickName=${session.member.nickName})}">
 						<i class="ti-user"></i>
 					</a>
 				</li>
