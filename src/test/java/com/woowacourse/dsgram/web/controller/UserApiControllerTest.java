@@ -7,6 +7,11 @@ import com.woowacourse.dsgram.service.dto.user.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
@@ -125,75 +130,63 @@ class UserApiControllerTest extends AbstractControllerTest {
         checkExceptionMessage(response, "회원정보가 일치하지 않습니다.");
     }
 
-    // TODO: 2019-08-21  
+    // TODO: 2019-08-21
 
     @Test
     void 회원정보_수정() {
-        UserDto updatedUserDto = UserDto.builder()
-                .userName("김씨유")
-                .intro("updatedIntro")
-                .nickName("펠프스")
-                .password("dsdsds")
-                .webSite("updatedWebSite")
-                .build();
+        MultipartBodyBuilder multipartBodyBuilder =
+                createMultipartBodyBuilder("포비", "intro", "포비", "dsdsds", "");
 
-        webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
+        webTestClient.put()
+                .uri("/api/users/{userId}", AUTO_INCREMENT)
                 .header("Cookie", cookie)
-                .body(Mono.just(updatedUserDto), UserDto.class)
+                .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
                 .exchange()
                 .expectStatus().isOk();
+
+
     }
 
     @Test
     void 회원정보_일부_수정_실패_닉네임_Null() {
-        UserDto updatedUserDto = UserDto.builder()
-                .userName("자손")
-                .intro("")
-                .nickName("")
-                .password("dsdsds")
-                .webSite("")
-                .build();
 
-        ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
+        MultipartBodyBuilder multipartBodyBuilder =
+                createMultipartBodyBuilder("포비", "", "", "dsdsds", "");
+
+        WebTestClient.ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
                 .header("Cookie", cookie)
-                .body(Mono.just(updatedUserDto), UserDto.class)
-                .exchange();
+                .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
+                .exchange()
+                .expectStatus().isBadRequest();
 
         checkExceptionMessage(response, "닉네임은 2~10자");
     }
 
     @Test
     void 회원정보_일부_수정_실패_패스워드_Null() {
-        UserDto updatedUserDto = UserDto.builder()
-                .userName("자손")
-                .intro("")
-                .nickName("jason")
-                .password("")
-                .webSite("")
-                .build();
 
-        ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
+        MultipartBodyBuilder multipartBodyBuilder =
+                createMultipartBodyBuilder("자손", "", "jason", "", "");
+
+        WebTestClient.ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
                 .header("Cookie", cookie)
-                .body(Mono.just(updatedUserDto), UserDto.class)
-                .exchange();
+                .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
+                .exchange()
+                .expectStatus().isBadRequest();
 
         checkExceptionMessage(response, "비밀번호는 4~16자");
     }
 
     @Test
     void 회원정보_일부_수정_실패_이름_형식_불일치() {
-        UserDto updatedUserDto = UserDto.builder()
-                .userName("자")
-                .intro("")
-                .nickName("jason")
-                .password("1234")
-                .webSite("")
-                .build();
+        MultipartBodyBuilder multipartBodyBuilder =
+                createMultipartBodyBuilder("자", "", "jason", "1234", "");
 
-        ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
+        WebTestClient.ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
                 .header("Cookie", cookie)
-                .body(Mono.just(updatedUserDto), UserDto.class)
-                .exchange();
+                .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
+                .exchange()
+                .expectStatus().isBadRequest();
 
         checkExceptionMessage(response, "이름은 2~10자");
     }
@@ -257,10 +250,30 @@ class UserApiControllerTest extends AbstractControllerTest {
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus().isOk();
-
         webTestClient.get().uri("/articles/{articleId}", articleId[0])
                 .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus().isBadRequest();
+    }
+
+
+
+    private MultipartBodyBuilder createMultipartBodyBuilder(String userName,
+                                                            String intro, String nickName,
+                                                            String password, String website
+    ) {
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("file", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
+            @Override
+            public String getFilename() {
+                return "catImage.jpeg";
+            }
+        }, MediaType.IMAGE_JPEG);
+        bodyBuilder.part("userName", userName);
+        bodyBuilder.part("nickName", nickName);
+        bodyBuilder.part("intro", intro);
+        bodyBuilder.part("webSite", website);
+        bodyBuilder.part("password", password);
+        return bodyBuilder;
     }
 }
