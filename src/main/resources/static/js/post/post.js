@@ -10,14 +10,18 @@ let totalPage;
 let currentPageNumber = 1;
 writeBtn.addEventListener('click', (event) => {
     const contents = writeArea.value
-
-    api.POST(POST_URL, contents)
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            }
-            throw res
-        })
+    const formData = new FormData();
+    formData.append('contents', contents)
+    fetch('/api/posts', {
+        method: 'POST',
+        enctype: "multipart/form-data",
+        body: formData
+    }).then(res => {
+        if (res.ok) {
+            return res.json();
+        }
+        throw res
+    })
         .then(post => posts.prepend(createPostDOM(post)))
         .catch(error => {
             error.json()
@@ -25,8 +29,6 @@ writeBtn.addEventListener('click', (event) => {
                     console.log(errorMessage.message)
                 )
         })
-
-
     writeArea.value = ''
 })
 
