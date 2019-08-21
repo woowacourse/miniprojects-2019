@@ -1,7 +1,7 @@
-package com.woowacourse.zzazanstagram.web.controller.like;
+package com.woowacourse.zzazanstagram.web.controller.ddabong;
 
-import com.woowacourse.zzazanstagram.model.like.dto.DdabongResponse;
-import com.woowacourse.zzazanstagram.model.like.service.DdabongService;
+import com.woowacourse.zzazanstagram.model.ddabong.dto.DdabongResponse;
+import com.woowacourse.zzazanstagram.model.ddabong.service.DdabongService;
 import com.woowacourse.zzazanstagram.model.member.MemberSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

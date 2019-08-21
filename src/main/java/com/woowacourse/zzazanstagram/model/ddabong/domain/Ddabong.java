@@ -1,4 +1,4 @@
-package com.woowacourse.zzazanstagram.model.like.domain;
+package com.woowacourse.zzazanstagram.model.ddabong.domain;
 
 import com.woowacourse.zzazanstagram.model.article.domain.Article;
 import com.woowacourse.zzazanstagram.model.common.BaseEntity;

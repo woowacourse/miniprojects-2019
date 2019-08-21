@@ -65,7 +65,7 @@ public class FollowService {
     }
 
     public MemberRelationResponse findRelation(Long targetMemberId, Long sessionMemberId) {
-        boolean isFollower =  followRepository.existsByFolloweeIdAndFollowerId(targetMemberId, sessionMemberId);
+        boolean isFollower = followRepository.existsByFolloweeIdAndFollowerId(targetMemberId, sessionMemberId);
         boolean isFollowing = followRepository.existsByFolloweeIdAndFollowerId(sessionMemberId, targetMemberId);
         return new MemberRelationResponse(isFollower, isFollowing);
     }

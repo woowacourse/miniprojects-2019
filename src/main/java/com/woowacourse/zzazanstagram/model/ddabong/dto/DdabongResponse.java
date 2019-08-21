@@ -1,4 +1,4 @@
-package com.woowacourse.zzazanstagram.model.like.dto;
+package com.woowacourse.zzazanstagram.model.ddabong.dto;
 
 public class DdabongResponse {
     private int count;

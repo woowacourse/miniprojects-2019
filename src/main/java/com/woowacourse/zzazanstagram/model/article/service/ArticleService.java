@@ -42,14 +42,8 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    public ArticleResponse getArticleResponse(Long id) {
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new ArticleException("해당 게시글이 존재하지 않습니다."));
-        return ArticleAssembler.toDto(article);
-    }
-
     public void save(ArticleRequest dto, MultipartFile file, String email) {
-        Member author = memberService.findMemberByEmail(email);
+        Member author = memberService.findByEmail(email);
         String imageUrl = s3Uploader.upload(file, dirName);
 
         Article article = ArticleAssembler.toEntity(dto, imageUrl, author);
