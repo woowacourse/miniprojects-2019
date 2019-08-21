@@ -145,7 +145,8 @@ const USER_APP = (() => {
     };
 
     return {
-        init: init
+        init: init,
+        FetchApi: FetchApi
     }
 })();
 
