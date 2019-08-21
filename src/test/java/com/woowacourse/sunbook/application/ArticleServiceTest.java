@@ -1,15 +1,14 @@
 package com.woowacourse.sunbook.application;
 
-import com.woowacourse.sunbook.application.article.ArticleService;
-import com.woowacourse.sunbook.application.article.dto.ArticleResponseDto;
+import com.woowacourse.sunbook.application.dto.article.ArticleResponseDto;
+import com.woowacourse.sunbook.application.exception.NotFoundArticleException;
+import com.woowacourse.sunbook.application.exception.NotFoundUserException;
+import com.woowacourse.sunbook.application.service.ArticleService;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.domain.article.ArticleRepository;
+import com.woowacourse.sunbook.domain.comment.exception.MismatchAuthException;
 import com.woowacourse.sunbook.domain.user.User;
-import com.woowacourse.sunbook.presentation.excpetion.NotFoundArticleException;
-import com.woowacourse.sunbook.seongmo.NotFoundUserException;
-import com.woowacourse.sunbook.seongmo.NotMatchUserException;
-import com.woowacourse.sunbook.seongmo.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -98,7 +97,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(any(Long.class))).willReturn(Optional.of(article));
         given(article.isSameUser(any(User.class))).willReturn(false);
 
-        assertThrows(NotMatchUserException.class, () -> {
+        assertThrows(MismatchAuthException.class, () -> {
             articleService.modify(ARTICLE_ID, updatedArticleFeature, USER_ID);
         });
     }
@@ -119,7 +118,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(ARTICLE_ID)).willReturn(Optional.of(article));
         given(article.isSameUser(any(User.class))).willReturn(false);
 
-        assertThrows(NotMatchUserException.class, () -> {
+        assertThrows(MismatchAuthException.class, () -> {
             articleService.remove(ARTICLE_ID, USER_ID);
         });
     }

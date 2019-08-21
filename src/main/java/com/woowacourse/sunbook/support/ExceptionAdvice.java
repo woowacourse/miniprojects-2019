@@ -1,11 +1,9 @@
 package com.woowacourse.sunbook.support;
 
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
-import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
-import com.woowacourse.sunbook.application.exception.LoginException;
+import com.woowacourse.sunbook.application.exception.*;
+import com.woowacourse.sunbook.domain.comment.exception.MismatchAuthException;
 import com.woowacourse.sunbook.domain.validation.exception.InvalidValueException;
-import com.woowacourse.sunbook.seongmo.NotFoundUserException;
-import com.woowacourse.sunbook.seongmo.NotMatchUserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -16,7 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionAdvice {
 
     @ExceptionHandler({DuplicateEmailException.class, LoginException.class, InvalidValueException.class,
-            NotFoundUserException.class, NotMatchUserException.class})
+            NotFoundUserException.class, MismatchAuthException.class,
+            NotFoundArticleException.class, NotFoundCommentException.class})
     public ResponseEntity<ErrorMessage> responseExceptionMessage(RuntimeException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
         return new ResponseEntity<>(errorMessage, HttpStatus.OK);

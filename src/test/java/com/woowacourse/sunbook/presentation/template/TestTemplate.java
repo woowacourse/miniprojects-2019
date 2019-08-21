@@ -1,6 +1,6 @@
 package com.woowacourse.sunbook.presentation.template;
 
-import com.woowacourse.sunbook.application.user.dto.UserRequestDto;
+import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.domain.user.UserEmail;
 import com.woowacourse.sunbook.domain.user.UserName;
 import com.woowacourse.sunbook.domain.user.UserPassword;
@@ -30,6 +30,12 @@ public class TestTemplate {
     protected UserRequestDto userRequestDto = new UserRequestDto(
             new UserEmail("ddu0422@naver.com"),
             new UserName("mir"),
+            new UserPassword("asdf1234!A")
+    );
+
+    protected UserRequestDto otherRequestDto = new UserRequestDto(
+            new UserEmail("eara12sa@naver.com"),
+            new UserName("abc"),
             new UserPassword("asdf1234!A")
     );
 
