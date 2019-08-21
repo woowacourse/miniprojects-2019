@@ -18,16 +18,18 @@ public class CommentResponse {
     private Long id;
     private Long parentId;
     private String contents;
+    private int countOfChildren;
     private UserResponse userResponse;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @Builder
-    public CommentResponse(final Long id, final Long parentId, final String contents,
+    public CommentResponse(final Long id, final Long parentId, final String contents, final int countOfChildren,
                            final UserResponse userResponse, final LocalDateTime createdAt, final LocalDateTime updatedAt) {
         this.id = id;
         this.parentId = parentId;
         this.contents = contents;
+        this.countOfChildren = countOfChildren;
         this.userResponse = userResponse;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -38,9 +40,10 @@ public class CommentResponse {
                 .id(comment.getId())
                 .contents(comment.getContents())
                 .parentId(comment.getParentCommentId().orElse(null))
+                .countOfChildren(comment.getCountOfChildren())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
+                .userResponse(UserResponse.from(comment.getUser()))
                 .build();
     }
-
 }
