@@ -29,9 +29,14 @@ public class LikesRestController {
         return ResponseEntity.ok(likesService.getLikedUser(articleId));
     }
 
-    @DeleteMapping("/{articleId}/{likesId}")
-    public ResponseEntity delete(@PathVariable Long articleId, @PathVariable Long likesId) {
-        likesService.remove(articleId, likesId);
+    @DeleteMapping("/{articleId}/{likedId}")
+    public ResponseEntity delete(@PathVariable Long articleId, @PathVariable Long likedId) {
+        likesService.remove(articleId, likedId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/num/{articleId}")
+    public ResponseEntity<Integer> readNumberOfLiked(@PathVariable Long articleId) {
+        return ResponseEntity.ok(likesService.getLikedUser(articleId).size());
     }
 }
