@@ -20,7 +20,7 @@ const commentTemplate = (comment) => `
                 <span>·</span>
                 <span class="pointer text-link-color toggle-child">답글 달기</span>
                 <span>·</span>
-                <span class="pointer">2시간</span>
+                <span class="pointer">${dateFormat(comment.updatedAt, isUpdated(comment.createdAt, comment.updatedAt))}</span>
             </div>
             
                 
@@ -65,7 +65,7 @@ const childCommentTemplate = (comment) => `
                 <span>·</span>
                 <span class="pointer text-link-color toggle-child">답글 달기</span>
                 <span>·</span>
-                <span class="pointer">2시간</span>
+                <span class="pointer">${dateFormat(comment.updatedAt, isUpdated(comment.createdAt, comment.updatedAt))}</span>
             </div>
             
                 
