@@ -11,7 +11,6 @@ import com.woowacourse.zzazanstagram.model.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,10 +29,10 @@ public class FollowService {
         Member follower = findMember(followRequest.getFollowerId());
         Follow follow = new Follow(followee, follower);
 
-        Optional<Follow> maybeFollow = followRepository.findByFolloweeAndFollower(followee, follower);
+        Follow maybeFollow = followRepository.findByFolloweeAndFollower(followee, follower);
 
-        if (maybeFollow.isPresent()) {
-            followRepository.delete(maybeFollow.get());
+        if (maybeFollow != null) {
+            followRepository.delete(maybeFollow);
             return;
         }
 
