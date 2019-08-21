@@ -45,10 +45,12 @@
 		<div class="header-container max-width-lg mx-auto">
 			<ul class="nav-left mrg-left-0 padding-15">
 				<li>
-					<img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png">
+					<a href="/">
+						<img class="logo desktop-view mrg-top-5" src="/images/logo/zzazanstagram.png">
+					</a>
 				</li>
 				<li class="search-box mrg-left-20 desktop-view">
-					<a class="search-toggle no-pdd-right" href=";">
+					<a class="search-toggle no-pdd-right" href="">
 						<i class="search-icon ti-search pdd-right-10 font-size-25"></i>
 						<i class="search-icon-close ti-close pdd-right-10 font-size-25"></i>
 					</a>
@@ -197,23 +199,62 @@
         integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
         crossorigin="anonymous"></script>
 <script>
-    document.querySelector('.search-toggle').addEventListener('click', toggleSearchInput)
-    document.querySelector(".search-input input").addEventListener("keyup", showSearchedList)
+    const INDEXPAGE = (function () {
 
-    function toggleSearchInput(event) {
-        event.preventDefault();
-        document.querySelector('.search-box').classList.toggle('active')
-        document.querySelector(".search-input").classList.toggle("active")
-        document.querySelector(".search-input input").focus()
-    }
+        const IndexPageController = function () {
+            const indexPageService = new IndexPageService();
 
-    function showSearchedList(event) {
-        if (event.target.value.length > 0) {
-            document.querySelector(".advanced-search").classList.add("active")
-        } else {
-            document.querySelector(".advanced-search").classList.remove("active")
+            const toggleSearchInput = function () {
+                document.querySelector('.search-toggle').addEventListener('click', indexPageService.toggleSearchInput);
+            };
+
+            const showSearchedList = function () {
+                document.querySelector(".search-input input").addEventListener("keyup", indexPageService.showSearchedList);
+            };
+
+            const init = function () {
+                toggleSearchInput();
+                showSearchedList();
+            };
+
+            return {
+                init: init,
+            }
+        };
+
+        const IndexPageService = function () {
+            const toggleSearchInput = function (event) {
+                event.preventDefault();
+                document.querySelector('.search-box').classList.toggle('active')
+                document.querySelector(".search-input").classList.toggle("active")
+                document.querySelector(".search-input input").focus()
+            };
+
+            const showSearchedList = function (event) {
+                if (event.target.value.length > 0) {
+                    document.querySelector(".advanced-search").classList.add("active")
+                } else {
+                    document.querySelector(".advanced-search").classList.remove("active")
+                }
+            };
+
+            return {
+                toggleSearchInput: toggleSearchInput,
+                showSearchedList: showSearchedList,
+            }
+        };
+
+        const init = function () {
+            const indexPageController = new IndexPageController();
+            indexPageController.init();
+        };
+
+        return {
+            init: init,
         }
-    }
+    })();
+
+    INDEXPAGE.init();
 </script>
 </body>
 </html>
