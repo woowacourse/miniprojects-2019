@@ -104,7 +104,7 @@ public class UserService {
     public void deleteById(long id, LoginUserRequest loginUserRequest) {
         // TODO: 2019-08-20 OAUTH revoke?
         User user = findByEmail(loginUserRequest.getEmail())
-                .orElseThrow(() -> new NotFoundUserException("회원을 찾을 수 없습니다."));
+                .orElseThrow(NotFoundUserException::new);
         if (user.isNotSameId(id)) {
             throw new InvalidUserException("회원정보가 일치하지 않습니다.");
         }

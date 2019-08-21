@@ -24,10 +24,17 @@ const USER_APP = (() => {
             loginButton ? loginButton.addEventListener('click', userService.login) : undefined;
         };
 
+        const changeImageJustOnFront = () => {
+            const imageInput = document.getElementById("img-upload");
+            imageInput ? imageInput.addEventListener("change", userService.changeImageJustOnFront) : undefined;
+
+        }
+
         const init = () => {
             signUp();
             editUser();
             login();
+            changeImageJustOnFront();
             deleteUser();
         };
 
@@ -50,6 +57,8 @@ const USER_APP = (() => {
         const userId = document.getElementById('userId');
         const webSite = document.getElementById('webSite');
         const intro = document.getElementById('intro');
+        const imageInput = document.getElementById("img-upload");
+        const profileImage = document.getElementById('profile-image');
 
         const saveUser = function (event) {
             event.preventDefault();
@@ -73,27 +82,35 @@ const USER_APP = (() => {
         const updateUser = function (event) {
             event.preventDefault();
 
-            const userDto = {
-                nickName: nickName.value,
-                userName: userName.value,
-                userId: userId.value,
-                webSite: webSite.value,
-                password: password.value,
-                intro: intro.value,
-            };
+            const formData = new FormData();
+
+            formData.append("nickName", nickName.value);
+            formData.append("userName", userName.value);
+            formData.append("intro", intro.value);
+
+            if (imageInput.files.length !== 0) {
+                formData.append("file", imageInput.files[0]);
+            }
+
+            formData.append("webSite", webSite.value);
+            formData.append("id", userId.value);
+            formData.append("password", password.value);
 
             const ifSucceed = () => window.location.href = '/';
 
             connector.fetchTemplate('/api/users/' + userId.value,
                 connector.PUT,
-                header,
-                JSON.stringify(userDto),
+                {},
+                formData,
                 ifSucceed);
         };
 
         const deleteUser = function (event) {
             event.preventDefault();
-            connector.fetchTemplate('/api/users/' + userId.value, connector.DELETE, null, () => window.location.href = '/login')
+            connector.fetchTemplate('/api/users/' + userId.value,
+                connector.DELETE,
+                null,
+                () => window.location.href = '/login')
         };
 
         const login = function (event) {
@@ -113,11 +130,25 @@ const USER_APP = (() => {
                 ifSucceed);
         };
 
+        const changeImageJustOnFront = function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            // it's onload event and you forgot (parameters)
+            reader.onload = function (readEvent) {
+                profileImage.src = readEvent.target.result;
+
+            }
+            // you have to declare the file loading
+            reader.readAsDataURL(file);
+
+        }
+
         return {
             saveUser: saveUser,
             updateUser: updateUser,
             deleteUser: deleteUser,
             login: login,
+            changeImageJustOnFront: changeImageJustOnFront
         }
     };
 

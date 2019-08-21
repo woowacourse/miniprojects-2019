@@ -35,6 +35,7 @@ public class UserController {
                                Model model,
                                @UserSession LoginUserRequest loginUserRequest) {
         model.addAttribute("user", userService.findUserInfoById(userId, loginUserRequest));
+
         return "account-edit";
     }
 

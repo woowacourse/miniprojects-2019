@@ -1,6 +1,7 @@
 package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
+import com.woowacourse.dsgram.domain.UserProfileImage;
 import com.woowacourse.dsgram.service.exception.FileUploadException;
 import com.woowacourse.dsgram.service.exception.NotFoundFileException;
 import com.woowacourse.dsgram.service.exception.UserDirNullException;
@@ -56,6 +57,18 @@ public class FileService {
 
     public byte[] readFile(Article article) {
         File file = new File(article.getFilePath() + "/" + article.getFileName());
+
+        try {
+            byte[] bytes = Files.readAllBytes(file.toPath());
+            return Base64.getEncoder().encode(bytes);
+        } catch (IOException e) {
+            throw new NotFoundFileException("파일을 찾지 못했습니다.", e);
+        }
+
+    }
+
+    public byte[] readFile(UserProfileImage userProfileImage) {
+        File file = new File(userProfileImage.getFilePath() + "/" + userProfileImage.getFileName());
 
         try {
             byte[] bytes = Files.readAllBytes(file.toPath());

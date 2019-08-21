@@ -20,6 +20,7 @@
                                     <div class="col-md-3 mrg-left-15">
                                         <label class="pointer" for="img-upload">
                                             <img alt=""
+                                                 id="profile-image"
                                                  src="https://avatars3.githubusercontent.com/u/46308949?s=460&v=4"
                                                  width="70" style="border-radius: 50px">
                                         </label>
@@ -28,7 +29,8 @@
                                         <div class="font-size-20"><b th:text="${user.nickName}">Nick Name</b></div>
                                         <label class="mrg-top-5 pointer text-bold" for="img-upload"
                                                style="color:dodgerblue;">프로필 사진 바꾸기</label>
-                                        <input class="d-none" id="img-upload" multiple name="uploadedimages0"
+                                        <input class="d-none" id="img-upload" name="uploadedimages0"
+                                               accept="image/*"
                                                type="file">
                                     </div>
                                 </div>
@@ -124,5 +126,51 @@
 
     <script src="/js/fetchApi.js"></script>
     <script src="/js/user.js"></script>
+    <script th:inline="javascript">
+        let userId = [[${user.id}]];
+
+        const b64StringToBlob = (b64Data, contentType = '', sliceSize = 512) => {
+            const byteCharacters = atob(b64Data);
+            const byteArrays = [];
+
+            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                const slice = byteCharacters.slice(offset, offset + sliceSize);
+                const byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+            const blob = new Blob(byteArrays, {type: contentType});
+            return blob;
+        };
+
+        fetch('/api/users/' + userId + "/image", {
+            method: "GET",
+        }).then(response => {
+            response.arrayBuffer().then(function (buffer) {
+                var bytes = new Uint8Array(buffer);
+                console.log('byte', bytes);
+
+                var binary = '';
+                bytes.forEach((b) => binary += String.fromCharCode(b));
+
+                const blob = b64StringToBlob(binary);
+                console.log('blob', blob);
+
+                const blobUrl = URL.createObjectURL(blob);
+
+                putSrc(blobUrl);
+            });
+        });
+
+        function putSrc(url) {
+            let userProfileImage = document.getElementById('profile-image');
+            userProfileImage.style.display = "block";
+            userProfileImage.src = url;
+
+        }
+    </script>
 </th:block>
 </html>
