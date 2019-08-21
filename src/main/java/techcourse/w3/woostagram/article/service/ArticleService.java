@@ -1,6 +1,8 @@
 package techcourse.w3.woostagram.article.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.article.domain.ArticleRepository;
@@ -11,6 +13,7 @@ import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.service.UserService;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -50,5 +53,9 @@ public class ArticleService {
 
     public Article findArticleById(Long articleId) {
         return articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new);
+    }
+
+    public Page<Article> findPageByUsers(List<User> followingUsers, Pageable pageable) {
+        return articleRepository.findByUserIn(followingUsers, pageable);
     }
 }

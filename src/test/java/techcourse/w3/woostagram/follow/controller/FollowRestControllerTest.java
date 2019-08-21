@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 
+import java.util.HashMap;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FollowRestControllerTest extends AbstractControllerTests {
@@ -13,7 +15,7 @@ class FollowRestControllerTest extends AbstractControllerTests {
     @BeforeEach
     protected void setUp() {
         super.setUp();
-        postJsonRequest("/api/follow/2", UserInfoDto.class, String.valueOf(2), "moomin@naver.com", "");
+        postJsonRequest("/api/follow/2", new HashMap<>());
     }
 
     @Test
@@ -30,7 +32,8 @@ class FollowRestControllerTest extends AbstractControllerTests {
 
     @Test
     void create_correctTarget_isTrue() {
-        assertThat(postJsonRequest("/api/follow/2", UserInfoDto.class, String.valueOf(2), "moomin@naver.com", "").getStatus().is2xxSuccessful()).isTrue();
+        assertThat(postJsonRequest("/api/follow/2", new HashMap<>()).getStatus().is2xxSuccessful()).isTrue();
+
     }
 
     @Test
