@@ -6,6 +6,8 @@ import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
@@ -16,14 +18,16 @@ public class ArticleDto {
     private String contents;
     private String imageUrl;
     private UserInfoDto userInfoDto;
+    private LocalDateTime created;
 
     @Builder
-    public ArticleDto(Long id, String contents, MultipartFile imageFile, String imageUrl, UserInfoDto userInfoDto) {
+    public ArticleDto(Long id, String contents, MultipartFile imageFile, String imageUrl, UserInfoDto userInfoDto, LocalDateTime created) {
         this.id = id;
         this.contents = contents;
         this.imageFile = imageFile;
         this.imageUrl = imageUrl;
         this.userInfoDto = userInfoDto;
+        this.created = created;
     }
 
     public static ArticleDto from(Article article) {
@@ -32,6 +36,7 @@ public class ArticleDto {
                 .contents(article.getContents())
                 .imageUrl(article.getImageUrl())
                 .userInfoDto(UserInfoDto.from(article.getUser()))
+                .created(article.getCreatedDate())
                 .build();
     }
 
