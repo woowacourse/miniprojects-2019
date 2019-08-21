@@ -298,7 +298,7 @@ const postOperateButton = (function () {
                         const editContentsNode = commentItem.querySelector('textarea.bg-lightgray');
                         contentsNode.innerText = comment.contents
                         editContentsNode.value = comment.contents
-                        commentItem.classList.toggle('editing');
+                        commentItem.querySelector('.info').classList.toggle('editing')
                     })
                     .catch(error => console.error(error))
             }
@@ -351,7 +351,6 @@ const postOperateButton = (function () {
                         .catch(error => console.error(error))
                 }
             }
-
 
             return {
                 toggleUpdate: toggleUpdate,
