@@ -1,8 +1,6 @@
 package com.wootube.ioi.domain.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,6 +27,10 @@ public class Video extends BaseEntity {
     @Lob
     @Column(nullable = false)
     private String originFileName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_to_user"), nullable = false)
+    private User writer;
 
     public Video(String title, String description) {
         this.title = title;
