@@ -3,12 +3,14 @@ package com.woowacourse.dsgram.service;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.domain.UserRepository;
 import com.woowacourse.dsgram.domain.exception.InvalidUserException;
+import com.woowacourse.dsgram.service.dto.oauth.OAuthUserInfoResponse;
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 import com.woowacourse.dsgram.service.exception.DuplicatedAttributeException;
 import com.woowacourse.dsgram.service.exception.NotFoundUserException;
+import com.woowacourse.dsgram.service.oauth.GithubClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
@@ -25,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @ExtendWith(SpringExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
     private final SignUpUserRequest signUpUserRequest = SignUpUserRequest.builder()
             .email("buddy@buddy.com")
             .userName("김버디")
@@ -39,11 +42,21 @@ public class UserServiceTest {
             .nickName("buddy_")
             .password("Aa12345!")
             .build();
-    
-    private final AuthUserRequest authUserRequest = new AuthUserRequest("buddy@buddy.com","Aa12345!");
+
+    private OAuthUserInfoResponse userInfo = OAuthUserInfoResponse.builder()
+            .email(user.getEmail())
+            .login(user.getNickName())
+            .name(user.getUserName())
+            .build();
+
+    private final AuthUserRequest authUserRequest = new AuthUserRequest("buddy@buddy.com", "Aa12345!");
 
     private final UserDto userDto = new UserDto(1L, "김버디", "buddy_2", "Aa12345!", "www.website.com", "intro");
-    private final LoginUserRequest loginUserRequest = new LoginUserRequest("buddy@buddy.com","buddy_","김버디");
+    private final LoginUserRequest loginUserRequest = new LoginUserRequest(1L, "buddy@buddy.com", "buddy_", "김버디");
+
+    private final String code = "af70401e9c65f83fe29e";
+    private final String sampleToken = "mq4m38cvt3ucw498ub2er";
+    private final String email = "buddy@buddy.com";
 
 
     @InjectMocks
@@ -51,6 +64,9 @@ public class UserServiceTest {
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    private GithubClient githubClient;
 
     @Test
     void 유저_저장_성공() {
@@ -65,7 +81,9 @@ public class UserServiceTest {
     void 유저_저장_실패_닉네임_중복() {
         given(userRepository.existsByNickName(any())).willReturn(true);
 
-        assertThrows(RuntimeException.class, () -> {userService.save(signUpUserRequest);});
+        assertThrows(RuntimeException.class, () -> {
+            userService.save(signUpUserRequest);
+        });
     }
 
     @Test
@@ -82,7 +100,7 @@ public class UserServiceTest {
 
         userService.login(authUserRequest);
 
-        verify(userRepository,times(1)).findByEmail(any());
+        verify(userRepository, times(1)).findByEmail(any());
     }
 
     @Test
@@ -96,7 +114,7 @@ public class UserServiceTest {
     void 로그인_실패_패스워드_불일치() {
         given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
 
-        assertThrows(InvalidUserException.class, () -> userService.login(new AuthUserRequest("buddy@buddy.com","exception")));
+        assertThrows(InvalidUserException.class, () -> userService.login(new AuthUserRequest("buddy@buddy.com", "exception")));
     }
 
     @Test
@@ -104,7 +122,7 @@ public class UserServiceTest {
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
 
         UserDto userDto = new UserDto(1L, "김버디", "buddy_2", "Aa12345!", "www.website.com", "intro");
-        LoginUserRequest loginUserRequest = new LoginUserRequest("buddy@buddy.com","buddy_","김버디");
+        LoginUserRequest loginUserRequest = new LoginUserRequest(1L, "buddy@buddy.com", "buddy_", "김버디");
         assertDoesNotThrow(() -> userService.update(1L, userDto, loginUserRequest));
     }
 
@@ -119,7 +137,7 @@ public class UserServiceTest {
     void 남의_정보를_수정() {
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         given(userRepository.existsByNickName(anyString())).willReturn(false);
-        assertThrows(InvalidUserException.class, () -> userService.update(anyLong(), userDto, new LoginUserRequest("user@gmail","user","user")));
+        assertThrows(InvalidUserException.class, () -> userService.update(anyLong(), userDto, new LoginUserRequest(1L, "user@gmail", "user", "user")));
     }
 
     @Test
@@ -130,4 +148,31 @@ public class UserServiceTest {
         assertThrows(DuplicatedAttributeException.class, () -> userService.update(anyLong(), userDto, loginUserRequest));
     }
 
+    @Test
+    void oauth_firstLogin() {
+        given(githubClient.getToken(code)).willReturn(sampleToken);
+        given(githubClient.getUserEmail(sampleToken)).willReturn(email);
+
+        given(userRepository.findByEmail(email)).willReturn(Optional.empty());
+
+        given(userRepository.save(user)).willReturn(user);
+        given(githubClient.getUserInformation(sampleToken)).willReturn(userInfo);
+
+        LoginUserRequest loginUserRequest = userService.oauth(code);
+
+        verify(userRepository).save(any());
+        assertThat(loginUserRequest.getEmail()).isEqualTo(user.getEmail());
+    }
+
+    @Test
+    void oauth_login() {
+        given(githubClient.getToken(code)).willReturn(sampleToken);
+        given(githubClient.getUserEmail(sampleToken)).willReturn(email);
+
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
+
+        LoginUserRequest loginUserRequest = userService.oauth(code);
+
+        assertThat(loginUserRequest.getEmail()).isEqualTo(user.getEmail());
+    }
 }

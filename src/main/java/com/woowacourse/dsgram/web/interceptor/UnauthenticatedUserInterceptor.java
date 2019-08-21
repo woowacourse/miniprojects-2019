@@ -14,7 +14,7 @@ public class UnauthenticatedUserInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        Optional<LoginUserRequest> userSession = Optional.ofNullable((LoginUserRequest) request.getSession().getAttribute("sessionUser"));
+        Optional<LoginUserRequest> userSession = Optional.ofNullable((LoginUserRequest) request.getSession().getAttribute(LoginUserRequest.SESSION_USER));
 
         if (!userSession.isPresent()) {
             response.sendRedirect("/login");

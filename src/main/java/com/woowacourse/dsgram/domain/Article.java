@@ -1,19 +1,25 @@
 package com.woowacourse.dsgram.domain;
 
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@EqualsAndHashCode(of = {"id"})
 public class Article {
 
     @Id
     @Column(name = "article_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Lob
     @Column(nullable = false)
@@ -25,13 +31,25 @@ public class Article {
     @Column(nullable = false)
     private String filePath;
 
-    public Article() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "author", foreignKey = @ForeignKey(name = "fk_article_to_user"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User author;
 
-    public Article(String contents, String fileName, String filePath) {
+    public Article(String contents, String fileName, String filePath, User author) {
         this.contents = contents;
         this.fileName = fileName;
         this.filePath = filePath;
+        this.author = author;
+    }
+
+    public Article update(String contents) {
+        this.contents = contents;
+        return this;
+    }
+
+    public boolean notEqualAuthorId(long id) {
+        return this.author.notEqualId(id);
     }
 
     @Override
@@ -41,19 +59,7 @@ public class Article {
                 ", contents='" + contents + '\'' +
                 ", fileName='" + fileName + '\'' +
                 ", filePath='" + filePath + '\'' +
+                ", author=" + author +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Article article = (Article) o;
-        return Objects.equals(id, article.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, contents, fileName, filePath);
     }
 }
