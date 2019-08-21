@@ -30,49 +30,16 @@ const USER_APP = (() => {
         }
     };
 
-    const FetchApi = function () {
-        const POST = 'POST';
-        const PUT = 'PUT';
-
-        const fetchTemplate = function (requestUrl, method, body, ifSucceed) {
-            fetch(requestUrl, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(body)
-            }).then(response => {
-                if (response.status === 200) {
-                    ifSucceed();
-                    return;
-                }
-                if (response.status === 400) {
-                    errorHandler(response);
-                }
-            });
-        };
-
-        const errorHandler = function(error) {
-            error.json()
-                .then(exception => {
-                    alert(exception.message)
-                });
-        };
-
-        return {
-            POST: POST,
-            PUT: PUT,
-            fetchTemplate: fetchTemplate,
-        }
-    };
-
     const UserService = function () {
-        const connector = new FetchApi();
+        const connector = FETCH_APP.fetchApi();
+        const header = {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json'
+        };
 
         const email = document.getElementById('email');
-        const nickName = document.getElementById('nickName');
-        const userName = document.getElementById('userName');
+        const nickName = document.getElementById('nick-name');
+        const userName = document.getElementById('user-name');
         const password = document.getElementById('password');
         const userId = document.getElementById('userId');
         const webSite = document.getElementById('webSite');
@@ -92,7 +59,8 @@ const USER_APP = (() => {
 
             connector.fetchTemplate('/api/users',
                 connector.POST,
-                userBasicInfo,
+                header,
+                JSON.stringify(userBasicInfo),
                 ifSucceed);
         };
 
@@ -112,7 +80,8 @@ const USER_APP = (() => {
 
             connector.fetchTemplate('/api/users/' + userId.value,
                 connector.PUT,
-                userDto,
+                header,
+                JSON.stringify(userDto),
                 ifSucceed);
         };
 
@@ -128,7 +97,8 @@ const USER_APP = (() => {
 
             connector.fetchTemplate('/api/users/login',
                 connector.POST,
-                userBasicInfo,
+                header,
+                JSON.stringify(userBasicInfo),
                 ifSucceed);
         };
 
