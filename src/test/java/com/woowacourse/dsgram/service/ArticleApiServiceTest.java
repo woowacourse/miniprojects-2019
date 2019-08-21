@@ -2,13 +2,11 @@ package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
 import com.woowacourse.dsgram.domain.ArticleRepository;
-import com.woowacourse.dsgram.service.exception.JpaException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
