@@ -12,11 +12,11 @@ public class NickName {
     @Column(name = "nick_name", unique = true)
     private String nickName;
 
-    private NickName(final String name) {
-        this.nickName = validate(name);
+    private NickName() {
     }
 
-    private NickName() {
+    private NickName(final String name) {
+        this.nickName = validate(name);
     }
 
     public static NickName of(final String name) {
