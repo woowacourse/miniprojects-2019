@@ -54,10 +54,13 @@ const Comment = (function () {
             const commentInput = document.querySelector(".comment-input");
             let contents = commentInput.value;
 
+            if (contents.length === 0) {
+                return false;
+            }
+
             request.post('/', {
                 contents : contents
             }, (status, data) => {
-                console.log(data);
                 commentInput.value = "";
                 read();
             })
