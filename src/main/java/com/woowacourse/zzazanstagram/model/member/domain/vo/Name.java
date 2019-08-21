@@ -12,11 +12,11 @@ public class Name {
     @Column(name = "name")
     private String name;
 
-    private Name(final String name) {
-        this.name = validate(name);
+    private Name() {
     }
 
-    private Name() {
+    private Name(final String name) {
+        this.name = validate(name);
     }
 
     public static Name of(final String name) {
