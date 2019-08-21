@@ -18,10 +18,7 @@ public class UserProfileImageFileService {
         this.userProfileImageRepository = userProfileImageRepository;
     }
 
-    public void save(Long userId, MultipartFile imageFile) {
-        if (imageFile == null) {
-            return;
-        }
+    public void saveOrUpdate(Long userId, MultipartFile imageFile) {
         FileInfo fileInfo = fileService.save(imageFile);
         UserProfileImage userProfileImage = new UserProfileImage(userId, fileInfo.getFileName(), fileInfo.getFilePath());
 

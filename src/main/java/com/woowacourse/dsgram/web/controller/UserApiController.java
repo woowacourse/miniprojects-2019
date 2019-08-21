@@ -56,7 +56,9 @@ public class UserApiController {
             throw new RuntimeException(fieldError.getDefaultMessage());
         }
 
-        userProfileImageFileService.save(userId, editUserRequest.getFile());
+        editUserRequest.getFile().ifPresent((uploadedFile) ->
+                userProfileImageFileService.saveOrUpdate(userId, uploadedFile));
+
         userService.update(userId, editUserRequest.toUserDto(), loginUserRequest);
         return new ResponseEntity(HttpStatus.OK);
     }

@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -27,9 +28,9 @@ public class EditUserRequest {
 
     private String webSite;
     private String intro;
-    private MultipartFile file;
+    private Optional<MultipartFile> file;
 
-    public EditUserRequest(String nickName, String userName, String webSite, String intro, MultipartFile file) {
+    public EditUserRequest(String nickName, String userName, String webSite, String intro, Optional<MultipartFile> file) {
         this.nickName = nickName;
         this.userName = userName;
         this.webSite = webSite;
