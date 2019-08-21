@@ -11,7 +11,7 @@ public class AuthenticatedUserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Optional<LoginUserRequest> userSession = Optional.ofNullable((LoginUserRequest) request.getSession().getAttribute(
-                "sessionUser"));
+                LoginUserRequest.SESSION_USER));
 
         if (userSession.isPresent()) {
             response.sendRedirect("/");

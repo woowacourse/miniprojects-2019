@@ -35,18 +35,26 @@ public class UserController {
                                Model model,
                                @UserSession LoginUserRequest loginUserRequest) {
         model.addAttribute("user", userService.findUserInfoById(userId, loginUserRequest));
+
         return "account-edit";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession httpSession) {
-        httpSession.removeAttribute("sessionUser");
+        httpSession.removeAttribute(LoginUserRequest.SESSION_USER);
         return "redirect:/login";
     }
 
     @GetMapping("/oauth")
     public String test(@RequestParam String code, HttpSession httpSession) {
-        httpSession.setAttribute("sessionUser", userService.oauth(code));
+        httpSession.setAttribute(LoginUserRequest.SESSION_USER, userService.oauth(code));
         return "redirect:/login";
+    }
+
+    // TODO: 2019-08-20 my feed뿐만 아니라, 다른 user feed도 사용할 수 있도록 이름 바꾸기
+    // TODO: 2019-08-20 real instagram은 뒤에 email을 붙임.... 우린 users/1/edit, myfeed/1 이렇게 될거같은데 바꿔야될듯ㅎㅎ^^;;;;;;;;
+    @GetMapping("/myfeed/{userId}")
+    public String showMyFeed(@PathVariable long userId) {
+        return "my-feed";
     }
 }

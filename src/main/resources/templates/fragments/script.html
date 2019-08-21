@@ -51,5 +51,18 @@
                 document.querySelector(".advanced-search").classList.remove("active")
             }
         }
+
+        const hashTag = () => {
+            const contents = Array.from(document.getElementsByClassName('contents'));
+            const contentsHtml = contents.innerHTML;
+            const regex = new RegExp('#([0-9a-zA-Z가-힣_]{2,30})', 'g');
+
+            let tag = contentsHtml.match(regex);
+            tag.forEach(tag => {
+                contents.innerHTML = contents.innerHTML.replace(tag, '<a href="">' + tag + '</a>')
+            });
+        };
+
+        window.addEventListener('DOMContentLoaded', hashTag)
     }
 </script>
