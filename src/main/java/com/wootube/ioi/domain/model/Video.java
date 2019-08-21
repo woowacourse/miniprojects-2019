@@ -52,4 +52,8 @@ public class Video extends BaseEntity {
     public void setOriginFileName(String originFileName) {
         this.originFileName = originFileName;
     }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
 }
