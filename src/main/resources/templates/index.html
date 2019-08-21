@@ -99,6 +99,7 @@
 						
 						<div th:each="article : ${articles}" class="card widget-feed no-pdd mrg-btm-70">
 							<div class="feed-header padding-15">
+								<input type="hidden" th:value="${article.id}" id="articleId">
 								<ul class="list-unstyled list-info">
 									<li>
 										<img class="thumb-img img-circle" th:src="${article.profileImage}" alt="">
@@ -151,7 +152,7 @@
 							<div class="feedback-status-container pdd-horizon-15">
 								<img class="mini-profile-img" src="images/default/eastjun_profile.jpg">
 								<p class="no-mrg pdd-left-5 d-inline-block">
-									<span class="text-bold">eastjun</span>님 외 <span class="text-bold">37</span>명이 좋아합니다.
+									<span class="text-bold">eastjun</span>님 외 <span class="text-bold" id="ddabongCount">0</span>명이 좋아합니다.
 								</p>
 							</div>
 							<div class="feed-footer">
@@ -198,6 +199,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"
         integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
         crossorigin="anonymous"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
     const INDEXPAGE = (function () {
 
@@ -212,9 +214,14 @@
                 document.querySelector(".search-input input").addEventListener("keyup", indexPageService.showSearchedList);
             };
 
+            const toggleHeart = function () {
+                document.querySelector('.fa-heart-o').addEventListener('click', indexPageService.toggleHeart);
+            };
+
             const init = function () {
                 toggleSearchInput();
                 showSearchedList();
+                toggleHeart();
             };
 
             return {
@@ -238,9 +245,27 @@
                 }
             };
 
+            const toggleHeart = function (event) {
+                event.preventDefault();
+                const articleId = document.getElementById('articleId').value;
+	            
+                axios({
+                    method: 'post',
+                    url: '/articles/' + articleId + '/ddabongs',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    }
+                }).then(response => {
+                    console.log(response)
+	                const ddabongCountTag = document.getElementById('ddabongCount');
+                    ddabongCountTag.innerText = response.data;
+                });
+            };
+
             return {
                 toggleSearchInput: toggleSearchInput,
                 showSearchedList: showSearchedList,
+                toggleHeart: toggleHeart,
             }
         };
 

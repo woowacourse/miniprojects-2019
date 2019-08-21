@@ -16,7 +16,6 @@ public class DdabongController {
         this.ddabongService = ddabongService;
     }
 
-    // todo method naming
     @PostMapping("/articles/{articleId}/ddabongs")
     public ResponseEntity<String> clickDdabong(@PathVariable Long articleId, MemberSession memberSession) {
         String ddabongCount = ddabongService.saveOrRemove(articleId, memberSession.getEmail());
