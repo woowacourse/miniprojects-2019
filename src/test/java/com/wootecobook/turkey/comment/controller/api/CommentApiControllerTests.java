@@ -6,19 +6,22 @@ import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.commons.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
-import com.wootecobook.turkey.post.service.dto.PostRequest;
+import com.wootecobook.turkey.config.AwsMockConfig;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
+@Import(AwsMockConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentApiControllerTests extends BaseControllerTests {
 
@@ -36,12 +39,14 @@ class CommentApiControllerTests extends BaseControllerTests {
         jSessionId = logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD);
 
         // 글작성
-        PostRequest postRequest = new PostRequest("contents");
+        //given
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("contents", "contents");
 
+        //when
         PostResponse postResponse = webTestClient.post().uri("/api/posts")
-                .contentType(MEDIA_TYPE)
                 .cookie(JSESSIONID, jSessionId)
-                .body(Mono.just(postRequest), PostRequest.class)
+                .syncBody(bodyBuilder.build())
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(PostResponse.class)

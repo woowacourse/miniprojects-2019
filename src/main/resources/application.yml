@@ -28,3 +28,12 @@ server:
   servlet:
     session:
       tracking-modes: cookie
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    s3:
+      bucket: woowa-turkey
+    region:
+      static: ap-northeast-2

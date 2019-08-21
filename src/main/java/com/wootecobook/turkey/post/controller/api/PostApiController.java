@@ -27,8 +27,7 @@ public class PostApiController {
     }
 
     @PostMapping
-    public ResponseEntity<PostResponse> create(@RequestBody @Valid PostRequest postRequest,
-                                               UserSession userSession) {
+    public ResponseEntity<PostResponse> create(@Valid PostRequest postRequest, UserSession userSession) {
 
         PostResponse postResponse = postService.save(postRequest, userSession.getId());
         final URI uri = linkTo(PostApiController.class).toUri(); //todo: uri 적절한가
