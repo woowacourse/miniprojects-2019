@@ -23,7 +23,7 @@ public class FollowService {
     }
 
     @Transactional
-    public void add(String email, long targetId){
+    public void add(String email, Long targetId){
         User user = userService.findUserByEmail(email);
         User targetUser = userService.findById(targetId);
         Follow follow = Follow.builder()
