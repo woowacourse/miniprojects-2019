@@ -27,9 +27,9 @@ public class AwsS3Service implements StorageService {
 
     public AwsS3Service() {
         this.s3 = AmazonS3ClientBuilder
-            .standard()
-            .withRegion(Regions.AP_NORTHEAST_2)
-            .build();
+                .standard()
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .build();
     }
 
     @Override

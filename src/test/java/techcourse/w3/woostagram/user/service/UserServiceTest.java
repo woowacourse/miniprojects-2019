@@ -56,7 +56,6 @@ class UserServiceTest {
         userUpdateDto = UserUpdateDto.builder()
                 .userName("woowacrews")
                 .contents("woostagram")
-                .imageFile(multipartFile)
                 .build();
     }
 

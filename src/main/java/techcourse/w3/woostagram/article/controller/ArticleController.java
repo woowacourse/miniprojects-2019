@@ -8,8 +8,6 @@ import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.service.ArticleService;
 import techcourse.w3.woostagram.user.support.LoggedInUser;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Controller
 @RequestMapping("/articles")
 public class ArticleController {
@@ -25,7 +23,7 @@ public class ArticleController {
     }
 
     @PostMapping
-    public String create(HttpServletRequest request, ArticleDto articleDto, @LoggedInUser String email) {
+    public String create(ArticleDto articleDto, @LoggedInUser String email) {
         return "redirect:/articles/" + articleService.save(articleDto, email);
     }
 
