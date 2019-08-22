@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.post.service;
 
+import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.file.domain.FileFeature;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.service.UploadFileService;
@@ -39,19 +40,16 @@ public class PostServiceTest {
 
     @InjectMocks
     private PostService postService;
-
     @Mock
     private PostRepository postRepository;
-
     @Mock
     private PostGoodService postGoodService;
-
+    @Mock
+    private CommentRepository commentRepository;
     @Mock
     private UserService userService;
-
     @Mock
     private UploadFileService uploadFileService;
-
     private Contents defaultContents;
     private Post savedPost;
     private PostRequest postRequestWithoutFiles;
@@ -64,21 +62,16 @@ public class PostServiceTest {
     void setUp() {
         author = new User("pobi@woowa.com", "pobi", "Passw0rd!");
         author.setId(1L);
-
         other = new User("olaf@woowa.com", "olaf", "Passw0rd!");
         other.setId(2L);
-
         String contentsText = "hello";
         postRequestWithoutFiles = PostRequest.builder()
                 .contents(contentsText)
                 .build();
-
         defaultContents = new Contents(contentsText);
-
         updatePostRequest = PostRequest.builder()
                 .contents("update")
                 .build();
-
         savedPostId = 10L;
         savedPost = Post.builder()
                 .contents(defaultContents)
@@ -95,18 +88,15 @@ public class PostServiceTest {
                 "file", "mock1.png", "image/png", "test data".getBytes());
         FileFeature fileFeature = convertToFileFeature(mockMultipartFile);
         UploadFile uploadFile = new UploadFile(fileFeature, author);
-
         when(userService.findById(any(Long.class))).thenReturn(author);
         when(postRepository.save(any(Post.class))).then(returnsFirstArg());
         when(uploadFileService.save(any(MultipartFile.class), any(), any(User.class))).thenReturn(uploadFile);
-
         //when
         PostRequest postRequestWithFiles = PostRequest.builder()
                 .contents(defaultContents.getContents())
                 .files(Arrays.asList(mockMultipartFile))
                 .build();
         PostResponse result = postService.save(postRequestWithFiles, author.getId());
-
         //then
         assertThat(result.getContents()).isEqualTo(defaultContents);
         assertThat(result.getFiles()).hasSize(1);
@@ -117,10 +107,8 @@ public class PostServiceTest {
         //given
         when(userService.findById(any(Long.class))).thenReturn(author);
         when(postRepository.save(any(Post.class))).then(returnsFirstArg());
-
         //when
         PostResponse result = postService.save(postRequestWithoutFiles, author.getId());
-
         //then
         assertThat(result.getContents()).isEqualTo(defaultContents);
         assertThat(result.getFiles()).hasSize(0);
@@ -130,10 +118,8 @@ public class PostServiceTest {
     void post_조회_테스트() {
         //given
         when(postRepository.findById(savedPostId)).thenReturn(Optional.of(savedPost));
-
         //when
         Post testPost = postService.findById(savedPostId);
-
         //then
         assertThat(testPost.getContents()).isEqualTo(defaultContents);
     }
@@ -144,7 +130,7 @@ public class PostServiceTest {
         assertThrows(EntityNotFoundException.class, () -> postService.findById(NOT_FOUND_POST_ID));
     }
 
-//  todo : 리팩터링 필요
+    //  todo : 리팩터링 필요
 //    @Test
 //    void post_페이징_테스트() {
 //        int pageNum = 0;
@@ -169,10 +155,10 @@ public class PostServiceTest {
     void post_수정_테스트() {
         //given
         when(postRepository.findById(savedPostId)).thenReturn(Optional.of(savedPost));
-
+        when(postGoodService.findByPost(any(Post.class))).thenReturn(new ArrayList<>());
+        when(commentRepository.countByPost(any(Post.class))).thenReturn(0);
         //when
         PostResponse updateResult = postService.update(updatePostRequest, savedPostId, author.getId());
-
         //then
         assertThat(updateResult.getContents().getContents()).isEqualTo(updatePostRequest.getContents());
     }
@@ -188,7 +174,6 @@ public class PostServiceTest {
     void 수정_권한이_없는_유저_게시글_수정_예외_테스트() {
         //given
         when(postRepository.findById(savedPostId)).thenReturn(Optional.of(savedPost));
-
         //when & then
         assertThrows(NotPostOwnerException.class, () -> postService.update(updatePostRequest, savedPostId, other.getId()));
     }
@@ -197,7 +182,6 @@ public class PostServiceTest {
     void post_삭제_테스트() {
         //given
         when(postRepository.findById(savedPostId)).thenReturn(Optional.of(savedPost));
-
         //when & then
         assertDoesNotThrow(() -> postService.delete(savedPostId, author.getId()));
     }
@@ -212,7 +196,6 @@ public class PostServiceTest {
     void 삭제_권한이_없는_유저_게시글_삭제_예외_테스트() {
         //given
         when(postRepository.findById(savedPostId)).thenReturn(Optional.of(savedPost));
-
         //when & then
         assertThrows(NotPostOwnerException.class, () -> postService.delete(savedPostId, other.getId()));
     }
@@ -225,5 +208,4 @@ public class PostServiceTest {
                 .size(multipartFile.getSize())
                 .build();
     }
-
 }
