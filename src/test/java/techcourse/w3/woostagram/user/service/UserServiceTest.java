@@ -5,20 +5,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.UserRepository;
-import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
-import techcourse.w3.woostagram.user.exception.UserUpdateException;
+import techcourse.w3.woostagram.user.exception.UserNotFoundException;
 
 import java.util.Optional;
 
@@ -82,7 +80,7 @@ class UserServiceTest {
     @Test
     void update_empty_fail() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
-        assertThrows(UserUpdateException.class, () -> userService.update(userUpdateDto, userDto.getEmail()));
+        assertThrows(UserNotFoundException.class, () -> userService.update(userUpdateDto, userDto.getEmail()));
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
     }
 
@@ -97,7 +95,7 @@ class UserServiceTest {
     @Test
     void delete_empty_fail() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
-        assertThrows(LoginException.class, () -> userService.deleteByEmail(userDto.getEmail()));
+        assertThrows(UserNotFoundException.class, () -> userService.deleteByEmail(userDto.getEmail()));
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
         verify(userRepository, times(0)).delete(userDto.toEntity());
     }
@@ -111,7 +109,7 @@ class UserServiceTest {
     @Test
     void findByEmail_empty_fail() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
-        assertThrows(LoginException.class, () -> userService.findByEmail(userDto.getEmail()));
+        assertThrows(UserNotFoundException.class, () -> userService.findByEmail(userDto.getEmail()));
     }
 
     @Test
@@ -123,7 +121,7 @@ class UserServiceTest {
     @Test
     void findEntityByEmail_empty_fail() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
-        assertThrows(LoginException.class, () -> userService.findByEmail(userDto.getEmail()));
+        assertThrows(UserNotFoundException.class, () -> userService.findByEmail(userDto.getEmail()));
     }
 
     @Test
