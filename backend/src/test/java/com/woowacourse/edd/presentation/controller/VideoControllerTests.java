@@ -43,12 +43,13 @@ public class VideoControllerTests extends BasicControllerTests {
 
     @Test
     void find_videos_by_date() {
-        saveVideo(new VideoSaveRequestDto("111", "tilte1", "contents1"));
-        saveVideo(new VideoSaveRequestDto("222", "tilte2", "contents2"));
-        saveVideo(new VideoSaveRequestDto("333", "tilte3", "contents3"));
-        saveVideo(new VideoSaveRequestDto("444", "tilte4", "contents4"));
-        saveVideo(new VideoSaveRequestDto("555", "tilte5", "contents5"));
-        saveVideo(new VideoSaveRequestDto("666", "tilte6", "contents6"));
+        String jsessionid = getDefaultLoginSessionId();
+        saveVideo(new VideoSaveRequestDto("111", "tilte1", "contents1"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("222", "tilte2", "contents2"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("333", "tilte3", "contents3"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("444", "tilte4", "contents4"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("555", "tilte5", "contents5"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("666", "tilte6", "contents6"), jsessionid);
 
         findVideos(0, 6, "createDate", "DESC").isOk().expectBody()
             .jsonPath("$.content.length()").isEqualTo(6)
@@ -61,7 +62,7 @@ public class VideoControllerTests extends BasicControllerTests {
     void save() {
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
-        saveVideo(videoSaveRequestDto).isCreated()
+        saveVideo(videoSaveRequestDto, getDefaultLoginSessionId()).isCreated()
             .expectBody()
             .jsonPath("$.id").isNotEmpty()
             .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
@@ -76,7 +77,7 @@ public class VideoControllerTests extends BasicControllerTests {
 
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(youtubeId, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
-        assertFailBadRequest(saveVideo(videoSaveRequestDto), "유투브 아이디는 필수로 입력해야합니다.");
+        assertFailBadRequest(saveVideo(videoSaveRequestDto, getDefaultLoginSessionId()), "유투브 아이디는 필수로 입력해야합니다.");
     }
 
     @Test
@@ -85,7 +86,7 @@ public class VideoControllerTests extends BasicControllerTests {
 
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, title, DEFAULT_VIDEO_CONTENTS);
 
-        assertFailBadRequest(saveVideo(videoSaveRequestDto), "제목은 한 글자 이상이어야합니다");
+        assertFailBadRequest(saveVideo(videoSaveRequestDto, getDefaultLoginSessionId()), "제목은 한 글자 이상이어야합니다");
 
     }
 
@@ -95,7 +96,7 @@ public class VideoControllerTests extends BasicControllerTests {
 
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, contents);
 
-        assertFailBadRequest(saveVideo(videoSaveRequestDto), "내용은 한 글자 이상이어야합니다");
+        assertFailBadRequest(saveVideo(videoSaveRequestDto, getDefaultLoginSessionId()), "내용은 한 글자 이상이어야합니다");
     }
 
     @Test
@@ -109,7 +110,7 @@ public class VideoControllerTests extends BasicControllerTests {
 
         VideoUpdateRequestDto videoUpdateRequestDto = new VideoUpdateRequestDto(youtubeId, title, contetns);
 
-        updateVideo(id, videoUpdateRequestDto)
+        updateVideo(id, videoUpdateRequestDto, getDefaultLoginSessionId())
             .isOk()
             .expectHeader()
             .valueMatches("location", VIDEOS_URI + "/" + id)
@@ -124,24 +125,24 @@ public class VideoControllerTests extends BasicControllerTests {
 
         VideoUpdateRequestDto videoUpdateRequestDto = new VideoUpdateRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
-        assertFailNotFound(updateVideo(id, videoUpdateRequestDto), "그런 비디오는 존재하지 않아!");
+        assertFailNotFound(updateVideo(id, videoUpdateRequestDto, getDefaultLoginSessionId()), "그런 비디오는 존재하지 않아!");
     }
 
     @Test
     void delete() {
-        EntityExchangeResult<byte[]> res = saveVideo(new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS))
+        EntityExchangeResult<byte[]> res = saveVideo(new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS), getDefaultLoginSessionId())
             .isCreated()
             .expectBody()
             .returnResult();
 
         String[] id = res.getResponseHeaders().getLocation().toASCIIString().split("/");
 
-        deleteVideo(Long.valueOf(id[id.length - 1])).isNoContent();
+        deleteVideo(Long.valueOf(id[id.length - 1]), getDefaultLoginSessionId()).isNoContent();
     }
 
     @Test
     void delete_invalid_id() {
-        assertFailNotFound(deleteVideo(100L), "그런 비디오는 존재하지 않아!");
+        assertFailNotFound(deleteVideo(100L, getDefaultLoginSessionId()), "그런 비디오는 존재하지 않아!");
     }
 
     private StatusAssertions findVideo(String uri) {
@@ -156,22 +157,25 @@ public class VideoControllerTests extends BasicControllerTests {
             .expectStatus();
     }
 
-    private StatusAssertions saveVideo(VideoSaveRequestDto videoSaveRequestDto) {
+    private StatusAssertions saveVideo(VideoSaveRequestDto videoSaveRequestDto, String jsessionid) {
         return executePost(VIDEOS_URI)
+            .cookie(COOKIE_JSESSIONID, jsessionid)
             .body(Mono.just(videoSaveRequestDto), VideoSaveRequestDto.class)
             .exchange()
             .expectStatus();
     }
 
-    private StatusAssertions updateVideo(Long id, VideoUpdateRequestDto videoUpdateRequestDto) {
+    private StatusAssertions updateVideo(Long id, VideoUpdateRequestDto videoUpdateRequestDto, String jsessionid) {
         return executePut(VIDEOS_URI + "/" + id)
+            .cookie(COOKIE_JSESSIONID, jsessionid)
             .body(Mono.just(videoUpdateRequestDto), VideoUpdateRequestDto.class)
             .exchange()
             .expectStatus();
     }
 
-    private StatusAssertions deleteVideo(Long id) {
+    private StatusAssertions deleteVideo(Long id, String jsessionid) {
         return executeDelete(VIDEOS_URI + "/" + id)
+            .cookie(COOKIE_JSESSIONID, jsessionid)
             .exchange()
             .expectStatus();
     }

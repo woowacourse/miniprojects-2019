@@ -31,11 +31,11 @@ public class UserControllerTests extends BasicControllerTests {
         UserRequestDto userRequestDto = new UserRequestDto("jm", "hansome@gmail.com", "P!ssW0rd");
 
         EntityExchangeResult<byte[]> result = signUp(userSaveRequestDto);
-
         String uri = result.getResponseHeaders().getLocation().toASCIIString();
 
         webTestClient.put()
             .uri(uri)
+            .cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
             .body(Mono.just(userRequestDto), UserRequestDto.class)
             .exchange()
             .expectStatus()
@@ -49,6 +49,7 @@ public class UserControllerTests extends BasicControllerTests {
     void user_delete_not_found() {
         webTestClient.delete()
             .uri(USER_URL + "/999")
+            .cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
             .exchange()
             .expectStatus()
             .isNotFound();  //404
@@ -61,6 +62,7 @@ public class UserControllerTests extends BasicControllerTests {
         String url = result.getResponseHeaders().getLocation().toASCIIString();
         webTestClient.delete()
             .uri(url)
+            .cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
             .exchange()
             .expectStatus()
             .isNoContent();
@@ -71,16 +73,19 @@ public class UserControllerTests extends BasicControllerTests {
         UserRequestDto userRequestDto = new UserRequestDto("conas", "conas@email.com", "P@ssW0rd");
 
         EntityExchangeResult<byte[]> result = signUp(userRequestDto);
-
         String url = result.getResponseHeaders().getLocation().toASCIIString();
+        String jsessionid = getDefaultLoginSessionId();
+
         webTestClient.delete()
             .uri(url)
+            .cookie(COOKIE_JSESSIONID, jsessionid)
             .exchange()
             .expectStatus()
             .isNoContent();
 
         webTestClient.delete()
             .uri(url)
+            .cookie(COOKIE_JSESSIONID, jsessionid)
             .exchange()
             .expectStatus()
             .isNotFound();
