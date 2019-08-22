@@ -75,12 +75,22 @@ const Api = function () {
         return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}`, 'DELETE')
     }
 
+    const postLogin = (dataBody) => {
+        return request(`${baseUrl}/v1/login`, 'POST', dataBody)
+    }
+
+    const signup = (dataBody) => {
+        return request(`${baseUrl}/v1/users`, 'POST', dataBody)
+    }
+
     return {
-        requestVideos: requestVideos,
-        requestVideo: requestVideo,
-        saveVideo: saveVideo,
-        updateVideo:updateVideo,
-        deleteVideo:deleteVideo
+        requestVideos,
+        requestVideo,
+        saveVideo,
+        updateVideo,
+        deleteVideo,
+        postLogin,
+        signup
     }
 
 }

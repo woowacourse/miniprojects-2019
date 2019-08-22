@@ -75,17 +75,19 @@
                         <div class="form-group row">
                             <label for="form-1-4" class="col-md-3">패스워드확인</label>
                             <div class="col-md-9">
-                                <input type="password" name="password comfirm" placeholder="패스워드를 다시 한번 입력하세요" class="form-control" required>
+                                <input type="password" name="password_confirm" placeholder="패스워드를 다시 한번 입력하세요" class="form-control" required>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="alert alert-danger" role="alert">아이디 혹은 비밀번호가 일치하지 않습니다</div>
+                <div class="alert alert-danger d-none" role="alert">아이디 혹은 비밀번호가 일치하지 않습니다</div>
                 <div> 계정이 있으신가요? <a href="/login.html">로그인</a></div>
-                <button type="button" class="btn btn-primary btn-signin">회원가입</button>
+                <button type="button" class="btn btn-primary btn-signup">회원가입</button>
             </form>
         </div>
     </div>
+    <script src="./js/common.js"></script>
+    <script src="./js/signup.js"></script>
 </body>
 
 </html>

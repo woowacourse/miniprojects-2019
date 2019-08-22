@@ -10,7 +10,7 @@ function addVideoCardTemplate(data, number, categorie) {
             </div>
             <div class="card-block padding-10">
                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">${data[number].title}</h5>
-                <span class="font-size-13">로비</span>
+                <span class="font-size-13">${data[number].creator.name}</span>
                 <div class="font-size-13">
                 <span>조회수</span>
                 <span> · </span>
