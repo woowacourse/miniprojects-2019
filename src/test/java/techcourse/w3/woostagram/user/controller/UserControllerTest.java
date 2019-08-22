@@ -3,6 +3,7 @@ package techcourse.w3.woostagram.user.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
+import techcourse.w3.woostagram.common.support.TestDataInitializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,15 +11,18 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserControllerTest extends AbstractControllerTests {
-    private static final String TEST_EMAIL = "a@naver.com";
-    private static final String TEST_EMAIL2 = "test2@test.com";
-    private static final String TEST_PASSWORD = "Aa1234!!";
-    private static final String BAD_PASSWORD = "abc";
+    private static final String EMAIL = "email";
+    private static final String PASSWORD = "password";
+    private static final String NAME = "name";
+    private static final String USER_NAME = "userName";
+    private static final String CONTENTS = "contents";
+    private static final String ORIGINAL_IMG_FILE = "originalImageFile";
+    private static final String IMAGE_FILE = "imageFile";
 
     @Override
     @BeforeEach
     protected void setUp() {
-        loginRequest(TEST_EMAIL, TEST_PASSWORD);
+        loginRequest(TestDataInitializer.authorUser.getEmail(), TestDataInitializer.authorUser.getPassword());
     }
 
     @Test
@@ -33,8 +37,8 @@ class UserControllerTest extends AbstractControllerTests {
     @Test
     void login_correct_isRedirect() {
         Map<String, String> params = new HashMap<>();
-        params.put("email", TEST_EMAIL);
-        params.put("password", TEST_PASSWORD);
+        params.put(EMAIL, TestDataInitializer.authorUser.getEmail());
+        params.put(PASSWORD, TestDataInitializer.authorUser.getPassword());
 
         clearCookie();
         assertThat(postFormRequest("/users/login", params)
@@ -45,8 +49,8 @@ class UserControllerTest extends AbstractControllerTests {
     @Test
     void login_mismatch_isFail() {
         Map<String, String> params = new HashMap<>();
-        params.put("email", TEST_EMAIL2);
-        params.put("password", TEST_PASSWORD);
+        params.put(EMAIL, TestDataInitializer.unAuthorUser.getEmail());
+        params.put(PASSWORD, TestDataInitializer.unAuthorUser.getPassword());
 
         clearCookie();
         assertThat(postFormRequest("/users/login", params)
@@ -66,8 +70,8 @@ class UserControllerTest extends AbstractControllerTests {
     @Test
     void create_correct_isOk() {
         Map<String, String> params = new HashMap<>();
-        params.put("email", TEST_EMAIL2);
-        params.put("password", TEST_PASSWORD);
+        params.put(EMAIL, TestDataInitializer.authorUser.getEmail());
+        params.put(PASSWORD, TestDataInitializer.authorUser.getPassword());
 
         clearCookie();
         assertThat(postFormRequest("/users/signup", params)
@@ -78,8 +82,8 @@ class UserControllerTest extends AbstractControllerTests {
     @Test
     void create_mismatch_isFail() {
         Map<String, String> params = new HashMap<>();
-        params.put("email", TEST_EMAIL2);
-        params.put("password", BAD_PASSWORD);
+        params.put(EMAIL, TestDataInitializer.authorUser.getEmail());
+        params.put(PASSWORD, TestDataInitializer.unAuthorUser.getPassword());
 
         clearCookie();
         assertThat(postFormRequest("/users/signup", params)
@@ -104,11 +108,11 @@ class UserControllerTest extends AbstractControllerTests {
     @Test
     void update_correct_isOk() {
         Map<String, String> params = new HashMap<>();
-        params.put("name", "a");
-        params.put("userName", "b");
-        params.put("contents", "c");
-        params.put("originalImageFile", "d");
-        params.put("imageFile", "e");
+        params.put(NAME, "a");
+        params.put(USER_NAME, "b");
+        params.put(CONTENTS, "c");
+        params.put(ORIGINAL_IMG_FILE, "d");
+        params.put(IMAGE_FILE, "e");
 
         assertThat(putFormRequest("/users", params)
                 .getStatus()
@@ -118,11 +122,11 @@ class UserControllerTest extends AbstractControllerTests {
     @Test
     void update_mismatch_isFail() {
         Map<String, String> params = new HashMap<>();
-        params.put("name", "");
-        params.put("userName", "");
-        params.put("contents", "");
-        params.put("originalImageFile", "");
-        params.put("imageFile", "");
+        params.put(NAME, "");
+        params.put(USER_NAME, "");
+        params.put(CONTENTS, "");
+        params.put(ORIGINAL_IMG_FILE, "");
+        params.put(IMAGE_FILE, "");
 
         assertThat(putFormRequest("/users", params)
                 .getStatus()
@@ -132,10 +136,10 @@ class UserControllerTest extends AbstractControllerTests {
     @Test
     void delete_correct_isOk() {
         Map<String, String> params = new HashMap<>();
-        params.put("email", TEST_EMAIL2);
-        params.put("password", TEST_PASSWORD);
+        params.put(EMAIL, TestDataInitializer.deleteUser.getEmail());
+        params.put(PASSWORD, TestDataInitializer.deleteUser.getPassword());
         postFormRequest("/users/signup", params);
-        loginRequest(TEST_EMAIL2, TEST_PASSWORD);
+        loginRequest(TestDataInitializer.deleteUser.getEmail(), TestDataInitializer.deleteUser.getPassword());
 
         assertThat(deleteRequest("/users")
                 .getStatus()
