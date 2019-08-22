@@ -76,12 +76,9 @@ public class ArticleService {
                 .orElseThrow(NotFoundArticleException::new);
         User user = userService.findById(userId);
 
-        checkAuth(article, user);
-        articleRepository.deleteById(articleId);
-    }
-
-    private void checkAuth(Article article, User user) {
         if (article.isSameUser(user)) {
+            articleRepository.deleteById(articleId);
+
             return;
         }
 
