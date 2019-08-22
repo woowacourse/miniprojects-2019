@@ -42,7 +42,7 @@ public class UserService {
 
     @Transactional
     public void update(UserUpdateDto userUpdateDto, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(UserUpdateException::new);
+        User user = findUserByEmail(email);
         user.updateContents(userUpdateDto.toEntity());
     }
 
@@ -53,13 +53,11 @@ public class UserService {
     }
 
     public void deleteByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(LoginException::new);
-        userRepository.delete(user);
+        userRepository.delete(findUserByEmail(email));
     }
 
     public UserInfoDto findByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(LoginException::new);
-        return UserInfoDto.from(user);
+        return UserInfoDto.from(findUserByEmail(email));
     }
 
     public User findUserByEmail(String email) {
@@ -72,7 +70,7 @@ public class UserService {
 
     @Transactional
     public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(UserUpdateException::new);
+        User user = findUserByEmail(email);
         String fileUrl = userProfileImageDto.getOriginalImageFile();
         deleteFile(fileUrl);
         if (!userProfileImageDto.getImageFile().isEmpty()) {

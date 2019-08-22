@@ -38,7 +38,7 @@ public class ArticleService {
     }
 
     public ArticleDto findById(Long articleId) {
-        return ArticleDto.from(articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new));
+        return ArticleDto.from(findArticleById(articleId));
     }
 
     @Transactional

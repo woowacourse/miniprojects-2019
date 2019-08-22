@@ -36,13 +36,17 @@ public class FollowService {
     public List<UserInfoDto> getFollowers(Long id) {
         User user = userService.findById(id);
         List<Follow> followers = followRepository.findAllByTo(user);
-        return followers.stream().map((Follow follow) -> UserInfoDto.from(follow.getFrom())).collect(Collectors.toList());
+        return followers.stream()
+                .map(follow -> UserInfoDto.from(follow.getFrom()))
+                .collect(Collectors.toList());
     }
 
     public List<UserInfoDto> getFollowing(Long id) {
         User user = userService.findById(id);
         List<Follow> followers = followRepository.findAllByFrom(user);
-        return followers.stream().map((Follow follow) -> UserInfoDto.from(follow.getTo())).collect(Collectors.toList());
+        return followers.stream()
+                .map(follow -> UserInfoDto.from(follow.getTo()))
+                .collect(Collectors.toList());
     }
 
     public void remove(String email, Long targetId) {
