@@ -72,12 +72,16 @@ public class ArticleService {
     }
 
     public void remove(Long articleId, Long userId) {
-        Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(NotFoundArticleException::new);
         User user = loginService.findById(userId);
 
-        if (article.isSameUser(user)) {
-            articleRepository.deleteById(articleId);
+        checkAuth(article, user);
+        articleRepository.deleteById(articleId);
+    }
 
+    private void checkAuth(Article article, User user) {
+        if (article.isSameUser(user)) {
             return;
         }
 
