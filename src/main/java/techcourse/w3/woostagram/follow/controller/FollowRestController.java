@@ -13,40 +13,39 @@ import java.util.List;
 public class FollowRestController {
     private final FollowService followService;
 
-    public FollowRestController(FollowService followService) {
+    public FollowRestController(final FollowService followService) {
         this.followService = followService;
     }
 
     @GetMapping("/followers")
     public ResponseEntity<List<UserInfoDto>> readFollowers(@PathVariable Long targetId) {
-        return ResponseEntity.ok(followService.getFollowers(targetId));
+        return ResponseEntity.ok(followService.findAllByTo(targetId));
     }
 
     @GetMapping("/followings")
     public ResponseEntity<List<UserInfoDto>> readFollowing(@PathVariable Long targetId) {
-        List<UserInfoDto> dtos = followService.getFollowing(targetId);
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(followService.findAllByFrom(targetId));
     }
 
     @PostMapping
     public ResponseEntity create(@PathVariable Long targetId, @LoggedInUser String email) {
-        followService.add(email, targetId);
+        followService.save(email, targetId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping
     public ResponseEntity delete(@PathVariable Long targetId, @LoggedInUser String email) {
-        followService.remove(email, targetId);
+        followService.delete(email, targetId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/followers/num")
     public ResponseEntity<Integer> readNumberOfFollowers(@PathVariable Long targetId) {
-        return ResponseEntity.ok(followService.getFollowers(targetId).size());
+        return ResponseEntity.ok(followService.findAllByTo(targetId).size());
     }
 
     @GetMapping("/followings/num")
     public ResponseEntity<Integer> readNumberOfFollowing(@PathVariable Long targetId) {
-        return ResponseEntity.ok(followService.getFollowing(targetId).size());
+        return ResponseEntity.ok(followService.findAllByFrom(targetId).size());
     }
 }

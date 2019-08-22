@@ -45,7 +45,7 @@ public class MainService {
     }
 
     private List<User> getFollowingUsers(User user) {
-        List<User> followingUsers = followService.getFollowing(user.getId()).stream()
+        List<User> followingUsers = followService.findAllByFrom(user.getId()).stream()
                 .map(UserInfoDto::toEntity)
                 .collect(Collectors.toList());
         followingUsers.add(user);

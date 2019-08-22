@@ -23,7 +23,7 @@ public class FollowService {
     }
 
     @Transactional
-    public void add(String email, Long targetId) {
+    public void save(String email, Long targetId) {
         User user = userService.findUserByEmail(email);
         User targetUser = userService.findById(targetId);
         Follow follow = Follow.builder()
@@ -33,7 +33,7 @@ public class FollowService {
         followRepository.save(follow);
     }
 
-    public List<UserInfoDto> getFollowers(Long id) {
+    public List<UserInfoDto> findAllByTo(Long id) {
         User user = userService.findById(id);
         List<Follow> followers = followRepository.findAllByTo(user);
         return followers.stream()
@@ -41,7 +41,7 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    public List<UserInfoDto> getFollowing(Long id) {
+    public List<UserInfoDto> findAllByFrom(Long id) {
         User user = userService.findById(id);
         List<Follow> followers = followRepository.findAllByFrom(user);
         return followers.stream()
@@ -49,7 +49,7 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    public void remove(String email, Long targetId) {
+    public void delete(String email, Long targetId) {
         User user = userService.findUserByEmail(email);
         User targetUser = userService.findById(targetId);
         Follow following = followRepository.findByFromAndTo(user, targetUser).orElseThrow(FollowNotFoundException::new);
