@@ -42,7 +42,6 @@ const ArticleApp = (() => {
             read();
             update();
             photoAndVideo();
-            clickGood();
         };
 
         return {
@@ -94,44 +93,7 @@ const ArticleApp = (() => {
             }
             AppStorage.set('article-add-run', true);
 
-            let file = document.querySelector('#photo-video-input').files[0];
-            let formData = new FormData();
-            formData.append('data', file);
-
-            $.ajax({
-                type: 'POST',
-                url: '/upload',
-                data: formData,
-                processData: false,
-                contentType: false
-            }).then(res => {
-                console.log(res);
-                return res;
-            }).then(res => {
-                let imgExtension = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-                let videoExtension = /(\.mov|\.mp4)$/i;
-                let data;
-                if(imgExtension.exec(res)){
-                    data = {
-                        contents: contents.value,
-                        imageUrl: res,
-                        videoUrl: "",
-                    };
-                } else if (videoExtension.exec(res)) {
-                    data = {
-                        contents: contents.value,
-                        imageUrl: "",
-                        videoUrl: res,
-                    };
-                } else {
-                    data = {
-                        contents: contents.value,
-                        imageUrl: "",
-                        videoUrl: "",
-                    };
-                }
-                return data;
-            }).then(data => {
+            upload(contents).then(data => {
                 articleApi.add(data)
                     .then(response => response.json())
                     .then((article) => {
@@ -246,33 +208,46 @@ const ArticleApp = (() => {
             }
         };
 
-        const upload = () => {
-            // let file = document.querySelector('#photo-video-input').files[0];
-            // const fileName = file.name;
-            // let formData = new FormData();
-            // formData.append('data', file);
-            //
-            // let srcUrl;
-            // $.ajax({
-            //     type: 'POST',
-            //     url: '/upload',
-            //     data: formData,
-            //     processData: false,
-            //     contentType: false
-            // }).then(res => {
-            //     console.log(res);
-            //     srcUrl = res;
-            // });
-            // return srcUrl;
+        const upload = (contents) => {
+            let file = document.querySelector('#photo-video-input').files[0];
+            let formData = new FormData();
+            formData.append('data', file);
 
-            // articleApi.upload(formData)
-            //     .then(response => {
-            //         console.log(response.body);
-            //         console.log(response);
-            //         return response;
-            //     })
-            //     .then(success => console.log(success))
-            //     .catch(error => console.log(error));
+            //TODO: ajax --> fetch 변경
+            return $.ajax({
+                type: 'POST',
+                url: '/upload',
+                data: formData,
+                processData: false,
+                contentType: false
+            }).then(res => {
+                console.log(res);
+                return res;
+            }).then(res => {
+                let imgExtension = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+                let videoExtension = /(\.mov|\.mp4)$/i;
+                let data;
+                if (imgExtension.exec(res)) {
+                    data = {
+                        contents: contents.value,
+                        imageUrl: res,
+                        videoUrl: "",
+                    };
+                } else if (videoExtension.exec(res)) {
+                    data = {
+                        contents: contents.value,
+                        imageUrl: "",
+                        videoUrl: res,
+                    };
+                } else {
+                    data = {
+                        contents: contents.value,
+                        imageUrl: "",
+                        videoUrl: "",
+                    };
+                }
+                return data;
+            });
         };
 
         return {
