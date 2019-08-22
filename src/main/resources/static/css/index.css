@@ -23,3 +23,7 @@
 .article-card{
 
 }
+
+a:hover{
+    cursor:pointer;
+}
