@@ -31,7 +31,7 @@
 <script src="/js/card.js"></script>
 <script th:inline="javascript">
     let articleId = [[${article.id}]];
-    let articleFileName = [[${article.fileName}]];
+    let articleFileName = [[${article.fileInfo.fileName}]];
 
     const connector = FETCH_APP.fetchApi();
     const fileLoader = FILE_LOAD_APP.fileLoadApi();

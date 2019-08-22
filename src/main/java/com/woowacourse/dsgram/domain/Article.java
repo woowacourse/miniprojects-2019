@@ -1,10 +1,8 @@
 package com.woowacourse.dsgram.domain;
 
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.woowacourse.dsgram.domain.exception.InvalidUserException;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,7 +15,6 @@ import javax.persistence.*;
 public class Article {
 
     @Id
-    @Column(name = "article_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
@@ -25,30 +22,35 @@ public class Article {
     @Column(nullable = false)
     private String contents;
 
-    @Column(nullable = false, length = 240)
-    private String fileName;
-
-    @Column(nullable = false)
-    private String filePath;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "FILEINFO_ID")
+    private FileInfo fileInfo;
 
     @ManyToOne
     @JoinColumn(name = "author", foreignKey = @ForeignKey(name = "fk_article_to_user"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
 
-    public Article(String contents, String fileName, String filePath, User author) {
+    @Builder
+    public Article(String contents, FileInfo fileInfo, User author) {
         this.contents = contents;
-        this.fileName = fileName;
-        this.filePath = filePath;
+        this.fileInfo = fileInfo;
         this.author = author;
     }
 
-    public Article update(String contents) {
+    public Article update(String contents, long editUserId) {
+        checkAccessibleAuthor(editUserId);
         this.contents = contents;
         return this;
     }
 
-    public boolean notEqualAuthorId(long id) {
+    public void checkAccessibleAuthor(long editUserId) {
+        if (notEqualAuthorId(editUserId)) {
+            throw new InvalidUserException("글 작성자만 수정, 삭제가 가능합니다.");
+        }
+    }
+
+    private boolean notEqualAuthorId(long id) {
         return this.author.notEqualId(id);
     }
 
@@ -57,8 +59,7 @@ public class Article {
         return "Article{" +
                 "id=" + id +
                 ", contents='" + contents + '\'' +
-                ", fileName='" + fileName + '\'' +
-                ", filePath='" + filePath + '\'' +
+                ", fileInfo=" + fileInfo +
                 ", author=" + author +
                 '}';
     }

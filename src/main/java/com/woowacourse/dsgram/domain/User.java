@@ -40,27 +40,33 @@ public class User {
     @Lob
     private String intro;
 
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "FILEINFO_ID")
+    private FileInfo fileInfo;
+
     @Column(columnDefinition = "boolean default false")
     private boolean isOauthUser;
 
     @Builder
-    public User(String email, String nickName, String userName, String password, String webSite, String intro, boolean isOauthUser) {
+    public User(String email, String nickName, String userName, String password, String webSite, String intro, FileInfo fileInfo, boolean isOauthUser) {
         this.email = email;
         this.nickName = nickName;
         this.userName = userName;
         this.password = password;
         this.webSite = webSite;
         this.intro = intro;
+        this.fileInfo = fileInfo;
         this.isOauthUser = isOauthUser;
     }
 
     public void update(User updatedUser, String sessionEmail) {
         checkEmail(sessionEmail);
-        this.intro = updatedUser.intro;
-        this.userName = updatedUser.userName;
         this.nickName = updatedUser.nickName;
+        this.userName = updatedUser.userName;
         this.password = updatedUser.password;
         this.webSite = updatedUser.webSite;
+        this.intro = updatedUser.intro;
+        this.fileInfo = updatedUser.fileInfo;
     }
 
     public void changeToOAuthUser() {
@@ -103,7 +109,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", webSite='" + webSite + '\'' +
                 ", intro='" + intro + '\'' +
+                ", fileInfo=" + fileInfo +
+                ", isOauthUser=" + isOauthUser +
                 '}';
     }
-
 }

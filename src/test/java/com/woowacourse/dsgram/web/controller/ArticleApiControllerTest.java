@@ -1,6 +1,7 @@
 package com.woowacourse.dsgram.web.controller;
 
 import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,15 +14,23 @@ import java.util.Objects;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class ArticleApiControllerTests extends AbstractControllerTest {
+class ArticleApiControllerTest extends AbstractControllerTest {
+    private static String COMMON_REQUEST_URL = "/api/articles/{articleId}";
 
     private String cookie;
+    private String anotherCookie;
     private long articleId;
 
     @BeforeEach
     void setUp() {
-        cookie = getCookieAfterSignUpAndLogin();
+        SignUpUserRequest signUpUserRequest = createSignUpUser();
+
+        cookie = getCookieAfterSignUpAndLogin(signUpUserRequest);
         articleId = saveArticle(cookie);
+
+        signUpUserRequest = createSignUpUser();
+        anotherCookie = getCookieAfterSignUpAndLogin(signUpUserRequest);
+
     }
 
     @Test
@@ -36,7 +45,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     @DisplayName("파일 조회 성공")
     void read() {
 
-        webTestClient.get().uri("/api/articles/" + articleId + "/file")
+        webTestClient.get().uri(COMMON_REQUEST_URL + "/file", articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus()
@@ -48,7 +57,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     void update() {
         ArticleEditRequest articleEditRequest = new ArticleEditRequest("update contents");
 
-        webTestClient.put().uri("/api/articles/" + articleId)
+        webTestClient.put().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", cookie)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(articleEditRequest), ArticleEditRequest.class)
@@ -56,7 +65,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
                 .expectStatus()
                 .isOk();
 
-        webTestClient.get().uri("/articles/" + articleId)
+        webTestClient.get().uri("/articles/{articleId}", articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus().isOk()
@@ -72,9 +81,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     void update_By_Not_Author() {
         ArticleEditRequest articleEditRequest = new ArticleEditRequest("update contents");
 
-        String anotherCookie = getCookieAfterSignUpAndLogin();
-
-        webTestClient.put().uri("/api/articles/" + articleId)
+        webTestClient.put().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", anotherCookie)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(articleEditRequest), ArticleEditRequest.class)
@@ -86,13 +93,13 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     @Test
     @DisplayName("게시글 삭제 성공")
     void delete_by_Not_Author() {
-        webTestClient.delete().uri("/api/articles/" + articleId)
+        webTestClient.delete().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus()
                 .isOk();
 
-        webTestClient.get().uri("/articles/" + articleId)
+        webTestClient.get().uri("/articles/{articleId}", articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -101,9 +108,8 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     @Test
     @DisplayName("다른 사용자에 의한 게시글 삭제 실패")
     void delete() {
-        String anotherSessionCookie = getCookieAfterSignUpAndLogin();
-        webTestClient.delete().uri("/api/articles/" + articleId)
-                .header("Cookie", anotherSessionCookie)
+        webTestClient.delete().uri(COMMON_REQUEST_URL, articleId)
+                .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus()
                 .isBadRequest();

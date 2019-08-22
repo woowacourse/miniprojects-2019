@@ -1,4 +1,4 @@
-package com.woowacourse.dsgram.service;
+package com.woowacourse.dsgram.service.strategy;
 
 
 import com.woowacourse.dsgram.service.exception.UserDirNullException;

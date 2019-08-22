@@ -3,11 +3,10 @@ package com.woowacourse.dsgram.web.controller;
 
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
-import com.woowacourse.dsgram.service.dto.user.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpMethod;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -17,28 +16,19 @@ import reactor.core.publisher.Mono;
 import static org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 class UserApiControllerTest extends AbstractControllerTest {
+    private static String COMMON_REQUEST_URL = "/users/{userId}/edit";
 
-    private AuthUserRequest authUserRequest;
-    private String cookie;
-    private SignUpUserRequest anotherUser;
-    private SignUpUserRequest signUpUserRequest = SignUpUserRequest.builder()
-            .email("success@gmail.com")
-            .userName("success")
-            .nickName("success")
-            .password("1234")
-            .build();
+    private String myCookie;
+    private String anotherCookie;
+    private SignUpUserRequest signUpUserRequest;
 
     @BeforeEach
     void setUp() {
-        signUpUserRequest = SignUpUserRequest.builder()
-                .email(AUTO_INCREMENT + "success@gmail.com")
-                .userName("success")
-                .nickName(AUTO_INCREMENT + "success")
-                .password("1234")
-                .build();
-        getResponseAfterSignUp(signUpUserRequest);
+        signUpUserRequest = createSignUpUser();
+        myCookie = getCookieAfterSignUpAndLogin(signUpUserRequest);
 
-        cookie = getCookieAfterSignUpAndLogin();
+        signUpUserRequest = createSignUpUser();
+        anotherCookie = getCookieAfterSignUpAndLogin(signUpUserRequest);
     }
 
     @Test
@@ -90,32 +80,27 @@ class UserApiControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void login() {
-        getCookieAfterSignUpAndLogin();
-    }
-
-    @Test
     void login_fail() {
         AuthUserRequest authUserRequest = new AuthUserRequest("nonexistent", "nonexistent");
         ResponseSpec response = webTestClient.post().uri("/api/users/login")
                 .body(Mono.just(authUserRequest), AuthUserRequest.class)
-                .exchange();
+                .exchange()
+                .expectStatus().isBadRequest();
 
         checkExceptionMessage(response, "회원정보가 일치하지 않습니다.");
     }
 
     @Test
     void 회원정보_수정페이지_접근() {
-        cookie = getCookieAfterSignUpAndLogin();
-        webTestClient.get().uri("/users/{userId}/edit", AUTO_INCREMENT)
-                .header("Cookie", cookie)
+        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID - 1)
+                .header("Cookie", myCookie)
                 .exchange()
                 .expectStatus().isOk();
     }
 
     @Test
     void 회정정보_수정페이지_접근_비로그인() {
-        webTestClient.get().uri("/users/{userId}/edit", AUTO_INCREMENT)
+        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID)
                 .exchange()
                 .expectStatus().isFound()
                 .expectHeader().valueMatches("Location", ".*/login");
@@ -123,9 +108,10 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void 회정정보_수정페이지_접근_다른_사용자() {
-        ResponseSpec response = webTestClient.get().uri("/users/{userId}/edit", AUTO_INCREMENT)
-                .header("Cookie", getCookieAfterSignUpAndLogin())
-                .exchange();
+        ResponseSpec response = webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID - 1)
+                .header("Cookie", anotherCookie)
+                .exchange()
+                .expectStatus().isBadRequest();
 
         checkExceptionMessage(response, "회원정보가 일치하지 않습니다.");
     }
@@ -138,13 +124,11 @@ class UserApiControllerTest extends AbstractControllerTest {
                 createMultipartBodyBuilder("포비", "intro", "포비", "dsdsds", "");
 
         webTestClient.put()
-                .uri("/api/users/{userId}", AUTO_INCREMENT)
-                .header("Cookie", cookie)
+                .uri("/api/users/{userId}", LAST_USER_ID - 1)
+                .header("Cookie", myCookie)
                 .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
                 .exchange()
                 .expectStatus().isOk();
-
-
     }
 
     @Test
@@ -153,8 +137,8 @@ class UserApiControllerTest extends AbstractControllerTest {
         MultipartBodyBuilder multipartBodyBuilder =
                 createMultipartBodyBuilder("포비", "", "", "dsdsds", "");
 
-        WebTestClient.ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
-                .header("Cookie", cookie)
+        WebTestClient.ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", LAST_USER_ID)
+                .header("Cookie", myCookie)
                 .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -168,8 +152,8 @@ class UserApiControllerTest extends AbstractControllerTest {
         MultipartBodyBuilder multipartBodyBuilder =
                 createMultipartBodyBuilder("자손", "", "jason", "", "");
 
-        WebTestClient.ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
-                .header("Cookie", cookie)
+        WebTestClient.ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", LAST_USER_ID)
+                .header("Cookie", myCookie)
                 .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -182,8 +166,8 @@ class UserApiControllerTest extends AbstractControllerTest {
         MultipartBodyBuilder multipartBodyBuilder =
                 createMultipartBodyBuilder("자", "", "jason", "1234", "");
 
-        WebTestClient.ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
-                .header("Cookie", cookie)
+        WebTestClient.ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", LAST_USER_ID)
+                .header("Cookie", myCookie)
                 .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -193,40 +177,24 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void 회원정보_수정_다른_사용자() {
-        // TODO: 2019-08-21
-        getResponseAfterSignUp(anotherUser)
-                .expectStatus().isOk();
+        MultipartBodyBuilder multipartBodyBuilder =
+                createMultipartBodyBuilder("김포비", "반란군", "1234", "slipp.net",
+                        "intro");
 
-        UserDto updatedUserDto = UserDto.builder()
-                .userName("김포비")
-                .intro("updatedIntro")
-                .nickName("반란군")
-                .password("dsdsds")
-                .webSite("updatedWebSite")
-                .build();
-
-        ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", AUTO_INCREMENT)
-                .header("Cookie", cookie)
-                .body(Mono.just(updatedUserDto), UserDto.class)
-                .exchange();
+        System.out.println("지금 몇번인데: " + LAST_USER_ID);
+        ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", LAST_USER_ID - 1)
+                .header("Cookie", anotherCookie)
+                .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
+                .exchange()
+                .expectStatus().isBadRequest();
 
         checkExceptionMessage(response, "회원정보가 일치하지 않습니다.");
     }
 
     @Test
     void user_다른_사용자가_탈퇴_시도() {
-//        SignUpUserRequest anotherUser = SignUpUserRequest.builder()
-//                .userName("김희CHORE")
-//                .email(AUTO_INCREMENT + "buddy@gmail.com")
-//                .nickName(AUTO_INCREMENT + "chore")
-//                .password("bodybuddy1!")
-//                .build();
-//        getResponseAfterSignUp(anotherUser, true);
-//        String anotherUserCookie = loginAndGetCookie(new AuthUserRequest(anotherUser.getEmail(), anotherUser.getPassword()));
-
-        String anotherUserCookie = getCookieAfterSignUpAndLogin();
-        webTestClient.delete().uri("/api/users/{userId}", AUTO_INCREMENT - 1)
-                .header("Cookie", anotherUserCookie)
+        webTestClient.delete().uri("/api/users/{userId}", LAST_USER_ID - 1)
+                .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus().isBadRequest();
     }
@@ -236,10 +204,7 @@ class UserApiControllerTest extends AbstractControllerTest {
         long[] userId = new long[1];
         long[] articleId = new long[1];
 
-        String cookie = getCookieAfterSignUpAndLogin();
-        String anotherCookie = getCookieAfterSignUpAndLogin();
-
-        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/api/articles", cookie)
+        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/api/articles", myCookie)
                 .expectBody()
                 .jsonPath("$.id")
                 .value(id -> articleId[0] = Long.parseLong(id.toString()))
@@ -247,15 +212,15 @@ class UserApiControllerTest extends AbstractControllerTest {
                 .value(id -> userId[0] = Long.parseLong(id.toString()));
 
         webTestClient.delete().uri("/api/users/{userId}", userId[0])
-                .header("Cookie", cookie)
+                .header("Cookie", myCookie)
                 .exchange()
                 .expectStatus().isOk();
+
         webTestClient.get().uri("/articles/{articleId}", articleId[0])
                 .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus().isBadRequest();
     }
-
 
 
     private MultipartBodyBuilder createMultipartBodyBuilder(String userName,

@@ -1,4 +1,4 @@
-package com.woowacourse.dsgram.service;
+package com.woowacourse.dsgram.service.strategy;
 
 public class ArticleFileNamingStrategy extends CommonFileNamingStrategy {
 
