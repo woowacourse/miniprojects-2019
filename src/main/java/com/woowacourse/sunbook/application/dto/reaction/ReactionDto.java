@@ -8,8 +8,15 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ReactionDto {
     private Long numberOfGood;
+    private boolean hasGood;
 
     public ReactionDto(final Long numberOfGood) {
         this.numberOfGood = numberOfGood;
     }
+
+    public ReactionDto(final Long numberOfGood, final boolean hasGood) {
+        this.numberOfGood = numberOfGood;
+        this.hasGood = hasGood;
+    }
+
 }

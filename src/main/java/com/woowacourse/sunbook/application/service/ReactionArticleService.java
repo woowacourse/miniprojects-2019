@@ -38,7 +38,7 @@ public class ReactionArticleService {
                 .findByAuthorAndArticle(author, article);
         reactionArticle.toggleGood();
 
-        return new ReactionDto(getCount(article));
+        return new ReactionDto(getCount(article), reactionArticle.getHasGood());
     }
 
     public ReactionDto showCount(final Long articleId) {

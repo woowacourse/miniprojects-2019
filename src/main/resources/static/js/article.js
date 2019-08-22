@@ -34,7 +34,6 @@ const ArticleApp = (() => {
         };
 
         const clickGood = () => {
-            console.log("check");
             const articleList = document.getElementById('article-list');
             articleList.addEventListener('click', articleService.clickGood);
         };
@@ -182,9 +181,17 @@ const ArticleApp = (() => {
                 articleApi.clickGood(Number(data), articleId)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data.numberOfGood);
                         document.getElementById(`good-count-${articleId}`)
                             .innerText = data.numberOfGood;
+                        console.log(data);
+
+                        if (data.hasGood) {
+                            document.getElementById(`good-btn-icon-${articleId}`)
+                                .setAttribute('class', 'fa fa-thumbs-up font-size-16');
+                        } else {
+                            document.getElementById(`good-btn-icon-${articleId}`)
+                                .setAttribute('class', 'fa fa-thumbs-o-up font-size-16');
+                        }
                     });
             }
         };

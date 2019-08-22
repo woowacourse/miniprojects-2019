@@ -54,7 +54,7 @@ const template = (function () {
                     <ul class="feed-action border bottom d-flex">
                         <li class="text-center flex-grow-1" data-btn="reaction-good-btn">
                             <button class="btn btn-default no-border pdd-vertical-0 no-mrg width-100">
-                                <i class="fa fa-thumbs-o-up font-size-16"></i>
+                                <i id="good-btn-icon-{{id}}" class="fa fa-thumbs-o-up font-size-16"></i>
                                 <span class="font-size-13">좋아요</span>
                             </button>
                         </li>
