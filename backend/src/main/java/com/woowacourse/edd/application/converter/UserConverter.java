@@ -8,7 +8,7 @@ import com.woowacourse.edd.domain.User;
 public class UserConverter {
 
     public static User toSaveEntity(UserRequestDto userSaveRequestDto) {
-        return new User(userSaveRequestDto.getName(), userSaveRequestDto.getEmail(), userSaveRequestDto.getPassword();
+        return new User(userSaveRequestDto.getName(), userSaveRequestDto.getEmail(), userSaveRequestDto.getPassword());
     }
 
     public static UserResponse toResponse(User user) {
