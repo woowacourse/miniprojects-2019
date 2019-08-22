@@ -1,7 +1,7 @@
 class Follow {
     constructor(loginId){
         this.loginId = loginId;
-        this.request  = new Request('/api/follow');
+        this.request  = new Request('/api/follows');
 
     }
 
