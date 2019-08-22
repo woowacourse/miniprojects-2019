@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class LoginService {
     private final UserRepository userRepository;
@@ -46,7 +45,6 @@ public class LoginService {
 
         return modelMapper.map(user, UserResponseDto.class);
     }
-
 
     protected User findById(final Long id) {
         return userRepository.findById(id).orElseThrow(NotFoundUserException::new);
