@@ -33,7 +33,7 @@ class UserInternalServiceTests {
 
     @BeforeEach
     void setUp() {
-        user = new User("jm", "jm@gmail.com", "p@ssW0rd", false);
+        user = new User("jm", "jm@gmail.com", "p@ssW0rd");
     }
 
     @Test
@@ -70,7 +70,8 @@ class UserInternalServiceTests {
 
     @Test
     void delete_fail() {
-        User deletedUser = new User("jm", "jm@gmail.com", "p@ssW0rd", true);
+        User deletedUser = new User("jm", "jm@gmail.com", "p@ssW0rd");
+        deletedUser.delete();
         when(userRepository.findById(any())).thenThrow(new UserNotFoundException());
 
         assertThrows(UserNotFoundException.class,

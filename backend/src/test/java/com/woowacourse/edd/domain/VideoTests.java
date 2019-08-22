@@ -25,7 +25,7 @@ public class VideoTests {
 
     @BeforeEach
     void setUp() {
-        creator = new User("name", "name@gamil.com", "P@ssw0rd", false);
+        creator = new User("name", "name@gamil.com", "P@ssw0rd");
     }
 
     @Test

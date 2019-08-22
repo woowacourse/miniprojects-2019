@@ -28,7 +28,7 @@ public class LoginInternalServiceTests {
     @Test
     void authenticate_succeed() {
         LoginRequestDto loginRequestDto = new LoginRequestDto("aaa@bbb.com", "p@ssW0rd");
-        User user = new User("robby", "aaa@bbb.com", "p@ssW0rd", false);
+        User user = new User("robby", "aaa@bbb.com", "p@ssW0rd");
 
         when(userInternalService.findByEmail(loginRequestDto.getEmail())).thenReturn(user);
 
@@ -52,7 +52,7 @@ public class LoginInternalServiceTests {
     @Test
     void authenticate_invalid_password() {
         LoginRequestDto loginRequestDto = new LoginRequestDto("aaa@bbb.com", "p@ssWord2");
-        User user = new User("robby", "aaa@bbb.com", "p@ssW0rd", false);
+        User user = new User("robby", "aaa@bbb.com", "p@ssW0rd");
 
         when(userInternalService.findByEmail(loginRequestDto.getEmail())).thenReturn(user);
 

@@ -40,7 +40,7 @@ class VideoInternalServiceTests {
 
     @BeforeEach
     void init() {
-        creator = spy(new User("name", "name@gmail.com", "p@ssW0rd", false));
+        creator = spy(new User("name", "name@gmail.com", "p@ssW0rd"));
         video = spy(new Video("1234", "title", "contents", creator));
     }
 

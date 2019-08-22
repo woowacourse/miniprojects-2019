@@ -20,7 +20,7 @@ function addVideoDetailTemplate(data) {
              </a>
             </div>
             <div class="col-md-10">
-                <span class="text-bold">로비로비</span><br>
+                <span class="text-bold">${data.creator.name}</span><br>
                 <span>게시일 : ${data.createDate}</span><br><br>
                 <span>${data.contents}</span>
             </div>
