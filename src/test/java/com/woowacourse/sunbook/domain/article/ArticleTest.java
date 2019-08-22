@@ -6,6 +6,11 @@ import com.woowacourse.sunbook.domain.user.UserName;
 import com.woowacourse.sunbook.domain.user.UserPassword;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,39 +34,22 @@ class ArticleTest {
         user = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르"));
     }
 
-    @Test
-    void 게시글_정상_생성_이미지_비디오_존재() {
-        assertDoesNotThrow(() -> new Article(new ArticleFeature(CONTENTS, IMAGE_URL, VIDEO_URL), user));
+    static Stream<Arguments> articleParameters() {
+        return Stream.of(
+                Arguments.of(CONTENTS, IMAGE_URL, VIDEO_URL),
+                Arguments.of(EMPTY, IMAGE_URL, VIDEO_URL),
+                Arguments.of(CONTENTS, EMPTY, VIDEO_URL),
+                Arguments.of(CONTENTS, IMAGE_URL, EMPTY),
+                Arguments.of(CONTENTS, EMPTY, EMPTY),
+                Arguments.of(EMPTY, IMAGE_URL, EMPTY),
+                Arguments.of(EMPTY, EMPTY, VIDEO_URL)
+        );
     }
 
-    @Test
-    void 게시글_정상_생성_내용없고_이미지_존재_비디오_존재() {
-        assertDoesNotThrow(() -> new Article(new ArticleFeature(EMPTY, IMAGE_URL, VIDEO_URL), user));
-    }
-
-    @Test
-    void 게시글_정상_생성_이미지_없고_비디오_존재() {
-        assertDoesNotThrow(() -> new Article(new ArticleFeature(CONTENTS, EMPTY, VIDEO_URL), user));
-    }
-
-    @Test
-    void 게시글_정상_생성_이미지_존재_비디오_없음() {
-        assertDoesNotThrow(() -> new Article(new ArticleFeature(CONTENTS, IMAGE_URL, EMPTY), user));
-    }
-
-    @Test
-    void 게시글_정상_생성_내용만_있음() {
-        assertDoesNotThrow(() -> new Article(new ArticleFeature(CONTENTS, EMPTY, EMPTY), user));
-    }
-
-    @Test
-    void 게시글_정상_생성_이미지만_있음() {
-        assertDoesNotThrow(() -> new Article(new ArticleFeature(EMPTY, IMAGE_URL, EMPTY), user));
-    }
-
-    @Test
-    void 게시글_정상_생성_비디오만_있음() {
-        assertDoesNotThrow(() -> new Article(new ArticleFeature(EMPTY, EMPTY, VIDEO_URL), user));
+    @ParameterizedTest
+    @MethodSource("articleParameters")
+    void 게시글_정상_생성_테스트_통합(String contents, String imageUrl, String videoUrl) {
+        assertDoesNotThrow(() -> new Article(new ArticleFeature(contents, imageUrl, videoUrl), user));
     }
 
     @Test
