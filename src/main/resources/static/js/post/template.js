@@ -1,3 +1,5 @@
+const MY_PAGE_URL = (userId) => `/users/${userId}`
+
 const postTemplate = (post) => `
 <div class="card widget-feed padding-15" data-id="${post.id}">
     <div class="feed-header">
@@ -5,7 +7,7 @@ const postTemplate = (post) => `
             <li>
                 <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
                 <div class="info">
-                    <a href="" class="title no-pdd-vertical text-semibold inline-block">${post.author.name}</a>
+                    <a href="${MY_PAGE_URL(post.author.id)}" class="title no-pdd-vertical text-semibold inline-block">${post.author.name}</a>
                     <span>님이 그룹에 링크를 공유했습니다.</span>
                     <span class="sub-title">${dateFormat(post.updatedAt, isUpdated(post.createdAt, post.updatedAt))}</span>
                     <a class="pointer absolute top-0 right-0 view" data-toggle="dropdown" aria-expanded="false">
