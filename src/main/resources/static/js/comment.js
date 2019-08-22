@@ -15,7 +15,8 @@ const CommentApp = (() => {
         };
 
         const read = () => {
-            commentService.read();
+            const articleList = document.getElementById('article-list');
+            articleList.addEventListener('click', commentService.read);
         };
 
         const init = () => {
@@ -32,30 +33,43 @@ const CommentApp = (() => {
     const CommentService = function () {
         const commentApi = new CommentApi();
 
-        const read = () => {
-            const commentList = document.getElementById('article-list');
+        const read = (event) => {
+            const target = event.target;
+            const article = target.closest('div[data-object="article"]');
+            const articleId = article.getAttribute('data-article-id');
+            const commentList = document.getElementById('comment-list-' + articleId);
 
-            commentApi.render()
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(comment => {
-                        commentList
-                            .insertAdjacentHTML('afterbegin', commentTemplate({
-                                "id": comment.id,
-                                "user-name": comment.authorName,
-                                "comment-contents": comment.commentFeature.contents,
-                                "updatedTime": comment.updatedTime,
-                            }));
+            if (target.closest('li[data-list="comment-list"]')) {
+                if (commentList.hasChildNodes()) {
+                    while (commentList.hasChildNodes()) {
+                        commentList.removeChild(commentList.firstChild);
+                    }
+                    return;
+                }
+
+                commentApi.render(articleId)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(comment => {
+                            commentList
+                                .insertAdjacentHTML('beforeend', commentTemplate({
+                                    "id": comment.id,
+                                    "user-name": comment.authorName,
+                                    "comment-contents": comment.commentFeature.contents,
+                                    "updatedTime": comment.updatedTime,
+                                }));
+                        })
                     })
-                })
-                .catch(error => console.log("error: " + error));
+                    .catch(error => console.log("error: " + error));
+            }
         };
 
         const add = (event) => {
             const target = event.target;
             const article = target.closest('div[data-object="article"]');
             const articleId = article.getAttribute('data-article-id');
-            const contents = document.getElementById("comment-contents-" + articleId);
+            const commentList = document.getElementById('comment-list-' + articleId);
+            const contents = document.getElementById('comment-contents-' + articleId);
 
             if (event.which === 13 && contents.value !== '' && event.target.classList.contains('comment-save')) {
                 if (!event.shiftKey) {
@@ -64,19 +78,31 @@ const CommentApp = (() => {
                     };
 
                     commentApi.add(articleId, data)
-                        .then(response => response.json())
-                        .then((comment) => {
-                            console.log(comment);
-                            document.getElementById('comment-list-' + articleId)
-                                .insertAdjacentHTML('beforeend', commentTemplate({
-                                    "id": comment.id,
-                                    "user-name": comment.authorName,
-                                    "comment-contents": comment.commentFeature.contents,
-                                    "updatedTime": comment.updatedTime,
-                                }));
+                        .then(() => {
+                            if (commentList.hasChildNodes()) {
+                                while (commentList.hasChildNodes()) {
+                                    commentList.removeChild(commentList.firstChild);
+                                }
+                            }
+
+                            commentApi.render(articleId)
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.forEach(comment => {
+                                        commentList
+                                            .insertAdjacentHTML('beforeend', commentTemplate({
+                                                "id": comment.id,
+                                                "user-name": comment.authorName,
+                                                "comment-contents": comment.commentFeature.contents,
+                                                "updatedTime": comment.updatedTime,
+                                            }));
+                                    })
+                                })
+                                .catch(error => console.log("error: " + error));
                         })
                         .then(() => {
                             contents.value = "";
+                            contents.blur();
                         });
                 }
             }
@@ -122,8 +148,8 @@ const CommentApp = (() => {
             return Api.delete(`/api/articles/${articleId}/comments/${commentId}`);
         };
 
-        const render = () => {
-            return Api.get(`/api/articles`);
+        const render = (articleId) => {
+            return Api.get(`/api/articles/${articleId}/comments`);
         };
 
         return {

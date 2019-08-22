@@ -58,7 +58,7 @@ const template = (function () {
                                 <span class="font-size-13">좋아요</span>
                             </button>
                         </li>
-                        <li class="text-center flex-grow-1">
+                        <li class="text-center flex-grow-1" data-list="comment-list">
                             <button class="btn btn-default no-border pdd-vertical-0 no-mrg width-100">
                                 <i class="fa fa-comment-o font-size-16"></i>
                                 <span class="font-size-13">댓글</span>
@@ -73,7 +73,8 @@ const template = (function () {
                     </ul>
                     <div class="feed-footer">
                         <div class="comment">
-                            <ul id="comment-list-{{id}}" class="list-unstyled list-info"><!--댓글 추가 공간--></ul>
+                            <!--댓글 추가 공간-->
+                            <ul id="comment-list-{{id}}" class="list-unstyled list-info"></ul>
                             <!-- 댓글 입력 공간-->
                             <div class="add-comment">
                                 <textarea id="comment-contents-{{id}}" rows="1" class="form-control comment-save" placeholder="댓글을 입력하세요."></textarea>
@@ -90,9 +91,9 @@ const template = (function () {
                                 <span>{{comment-contents}}</span>
                             </div>
                             <a class="pointer absolute top-0 right-0" data-toggle="dropdown" aria-expanded="false">
-                                    <span class="btn-icon text-dark">
-                                        <i class="ti-more font-size-16"></i>
-                                    </span>
+                                <span class="btn-icon text-dark">
+                                    <i class="ti-more font-size-16"></i>
+                                </span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li data-btn="comment-update">
@@ -104,7 +105,7 @@ const template = (function () {
                                 <li data-btn="comment-delete">
                                     <a class="pointer">
                                         <i class="ti-trash pdd-right-10 text-dark"></i>
-                                        <span id="article-delete-{{id}}">댓글 삭제</span>
+                                        <span id="comment-delete-{{id}}">댓글 삭제</span>
                                     </a>
                                 </li>
                             </ul>

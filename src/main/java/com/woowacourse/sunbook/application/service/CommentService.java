@@ -46,9 +46,9 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> findAll() {
+    public List<CommentResponseDto> findByArticleId(final Long articleId) {
         return Collections.unmodifiableList(
-                commentRepository.findAll().stream()
+                commentRepository.findByArticleId(articleId).stream()
                         .map(article -> modelMapper.map(article, CommentResponseDto.class))
                         .collect(Collectors.toList())
         );

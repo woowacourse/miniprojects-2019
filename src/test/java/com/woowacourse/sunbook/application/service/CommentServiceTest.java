@@ -56,13 +56,6 @@ class CommentServiceTest {
     }
 
     @Test
-    void 댓글_전체_조회() {
-        commentService.findAll();
-
-        verify(commentRepository).findAll();
-    }
-
-    @Test
     void 없는_게시글_댓글_수정() {
         given(loginService.findById(ID)).willReturn(mock(User.class));
         given(articleService.findById(ID)).willThrow(NotFoundArticleException.class);
