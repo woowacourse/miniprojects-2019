@@ -115,6 +115,11 @@ public class UserControllerTests extends BasicControllerTests {
     }
 
     @Test
+    @DisplayName("가입된 유저가 탈퇴한 유저의 정보를 조회할 때")
+    void user_() {
+    }
+
+    @Test
     void find_by_id() {
         findUser(USER_URL + "/1").isOk();
     }

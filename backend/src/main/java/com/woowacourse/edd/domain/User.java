@@ -2,6 +2,7 @@ package com.woowacourse.edd.domain;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
+@Where(clause = "is_deleted = 'false'")
 public class User {
 
     @Id
@@ -34,16 +36,17 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updateDate;
 
+    @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted;
 
     public User() {
     }
 
-    public User(String name, String email, String password, boolean isDeleted) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.isDeleted = isDeleted;
+        this.isDeleted = false;
     }
 
     public void update(String name, String email, String password) {
@@ -66,10 +69,6 @@ public class User {
 
     public String getEmail() {
         return email;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
     }
 
     public boolean isNotMatchPassword(String password) {

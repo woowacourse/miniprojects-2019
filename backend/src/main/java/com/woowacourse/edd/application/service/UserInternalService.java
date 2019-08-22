@@ -40,15 +40,11 @@ class UserInternalService {
     public void delete(Long id, Long loggedInId) {
         checkAuthorization(id, loggedInId);
         User user = findById(id);
-        if (user.isDeleted()) {
-            throw new UserNotFoundException();
-        }
         user.delete();
     }
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-            .filter(user -> !user.isDeleted())
             .orElseThrow(UserNotFoundException::new);
     }
 

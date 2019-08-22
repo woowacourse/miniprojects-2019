@@ -71,7 +71,7 @@ class UserInternalServiceTests {
     @Test
     void delete_fail() {
         User deletedUser = new User("jm", "jm@gmail.com", "p@ssW0rd", true);
-        when(userRepository.findById(any())).thenReturn(Optional.of(deletedUser));
+        when(userRepository.findById(any())).thenThrow(new UserNotFoundException());
 
         assertThrows(UserNotFoundException.class,
             () -> userInternalService.delete(1L, 1L));
