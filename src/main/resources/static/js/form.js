@@ -1,18 +1,19 @@
 const fileInput = () => {
     const input = document.querySelector("#file-input");
-    input.addEventListener('change', function(){previewImage(this)})
-}
+    input.addEventListener('change', previewImage)
+};
 
 const previewImage = (input) => {
-    if(input.files){
+    console.log(input);
+    if (input.target.files) {
         const reader = new FileReader();
-        reader.onload = function (e) {
-            DomUtil.inactive(".form-image-label")
-            DomUtil.active(".file-preview")
+        reader.onload = (e) => {
+            DomUtil.inactive(".form-image-label");
+            DomUtil.active(".file-preview");
             console.log(e.target);
             document.querySelector(".file-preview").src = e.target.result;
-        }
-        reader.readAsDataURL(input.files[0]);
+        };
+        reader.readAsDataURL(input.target.files[0]);
     }
-}
+};
 fileInput();
