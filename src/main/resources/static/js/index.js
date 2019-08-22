@@ -1,5 +1,5 @@
-const getArticleTemplate = function (userName, imageUrl, profileUrl, contents) {
-    return `<div class="article-card card widget-feed no-pdd mrg-btm-70">
+const getArticleTemplate = function (articleId, userId, userName, imageUrl, profileUrl, contents) {
+    return `<div class="article-card card widget-feed no-pdd mrg-btm-70" data-article-id = ${articleId} data-user-id = ${userId}>
                             <div class="feed-header padding-15">
                                 <ul class="list-unstyled list-info">
                                     <li>
@@ -57,16 +57,18 @@ const getArticleTemplate = function (userName, imageUrl, profileUrl, contents) {
                                 </p>
                             </div>
                             <div class="feed-footer">
-                                <div class="comment">
-                                    <ul class="list-unstyled list-info pdd-horizon-5">
+                                <div class="comment">      
+                                <ul class="list-unstyled list-info pdd-horizon-5">
                                         <li class="comment-item no-pdd">
-                                            <div class="info pdd-left-15 pdd-vertical-5">
-                                                <a href=""
+                                            <div class = "comment-list">
+                                                <div class="info pdd-left-15 pdd-vertical-5">
+                                                   <a href=""
                                                    class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
-                                                <span class="font-size-14">${contents}</span>
-                                                <time class="font-size-8 text-gray d-block">12시간 전</time>
+                                                   <span class="font-size-14">${contents}</span>
+                                                </div>
                                             </div>
-                                        </li>
+                                           <time class="font-size-8 text-gray d-block">12시간 전</time>                           
+                                     </li>
                                     </ul>
                                     <div class="add-comment relative">
                                         <textarea rows="1" class="form-control text-dark padding-15"
@@ -78,7 +80,17 @@ const getArticleTemplate = function (userName, imageUrl, profileUrl, contents) {
                                 </div>
                             </div>
                         </div>`
+};
 
+const commentTemplate =(userName,contents)=>
+{
+    `
+    <div class="info pdd-left-15 pdd-vertical-5">
+       <a href=""
+       class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
+       <span class="font-size-14">${contents}</span>
+    </div>
+      `;
 }
 const Index = (function () {
 
@@ -86,24 +98,29 @@ const Index = (function () {
 
     const IndexController = function () {
         const indexService = new IndexService();
+        const articleList = document.querySelector('.article-card-con');
 
         const loadInit = function () {
             indexService.getPageData(0);
-        }
+        };
 
+        const likeButton = ()=>{
+
+        }
 
         const init = function () {
             loadInit()
-        }
+        };
 
         return {
             init: init
         }
-    }
+    };
 
 
     const IndexService = function () {
         const indexRequest = new Request("/api/main");
+
         const getPageData = (pageNum) => {
             indexRequest.get('?page=' + pageNum + "&size=" + pageSize
                 , (status, data) => {
@@ -111,27 +128,33 @@ const Index = (function () {
                     for (let i = 0; i < pageSize; i++) {
                         pagesHtml += parsingPage(data.content[i]);
                     }
-                    const container = document.querySelector(".article-card-con")
+                    const container = document.querySelector(".article-card-con");
                     container.insertAdjacentHTML('beforeend', pagesHtml);
                 })
-        }
+        };
 
         const parsingPage = (pageData) => {
-            console.log(pageData)
-            return getArticleTemplate(pageData.article.userInfoDto.userContentsDto.userName
-                ,pageData.article.imageUrl,
-                pageData.article.userInfoDto.userContentsDto.profile,
-                pageData.article.contents)
-        }
+            console.log(pageData);
+            const article = pageData.article;
+            const user = pageData.article.userInfoDto;
+            return getArticleTemplate(
+                article.id,
+                user.id,
+                user.userContentsDto.userName,
+                article.imageUrl,
+                user.userContentsDto.profile,
+                article.contents)
+        };
+
         return {
             getPageData: getPageData
         }
-    }
+    };
 
     const init = () => {
         const indexController = new IndexController();
         indexController.init();
-    }
+    };
 
     return {
         init: init
