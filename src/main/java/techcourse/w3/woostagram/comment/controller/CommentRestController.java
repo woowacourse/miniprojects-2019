@@ -10,7 +10,7 @@ import techcourse.w3.woostagram.common.support.LoggedInUser;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comments/{articleId}")
+@RequestMapping("/api/articles/{articleId}/comments")
 public class CommentRestController {
     private final CommentService commentService;
 
