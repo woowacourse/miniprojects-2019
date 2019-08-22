@@ -49,6 +49,9 @@ public class CommonControllerTest {
             "Update Contents",
             LocalDateTime.now());
 
+    public static final LogInRequestDto USER_A_LOGIN_REQUEST_DTO = new LogInRequestDto("a@test.com", "1234qwer");
+    public static final LogInRequestDto USER_B_LOGIN_REQUEST_DTO = new LogInRequestDto("b@test.com", "1234qwer");
+
     @LocalServerPort
     private int port;
 
@@ -66,7 +69,32 @@ public class CommonControllerTest {
         return "http://localhost:" + port;
     }
 
-    private MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {
+    public WebTestClient.ResponseSpec request(HttpMethod method, String uri, MultiValueMap<String, String> data) {
+        return webTestClient.method(method)
+                .uri(uri)
+                .body(BodyInserters.fromFormData(data))
+                .exchange();
+    }
+
+    public WebTestClient.ResponseSpec request(HttpMethod method, String uri) {
+        return request(method, uri, new LinkedMultiValueMap<>());
+    }
+
+    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri, MultiValueMap<String, String> data, LogInRequestDto logInRequestDto) {
+        String sessionValue = login(logInRequestDto);
+
+        return webTestClient.method(method)
+                .uri(uri)
+                .cookie("JSESSIONID", sessionValue)
+                .body(BodyInserters.fromFormData(data))
+                .exchange();
+    }
+
+    public WebTestClient.ResponseSpec loginAndRequest(HttpMethod method, String uri,LogInRequestDto logInRequestDto) {
+        return loginAndRequest(method, uri, new LinkedMultiValueMap<>(), logInRequestDto);
+    }
+
+    public MultiValueMap<String, String> parser(SignUpRequestDto signUpRequestDto) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("name", signUpRequestDto.getName());
         multiValueMap.add("email", signUpRequestDto.getEmail());
@@ -74,7 +102,7 @@ public class CommonControllerTest {
         return multiValueMap;
     }
 
-    private MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
+    public MultiValueMap<String, String> parser(LogInRequestDto logInRequestDto) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("email", logInRequestDto.getEmail());
         multiValueMap.add("password", logInRequestDto.getPassword());
