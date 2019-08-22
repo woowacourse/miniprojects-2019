@@ -7,7 +7,7 @@ import techcourse.w3.woostagram.comment.domain.Comment;
 import techcourse.w3.woostagram.comment.domain.CommentRepository;
 import techcourse.w3.woostagram.comment.dto.CommentDto;
 import techcourse.w3.woostagram.comment.exception.CommentNotFoundException;
-import techcourse.w3.woostagram.common.exception.UnauthorizedException;
+import techcourse.w3.woostagram.common.exception.UnAuthorizedException;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.service.UserService;
 
@@ -50,8 +50,8 @@ public class CommentService {
         User user = userService.findUserByEmail(email);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
-        if (!user.equals(comment.getUser())) {
-            throw new UnauthorizedException();
+        if (!comment.isAuthor(user.getId())) {
+            throw new UnAuthorizedException();
         }
     }
 }

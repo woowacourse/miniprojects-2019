@@ -8,6 +8,7 @@ import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
+import techcourse.w3.woostagram.common.exception.UnAuthorizedException;
 import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -43,12 +44,16 @@ public class ArticleService {
 
     @Transactional
     public void update(ArticleDto articleDto, String email) {
-        User loggedInUser = userService.findUserByEmail(email);
         Article article = articleRepository.findById(articleDto.getId()).orElseThrow(ArticleNotFoundException::new);
+        validateUser(article, email);
+
         article.updateContents(articleDto.getContents());
     }
 
-    public void deleteById(Long articleId) {
+    public void deleteById(Long articleId, String email) {
+        Article article = articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new);
+        validateUser(article, email);
+
         articleRepository.deleteById(articleId);
     }
 
@@ -58,5 +63,13 @@ public class ArticleService {
 
     public Page<Article> findPageByUsers(List<User> followingUsers, Pageable pageable) {
         return articleRepository.findByUserIn(followingUsers, pageable);
+    }
+
+    private void validateUser(Article article, String email) {
+        User user = userService.findUserByEmail(email);
+
+        if (!article.isAuthor(user.getId())) {
+            throw new UnAuthorizedException();
+        }
     }
 }
