@@ -8,7 +8,9 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.StatusAssertions;
 import reactor.core.publisher.Mono;
 
-import static com.woowacourse.edd.application.dto.UserRequestDto.*;
+import static com.woowacourse.edd.application.dto.UserRequestDto.INVALID_EMAIL_MESSAGE;
+import static com.woowacourse.edd.application.dto.UserRequestDto.INVALID_NAME_MESSAGE;
+import static com.woowacourse.edd.application.dto.UserRequestDto.INVALID_PASSWORD_MESSAGE;
 import static com.woowacourse.edd.presentation.controller.UserController.USER_URL;
 
 public class UserControllerTests extends BasicControllerTests {

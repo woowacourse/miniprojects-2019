@@ -9,15 +9,15 @@ public class UserConverter {
 
     private static final Boolean IS_DELETED = false;
 
-    public User toSaveEntity(UserRequestDto userSaveRequestDto) {
+    public static User toSaveEntity(UserRequestDto userSaveRequestDto) {
         return new User(userSaveRequestDto.getName(), userSaveRequestDto.getEmail(), userSaveRequestDto.getPassword(), IS_DELETED);
     }
 
-    public UserResponse toResponse(User user) {
+    public static UserResponse toResponse(User user) {
         return new UserResponse(user.getId(), user.getName(), user.getEmail());
     }
 
-    public SessionUser toSessionUser(User user) {
+    public static SessionUser toSessionUser(User user) {
         return new SessionUser(user.getId());
     }
 }

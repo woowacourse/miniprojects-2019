@@ -11,25 +11,25 @@ import java.time.format.DateTimeFormatter;
 
 public class VideoConverter {
 
-    public Video toEntity(VideoSaveRequestDto requestDto, User creator) {
+    public static Video toEntity(VideoSaveRequestDto requestDto, User creator) {
         return new Video(requestDto.getYoutubeId(), requestDto.getTitle(), requestDto.getContents(), creator);
     }
 
-    public VideoResponse toResponse(Video video) {
+    public static VideoResponse toResponse(Video video) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHH");
         String date = video.getCreateDate().format(format);
         VideoResponse.CreatorResponse creatorResponse = new VideoResponse.CreatorResponse(video.getCreator().getId(), video.getCreator().getName());
         return new VideoResponse(video.getId(), video.getYoutubeId(), video.getTitle(), video.getContents(), date, creatorResponse);
     }
 
-    public VideoPreviewResponse toPreviewResponse(Video video) {
+    public static VideoPreviewResponse toPreviewResponse(Video video) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHH");
         String date = video.getCreateDate().format(format);
         VideoResponse.CreatorResponse creatorResponse = new VideoResponse.CreatorResponse(video.getCreator().getId(), video.getCreator().getName());
         return new VideoPreviewResponse(video.getId(), video.getYoutubeId(), video.getTitle(), date, creatorResponse);
     }
 
-    public VideoUpdateResponse toUpdateResponse(Video video) {
+    public static VideoUpdateResponse toUpdateResponse(Video video) {
         return new VideoUpdateResponse(video.getId());
     }
 }

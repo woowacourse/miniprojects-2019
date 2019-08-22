@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
     private final LoginInternalService loginInternalService;
-    private final UserConverter userConverter = new UserConverter();
 
     @Autowired
     public LoginService(LoginInternalService loginInternalService) {
@@ -20,6 +19,6 @@ public class LoginService {
 
     public SessionUser login(LoginRequestDto loginRequestDto) {
         User user = loginInternalService.authenticate(loginRequestDto);
-        return userConverter.toSessionUser(user);
+        return UserConverter.toSessionUser(user);
     }
 }

@@ -18,7 +18,6 @@ public class VideoService {
 
     private final VideoInternalService videoInternalService;
     private final UserInternalService userInternalService;
-    private final VideoConverter videoConverter = new VideoConverter();
 
     @Autowired
     public VideoService(VideoInternalService videoInternalService, UserInternalService userInternalService) {
@@ -28,22 +27,22 @@ public class VideoService {
 
     public VideoResponse save(VideoSaveRequestDto requestDto, Long id) {
         User user = userInternalService.findById(id);
-        Video video = videoInternalService.save(videoConverter.toEntity(requestDto, user));
-        return videoConverter.toResponse(video);
+        Video video = videoInternalService.save(VideoConverter.toEntity(requestDto, user));
+        return VideoConverter.toResponse(video);
     }
 
     public Page<VideoPreviewResponse> findByPageRequest(Pageable pageable) {
-        return videoInternalService.findAll(pageable).map(videoConverter::toPreviewResponse);
+        return videoInternalService.findAll(pageable).map(VideoConverter::toPreviewResponse);
     }
 
     public VideoResponse findById(long id) {
         Video video = videoInternalService.findById(id);
-        return videoConverter.toResponse(video);
+        return VideoConverter.toResponse(video);
     }
 
     public VideoUpdateResponse update(Long id, VideoUpdateRequestDto requestDto) {
         Video video = videoInternalService.update(id, requestDto);
-        return videoConverter.toUpdateResponse(video);
+        return VideoConverter.toUpdateResponse(video);
     }
 
     public void delete(Long id) {

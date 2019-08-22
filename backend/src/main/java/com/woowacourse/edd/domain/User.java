@@ -3,7 +3,11 @@ package com.woowacourse.edd.domain;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,12 +34,12 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updateDate;
 
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     private User() {
     }
 
-    public User(String name, String email, String password, Boolean isDeleted) {
+    public User(String name, String email, String password, boolean isDeleted) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -64,7 +68,7 @@ public class User {
         return email;
     }
 
-    public Boolean isDeleted() {
+    public boolean isDeleted() {
         return isDeleted;
     }
 
