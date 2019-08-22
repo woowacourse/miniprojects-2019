@@ -7,12 +7,17 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @EqualsAndHashCode(of = {"id"})
 public class Article {
+    public static final String REGEX = "#([0-9a-zA-Z가-힣_]{2,30})";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +57,16 @@ public class Article {
 
     private boolean notEqualAuthorId(long id) {
         return this.author.notEqualId(id);
+    }
+
+    public Set<String> getKeyword() {
+        Matcher matcher = Pattern.compile(REGEX).matcher(contents);
+
+        Set<String> keywords = new HashSet<>();
+        while (matcher.find()) {
+            keywords.add(matcher.group());
+        }
+        return keywords;
     }
 
     @Override
