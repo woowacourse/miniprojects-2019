@@ -15,41 +15,41 @@ class FollowRestControllerTest extends AbstractControllerTests {
     @BeforeEach
     protected void setUp() {
         super.setUp();
-        postJsonRequest("/api/follow/2", new HashMap<>());
+        postJsonRequest("/api/follows/2", new HashMap<>());
     }
 
     @Test
     void readFollower_correctId_isTrue() {
-        UserInfoDto[] userInfoDtos = getRequest("/api/follow/from/2", UserInfoDto[].class);
+        UserInfoDto[] userInfoDtos = getRequest("/api/follows/2/followers", UserInfoDto[].class);
         assertThat(userInfoDtos[0].getId()).isEqualTo(1);
     }
 
     @Test
     void readFollowing_correctId_isTrue() {
-        UserInfoDto[] userInfoDtos = getRequest("/api/follow/to/1", UserInfoDto[].class);
+        UserInfoDto[] userInfoDtos = getRequest("/api/follows/1/followings", UserInfoDto[].class);
         assertThat(userInfoDtos[0].getId()).isEqualTo(2);
     }
 
     @Test
     void create_correctTarget_isTrue() {
-        assertThat(postJsonRequest("/api/follow/2", new HashMap<>()).getStatus().is2xxSuccessful()).isTrue();
+        assertThat(postJsonRequest("/api/follows/2", new HashMap<>()).getStatus().is2xxSuccessful()).isTrue();
 
     }
 
     @Test
     void delete_correctTarget_isTrue() {
-        assertThat(deleteRequest("/api/follow/2").getStatus().is2xxSuccessful()).isTrue();
+        assertThat(deleteRequest("/api/follows/2").getStatus().is2xxSuccessful()).isTrue();
     }
 
     @Test
     void readNumberOfFollowers_correctId_isTrue() {
-        int numberOfFollowers = getRequest("/api/follow/num/from/2", Integer.class);
+        int numberOfFollowers = getRequest("/api/follows/num/2/followers", Integer.class);
         assertThat(numberOfFollowers).isEqualTo(1);
     }
 
     @Test
     void readNumberOfFollowing_correctId_isTrue() {
-        int numberOfFollowing = getRequest("/api/follow/num/to/1", Integer.class);
+        int numberOfFollowing = getRequest("/api/follows/num/1/followings", Integer.class);
         assertThat(numberOfFollowing).isEqualTo(1);
     }
 
@@ -57,6 +57,6 @@ class FollowRestControllerTest extends AbstractControllerTests {
     @AfterEach
     protected void tearDown() {
         super.tearDown();
-        deleteRequest("/api/follow/2");
+        deleteRequest("/api/follows/2");
     }
 }

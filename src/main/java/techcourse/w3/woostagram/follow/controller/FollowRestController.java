@@ -9,7 +9,7 @@ import techcourse.w3.woostagram.user.support.LoggedInUser;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/follow")
+@RequestMapping("/api/follows")
 public class FollowRestController {
     private final FollowService followService;
 
@@ -17,12 +17,12 @@ public class FollowRestController {
         this.followService = followService;
     }
 
-    @GetMapping("/from/{userId}")
+    @GetMapping("/{userId}/followers")
     public ResponseEntity<List<UserInfoDto>> readFollowers(@PathVariable Long userId) {
         return ResponseEntity.ok(followService.getFollowers(userId));
     }
 
-    @GetMapping("/to/{userId}")
+    @GetMapping("/{userId}/followings")
     public ResponseEntity<List<UserInfoDto>> readFollowing(@PathVariable Long userId) {
         List<UserInfoDto> dtos = followService.getFollowing(userId);
         return ResponseEntity.ok(dtos);
@@ -40,12 +40,12 @@ public class FollowRestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/num/from/{userId}")
+    @GetMapping("/num/{userId}/followers")
     public ResponseEntity<Integer> readNumberOfFollowers(@PathVariable Long userId) {
         return ResponseEntity.ok(followService.getFollowers(userId).size());
     }
 
-    @GetMapping("/num/to/{userId}")
+    @GetMapping("/num/{userId}/followings")
     public ResponseEntity<Integer> readNumberOfFollowing(@PathVariable Long userId) {
         return ResponseEntity.ok(followService.getFollowing(userId).size());
     }
