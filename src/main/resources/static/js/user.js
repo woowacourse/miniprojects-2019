@@ -153,14 +153,10 @@ const USER_APP = (() => {
             const getImage = response => {
                 response.arrayBuffer().then(function (buffer) {
                     let bytes = new Uint8Array(buffer);
-                    console.log('byte', bytes);
-
                     let binary = '';
                     bytes.forEach(b => binary += String.fromCharCode(b));
 
                     const blob = fileLoadService.b64StringToBlob(binary);
-                    console.log('blob', blob);
-
                     const blobUrl = URL.createObjectURL(blob);
 
                     userProfileImage.style.display = 'block';
