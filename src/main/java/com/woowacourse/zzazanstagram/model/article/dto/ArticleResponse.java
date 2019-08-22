@@ -4,6 +4,7 @@ import com.woowacourse.zzazanstagram.model.comment.dto.CommentResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class ArticleResponse {
     private Long id;
@@ -125,5 +126,25 @@ public class ArticleResponse {
         public ArticleResponse build() {
             return new ArticleResponse(id, image, contents, nickName, profileImage, createdDate, lastModifiedDate, commentResponses);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArticleResponse response = (ArticleResponse) o;
+        return Objects.equals(id, response.id) &&
+                Objects.equals(image, response.image) &&
+                Objects.equals(contents, response.contents) &&
+                Objects.equals(nickName, response.nickName) &&
+                Objects.equals(profileImage, response.profileImage) &&
+                Objects.equals(createdDate, response.createdDate) &&
+                Objects.equals(lastModifiedDate, response.lastModifiedDate) &&
+                Objects.equals(commentResponses, response.commentResponses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, image, contents, nickName, profileImage, createdDate, lastModifiedDate, commentResponses);
     }
 }
