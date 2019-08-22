@@ -109,17 +109,17 @@ public class ProductionDataInitializer implements ApplicationRunner {
 
         Likes likes1 = likesRepository.save(Likes.builder()
                 .article(article1)
-                .likeUser(user1)
+                .user(user1)
                 .build());
 
         Likes likes2 = likesRepository.save(Likes.builder()
                 .article(article1)
-                .likeUser(user2)
+                .user(user2)
                 .build());
 
         Likes likes3 = likesRepository.save(Likes.builder()
                 .article(article1)
-                .likeUser(user3)
+                .user(user3)
                 .build());
     }
 }

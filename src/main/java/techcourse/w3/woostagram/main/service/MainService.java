@@ -34,7 +34,7 @@ public class MainService {
     public Page<MainArticleDto> getFollowingArticles(String userEmail, Pageable pageable) {
         User user = userService.findUserByEmail(userEmail);
         return articleService.findPageByUsers(getFollowingUsers(user), pageable).map((article) -> {
-            List<UserInfoDto> likes = likesService.getLikedUser(article.getId());
+            List<UserInfoDto> likes = likesService.findLikedUserByArticleId(article.getId());
 
             return MainArticleDto.from(article,
                     commentService.findByArticleId(article.getId(), userEmail),

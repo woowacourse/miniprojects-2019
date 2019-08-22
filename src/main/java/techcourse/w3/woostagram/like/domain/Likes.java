@@ -25,16 +25,16 @@ public class Likes extends BaseEntity {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User likeUser;
+    private User user;
 
     @Builder
-    public Likes(Article article, User likeUser) {
+    public Likes(Article article, User user) {
         this.article = article;
-        this.likeUser = likeUser;
+        this.user = user;
     }
 
     public void nullify() {
         article = null;
-        likeUser = null;
+        user = null;
     }
 }

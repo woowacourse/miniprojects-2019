@@ -26,27 +26,28 @@ public class LikesService {
     }
 
     @Transactional
-    public void add(String email, Long articleId) {
+    public void save(String email, Long articleId) {
         User user = userService.findUserByEmail(email);
         Article article = articleService.findArticleById(articleId);
 
         Likes likes = Likes.builder()
                 .article(article)
-                .likeUser(user)
+                .user(user)
                 .build();
 
         likesRepository.save(likes);
     }
 
-    public List<UserInfoDto> getLikedUser(Long articleId) {
+    public List<UserInfoDto> findLikedUserByArticleId(Long articleId) {
         Article article = articleService.findArticleById(articleId);
         List<Likes> likedUsers = likesRepository.findAllByArticle(article);
-        return likedUsers.stream().map((Likes likes) -> UserInfoDto.from(likes.getLikeUser())).collect(Collectors.toList());
+        return likedUsers.stream().map(likes -> UserInfoDto.from(likes.getUser())).collect(Collectors.toList());
     }
 
-    public void remove(Long articleId, Long likedId) {
+    public void remove(Long articleId, String email) {
+        User user = userService.findUserByEmail(email);
         Article article = articleService.findArticleById(articleId);
-        Likes likes = likesRepository.findByArticleAndId(article, likedId);
+        Likes likes = likesRepository.findByArticleAndUser_Id(article, user.getId());
         likes.nullify();
         likesRepository.delete(likes);
     }
