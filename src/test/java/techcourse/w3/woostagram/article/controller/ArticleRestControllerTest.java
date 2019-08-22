@@ -19,28 +19,22 @@ class ArticleRestControllerTest extends AbstractControllerTests {
 
     @Test
     void read_incorrectArticleId_exception() {
-        assertThat(getRequest("/api/articles/11").getStatus().is4xxClientError()).isTrue();
+        assertThat(getRequest("/api/articles/11231").getStatus().is4xxClientError()).isTrue();
     }
 
     @Test
     void update_correctArticleDto_isOk() {
         Map<String, String> params = new HashMap<>();
-        params.put("id", String.valueOf(1));
+        params.put("id", String.valueOf(TestDataInitializer.updateArticle.getId()));
         params.put("contents", "moomin is not moomin anymore");
         assertThat(putJsonRequest("/api/articles", params).getStatus().is2xxSuccessful()).isTrue();
-
-        Map<String, String> params2 = new HashMap<>();
-        params2.put("id", String.valueOf(1));
-        params2.put("contents", "moomin is moomin");
-        assertThat(putJsonRequest("/api/articles", params2).getStatus().is2xxSuccessful()).isTrue();
     }
 
     @Test
     void update_incorrectArticleDto_exception() {
         Map<String, String> params = new HashMap<>();
-        params.put("id", String.valueOf(11));
+        params.put("id", String.valueOf(11231));
         params.put("contents", "moomin is not moomin anymore");
-
         assertThat(putJsonRequest("/api/articles", params).getStatus().is4xxClientError()).isTrue();
     }
 }
