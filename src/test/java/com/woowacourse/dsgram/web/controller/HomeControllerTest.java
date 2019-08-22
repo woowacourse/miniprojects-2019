@@ -4,7 +4,7 @@ import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class HomeControllerTests extends AbstractControllerTest {
+class HomeControllerTest extends AbstractControllerTest {
 
     private String cookie;
     private SignUpUserRequest signUpUserRequest;

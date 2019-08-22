@@ -14,7 +14,7 @@ import java.util.Objects;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class ArticleApiControllerTests extends AbstractControllerTest {
+public class ArticleApiControllerTest extends AbstractControllerTest {
     private static String COMMON_REQUEST_URL = "/api/articles";
 
     private String cookie;
