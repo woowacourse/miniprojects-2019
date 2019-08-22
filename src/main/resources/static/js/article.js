@@ -49,17 +49,6 @@ const ArticleApp = (() => {
         }
     };
 
-    function checkBlank() {
-        const videoTag = document.querySelector('video[data-object="article-video"]');
-        const imageTag = document.querySelector('img[data-object="article-image"]');
-        if (videoTag.getAttribute('src') === "") {
-            videoTag.setAttribute('style', 'display:none');
-        }
-        if (imageTag.getAttribute('src') === "") {
-            imageTag.setAttribute('style', 'display:none');
-        }
-    }
-
     const ArticleService = function () {
         const articleApi = new ArticleApi();
 
@@ -248,6 +237,17 @@ const ArticleApp = (() => {
                 }
                 return data;
             });
+        };
+
+        const checkBlank = () => {
+            const videoTag = document.querySelector('video[data-object="article-video"]');
+            const imageTag = document.querySelector('img[data-object="article-image"]');
+            if (videoTag.getAttribute('src') === "") {
+                videoTag.setAttribute('style', 'display:none');
+            }
+            if (imageTag.getAttribute('src') === "") {
+                imageTag.setAttribute('style', 'display:none');
+            }
         };
 
         return {
