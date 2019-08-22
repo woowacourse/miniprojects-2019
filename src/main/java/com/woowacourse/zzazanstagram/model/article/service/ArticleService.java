@@ -42,10 +42,10 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    public void save(ArticleRequest dto, MultipartFile file, String email) {
+    public void save(ArticleRequest dto, String email) {
         Member author = memberService.findByEmail(email);
+        MultipartFile file = dto.getFile();
         String imageUrl = s3Uploader.upload(file, dirName);
-
         Article article = ArticleAssembler.toEntity(dto, imageUrl, author);
         articleRepository.save(article);
 
