@@ -79,7 +79,7 @@ public class TestDataInitializer implements ApplicationRunner {
     private Likes saveLikes(User liker, Article article) {
         return likesRepository.save(Likes.builder()
                 .article(article)
-                .likeUser(liker)
+                .user(liker)
                 .build());
     }
 

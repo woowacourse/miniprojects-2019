@@ -20,23 +20,23 @@ public class LikesRestController {
 
     @PostMapping
     public ResponseEntity create(@PathVariable Long articleId, @LoggedInUser String email) {
-        likesService.add(email, articleId);
+        likesService.save(email, articleId);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<UserInfoDto>> readLikedUsers(@PathVariable Long articleId) {
-        return ResponseEntity.ok(likesService.getLikedUser(articleId));
+        return ResponseEntity.ok(likesService.findLikedUserByArticleId(articleId));
     }
 
-    @DeleteMapping("/{likedId}")
-    public ResponseEntity delete(@PathVariable Long articleId, @PathVariable Long likedId) {
-        likesService.remove(articleId, likedId);
+    @DeleteMapping
+    public ResponseEntity delete(@PathVariable Long articleId, @LoggedInUser String email) {
+        likesService.remove(articleId, email);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/num")
     public ResponseEntity<Integer> readNumberOfLiked(@PathVariable Long articleId) {
-        return ResponseEntity.ok(likesService.getLikedUser(articleId).size());
+        return ResponseEntity.ok(likesService.findLikedUserByArticleId(articleId).size());
     }
 }
