@@ -1,4 +1,4 @@
-package techcourse.w3.woostagram.user.support;
+package techcourse.w3.woostagram.common.support;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

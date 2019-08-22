@@ -12,6 +12,7 @@ import techcourse.w3.woostagram.user.dto.UserProfileImageDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
+import techcourse.w3.woostagram.user.exception.UserNotFoundException;
 
 @Service
 public class UserService {
@@ -45,12 +46,6 @@ public class UserService {
         user.updateContents(userUpdateDto.toEntity());
     }
 
-    private void deleteFile(String fileUrl) {
-        if (!StringUtils.isEmpty(fileUrl) && !fileUrl.equals(DEFAULT_PROFILE_IMAGE)) {
-            storageService.deleteFile(fileUrl);
-        }
-    }
-
     public void deleteByEmail(String email) {
         userRepository.delete(findUserByEmail(email));
     }
@@ -60,11 +55,11 @@ public class UserService {
     }
 
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(LoginException::new);
+        return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
 
     public User findById(long targetId) {
-        return userRepository.findById(targetId).orElseThrow(LoginException::new);
+        return userRepository.findById(targetId).orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional
@@ -77,5 +72,11 @@ public class UserService {
         }
         user.updateProfile(fileUrl);
         return fileUrl;
+    }
+
+    private void deleteFile(String fileUrl) {
+        if (!StringUtils.isEmpty(fileUrl) && !fileUrl.equals(DEFAULT_PROFILE_IMAGE)) {
+            storageService.deleteFile(fileUrl);
+        }
     }
 }

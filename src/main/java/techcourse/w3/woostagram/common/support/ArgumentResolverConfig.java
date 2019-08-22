@@ -1,4 +1,4 @@
-package techcourse.w3.woostagram.user.support;
+package techcourse.w3.woostagram.common.support;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

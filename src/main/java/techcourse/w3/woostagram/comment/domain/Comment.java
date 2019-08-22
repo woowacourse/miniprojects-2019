@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import techcourse.w3.woostagram.article.domain.Article;
-import techcourse.w3.woostagram.common.support.AuditLog;
+import techcourse.w3.woostagram.common.domain.BaseEntity;
 import techcourse.w3.woostagram.user.domain.User;
 
 import javax.persistence.*;
@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
 @ToString
-public class Comment extends AuditLog {
+public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

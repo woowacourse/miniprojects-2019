@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import techcourse.w3.woostagram.main.dto.MainArticleDto;
 import techcourse.w3.woostagram.main.service.MainService;
-import techcourse.w3.woostagram.user.support.LoggedInUser;
+import techcourse.w3.woostagram.common.support.LoggedInUser;
 
 @RestController
 @RequestMapping("/api/main")

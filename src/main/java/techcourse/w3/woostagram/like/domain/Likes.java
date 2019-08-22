@@ -1,11 +1,10 @@
 package techcourse.w3.woostagram.like.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import techcourse.w3.woostagram.article.domain.Article;
+import techcourse.w3.woostagram.common.domain.BaseEntity;
 import techcourse.w3.woostagram.user.domain.User;
 
 import javax.persistence.*;
@@ -13,7 +12,9 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Likes {
+@EqualsAndHashCode(of = "id", callSuper = false)
+@ToString
+public class Likes extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

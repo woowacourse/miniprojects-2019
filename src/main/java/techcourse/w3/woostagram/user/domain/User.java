@@ -1,7 +1,7 @@
 package techcourse.w3.woostagram.user.domain;
 
 import lombok.*;
-import techcourse.w3.woostagram.common.support.AuditLog;
+import techcourse.w3.woostagram.common.domain.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
 @ToString
-public class User extends AuditLog {
+public class User extends BaseEntity {
     public static final String ERROR_EMAIL = "올바른 email 형식이 아닙니다.";
     public static final String ERROR_PASSWORD = "올바른 비밀번호 형식이 아닙니다.";
     public static final String PATTERN_PASSWORD = ".*(?=^.{8,}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*";

@@ -105,6 +105,7 @@ class ArticleServiceTest {
                 .contents("Test article")
                 .build();
         when(articleRepository.findById(anyLong())).thenReturn(Optional.empty());
+
         assertThrows(ArticleNotFoundException.class, () -> articleService.update(articleDto, "moomin@naver.com"));
     }
 

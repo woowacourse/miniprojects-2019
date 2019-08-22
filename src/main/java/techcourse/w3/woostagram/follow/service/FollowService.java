@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class FollowService {
-    private UserService userService;
-    private FollowRepository followRepository;
+    private final FollowRepository followRepository;
+    private final UserService userService;
 
-    public FollowService(UserService userService, FollowRepository followRepository) {
+    public FollowService(final UserService userService, final FollowRepository followRepository) {
         this.userService = userService;
         this.followRepository = followRepository;
     }

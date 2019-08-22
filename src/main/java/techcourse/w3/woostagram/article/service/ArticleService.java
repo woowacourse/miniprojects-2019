@@ -20,8 +20,8 @@ import java.util.List;
 @Service
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    private final UserService userService;
     private final StorageService storageService;
+    private final UserService userService;
 
     public ArticleService(final ArticleRepository articleRepository, final UserService userService, final StorageService storageService) {
         this.articleRepository = articleRepository;

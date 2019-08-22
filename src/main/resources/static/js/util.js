@@ -14,29 +14,29 @@ class Request {
 
     handleError = (error) => {
         return Promise.reject(error)
-    }
+    };
 
-    get = async (attatchedUrl, callback = this.defaultCallback) => {
-        return await this.request.get(this.baseUrl + attatchedUrl)
+    get = (attatchedUrl, callback = this.defaultCallback) => {
+        return this.request.get(this.baseUrl + attatchedUrl)
             .then(response => callback(response.status, response.data))
-    }
+    };
 
-    delete = async (attatchedUrl, callback = this.defaultCallback) => {
-        return await this.request.delete(this.baseUrl + attatchedUrl)
+    delete = (attatchedUrl, callback = this.defaultCallback) => {
+        return this.request.delete(this.baseUrl + attatchedUrl)
             .then(response => callback(response.status, response.data))
-    }
+    };
 
-    post = async (attatchedUrl, data, callback = this.defaultCallback) => {
-        return await this.request.post(this.baseUrl + attatchedUrl, data)
+    post = (attatchedUrl, data, callback = this.defaultCallback) => {
+        return this.request.post(this.baseUrl + attatchedUrl, data)
             .then(response => callback(response.status, response.data))
-    }
+    };
 
-    put = async (attatchedUrl, data, callback = this.defaultCallback) => {
-        return await this.request.put(this.baseUrl + attatchedUrl, data)
+    put = (attatchedUrl, data, callback = this.defaultCallback) => {
+        return this.request.put(this.baseUrl + attatchedUrl, data)
             .then(response => callback(response.status, response.data))
-    }
+    };
 
-    defaultCallback = (status,data)=>{
+    defaultCallback = (status, data) => {
         console.log(status + data)
 
     }
@@ -53,4 +53,4 @@ const DomUtil = {
         const element = document.querySelector(domName);
         element.classList.add("inactive")
     }
-}
+};

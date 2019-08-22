@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class UserProfileImageDto {
     private String originalImageFile;
     private MultipartFile imageFile;
