@@ -37,5 +37,4 @@ public class UserService {
 
         return modelMapper.map(user, UserResponseDto.class);
     }
-
 }

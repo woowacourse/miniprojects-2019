@@ -16,12 +16,12 @@ class UserPasswordTest {
     }
 
     @Test
-    void 이메일_유효성_실패() {
+    void 암호_유효성_실패() {
         assertThrows(InvalidValueException.class, () -> new UserPassword("12qwasQW"));
     }
 
     @Test
-    void 이메일_유효성_성공() {
+    void 암호_유효성_성공() {
         assertDoesNotThrow(() -> new UserPassword("12qw!@QW"));
     }
 }

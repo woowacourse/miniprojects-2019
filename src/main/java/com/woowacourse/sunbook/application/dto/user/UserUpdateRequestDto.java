@@ -15,4 +15,11 @@ public class UserUpdateRequestDto {
     private UserName userName;
     private UserPassword userPassword;
     private UserChangePassword changePassword;
+
+    public UserUpdateRequestDto(UserEmail userEmail, UserName userName, UserPassword userPassword, UserChangePassword changePassword) {
+        this.userEmail = userEmail;
+        this.userName = userName;
+        this.userPassword = userPassword;
+        this.changePassword = changePassword;
+    }
 }

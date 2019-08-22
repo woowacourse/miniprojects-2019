@@ -14,6 +14,10 @@ import javax.persistence.Embeddable;
 public class UserChangePassword {
     private String changePassword;
 
+    public UserChangePassword(String changePassword) {
+        this.changePassword = changePassword;
+    }
+
     public UserPassword updatedPassword(final UserPassword userPassword) {
         if (changePassword.isEmpty()) {
             return userPassword;

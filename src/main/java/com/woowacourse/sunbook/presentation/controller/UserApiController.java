@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserApiController {
     private final UserService userService;
 
@@ -19,7 +19,7 @@ public class UserApiController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<UserResponseDto> getLoginUser(LoginUser loginUser) {
         if (loginUser == null) {
             // 예외 이름 결정 및 생성
@@ -29,7 +29,7 @@ public class UserApiController {
         return new ResponseEntity<>(loginUser.getUserResponseDto(), HttpStatus.OK);
     }
 
-    @PutMapping("/users")
+    @PutMapping
     public ResponseEntity<UserResponseDto> updateUser(LoginUser loginUser, HttpSession httpSession,
                                                       @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         UserResponseDto updateUser = userService.update(loginUser.getUserResponseDto(), userUpdateRequestDto);
