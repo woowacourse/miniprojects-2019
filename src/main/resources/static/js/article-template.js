@@ -77,7 +77,7 @@ const template = (function () {
                             <ul id="comment-list-{{id}}" class="list-unstyled list-info"></ul>
                             <!-- 댓글 입력 공간-->
                             <div class="add-comment">
-                                <textarea id="comment-contents-{{id}}" rows="1" class="form-control comment-save" placeholder="댓글을 입력하세요."></textarea>
+                                <textarea id="comment-value-{{id}}" rows="1" class="form-control comment-save" placeholder="댓글을 입력하세요."></textarea>
                             </div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@ const template = (function () {
                         <div class="info">
                             <div class="bg-lightgray border-radius-18 padding-10 max-width-100">
                                 <a href="" class="title text-bold inline-block text-link-color">{{user-name}}</a>
-                                <span>{{comment-contents}}</span>
+                                <span id="comment-contents-{{id}}"data-object="comment-contents">{{comment-contents}}</span>
                             </div>
                             <a class="pointer absolute top-0 right-0" data-toggle="dropdown" aria-expanded="false">
                                 <span class="btn-icon text-dark">

@@ -234,6 +234,28 @@
     </div>
 </div>
 
+<input type="hidden" id="show-comment-modal-btn" data-toggle="modal" data-target="#comment-update-modal">
+<div class="modal fade" id="comment-update-modal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>댓글 수정</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hidden-article-id">
+                <input type="hidden" id="hidden-comment-id">
+                <textarea id="comment-update-contents" class="resize-none form-control border bottom resize-none"></textarea>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary btn-sm" id="comment-update-btn" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <input type="hidden" id="show-friend-modal-btn" data-toggle="modal" data-target="#user-friend-modal-l">
 <div class="modal slide-in-left modal-left fade " id="user-friend-modal-l">
     <div class="modal-dialog" role="document">

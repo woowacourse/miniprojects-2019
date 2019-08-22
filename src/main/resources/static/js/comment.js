@@ -9,6 +9,16 @@ const CommentApp = (() => {
             saveBtn.addEventListener('keydown', commentService.add);
         };
 
+        const showModal = () => {
+            const articleList = document.getElementById('article-list');
+            articleList.addEventListener('click', commentService.showModal);
+        };
+
+        const update = () => {
+            const commentUpdateBtn = document.getElementById('comment-update-btn');
+            commentUpdateBtn.addEventListener('click', commentService.update);
+        };
+
         const remove = () => {
             const articleList = document.getElementById('article-list');
             articleList.addEventListener('click', commentService.remove);
@@ -21,6 +31,8 @@ const CommentApp = (() => {
 
         const init = () => {
             add();
+            showModal();
+            update();
             remove();
             read();
         };
@@ -69,12 +81,12 @@ const CommentApp = (() => {
             const article = target.closest('div[data-object="article"]');
             const articleId = article.getAttribute('data-article-id');
             const commentList = document.getElementById('comment-list-' + articleId);
-            const contents = document.getElementById('comment-contents-' + articleId);
+            const contentsValue = document.getElementById('comment-value-' + articleId);
 
-            if (event.which === 13 && contents.value !== '' && event.target.classList.contains('comment-save')) {
+            if (event.which === 13 && contentsValue.value !== '' && event.target.classList.contains('comment-save')) {
                 if (!event.shiftKey) {
                     const data = {
-                        contents: contents.value,
+                        contents: contentsValue.value,
                     };
 
                     commentApi.add(articleId, data)
@@ -101,19 +113,47 @@ const CommentApp = (() => {
                                 .catch(error => console.log("error: " + error));
                         })
                         .then(() => {
-                            contents.value = "";
-                            contents.blur();
+                            contentsValue.value = "";
+                            contentsValue.blur();
                         });
                 }
             }
         };
 
-        const update = (event) => {
+        const showModal = (event) => {
             const target = event.target;
-            if (target.closest('li[data-btn="update"]')) {
+            if (target.closest('li[data-btn="comment-update"]')) {
                 const article = target.closest('div[data-object="article"]');
-                showModal(article);
+                const articleId = article.getAttribute('data-article-id');
+                const comment = target.closest('li[data-object="comment"]');
+                const commentId = comment.getAttribute('data-comment-id');
+                const updateArea = document.getElementById('comment-update-contents');
+                const showModalBtn = document.getElementById('show-comment-modal-btn');
+                const articleHiddenId  = document.getElementById('hidden-article-id');
+                const commentHiddenId  = document.getElementById('hidden-comment-id');
+
+                updateArea.value = comment.querySelector('span[data-object="comment-contents"]').innerText;
+                articleHiddenId.value = articleId;
+                commentHiddenId.value = commentId;
+
+                showModalBtn.click();
             }
+        };
+
+        const update = () => {
+            const articleHiddenId  = document.getElementById('hidden-article-id');
+            const commentHiddenId  = document.getElementById('hidden-comment-id');
+            const updateArea = document.getElementById('comment-update-contents');
+            const contents = document.getElementById('comment-contents-' + commentHiddenId.value);
+            const data = {
+                contents: updateArea.value,
+            };
+
+            commentApi.update(articleHiddenId.value, commentHiddenId.value, data)
+                .then(response => response.json())
+                .then(comment => {
+                    contents.innerText = comment.commentFeature.contents;
+                });
         };
 
         const remove = (event) => {
@@ -121,7 +161,7 @@ const CommentApp = (() => {
             if (target.closest('li[data-btn="comment-delete"]')) {
                 const article = target.closest('div[data-object="article"]');
                 const articleId = article.getAttribute('data-article-id');
-                const comment = target.closest('li[data-object="comment"');
+                const comment = target.closest('li[data-object="comment"]');
                 const commentId = comment.getAttribute('data-comment-id');
 
                 commentApi.remove(articleId, commentId)
@@ -135,6 +175,7 @@ const CommentApp = (() => {
             add: add,
             read: read,
             update: update,
+            showModal: showModal,
             remove: remove,
         }
     };
@@ -142,6 +183,10 @@ const CommentApp = (() => {
     const CommentApi = function () {
         const add = (articleId, data) => {
             return Api.post(`/api/articles/${articleId}/comments`, data)
+        };
+
+        const update = (articleId, commentId, data) => {
+            return Api.put(`/api/articles/${articleId}/comments/${commentId}`, data);
         };
 
         const remove = (articleId, commentId) => {
@@ -154,6 +199,7 @@ const CommentApp = (() => {
 
         return {
             add: add,
+            update: update,
             remove: remove,
             render: render,
         };
