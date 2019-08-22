@@ -2,6 +2,7 @@ package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
 import com.woowacourse.dsgram.domain.FileInfo;
+import com.woowacourse.dsgram.domain.HashTag;
 import com.woowacourse.dsgram.domain.repository.ArticleRepository;
 import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
 import com.woowacourse.dsgram.service.dto.ArticleRequest;
@@ -12,27 +13,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private FileService fileService;
-    private UserService userService; // TODO: 빼고싶음
+    private final HashTagService hashTagService;
+    private final FileService fileService;
+    private final UserService userService; // TODO: 빼고싶음
 
-    public ArticleService(ArticleRepository articleRepository, FileService fileService, UserService userService) {
+    public ArticleService(ArticleRepository articleRepository, HashTagService hashTagService, FileService fileService, UserService userService) {
         this.articleRepository = articleRepository;
+        this.hashTagService = hashTagService;
         this.fileService = fileService;
         this.userService = userService;
     }
 
+    @Transactional
     public Article create(ArticleRequest articleRequest, LoggedInUser loggedInUser) {
         FileInfo fileInfo = fileService.save(articleRequest.getFile(), new ArticleFileNamingStrategy());
+
         Article article = Article.builder()
                 .contents(articleRequest.getContents())
                 .fileInfo(fileInfo)
                 .author(userService.findUserById(loggedInUser.getId()))
                 .build();
+        hashTagService.saveHashTags(
+                article.getKeyword().stream()
+                        .map(keyword -> new HashTag(keyword, article))
+                        .collect(Collectors.toList()));
+
         return articleRepository.save(article);
     }
 
