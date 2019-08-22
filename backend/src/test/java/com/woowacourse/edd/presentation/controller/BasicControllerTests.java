@@ -17,9 +17,13 @@ import static com.woowacourse.edd.presentation.controller.UserController.USER_UR
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BasicControllerTests {
 
+    protected static final Long DEFAULT_LOGIN_ID = 1L;
+    protected static final String DEFAULT_LOGIN_NAME = "robby";
     protected static final String DEFAULT_LOGIN_EMAIL = "kangmin789@naver.com";
     protected static final String DEFAULT_LOGIN_PASSWORD = "P@ssW0rd";
     protected static final String COOKIE_JSESSIONID = "JSESSIONID";
+
+    protected static final Long DEFAULT_VIDEO_ID = 1L;
 
     @Autowired
     protected WebTestClient webTestClient;

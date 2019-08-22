@@ -1,6 +1,7 @@
 package com.woowacourse.edd.application.service;
 
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
+import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.domain.Video;
 import com.woowacourse.edd.exceptions.InvalidContentsException;
 import com.woowacourse.edd.exceptions.InvalidTitleException;
@@ -35,22 +36,27 @@ class VideoInternalServiceTests {
     private VideoInternalService videoInternalService;
 
     private Video video;
+    private User creator;
 
     @BeforeEach
     void init() {
-        video = spy(new Video("1234", "title", "contents"));
+        creator = spy(new User("name", "name@gmail.com", "p@ssW0rd", false));
+        video = spy(new Video("1234", "title", "contents", creator));
     }
 
     @Test
     void save() {
+        when(creator.getId()).thenReturn(1L);
         when(videoRepository.save(any())).thenReturn(video);
 
-        Video target = new Video("1234", "title", "contents");
+        Video target = new Video("1234", "title", "contents", creator);
         Video src = videoInternalService.save(video);
 
         assertThat(src.getTitle()).isEqualTo(target.getTitle());
         assertThat(src.getYoutubeId()).isEqualTo(target.getYoutubeId());
         assertThat(src.getContents()).isEqualTo(target.getContents());
+        assertThat(src.getCreator().getId()).isEqualTo(target.getCreator().getId());
+        assertThat(src.getCreator().getName()).isEqualTo(target.getCreator().getName());
     }
 
     @Test

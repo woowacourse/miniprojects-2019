@@ -2,6 +2,7 @@ package com.woowacourse.edd.presentation.controller;
 
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
+import com.woowacourse.edd.application.response.SessionUser;
 import com.woowacourse.edd.application.response.VideoPreviewResponse;
 import com.woowacourse.edd.application.response.VideoResponse;
 import com.woowacourse.edd.application.response.VideoUpdateResponse;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.net.URI;
 
 import static com.woowacourse.edd.presentation.controller.VideoController.VIDEO_URL;
@@ -41,8 +43,9 @@ public class VideoController {
     }
 
     @PostMapping
-    public ResponseEntity<VideoResponse> saveVideo(@RequestBody VideoSaveRequestDto requestDto) {
-        VideoResponse response = videoService.save(requestDto);
+    public ResponseEntity<VideoResponse> saveVideo(@RequestBody VideoSaveRequestDto requestDto, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        VideoResponse response = videoService.save(requestDto, sessionUser.getId());
         return ResponseEntity.created(URI.create(VIDEO_URL + "/" + response.getId())).body(response);
     }
 

@@ -30,16 +30,21 @@ public class Video {
     @Column(nullable = false)
     private LocalDateTime createDate;
 
+    @ManyToOne
+    @JoinColumn(name = "creator_id", nullable = false)
+    private User creator;
+
     private Video() {
     }
 
-    public Video(String youtubeId, String title, String contents) {
+    public Video(String youtubeId, String title, String contents, User creator) {
         checkYoutubeId(youtubeId);
         checkTitle(title);
         checkContents(contents);
         this.youtubeId = youtubeId.trim();
         this.title = title.trim();
         this.contents = contents.trim();
+        this.creator = creator;
     }
 
     private void checkContents(String contents) {
@@ -89,14 +94,19 @@ public class Video {
         return createDate;
     }
 
+    public User getCreator() {
+        return creator;
+    }
+
     @Override
     public String toString() {
         return "Video{" +
             "id=" + id +
-            ", youtubeId=" + youtubeId +
-            ", title=" + title +
-            ", contents=" + contents +
+            ", youtubeId='" + youtubeId + '\'' +
+            ", title='" + title + '\'' +
+            ", contents='" + contents + '\'' +
             ", createDate=" + createDate +
+            ", creator=" + creator +
             '}';
     }
 }

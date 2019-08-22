@@ -3,7 +3,6 @@ package com.woowacourse.edd.presentation.controller;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import com.woowacourse.edd.utils.Utils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.StatusAssertions;
@@ -18,22 +17,19 @@ public class VideoControllerTests extends BasicControllerTests {
     private final String DEFAULT_VIDEO_TITLE = "제목";
     private final String DEFAULT_VIDEO_CONTENTS = "내용";
     private final String VIDEOS_URI = "/v1/videos";
-    private final LocalDateTime DEFAULT_VIDEO_DATETIME = LocalDateTime.now(ZoneId.of("UTC"));
-
-    @BeforeEach
-    void setUp() {
-        save();
-    }
+    private final LocalDateTime DEFAULT_VIDEO_DATETIME = LocalDateTime.of(2019, 5, 5, 15, 31, 23);
 
     @Test
     void find_video_by_id() {
-        findVideo("/1").isOk()
+        findVideo("/" + DEFAULT_VIDEO_ID).isOk()
             .expectBody()
             .jsonPath("$.id").isNotEmpty()
             .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
             .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
             .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
-            .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(DEFAULT_VIDEO_DATETIME));
+            .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(DEFAULT_VIDEO_DATETIME))
+            .jsonPath("$.creator.id").isEqualTo(DEFAULT_VIDEO_ID)
+            .jsonPath("$.creator.name").isEqualTo(DEFAULT_LOGIN_NAME);
     }
 
     @Test
@@ -55,7 +51,8 @@ public class VideoControllerTests extends BasicControllerTests {
             .jsonPath("$.content.length()").isEqualTo(6)
             .jsonPath("$.content[0].youtubeId").isEqualTo("666")
             .jsonPath("$.content[3].youtubeId").isEqualTo("333")
-            .jsonPath("$.content[5].youtubeId").isEqualTo("111");
+            .jsonPath("$.content[5].youtubeId").isEqualTo("111")
+            .jsonPath("$.content[5].creator.id").isEqualTo(DEFAULT_LOGIN_ID);
     }
 
     @Test
@@ -68,7 +65,9 @@ public class VideoControllerTests extends BasicControllerTests {
             .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
             .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
             .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
-            .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(DEFAULT_VIDEO_DATETIME));
+            .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(LocalDateTime.now(ZoneId.of("UTC"))))
+            .jsonPath("$.creator.id").isEqualTo(DEFAULT_LOGIN_ID)
+            .jsonPath("$.creator.name").isEqualTo(DEFAULT_LOGIN_NAME);
     }
 
     @Test

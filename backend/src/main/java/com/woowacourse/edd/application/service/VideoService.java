@@ -6,6 +6,7 @@ import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import com.woowacourse.edd.application.response.VideoPreviewResponse;
 import com.woowacourse.edd.application.response.VideoResponse;
 import com.woowacourse.edd.application.response.VideoUpdateResponse;
+import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.domain.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,15 +17,18 @@ import org.springframework.stereotype.Service;
 public class VideoService {
 
     private final VideoInternalService videoInternalService;
+    private final UserInternalService userInternalService;
     private final VideoConverter videoConverter = new VideoConverter();
 
     @Autowired
-    public VideoService(VideoInternalService videoInternalService) {
+    public VideoService(VideoInternalService videoInternalService, UserInternalService userInternalService) {
         this.videoInternalService = videoInternalService;
+        this.userInternalService = userInternalService;
     }
 
-    public VideoResponse save(VideoSaveRequestDto requestDto) {
-        Video video = videoInternalService.save(videoConverter.toEntity(requestDto));
+    public VideoResponse save(VideoSaveRequestDto requestDto, Long id) {
+        User user = userInternalService.findById(id);
+        Video video = videoInternalService.save(videoConverter.toEntity(requestDto, user));
         return videoConverter.toResponse(video);
     }
 
