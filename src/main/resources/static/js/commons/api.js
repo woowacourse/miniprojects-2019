@@ -17,3 +17,11 @@ const api = {
     }),
     DELETE: (url) => fetch(url, {method: 'DELETE'})
 }
+
+const formDataApi = {
+    POST: (url, data) => fetch('/api/posts', {
+        method: 'POST',
+        enctype: "multipart/form-data",
+        body: data
+    })
+}

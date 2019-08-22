@@ -9,29 +9,34 @@ const writeArea = document.getElementById('write-area')
 let totalPage;
 let currentPageNumber = 1;
 writeBtn.addEventListener('click', (event) => {
-    const contents = writeArea.value
     const formData = new FormData();
-formData.append('contents', contents)
-fetch('/api/posts', {
-    method: 'POST',
-    enctype: "multipart/form-data",
-    body: formData
-}).then(res = > {
-    if(res.ok
-)
-{
-    return res.json();
-}
-throw res
-})
+
+    const contents = writeArea.value
+    formData.append('contents', contents)
+
+    const fileForm = document.getElementById('attach-files')
+    const files = fileForm.files
+
+    const len = files.length;
+    for (let i = 0; i < len; i++) {
+        formData.append('files', files[i]);
+    }
+
+    fileForm.value = ''
+    writeArea.value = ''
+
+    formDataApi.POST(POST_URL, formData)
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+            throw res
+        })
         .then(post => posts.prepend(createPostDOM(post)))
         .catch(error => {
-            error.json()
-                .then(errorMessage =>
-                    console.log(errorMessage.message)
-                )
+            error.json().then(errorMessage =>
+                console.log(errorMessage.message))
         })
-    writeArea.value = ''
 })
 
 const initLoad = async () => {
@@ -127,6 +132,9 @@ const postOperateButton = (function () {
         const PostService = function () {
             const toggleUpdate = function (event) {
                 const buttonContainer = event.target.closest("a")
+                if (buttonContainer == null || !buttonContainer.hasClass) {
+                    return
+                }
                 if (buttonContainer.classList.contains('toggle-post-update')) {
                     const postCard = buttonContainer.closest('.card');
                     postCard.classList.toggle('editing');
@@ -135,6 +143,9 @@ const postOperateButton = (function () {
 
             const update = function (event) {
                 const buttonContainer = event.target.closest("li")
+                if (buttonContainer == null || !buttonContainer.hasClass) {
+                    return
+                }
                 if (buttonContainer.classList.contains('post-update')) {
                     const postCard = buttonContainer.closest('.card');
                     const postId = postCard.dataset.id
@@ -165,6 +176,9 @@ const postOperateButton = (function () {
 
             const remove = (event) => {
                 const buttonContainer = event.target.closest("a")
+                if (buttonContainer == null || !buttonContainer.hasClass) {
+                    return
+                }
                 if (buttonContainer.classList.contains('post-delete')) {
                     const postCard = buttonContainer.closest('.card');
                     const postId = postCard.dataset.id
@@ -298,11 +312,11 @@ const postOperateButton = (function () {
                 api.PUT(`/api/posts/${postId}/comments/${commentId}`, commentUpdate)
                     .then(res => res.json())
                     .then(comment => {
-                    const contentsNode = commentItem.querySelector('span');
-                const editContentsNode = commentItem.querySelector('textarea.bg-lightgray');
-                contentsNode.innerText = comment.contents
-                editContentsNode.value = comment.contents
-                commentItem.querySelector('.info').classList.toggle('editing')
+                        const contentsNode = commentItem.querySelector('span');
+                        const editContentsNode = commentItem.querySelector('textarea.bg-lightgray');
+                        contentsNode.innerText = comment.contents
+                        editContentsNode.value = comment.contents
+                        commentItem.querySelector('.info').classList.toggle('editing')
                     })
                     .catch(error => console.error(error))
             }
@@ -379,6 +393,48 @@ const postOperateButton = (function () {
     }
 )();
 
+const fileAttach = (function () {
+    const fileAttachButtons = document.getElementsByClassName('file-attach');
+
+    const FileAttachController = function () {
+        const fileAttachService = new FileAttachService();
+
+        const showFileAttach = function () {
+            for (let i = 0; i < fileAttachButtons.length; i++) {
+                fileAttachButtons[i].addEventListener('click', fileAttachService.showFileAttach)
+            }
+        }
+
+        const init = function () {
+            showFileAttach();
+        };
+
+        return {
+            init: init
+        }
+    }
+
+    const FileAttachService = function () {
+        const showFileAttach = function (event) {
+            const fileAttachContainer = event.target.closest('li');
+            fileAttachContainer.firstElementChild.click();
+        };
+
+        return {
+            showFileAttach: showFileAttach
+        }
+    }
+
+    const init = function () {
+        const fileAttachController = new FileAttachController();
+        fileAttachController.init();
+    };
+
+    return {
+        init: init
+    }
+})();
 
 postOperateButton.init();
+fileAttach.init();
 initLoad();

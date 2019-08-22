@@ -38,6 +38,9 @@ const postTemplate = (post) => `
         <p class="view">
             ${textFormat(post.contents.contents)}
         </p>
+        <div class="post-files">
+            ${post.files.length === 0 ? '' : carouselTemplate(post)}
+        </div>
         <div class="edit edit-form">
             <textarea class="resize-none form-control border bottom resize-none edit">${post.contents.contents}</textarea>
             <ul class="composor-tools pdd-top-15">
