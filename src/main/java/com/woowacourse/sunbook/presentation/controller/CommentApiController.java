@@ -20,8 +20,8 @@ public class CommentApiController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentResponseDto>> show() {
-        List<CommentResponseDto> commentResponseDto = commentService.findAll();
+    public ResponseEntity<List<CommentResponseDto>> show(@PathVariable final Long articleId) {
+        List<CommentResponseDto> commentResponseDto = commentService.findByArticleId(articleId);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }

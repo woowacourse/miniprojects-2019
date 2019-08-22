@@ -34,15 +34,6 @@ public class CommentService {
         this.modelMapper = modelMapper;
     }
 
-    @Transactional(readOnly = true)
-    public List<CommentResponseDto> findAll() {
-        return Collections.unmodifiableList(
-                commentRepository.findAll().stream()
-                        .map(article -> modelMapper.map(article, CommentResponseDto.class))
-                        .collect(Collectors.toList())
-        );
-    }
-
     @Transactional
     public CommentResponseDto save(final CommentFeature commentFeature,
                                    final Long articleId,
@@ -52,6 +43,24 @@ public class CommentService {
         Comment comment = commentRepository.save(new Comment(commentFeature, user, article));
 
         return modelMapper.map(comment, CommentResponseDto.class);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponseDto> findAll() {
+        return Collections.unmodifiableList(
+                commentRepository.findAll().stream()
+                        .map(article -> modelMapper.map(article, CommentResponseDto.class))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponseDto> findByArticleId(final Long articleId) {
+        return Collections.unmodifiableList(
+                commentRepository.findByArticleId(articleId).stream()
+                        .map(article -> modelMapper.map(article, CommentResponseDto.class))
+                        .collect(Collectors.toList())
+        );
     }
 
     @Transactional
