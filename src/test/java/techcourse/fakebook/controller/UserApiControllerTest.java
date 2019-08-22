@@ -59,8 +59,9 @@ class UserApiControllerTest extends ControllerTestHelper {
     @Test
     void 로그인_키워드로_유저이름_조회() {
         UserSignupRequest userSignupRequest =
-                new UserSignupRequest("aa@bb.cc", "keyword", "123", "1q2w3e$R", "M", "123456");
+                new UserSignupRequest("aa@bb.cc", "keyword", "qwe", "1q2w3e$R", "M", "123456");
         String cookie = getCookie(signup(userSignupRequest));
+
 
         given().
                 port(port).
@@ -69,7 +70,7 @@ class UserApiControllerTest extends ControllerTestHelper {
         when().
                 get("/api/users/" + "keyword").
         then().
-                statusCode(HttpStatus.OK.value()).
-                body(".", hasItem("keyword123"));
+                statusCode(200).
+                body(".", hasItem("keywordqwe"));
     }
 }
