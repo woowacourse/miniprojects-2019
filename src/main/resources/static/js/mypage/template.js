@@ -2,7 +2,7 @@ const feedTemplatesCreator = () => {
     const templates = {
         introduce: (user) => `
         <div class="card-contents">
-            <i class="ti-email"></i><span>${user.email}</span>
+            <i class="ti-email"></i><span> ${user.email}</span>
         </div>
         `,
 
@@ -25,7 +25,7 @@ const feedTemplatesCreator = () => {
     imageTemplate = (imageSrc) => `
         <img src=${imageSrc} class="image">
     `,
-    multipleImageParser = (images) => images.map(image = > imageTemplate(image.path)).join('')
+    multipleImageParser = (images) => images.map(image => imageTemplate(image.path)).join('')
 
     return templates
 }
