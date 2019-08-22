@@ -2,7 +2,6 @@ package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
 import com.woowacourse.dsgram.domain.ArticleRepository;
-import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
 import com.woowacourse.dsgram.service.dto.user.LoggedInUser;
 import org.springframework.stereotype.Service;
@@ -38,21 +37,14 @@ public class ArticleService {
 
     @Transactional
     public Article update(long articleId, ArticleEditRequest articleEditRequest, LoggedInUser loggedInUser) {
-        Article article = checkAuthor(articleId, loggedInUser);
-        return article.update(articleEditRequest.getContents());
+        Article article = findById(articleId);
+        return article.update(articleEditRequest.getContents(), loggedInUser.getId());
     }
 
     @Transactional
     public void delete(long articleId, LoggedInUser loggedInUser) {
-        Article article = checkAuthor(articleId, loggedInUser);
-        articleRepository.delete(article);
-    }
-
-    private Article checkAuthor(long articleId, LoggedInUser loggedInUser) {
         Article article = findById(articleId);
-        if (article.notEqualAuthorId(loggedInUser.getId())) {
-            throw new InvalidUserException("글 작성자만 수정, 삭제가 가능합니다.");
-        }
-        return article;
+        article.checkAccessibleAuthor(loggedInUser.getId());
+        articleRepository.delete(article);
     }
 }

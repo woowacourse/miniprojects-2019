@@ -1,6 +1,7 @@
 package com.woowacourse.dsgram.domain;
 
 
+import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -43,12 +44,19 @@ public class Article {
         this.author = author;
     }
 
-    public Article update(String contents) {
+    public Article update(String contents, long editUserId) {
+        checkAccessibleAuthor(editUserId);
         this.contents = contents;
         return this;
     }
 
-    public boolean notEqualAuthorId(long id) {
+    public void checkAccessibleAuthor(long editUserId) {
+        if (notEqualAuthorId(editUserId)) {
+            throw new InvalidUserException("글 작성자만 수정, 삭제가 가능합니다.");
+        }
+    }
+
+    private boolean notEqualAuthorId(long id) {
         return this.author.notEqualId(id);
     }
 
@@ -62,4 +70,5 @@ public class Article {
                 ", author=" + author +
                 '}';
     }
+
 }
