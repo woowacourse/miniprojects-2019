@@ -3,6 +3,7 @@ package techcourse.w3.woostagram.article.controller;
 import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
+import techcourse.w3.woostagram.common.support.TestDataInitializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ArticleRestControllerTest extends AbstractControllerTests {
     @Test
     void read_correctArticleId_isOk() {
-        ArticleDto response = getRequest("/api/articles/1", ArticleDto.class);
-        assertThat(response.getContents()).isEqualTo("moomin is moomin");
+        ArticleDto response = getRequest("/api/articles/" + TestDataInitializer.basicArticle.getId(), ArticleDto.class);
+        assertThat(response.getContents()).isEqualTo(TestDataInitializer.basicArticle.getContents());
     }
 
     @Test
