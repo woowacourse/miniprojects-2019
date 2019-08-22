@@ -13,6 +13,9 @@ import javax.persistence.*;
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
 @ToString
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"from_id", "to_id"})
+})
 public class Follow extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,20 +23,17 @@ public class Follow extends BaseEntity {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name="from_id")
     private User from;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name="to_id")
     private User to;
 
     @Builder
     public Follow(User from, User to) {
         this.from = from;
         this.to = to;
-    }
-
-    public void nullify() {
-        from = null;
-        to = null;
     }
 }

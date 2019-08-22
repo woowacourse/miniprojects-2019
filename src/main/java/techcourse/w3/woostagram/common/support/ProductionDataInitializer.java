@@ -37,89 +37,70 @@ public class ProductionDataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        User user1 = userRepository.save(User.builder()
-                .email("a@naver.com")
-                .password("Aa1234!!")
+        User gd = saveUser("gyudong@woowahan.com", "Aa1234!!", "규동");
+        User mm = saveUser("moomin@woowahan.com", "Aa1234!!", "무민");
+        User iv = saveUser("iva@woowahan.com", "Aa1234!!", "이바");
+        User hr = saveUser("harry-potter@woowahan.com", "Aa1234!!", "해리");
+        User uni = saveUser("uni@woowahan.com", "Aa1234!!", "유니");
+
+        Article gdArticle1 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article mmArticle1 = saveArticle(mm, "moomin is moomin", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/mm.png");
+        Article ivArticle1 = saveArticle(iv, "hello world", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/harry_moomin_gd.png");
+        Article hrArticle1 = saveArticle(hr, "", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/harry.png");
+        Article uniArticle1 = saveArticle(uni, "", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/uni.png");
+
+        Comment mmComment = saveComment(gdArticle1, "대박대박", mm);
+        Comment ivComment = saveComment(gdArticle1, "역규(역시 규동이라는 뜻)", iv);
+        Comment ivComment2 = saveComment(hrArticle1, "역해(역시 해리라는 뜻)", iv);
+
+        Follow gdToMm = saveFollow(gd, mm);
+        Follow gdToIv = saveFollow(gd, iv);
+        Follow gdToHr = saveFollow(gd, hr);
+        Follow gdToUni = saveFollow(gd, uni);
+        Follow mmToGd = saveFollow(mm, gd);
+        Follow ivToHr = saveFollow(iv, hr);
+        Follow hrToUni = saveFollow(hr, uni);
+    }
+
+    private Likes saveLikes(User liker, Article article) {
+        return likesRepository.save(Likes.builder()
+                .article(article)
+                .user(liker)
+                .build());
+    }
+
+    private Follow saveFollow(User from, User to) {
+        return followRepository.save(Follow.builder()
+                .from(from)
+                .to(to)
+                .build());
+    }
+
+    private Comment saveComment(Article article, String contents, User commenter) {
+        return commentRepository.save(Comment.builder()
+                .article(article)
+                .contents(contents)
+                .user(commenter)
+                .build());
+    }
+
+    private Article saveArticle(User author, String contents, String image) {
+        return articleRepository.save(Article.builder()
+                .user(author)
+                .contents(contents)
+                .imageUrl(image)
+                .build());
+    }
+
+    private User saveUser(String email, String password, String userName) {
+        return userRepository.save(User.builder()
+                .email(email)
+                .password(password)
                 .userContents(
                         UserContents.builder()
-                                .userName("user")
+                                .userName(userName)
                                 .build()
                 )
-                .build());
-
-        User user2 = userRepository.save(User.builder()
-                .email("b@naver.com")
-                .password("Aa1234!!")
-                .userContents(
-                        UserContents.builder()
-                                .userName("user2")
-                                .build()
-                )
-                .build());
-
-        User user3 = userRepository.save(User.builder()
-                .email("c@naver.com")
-                .password("Aa1234!!")
-                .userContents(
-                        UserContents.builder()
-                                .userName("user3")
-                                .build()
-                )
-                .build());
-
-        Article article1 = articleRepository.save(Article.builder()
-                .user(user1)
-                .contents("moomin is moomin1")
-                .imageUrl("https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/feee6754-8855-4461-b154-86cbda2b8864.png")
-                .build());
-
-        Article article2 = articleRepository.save(Article.builder()
-                .user(user1)
-                .contents("moomin is moomin2")
-                .imageUrl("https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/feee6754-8855-4461-b154-86cbda2b8864.png")
-                .build());
-
-        Article article3 = articleRepository.save(Article.builder()
-                .user(user1)
-                .contents("moomin is moomin3")
-                .imageUrl("https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/feee6754-8855-4461-b154-86cbda2b8864.png")
-                .build());
-
-        Comment comment1 = commentRepository.save(Comment.builder()
-                .article(article1)
-                .contents("contents1")
-                .user(user1)
-                .build());
-
-        Comment comment2 = commentRepository.save(Comment.builder()
-                .article(article1)
-                .contents("contents2")
-                .user(user1)
-                .build());
-
-        Follow follow1 = followRepository.save(Follow.builder()
-                .from(user1)
-                .to(user2)
-                .build());
-
-        Follow follow2 = followRepository.save(Follow.builder()
-                .from(user1)
-                .to(user3)
-                .build());
-
-        Likes likes1 = likesRepository.save(Likes.builder()
-                .article(article1)
-                .user(user1)
-                .build());
-
-        Likes likes2 = likesRepository.save(Likes.builder()
-                .article(article1)
-                .user(user2)
-                .build());
-
-        Likes likes3 = likesRepository.save(Likes.builder()
-                .article(article1)
-                .user(user3)
                 .build());
     }
 }

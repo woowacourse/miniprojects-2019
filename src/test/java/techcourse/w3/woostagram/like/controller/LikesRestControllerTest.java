@@ -13,7 +13,7 @@ class LikesRestControllerTest extends AbstractControllerTests {
 
     @Test
     void create_correct_isOk() {
-        assertThat(postJsonRequest("/api/articles/1/likes", new HashMap<>())
+        assertThat(postJsonRequest("/api/articles/2/likes", new HashMap<>())
                 .getStatus()
                 .is2xxSuccessful())
                 .isTrue();

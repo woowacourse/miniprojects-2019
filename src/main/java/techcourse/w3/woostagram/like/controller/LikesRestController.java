@@ -31,7 +31,7 @@ public class LikesRestController {
 
     @DeleteMapping
     public ResponseEntity delete(@PathVariable Long articleId, @LoggedInUser String email) {
-        likesService.remove(articleId, email);
+        likesService.delete(articleId, email);
         return ResponseEntity.ok().build();
     }
 

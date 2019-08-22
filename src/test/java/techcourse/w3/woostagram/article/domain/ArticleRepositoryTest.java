@@ -13,6 +13,7 @@ import techcourse.w3.woostagram.user.domain.UserRepository;
 
 import java.util.Arrays;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -27,7 +28,7 @@ class ArticleRepositoryTest {
     private TestEntityManager testEntityManager;
 
     @Test
-    public void test() {
+    public void findByUserIn_correct_ok() {
         User user1 = User.builder()
                 .email("ab@naver.com")
                 .password("Aa12345!!")
@@ -62,6 +63,8 @@ class ArticleRepositoryTest {
         testEntityManager.persist(article1);
         testEntityManager.persist(article2);
 
-        Page<Article> result = articleRepository.findByUserIn(Arrays.asList(persistUser1, persistUser2), new PageRequest(0,1));
+        Page<Article> result = articleRepository.findByUserIn(Arrays.asList(persistUser1, persistUser2), new PageRequest(0,2));
+        assertThat(result.getTotalElements()).isEqualTo(2);
+        assertThat(result.getTotalPages()).isEqualTo(1);
     }
 }

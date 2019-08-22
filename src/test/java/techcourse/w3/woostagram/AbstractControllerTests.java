@@ -138,11 +138,6 @@ public class AbstractControllerTests {
         }
     }
 
-    @AfterEach
-    protected void tearDown() {
-
-    }
-
     protected void clearCookie() {
         cookie = "";
     }

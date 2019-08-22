@@ -70,11 +70,10 @@ class LikesServiceTest {
         when(articleService.findArticleById(article.getId())).thenReturn(article);
         when(likesRepository.findByArticleAndUser_Id(article, user.getId())).thenReturn(likes);
 
-        likesService.remove(article.getId(), user.getEmail());
+        likesService.delete(article.getId(), user.getEmail());
         verify(userService, times(1)).findUserByEmail(user.getEmail());
         verify(articleService, times(1)).findArticleById(article.getId());
-        verify(likesRepository, times(1)).findByArticleAndUser_Id(article, likes.getId());
+        verify(likesRepository, times(1)).findByArticleAndUser_Id(article, user.getId());
         verify(likesRepository, times(1)).delete(likes);
-
     }
 }

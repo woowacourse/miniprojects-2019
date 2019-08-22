@@ -54,10 +54,4 @@ class FollowRestControllerTest extends AbstractControllerTests {
         int numberOfFollowing = getRequest("/api/users/" + basicFollow.getTo().getId() + "/follows/followings/num", Integer.class);
         assertThat(numberOfFollowing).isEqualTo(1);
     }
-
-    @Override
-    @AfterEach
-    protected void tearDown() {
-        super.tearDown();
-    }
 }

@@ -44,11 +44,10 @@ public class LikesService {
         return likedUsers.stream().map(likes -> UserInfoDto.from(likes.getUser())).collect(Collectors.toList());
     }
 
-    public void remove(Long articleId, String email) {
+    public void delete(Long articleId, String email) {
         User user = userService.findUserByEmail(email);
         Article article = articleService.findArticleById(articleId);
         Likes likes = likesRepository.findByArticleAndUser_Id(article, user.getId());
-        likes.nullify();
         likesRepository.delete(likes);
     }
 }

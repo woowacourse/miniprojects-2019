@@ -53,7 +53,6 @@ public class FollowService {
         User user = userService.findUserByEmail(email);
         User targetUser = userService.findById(targetId);
         Follow following = followRepository.findByFromAndTo(user, targetUser).orElseThrow(FollowNotFoundException::new);
-        following.nullify();
         followRepository.delete(following);
     }
 }
