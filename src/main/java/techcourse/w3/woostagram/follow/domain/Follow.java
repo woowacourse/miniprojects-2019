@@ -1,10 +1,9 @@
 package techcourse.w3.woostagram.follow.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import techcourse.w3.woostagram.common.support.BaseEntity;
 import techcourse.w3.woostagram.user.domain.User;
 
 import javax.persistence.*;
@@ -12,7 +11,9 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Follow {
+@EqualsAndHashCode(of = "id", callSuper = false)
+@ToString
+public class Follow extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

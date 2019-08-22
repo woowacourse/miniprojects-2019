@@ -1,18 +1,17 @@
 package techcourse.w3.woostagram.user.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserContents;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class UserDto {
     @Email(message = User.ERROR_EMAIL)
     private String email;

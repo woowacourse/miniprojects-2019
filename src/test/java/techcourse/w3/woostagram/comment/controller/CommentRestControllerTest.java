@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RestCommentControllerTest extends AbstractControllerTests {
+class CommentRestControllerTest extends AbstractControllerTests {
     @Test
     void create_correct_isOk() {
         Map<String, String> params = new HashMap<>();

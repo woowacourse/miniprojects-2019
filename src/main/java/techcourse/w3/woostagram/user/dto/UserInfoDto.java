@@ -4,11 +4,11 @@ package techcourse.w3.woostagram.user.dto;
 import lombok.*;
 import techcourse.w3.woostagram.user.domain.User;
 
-@ToString
-@EqualsAndHashCode
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class UserInfoDto {
     private Long id;
     private String email;

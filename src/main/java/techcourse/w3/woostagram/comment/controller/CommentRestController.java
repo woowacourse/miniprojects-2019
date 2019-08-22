@@ -11,10 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/comments/{articleId}")
-public class RestCommentController {
+public class CommentRestController {
     private final CommentService commentService;
 
-    public RestCommentController(CommentService commentService) {
+    public CommentRestController(CommentService commentService) {
         this.commentService = commentService;
     }
 
