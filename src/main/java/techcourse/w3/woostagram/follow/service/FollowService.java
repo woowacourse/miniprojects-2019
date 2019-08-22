@@ -23,7 +23,7 @@ public class FollowService {
     }
 
     @Transactional
-    public void add(String email, Long targetId){
+    public void add(String email, Long targetId) {
         User user = userService.findUserByEmail(email);
         User targetUser = userService.findById(targetId);
         Follow follow = Follow.builder()
@@ -33,13 +33,13 @@ public class FollowService {
         followRepository.save(follow);
     }
 
-    public List<UserInfoDto> getFollowers(Long id){
+    public List<UserInfoDto> getFollowers(Long id) {
         User user = userService.findById(id);
         List<Follow> followers = followRepository.findAllByTo(user);
         return followers.stream().map((Follow follow) -> UserInfoDto.from(follow.getFrom())).collect(Collectors.toList());
     }
 
-    public List<UserInfoDto> getFollowing(Long id){
+    public List<UserInfoDto> getFollowing(Long id) {
         User user = userService.findById(id);
         List<Follow> followers = followRepository.findAllByFrom(user);
         return followers.stream().map((Follow follow) -> UserInfoDto.from(follow.getTo())).collect(Collectors.toList());

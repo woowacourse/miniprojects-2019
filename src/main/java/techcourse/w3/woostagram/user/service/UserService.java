@@ -2,20 +2,23 @@ package techcourse.w3.woostagram.user.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserRepository;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
+import techcourse.w3.woostagram.user.dto.UserProfileImageDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
 import techcourse.w3.woostagram.user.exception.UserUpdateException;
 
-import java.util.Objects;
-
 @Service
 public class UserService {
+    private static final String DEFAULT_PROFILE_IMAGE =
+            "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
+
     private final UserRepository userRepository;
     private final StorageService storageService;
 
@@ -40,16 +43,11 @@ public class UserService {
     @Transactional
     public void update(UserUpdateDto userUpdateDto, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(UserUpdateException::new);
-        String fileUrl = userUpdateDto.getOriginalImageFile();
-        if (!userUpdateDto.getImageFile().isEmpty()) {
-            deleteFile(fileUrl);
-            fileUrl = storageService.saveMultipartFile(userUpdateDto.getImageFile());
-        }
-        user.updateContents(userUpdateDto.toEntity(fileUrl));
+        user.updateContents(userUpdateDto.toEntity());
     }
 
     private void deleteFile(String fileUrl) {
-        if (Objects.nonNull(fileUrl)) {
+        if (!StringUtils.isEmpty(fileUrl) && !fileUrl.equals(DEFAULT_PROFILE_IMAGE)) {
             storageService.deleteFile(fileUrl);
         }
     }
@@ -70,5 +68,17 @@ public class UserService {
 
     public User findById(long targetId) {
         return userRepository.findById(targetId).orElseThrow(LoginException::new);
+    }
+
+    @Transactional
+    public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(UserUpdateException::new);
+        String fileUrl = userProfileImageDto.getOriginalImageFile();
+        deleteFile(fileUrl);
+        if (!userProfileImageDto.getImageFile().isEmpty()) {
+            fileUrl = storageService.saveMultipartFile(userProfileImageDto.getImageFile());
+        }
+        user.updateProfile(fileUrl);
+        return fileUrl;
     }
 }

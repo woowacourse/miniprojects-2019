@@ -4,94 +4,74 @@
     <th:block th:replace="fragments/common-head :: common-head"></th:block>
 </head>
 <body>
-<header id="header" class="header navbar">
-    <div class="header-container max-width-lg mx-auto">
-        <ul class="nav-left mrg-left-0 padding-15">
-            <li>
-                <img class="logo desktop-view" src="/images/logo/instgram_logo.png">
-                <div class="width-40px mobile-view overflow-hidden">
-                    <img class="logo" src="/images/logo/instgram_logo.png">
-                </div>
-            </li>
-        </ul>
-    </div>
-</header>
-
-
-<form action="/users" th:method="put" enctype="multipart/form-data">
-    <div class="container-fluid max-width-lg mx-auto mrg-btm-30 padding-30" style="margin-top: 100px">
-        <div class="row">
-            <div class="col-md-7 mx-auto">
-                <div class="card">
-                    <div class="card-heading pdd-btm-5 border bottom">
-                        <h4 class="card-title d-inline-block">profile</h4>
-                        <button type="submit" class="btn btn-info float-right mrg-btm-0 relative bottom-5">수정</button>
+    <header id="header" class="header navbar">
+        <div class="header-container max-width-lg mx-auto">
+            <ul class="nav-left mrg-left-0 padding-15">
+                <li>
+                    <img class="logo desktop-view" src="/images/logo/instgram_logo.png">
+                    <div class="width-40px mobile-view overflow-hidden">
+                        <img class="logo" src="/images/logo/instgram_logo.png">
                     </div>
-                    <div th:if="${error}" th:text="${message}" class="alert alert-danger"
-                         role="alert"></div>
-                    <div class="card-block">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <p class="mrg-top-10 text-dark"><b>Name</b></p>
-                            </div>
-                            <div class="col-md-6">
-                                <input name="name" type="text" class="form-control" th:value="${userInfo.userContentsDto.name}">
-                            </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+
+    <form action="/users" th:method="put" enctype="multipart/form-data">
+        <div class="container-fluid max-width-lg mx-auto mrg-btm-30 padding-30" style="margin-top: 100px">
+            <div class="row">
+                <div class="col-md-7 mx-auto">
+                    <div class="card">
+                        <div class="card-heading pdd-btm-5 border bottom">
+                            <h4 class="card-title d-inline-block">profile</h4>
+                            <button type="submit" class="btn btn-info float-right mrg-btm-0 relative bottom-5">수정</button>
                         </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <p class="mrg-top-10 text-dark"><b>UserName</b></p>
-                            </div>
-                            <div class="col-md-6">
-                                <input name="userName" type="text" class="form-control" th:value="${userInfo.userContentsDto.userName}" th:filed="*{userName}">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <p class="mrg-top-10 text-dark"><b>Contents</b></p>
-                            </div>
-                            <div class="col-md-6">
-                                <input name="contents" type="text" class="form-control" th:value="${userInfo.userContentsDto.contents}">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <p class="mrg-top-10 text-dark"><b>Email</b></p>
-                            </div>
-                            <div class="col-md-6">
-                                <p class="mrg-top-10" th:text="${userInfo.email}"></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <p class="mrg-top-10 text-dark"><b>Avatar</b></p>
-                            </div>
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="img-upload" class="pointer">
-                                        <img th:src="${userInfo.userContentsDto.profile == null} ?
-                                                    'https://avatars3.githubusercontent.com/u/46308949?s=460&v=4'
-                                                    : ${userInfo.userContentsDto.profile}"
-                                             width="117" alt="">
-                                        <span class="btn btn-default display-block no-mrg-btm">Choose file</span>
-                                        <input class="d-none" type="file" name="imageFile" multiple
-                                               id="img-upload">
-                                        <input th:if="${userInfo.userContentsDto.profile != null}" type="hidden" name="originalImageFile"
-                                               th:value="${userInfo.userContentsDto.profile}">
-                                    </label>
+                        <div th:if="${error}" th:text="${message}" class="alert alert-danger"
+                             role="alert"></div>
+                        <div class="card-block">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p class="mrg-top-10 text-dark"><b>Name</b></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <input name="name" type="text" class="form-control" th:value="${userInfo.userContentsDto.name}">
                                 </div>
                             </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p class="mrg-top-10 text-dark"><b>UserName</b></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <input name="userName" type="text" class="form-control" th:value="${userInfo.userContentsDto.userName}" th:filed="*{userName}">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p class="mrg-top-10 text-dark"><b>Contents</b></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <input name="contents" type="text" class="form-control" th:value="${userInfo.userContentsDto.contents}">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p class="mrg-top-10 text-dark"><b>Email</b></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mrg-top-10" th:text="${userInfo.email}"></p>
+                                </div>
+                            </div>
+                            <hr>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -104,5 +84,4 @@
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 </body>
-
 </html>
