@@ -65,7 +65,7 @@ const USER_APP = (() => {
         const imageInput = document.getElementById("img-upload");
         const profileImage = document.getElementById('profile-image');
 
-        const saveUser = function (event) {
+        const saveUser = event => {
             event.preventDefault();
 
             const userBasicInfo = {
@@ -84,7 +84,7 @@ const USER_APP = (() => {
                 ifSucceed);
         };
 
-        const updateUser = function (event) {
+        const updateUser = event => {
             event.preventDefault();
 
             const formData = new FormData();
@@ -117,7 +117,7 @@ const USER_APP = (() => {
                 () => window.location.href = '/login')
         };
 
-        const login = function (event) {
+        const login = event => {
             event.preventDefault();
 
             const userBasicInfo = {
@@ -134,11 +134,11 @@ const USER_APP = (() => {
                 ifSucceed);
         };
 
-        const changeImageJustOnFront = function (event) {
+        const changeImageJustOnFront = event => {
             const file = event.target.files[0];
             const reader = new FileReader();
             // it's onload event and you forgot (parameters)
-            reader.onload = function (readEvent) {
+            reader.onload = readEvent => {
                 profileImage.src = readEvent.target.result;
             };
             // you have to declare the file loading
@@ -146,31 +146,27 @@ const USER_APP = (() => {
 
         };
 
-        const showThumbnail = function (userProfileImage) {
+        const showThumbnail = userProfileImage => {
             const fileLoadService = FILE_LOAD_APP.FileLoadService();
             const connector = FETCH_APP.FetchApi();
 
             const getImage = response => {
-                response.arrayBuffer().then(function (buffer) {
+                response.arrayBuffer().then(buffer => {
                     const bytes = new Uint8Array(buffer);
                     let binary = '';
                     bytes.forEach(b => binary += String.fromCharCode(b));
 
                     const blob = fileLoadService.b64StringToBlob(binary);
-                    const blobUrl = URL.createObjectURL(blob);
-
-                    userProfileImage.style.display = 'block';
-                    userProfileImage.src = blobUrl;
+                    setUrl(URL.createObjectURL(blob));
                 });
+
+                const setUrl = url => {
+                    userProfileImage.style.display = 'block';
+                    userProfileImage.src = url;
+                };
             };
 
             connector.fetchTemplateWithoutBody(`/api/users/${userId.value}/image`, connector.GET, getImage);
-        };
-
-        // TODO I want to PRIVATE method
-        const setUrl = (userProfileImage, url) => {
-            userProfileImage.style.display = 'block';
-            userProfileImage.src = url;
         };
 
         return {

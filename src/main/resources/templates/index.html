@@ -38,7 +38,7 @@
             const fileLoader = FILE_LOAD_APP.FileLoadService();
 
             const loadFile = response => {
-                response.arrayBuffer().then(function (buffer) {
+                response.arrayBuffer().then(buffer => {
                     const bytes = new Uint8Array(buffer);
                     let binary = '';
                     bytes.forEach((b) => binary += String.fromCharCode(b));

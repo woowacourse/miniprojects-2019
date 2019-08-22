@@ -7,7 +7,7 @@ const FETCH_APP = (() => {
         const PUT = 'PUT';
         const DELETE = 'DELETE';
 
-        const fetchTemplate = function (requestUrl, method, header, body, ifSucceed) {
+        const fetchTemplate = (requestUrl, method, header, body, ifSucceed) => {
             fetch(requestUrl, {
                 method: method,
                 headers: header,
@@ -22,7 +22,7 @@ const FETCH_APP = (() => {
             });
         };
 
-        const fetchTemplateWithoutBody = function (requestUrl, method, ifSucceed) {
+        const fetchTemplateWithoutBody = (requestUrl, method, ifSucceed) => {
             fetch(requestUrl, {
                 method: method,
                 headers: {
@@ -39,7 +39,7 @@ const FETCH_APP = (() => {
             });
         };
 
-        const errorHandler = function (error) {
+        const errorHandler = error => {
             error.json()
                 .then(exception => {
                     alert(exception.message)

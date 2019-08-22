@@ -25,7 +25,7 @@ const ARTICLE_APP = (() => {
     };
 
     const ArticleService = function () {
-        const save = function () {
+        const save = () => {
             const file = document.getElementById('file').value;
 
             if (file === '') {
@@ -48,7 +48,7 @@ const ARTICLE_APP = (() => {
         };
 
         // TODO 슬로스의 유작... 여기로 옮겨지다. (사용되지 않고 있음)
-        const copyUrl = (articleId) => {
+        const copyUrl = articleId => {
             const copiedUrl = window.location.host + `/articles/${articleId}`;
             const copyTarget = document.createElement('textarea');
 

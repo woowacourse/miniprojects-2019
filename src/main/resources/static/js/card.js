@@ -35,10 +35,28 @@ const CARD_APP = (() => {
                 const cardContents = document.getElementById(`article-contents-${articleId}`);
                 cardContents.children[0].style.display = 'none';
                 cardContents.children[1].style.display = 'block';
-                cardContents.children[1].children[1].addEventListener('click', function () {
-                    editArticle(cardContents, articleId)
-                }, false);
+                cardContents.children[1].children[1]
+                    .addEventListener('click', () => editArticle(cardContents, articleId), false);
             }
+
+            // TODO private method 를 어떻게 처리
+            const editArticle = (cardContents, articleId) => {
+                const header = {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                };
+                const articleInfo = {
+                    contents: cardContents.children[1].children[0].value
+                };
+                const connector = FETCH_APP.FetchApi();
+
+                connector.fetchTemplate(`/api/articles/${articleId}`,
+                    connector.PUT,
+                    header,
+                    JSON.stringify(articleInfo),
+                    () => window.location.reload());
+            };
+
         };
 
         const deleteCard = event => {
@@ -62,24 +80,6 @@ const CARD_APP = (() => {
             deleteCard: deleteCard,
             changeEditForm: changeEditForm
         }
-    };
-
-    const editArticle = function (cardContents, articleId) {
-        const header = {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Accept': 'application/json'
-        };
-        const articleInfo = {
-            // TODO 좋은 말할때 바꿔놔라 (미르)
-            contents: cardContents.children[1].children[0].value
-        };
-        const connector = FETCH_APP.FetchApi();
-
-        connector.fetchTemplate(`/api/articles/${articleId}`,
-            connector.PUT,
-            header,
-            JSON.stringify(articleInfo),
-            () => window.location.reload());
     };
 
     const init = () => {

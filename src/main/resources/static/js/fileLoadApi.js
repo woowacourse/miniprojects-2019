@@ -19,7 +19,7 @@ const FILE_LOAD_APP = (() => {
             return new Blob(byteArrays, {type: ''});
         };
 
-        function setSrcAttribute(url, fileName, articleId) {
+        const setSrcAttribute = (url, fileName, articleId) => {
             const words = fileName.split('.');
             const extension = words[words.length - 1];
 
@@ -36,7 +36,7 @@ const FILE_LOAD_APP = (() => {
                 articleVideo.style.display = "block";
                 articleVideo.src = url;
             }
-        }
+        };
 
         return {
             b64StringToBlob: b64StringToBlob,
