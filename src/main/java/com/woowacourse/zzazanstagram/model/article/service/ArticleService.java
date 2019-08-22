@@ -22,9 +22,6 @@ public class ArticleService {
     private static final Logger log = LoggerFactory.getLogger(ArticleService.class);
     private static final String TAG = "[ArticleService]";
 
-    @Value("${cloud.aws.s3.dirName.article}")
-    private String dirName;
-
     private final ArticleRepository articleRepository;
     private final MemberService memberService;
     private final S3Uploader s3Uploader;
@@ -42,7 +39,7 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    public void save(ArticleRequest dto, String email) {
+    public void save(ArticleRequest dto, String email, @Value("${cloud.aws.s3.dirName.article}") String dirName) {
         Member author = memberService.findByEmail(email);
         MultipartFile file = dto.getFile();
         String imageUrl = s3Uploader.upload(file, dirName);
