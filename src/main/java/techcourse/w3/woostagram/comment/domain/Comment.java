@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import techcourse.w3.woostagram.article.domain.Article;
-import techcourse.w3.woostagram.common.support.BaseEntity;
+import techcourse.w3.woostagram.common.domain.BaseEntity;
 import techcourse.w3.woostagram.user.domain.User;
 
 import javax.persistence.*;

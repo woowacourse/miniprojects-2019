@@ -1,7 +1,7 @@
 package techcourse.w3.woostagram.user.domain;
 
 import lombok.*;
-import techcourse.w3.woostagram.common.support.BaseEntity;
+import techcourse.w3.woostagram.common.domain.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
