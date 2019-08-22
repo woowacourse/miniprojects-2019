@@ -22,4 +22,8 @@ public abstract class Good extends BaseEntity {
     protected Good(final User user) {
         this.user = user;
     }
+
+    public boolean isGood(User user) {
+        return this.user.equals(user);
+    }
 }

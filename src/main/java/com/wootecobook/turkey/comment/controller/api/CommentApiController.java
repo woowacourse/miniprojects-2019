@@ -79,8 +79,8 @@ public class CommentApiController {
     }
 
     @GetMapping("/{id}/good/count")
-    public ResponseEntity<GoodResponse> countGood(@PathVariable Long id) {
-        GoodResponse goodResponse = commentService.countGoodResponseByComment(id);
+    public ResponseEntity<GoodResponse> countGood(@PathVariable Long id, UserSession userSession) {
+        GoodResponse goodResponse = commentService.countGoodResponseByComment(id, userSession.getId());
 
         return ResponseEntity.ok(goodResponse);
     }

@@ -5,10 +5,13 @@ import com.wootecobook.turkey.post.domain.PostGood;
 import com.wootecobook.turkey.post.domain.PostGoodRepository;
 import com.wootecobook.turkey.user.domain.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class PostGoodService {
 
     private final PostGoodRepository postGoodRepository;
@@ -17,19 +20,28 @@ public class PostGoodService {
         this.postGoodRepository = postGoodRepository;
     }
 
-    Integer good(Post post, User user) {
+    List<PostGood> good(Post post, User user) {
         Optional<PostGood> maybeGood = postGoodRepository.findByPostAndUser(post, user);
 
         if (maybeGood.isPresent()) {
-            postGoodRepository.delete(maybeGood.get());
+            cencelGoodRequest(maybeGood.get());
         } else {
-            postGoodRepository.save(new PostGood(user, post));
+            approveGoodRequest(new PostGood(user, post));
         }
 
-        return postGoodRepository.countByPost(post);
+        return findByPost(post);
     }
 
-    Integer countByPost(Post post) {
-        return postGoodRepository.countByPost(post);
+    private void approveGoodRequest(PostGood postGood) {
+        postGoodRepository.save(postGood);
+    }
+
+    private void cencelGoodRequest(PostGood postGood) {
+        postGoodRepository.delete(postGood);
+    }
+
+    @Transactional(readOnly = true)
+    List<PostGood> findByPost(Post post) {
+        return postGoodRepository.findByPost(post);
     }
 }

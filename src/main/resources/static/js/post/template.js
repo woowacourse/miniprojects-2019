@@ -76,18 +76,18 @@ const postTemplate = (post) => `
     <ul class="feed-action pdd-btm-5 border bottom">
         <li>
             <i class="fa fa-thumbs-o-up text-info font-size-16 mrg-left-5"></i>
-            <span class="font-size-14 lh-2-1">67</span>
+            <span class="show-post-good font-size-14 lh-2-1">${post.goodResponse.totalGood}</span>
         </li>
         <li class="float-right">
-            <span  class="font-size-13">공유 78회</span>
+            <span  class="font-size-13">공유 0회</span>
         </li>
         <li class="float-right mrg-right-15">
-            <span class="font-size-13">댓글 2개</span>
+            <span class="font-size-13">댓글 ${post.totalComment}개</span>
         </li>
     </ul>
     <ul class="feed-action border bottom d-flex">
         <li class="text-center flex-grow-1">
-            <button class="btn btn-default no-border pdd-vertical-0 no-mrg width-100">
+            <button class="good btn btn-default no-border pdd-vertical-0 no-mrg width-100">
                 <i class="fa fa-thumbs-o-up font-size-16"></i>
                 <span class="font-size-13">좋아요</span>
             </button>

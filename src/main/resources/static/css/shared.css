@@ -7,3 +7,7 @@ ul {
 li {
     margin: 0;
 }
+
+.good-active {
+    color: #2caae1;
+}

@@ -35,8 +35,9 @@ public class PostApiController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PostResponse>> list(@PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<PostResponse> postResponses = postService.findPostResponses(pageable);
+    public ResponseEntity<Page<PostResponse>> list(@PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable,
+                                                   UserSession userSession) {
+        Page<PostResponse> postResponses = postService.findPostResponses(pageable, userSession.getId());
         return ResponseEntity.ok(postResponses);
     }
 
@@ -60,9 +61,9 @@ public class PostApiController {
         return ResponseEntity.ok(goodResponse);
     }
 
-    @GetMapping("/{id}/good/count")
-    public ResponseEntity countGood(@PathVariable Long id) {
-        GoodResponse goodResponse = postService.countPostGoodByPost(id);
+    @GetMapping("/{postId}/good/count")
+    public ResponseEntity countGood(@PathVariable Long postId, UserSession userSession) {
+        GoodResponse goodResponse = postService.countPostGoodByPost(postId, userSession.getId());
         return ResponseEntity.ok(goodResponse);
     }
 }

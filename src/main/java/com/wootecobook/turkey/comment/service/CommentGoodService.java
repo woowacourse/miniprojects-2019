@@ -6,6 +6,7 @@ import com.wootecobook.turkey.comment.domain.CommentGoodRepository;
 import com.wootecobook.turkey.user.domain.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,19 +18,27 @@ public class CommentGoodService {
         this.commentGoodRepository = commentGoodRepository;
     }
 
-    Integer good(final Comment comment, final User user) {
+    List<CommentGood> good(final Comment comment, final User user) {
         Optional<CommentGood> maybeCommentGood = commentGoodRepository.findByCommentAndUser(comment, user);
 
         if (maybeCommentGood.isPresent()) {
-            commentGoodRepository.delete(maybeCommentGood.get());
+            cencelGoodRequest(maybeCommentGood.get());
         } else {
-            commentGoodRepository.save(new CommentGood(user, comment));
+            approveGoodRequest(new CommentGood(user, comment));
         }
 
-        return countByComment(comment);
+        return findByComment(comment);
     }
 
-    Integer countByComment(Comment comment) {
-        return commentGoodRepository.countByComment(comment);
+    private void approveGoodRequest(CommentGood commentGood) {
+        commentGoodRepository.save(commentGood);
+    }
+
+    private void cencelGoodRequest(CommentGood commentGood) {
+        commentGoodRepository.delete(commentGood);
+    }
+
+    List<CommentGood> findByComment(Comment comment) {
+        return commentGoodRepository.findByComment(comment);
     }
 }

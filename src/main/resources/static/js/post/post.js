@@ -11,44 +11,44 @@ let currentPageNumber = 1;
 writeBtn.addEventListener('click', (event) => {
     const formData = new FormData();
 
-    const contents = writeArea.value
-    formData.append('contents', contents)
+const contents = writeArea.value
+formData.append('contents', contents)
 
-    const fileForm = document.getElementById('attach-files')
-    const files = fileForm.files
+const fileForm = document.getElementById('attach-files')
+const files = fileForm.files
 
-    const len = files.length;
-    for (let i = 0; i < len; i++) {
-        formData.append('files', files[i]);
-    }
+const len = files.length;
+for (let i = 0; i < len; i++) {
+    formData.append('files', files[i]);
+}
 
-    fileForm.value = ''
-    writeArea.value = ''
+fileForm.value = ''
+writeArea.value = ''
 
-    formDataApi.POST(POST_URL, formData)
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            }
-            throw res
-        })
-        .then(post => posts.prepend(createPostDOM(post)))
-        .catch(error => {
-            error.json().then(errorMessage =>
-                console.log(errorMessage.message))
-        })
+formDataApi.POST(POST_URL, formData)
+    .then(res => {
+    if (res.ok) {
+    return res.json();
+}
+throw res
+})
+.then(post => posts.prepend(createPostDOM(post)))
+.catch(error => {
+    error.json().then(errorMessage =>
+        console.log(errorMessage.message))
+})
 })
 
 const initLoad = async () => {
     await api.GET(POST_URL)
         .then(res => res.json())
-        .then(postPage => {
-            totalPage = postPage.totalPages;
-            postPage.content.forEach(post => {
-                posts.appendChild(createPostDOM(post))
-            })
-        })
-        .catch(error => console.error(error))
+.then(postPage => {
+        totalPage = postPage.totalPages;
+    postPage.content.forEach(post => {
+        posts.appendChild(createPostDOM(post))
+    })
+})
+.catch(error => console.error(error))
 }
 
 const infinityScroll = (event) => {
@@ -61,13 +61,13 @@ const infinityScroll = (event) => {
     if (currentScrollPercentage > 90) {
         api.GET(POST_URL + `?page=${currentPageNumber++}`)
             .then(res => res.json())
-            .then(postPage => {
-                totalPage = postPage.totalPages;
-                postPage.content.forEach(post => {
-                    posts.appendChild(createPostDOM(post))
-                })
-            })
-            .catch(error => console.error(error))
+    .then(postPage => {
+            totalPage = postPage.totalPages;
+        postPage.content.forEach(post => {
+            posts.appendChild(createPostDOM(post))
+        })
+    })
+    .catch(error => console.error(error))
     }
 }
 
@@ -154,23 +154,23 @@ const postOperateButton = (function () {
 
                     api.PUT(getTargetPostUrl(postId), contents)
                         .then(response => {
-                            if (!response.ok) {
-                                throw response;
-                            }
-                            return response.json();
-                        })
-                        .then(post => {
-                            const updatePostContainer = createPostDOM(post);
+                        if (!response.ok) {
+                        throw response;
+                    }
+                    return response.json();
+                })
+                .then(post => {
+                        const updatePostContainer = createPostDOM(post);
 
-                            postCard.parentNode.innerHTML = updatePostContainer.innerHTML;
-                            postCard.classList.toggle('editing');
-                        })
-                        .catch(errorResponse =>
-                            errorResponse.json()
-                                .then(errorMessage =>
-                                    console.log(errorMessage.message)
-                                )
-                        )
+                    postCard.parentNode.innerHTML = updatePostContainer.innerHTML;
+                    postCard.classList.toggle('editing');
+                })
+                .catch(errorResponse =>
+                    errorResponse.json()
+                        .then(errorMessage =>
+                    console.log(errorMessage.message)
+                )
+                )
                 }
             }
 
@@ -185,17 +185,17 @@ const postOperateButton = (function () {
 
                     api.DELETE(getTargetPostUrl(postId))
                         .then(response => {
-                            if (response.status !== 204) {
-                                throw response;
-                            }
-                            postList.removeChild(postCard.parentNode);
-                        })
-                        .catch(errorResponse =>
-                            errorResponse.json()
-                                .then(errorMessage =>
-                                    console.log(errorMessage.message)
-                                )
-                        )
+                        if (response.status !== 204) {
+                        throw response;
+                    }
+                    postList.removeChild(postCard.parentNode);
+                })
+                .catch(errorResponse =>
+                    errorResponse.json()
+                        .then(errorMessage =>
+                    console.log(errorMessage.message)
+                )
+                )
                 }
             }
 
@@ -217,32 +217,32 @@ const postOperateButton = (function () {
                     }
                     api.GET(`/api/posts/${postId}/comments?page=${page}`)
                         .then(res => res.json())
-                        .then(comments => {
-                            comments.content.forEach(comment => {
-                                const div = document.createElement('div')
-                                if (comments.content.parentId == null) {
-                                    div.innerHTML = commentTemplate(comment)
-                                    if (comment.countOfChildren > 0) {
-                                        div.innerHTML += countOfChildren(comment.countOfChildren)
-                                    }
-                                } else {
-                                    div.innerHTML = childCommentTemplate(comment)
-                                }
-                                div.addEventListener('keyup', updateComment)
-                                commentsContainer.appendChild(div)
-                            })
+                .then(comments => {
+                        comments.content.forEach(comment => {
+                            const div = document.createElement('div')
+                            if (comments.content.parentId == null) {
+                        div.innerHTML = commentTemplate(comment)
+                        if (comment.countOfChildren > 0) {
+                            div.innerHTML += countOfChildren(comment.countOfChildren)
+                        }
+                    } else {
+                        div.innerHTML = childCommentTemplate(comment)
+                    }
+                    div.addEventListener('keyup', updateComment)
+                    commentsContainer.appendChild(div)
+                })
 
-                            if (target.classList.contains('more-comments')) {
-                                target.parentNode.removeChild(target)
-                            }
-                            const pageable = comments.pageable
-                            if (!comments.last) {
-                                const div = document.createElement('div')
-                                div.innerHTML = moreCommentsTemplate(pageable.pageNumber)
-                                commentsContainer.appendChild(div)
-                            }
-                        })
-                        .catch(error => console.error(error))
+                    if (target.classList.contains('more-comments')) {
+                        target.parentNode.removeChild(target)
+                    }
+                    const pageable = comments.pageable
+                    if (!comments.last) {
+                        const div = document.createElement('div')
+                        div.innerHTML = moreCommentsTemplate(pageable.pageNumber)
+                        commentsContainer.appendChild(div)
+                    }
+                })
+                .catch(error => console.error(error))
                 }
             }
 
@@ -266,20 +266,20 @@ const postOperateButton = (function () {
 
                 api.POST(`/api/posts/${postId}/comments`, commentCreate)
                     .then(res => res.json())
-                    .then(comment => {
-                        const div = document.createElement('div')
-                        if (comment.parentId == null) {
-                            div.innerHTML = commentTemplate(comment)
-                            commentsContainer.appendChild(div)
-                            contentsArea.value = ''
-                        } else {
-                            const form = parentComment.querySelector('.add-comment').parentNode
-                            form.parentNode.removeChild(form)
-                            div.innerHTML = childCommentTemplate(comment)
-                            parentComment.appendChild(div)
-                        }
-                    })
-                    .catch(error => console.error(error))
+            .then(comment => {
+                    const div = document.createElement('div')
+                    if (comment.parentId == null) {
+                    div.innerHTML = commentTemplate(comment)
+                    commentsContainer.appendChild(div)
+                    contentsArea.value = ''
+                } else {
+                    const form = parentComment.querySelector('.add-comment').parentNode
+                    form.parentNode.removeChild(form)
+                    div.innerHTML = childCommentTemplate(comment)
+                    parentComment.appendChild(div)
+                }
+            })
+            .catch(error => console.error(error))
             }
 
             const toggleCommentUpdate = (event) => {
@@ -311,14 +311,14 @@ const postOperateButton = (function () {
 
                 api.PUT(`/api/posts/${postId}/comments/${commentId}`, commentUpdate)
                     .then(res => res.json())
-                    .then(comment => {
-                        const contentsNode = commentItem.querySelector('span');
-                        const editContentsNode = commentItem.querySelector('textarea.bg-lightgray');
-                        contentsNode.innerText = comment.contents
-                        editContentsNode.value = comment.contents
-                        commentItem.querySelector('.info').classList.toggle('editing')
-                    })
-                    .catch(error => console.error(error))
+            .then(comment => {
+                    const contentsNode = commentItem.querySelector('span');
+                const editContentsNode = commentItem.querySelector('textarea.bg-lightgray');
+                contentsNode.innerText = comment.contents
+                editContentsNode.value = comment.contents
+                commentItem.querySelector('.info').classList.toggle('editing')
+            })
+            .catch(error => console.error(error))
             }
 
             const deleteComment = (event) => {
@@ -328,13 +328,13 @@ const postOperateButton = (function () {
                     const commentId = buttonContainer.dataset.id;
                     api.DELETE(`/api/posts/${postId}/comments/${commentId}`)
                         .then(res => {
-                            if (res.status !== 204) {
-                                throw res;
-                            }
-                            const commentCard = buttonContainer.parentNode
-                            commentCard.removeChild(buttonContainer);
-                        })
-                        .catch(error => console.error(error))
+                        if (res.status !== 204) {
+                        throw res;
+                    }
+                    const commentCard = buttonContainer.parentNode
+                    commentCard.removeChild(buttonContainer);
+                })
+                .catch(error => console.error(error))
                 }
             }
 
@@ -358,15 +358,15 @@ const postOperateButton = (function () {
 
                     api.GET(`/api/posts/${postId}/comments/${parentId}/children?size=${size}`)
                         .then(res => res.json())
-                        .then(comments => {
-                            comments.content.forEach(comment => {
-                                const div = document.createElement('div')
-                                div.innerHTML = childCommentTemplate(comment)
-                                parentContainer.appendChild(div)
-                            })
-                            event.target.parentNode.removeChild(event.target)
+                .then(comments => {
+                        comments.content.forEach(comment => {
+                            const div = document.createElement('div')
+                            div.innerHTML = childCommentTemplate(comment)
+                            parentContainer.appendChild(div)
                         })
-                        .catch(error => console.error(error))
+                    event.target.parentNode.removeChild(event.target)
+                })
+                .catch(error => console.error(error))
                 }
             }
 

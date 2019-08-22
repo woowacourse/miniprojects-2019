@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.post.service;
 
+import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.service.UploadFileService;
@@ -27,15 +28,18 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private static final String NOT_FOUND_MESSAGE = "존재하지 않는 게시글입니다.";
+    private static final int INIT_COMMENT_COUNT = 0;
 
     private final PostRepository postRepository;
     private final PostGoodService postGoodService;
     private final UserService userService;
     private final UploadFileService uploadFileService;
+    private CommentRepository commentRepository;
 
     public PostService(final PostRepository postRepository, final PostGoodService postGoodService,
-                       final UserService userService, final UploadFileService uploadFileService) {
+                       final UserService userService, final UploadFileService uploadFileService, final CommentRepository commentRepository) {
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
         this.postGoodService = postGoodService;
         this.userService = userService;
         this.uploadFileService = uploadFileService;
@@ -47,7 +51,7 @@ public class PostService {
 
         Post savedPost = postRepository.save(postRequest.toEntity(user, savedFiles));
 
-        return PostResponse.from(savedPost);
+        return PostResponse.from(savedPost, GoodResponse.init(), INIT_COMMENT_COUNT);
     }
 
     private List<UploadFile> saveAttachments(List<MultipartFile> attachments, User owner) {
@@ -66,12 +70,20 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponse> findPostResponses(final Pageable pageable) {
-        return postRepository.findAll(pageable).map(PostResponse::from);
+    public Page<PostResponse> findPostResponses(final Pageable pageable, final Long userId) {
+        User user = userService.findById(userId);
+
+        return postRepository.findAll(pageable)
+                .map(post -> {
+                    GoodResponse goodResponse = GoodResponse.of(postGoodService.findByPost(post), user);
+                    int totalComment = commentRepository.countByPost(post);
+                    return PostResponse.from(post, goodResponse, totalComment);
+                });
     }
 
     public PostResponse update(final PostRequest postRequest, final Long postId, final Long userId) {
         Post post = findById(postId);
+        User user = userService.findById(userId);
 
         if (post.isWrittenBy(userId)) {
             Post updatePost = Post.builder()
@@ -80,7 +92,10 @@ public class PostService {
                     .build();
 
             post.update(updatePost);
-            return PostResponse.from(post);
+            GoodResponse goodResponse = GoodResponse.of(postGoodService.findByPost(post), user);
+            int totalComment = commentRepository.countByPost(post);
+
+            return PostResponse.from(post, goodResponse, totalComment);
         }
 
         throw new NotPostOwnerException();
@@ -100,12 +115,14 @@ public class PostService {
         Post post = findById(postId);
         User user = userService.findById(userId);
 
-        return new GoodResponse(postGoodService.good(post, user));
+        return GoodResponse.of(postGoodService.good(post, user), user);
     }
 
-    public GoodResponse countPostGoodByPost(Long postId) {
+    @Transactional(readOnly = true)
+    public GoodResponse countPostGoodByPost(Long postId, Long userId) {
         Post post = findById(postId);
+        User user = userService.findById(userId);
 
-        return new GoodResponse(postGoodService.countByPost(post));
+        return GoodResponse.of(postGoodService.findByPost(post), user);
     }
 }

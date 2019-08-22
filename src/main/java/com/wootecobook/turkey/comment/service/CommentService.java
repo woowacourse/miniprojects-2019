@@ -84,16 +84,22 @@ public class CommentService {
         comment.delete();
     }
 
+    public int countByPost(final Post post) {
+        return commentRepository.countByPost(post);
+    }
+
     public GoodResponse good(final Long id, final Long userId) {
         Comment comment = findById(id);
         User user = userService.findById(userId);
 
-        return new GoodResponse(commentGoodService.good(comment, user));
+        return GoodResponse.of(commentGoodService.good(comment, user), user);
     }
 
-    public GoodResponse countGoodResponseByComment(Long commentId) {
+    public GoodResponse countGoodResponseByComment(final Long commentId, final Long userId) {
         Comment comment = findById(commentId);
+        User user = userService.findById(userId);
 
-        return new GoodResponse(commentGoodService.countByComment(comment));
+        return GoodResponse.of(commentGoodService.findByComment(comment), user);
     }
+
 }

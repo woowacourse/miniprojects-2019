@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.post.service.dto;
 
+import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.file.service.FileResponse;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
@@ -24,19 +25,24 @@ public class PostResponse {
     private List<FileResponse> files;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Integer totalComment;
+    private GoodResponse goodResponse;
 
     @Builder
-    private PostResponse(Long id, UserResponse author, Contents contents, List<FileResponse> fileResponses,
-                         LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public PostResponse(final Long id, final UserResponse author, final Contents contents,
+                        final List<FileResponse> fileResponses, final LocalDateTime createdAt, final LocalDateTime updatedAt,
+                        final Integer totalComment, final GoodResponse goodResponse) {
         this.id = id;
         this.author = author;
         this.contents = contents;
         this.files = fileResponses;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.totalComment = totalComment;
+        this.goodResponse = goodResponse;
     }
 
-    public static PostResponse from(final Post post) {
+    public static PostResponse from(final Post post, final GoodResponse goodResponse, final int totalComment) {
         List<FileResponse> fileResponses = post.getUploadFiles().stream()
                 .map(FileResponse::from)
                 .collect(Collectors.toList());
@@ -48,7 +54,8 @@ public class PostResponse {
                 .fileResponses(fileResponses)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
+                .goodResponse(goodResponse)
+                .totalComment(totalComment)
                 .build();
     }
-
 }

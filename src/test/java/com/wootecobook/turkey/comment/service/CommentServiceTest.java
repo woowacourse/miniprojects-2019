@@ -1,6 +1,7 @@
 package com.wootecobook.turkey.comment.service;
 
 import com.wootecobook.turkey.comment.domain.Comment;
+import com.wootecobook.turkey.comment.domain.CommentGood;
 import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -197,7 +199,7 @@ class CommentServiceTest {
         // given
         when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
         when(userService.findById(USER_ID)).thenReturn(user);
-        when(commentGoodService.good(any(Comment.class), any(User.class))).thenReturn(1);
+        when(commentGoodService.good(any(Comment.class), any(User.class))).thenReturn(Arrays.asList(new CommentGood(user, comment)));
 
         // when
         commentService.good(USER_ID, COMMENT_ID);
