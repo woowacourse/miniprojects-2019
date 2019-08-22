@@ -13,46 +13,79 @@
                 <div class="row">
                     <div class="col-lg-7 mx-auto">
                         <div class="card widget-feed no-pdd mrg-btm-70">
-                            <form id="save-form" name="saveForm" enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label for="file"><b>파일 업로드</b></label>
+                            <div class="card-block">
+                                <form enctype="multipart/form-data" id="save-form" name="saveForm">
+                                    <div class="form-group">
+                                        <div class="row margin-20">
+                                            <img alt=""
+                                                 id="article-image"
+                                                 src="https://semantic-ui.com/images/wireframe/image.png"
+                                                 style="border-radius: 50px" width="100%">
                                         </div>
-                                        <div class="col-md-8">
-                                            <input id="file" name="file" type="file">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="mrg-top-10 text-dark" for="hashtag"><b>해시태그</b></label>
-                                        </div>
-                                        <div class="col=md-8">
-                                            <input class="form-control text-bold" id="hashtag" name="hashtag" size="50"
-                                                   type="text">
-                                        </div>
-                                    </div>
 
-
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="mrg-top-10 text-dark" for="contents"><b>내용</b></label>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="btn btn-info" for="file"><b>파일 업로드</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input accept="image/*,video/*" class="d-none" id="file" name="file"
+                                                       type="file">
+                                            </div>
                                         </div>
-                                        <div class="col-md-8">
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="mrg-top-10 text-dark" for="hashtag"><b>해시태그</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input class="form-control text-bold" id="hashtag" name="hashtag"
+                                                       size="50"
+                                                       type="text">
+                                            </div>
+                                        </div>
+
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="mrg-top-10 text-dark" for="contents"><b>내용</b></label>
+                                            </div>
+                                            <div class="col-md-8">
                                             <textarea class="form-control text-bold" form="save-form" id="contents"
                                                       name="contents"></textarea>
 
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <button class="btn btn-info" id="save-button" type="button">저장</button>
-                            </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <button class="btn btn-info" id="save-button" type="button">저장</button>
+
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        const changeImageJustOnFront = function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            // it's onload event and you forgot (parameters)
+            reader.onload = function (readEvent) {
+                const articleImage = document.getElementById('article-image');
+                articleImage.src = readEvent.target.result;
+            }
+            // you have to declare the file loading
+            reader.readAsDataURL(file);
+        }
+        const imageInput = document.getElementById("file");
+        imageInput.addEventListener("change", changeImageJustOnFront);
+    </script>
+
     <script src="/js/fetchApi.js"></script>
     <script src="/js/article-edit.js"></script>
 </th:block>
