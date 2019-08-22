@@ -9,9 +9,6 @@ import static com.woowacourse.edd.exceptions.UserNotFoundException.USER_NOT_FOUN
 
 public class LoginControllerTests extends BasicControllerTests {
 
-    private static final String DEFAULT_LOGIN_EMAIL = "kangmin789@naver.com";
-    private static final String DEFAULT_LOGIN_PASSWORD = "P@ssW0rd";
-
     @Test
     void login() {
         LoginRequestDto loginRequestDto = new LoginRequestDto(DEFAULT_LOGIN_EMAIL, DEFAULT_LOGIN_PASSWORD);
@@ -38,7 +35,12 @@ public class LoginControllerTests extends BasicControllerTests {
         UserRequestDto userRequestDto = new UserRequestDto("edan", testEmail, testPassword);
         String url = signUp(userRequestDto).getResponseHeaders().getLocation().toASCIIString();
 
-        webTestClient.delete().uri(url).exchange().expectStatus().isNoContent();
+        String sid = getLoginCookie(new LoginRequestDto("edan@gmail.com", "passW0rd"));
+
+        webTestClient.delete().uri(url)
+            .cookie(COOKIE_JSESSIONID, sid)
+            .exchange()
+            .expectStatus().isNoContent();
 
         LoginRequestDto loginRequestDto = new LoginRequestDto(testEmail, testPassword);
         assertFailNotFound(requestLogin(loginRequestDto), USER_NOT_FOUND_MESSAGE);
@@ -46,9 +48,7 @@ public class LoginControllerTests extends BasicControllerTests {
 
     @Test
     void logout() {
-        String cookie = getLoginCookie(new LoginRequestDto(DEFAULT_LOGIN_EMAIL, DEFAULT_LOGIN_PASSWORD));
-
-        executePost("/v1/logout").cookie("JSESSIONID", cookie)
+        executePost("/v1/logout").cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
             .exchange()
             .expectStatus().isOk();
     }

@@ -17,8 +17,16 @@ import static com.woowacourse.edd.presentation.controller.UserController.USER_UR
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BasicControllerTests {
 
+    protected static final String DEFAULT_LOGIN_EMAIL = "kangmin789@naver.com";
+    protected static final String DEFAULT_LOGIN_PASSWORD = "P@ssW0rd";
+    protected static final String COOKIE_JSESSIONID = "JSESSIONID";
+
     @Autowired
     protected WebTestClient webTestClient;
+
+    protected String getDefaultLoginSessionId() {
+        return getLoginCookie(new LoginRequestDto(DEFAULT_LOGIN_EMAIL, DEFAULT_LOGIN_PASSWORD));
+    }
 
     protected void assertFailBadRequest(StatusAssertions statusAssertions, String errorMessage) {
         WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
@@ -80,7 +88,7 @@ public class BasicControllerTests {
             .expectBody()
             .returnResult()
             .getResponseCookies()
-            .getFirst("JSESSIONID")
+            .getFirst(COOKIE_JSESSIONID)
             .getValue();
     }
 }
