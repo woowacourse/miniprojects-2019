@@ -38,6 +38,9 @@ class ArticleServiceTest {
     @Mock
     private FileService fileService;
 
+    @Mock
+    private HashTagService hashTagService;
+
     private Article article;
     private final ArticleRequest articleRequest = new ArticleRequest("qwe", new MockMultipartFile("name", "qwe".getBytes()));
     private final LoggedInUser loggedInUser = new LoggedInUser(1, "qwe@naver.com", "qwe", "qwe");

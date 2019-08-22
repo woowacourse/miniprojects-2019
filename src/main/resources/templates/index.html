@@ -32,7 +32,7 @@
 
         for (let i = 0; i < articles.length; i++) {
             const articleId = articles[i].id;
-            const articleFileName = articles[i].fileName;
+            const articleFileName = articles[i].fileInfo.fileName;
 
             const fileLoader = FILE_LOAD_APP.FileLoadService();
 

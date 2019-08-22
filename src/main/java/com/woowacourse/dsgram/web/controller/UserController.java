@@ -36,7 +36,7 @@ public class UserController {
                                @UserSession LoggedInUser loggedInUser) {
         model.addAttribute("user", userService.findUserInfoById(userId, loggedInUser));
 
-        return "account-edit";
+        return "user-edit";
     }
 
     @GetMapping("/logout")

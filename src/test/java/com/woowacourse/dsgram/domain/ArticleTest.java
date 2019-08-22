@@ -15,7 +15,7 @@ class ArticleTest {
                 .nickName("buddy_")
                 .password("Aa12345!")
                 .build();
-        Article article = new Article("#가나다! #11 #11#22 이렇게 쓰다가 갑자기 #exception 터지면?", "fileName", "filePath", user);
+        Article article = new Article("#가나다! #11 #11#22 이렇게 쓰다가 갑자기 #exception 터지면?", new FileInfo("sampleName", "samplePath"), user);
         assertThat(article.getKeyword()).contains("#가나다", "#exception", "#11", "#22");
     }
 }
