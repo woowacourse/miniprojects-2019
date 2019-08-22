@@ -21,15 +21,16 @@ public class MethodNeedSignedInInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String method = request.getMethod();
 
-        if (!allowedMethods.contains(method)) {
-            return true;
-        }
-
-        if (isSignedIn(request.getSession())) {
+        if (isSignedIn(request.getSession()) ||
+            shouldNotVerify(method)) {
             return true;
         }
 
         throw new UnauthenticatedException();
+    }
+
+    private boolean shouldNotVerify(String method) {
+        return !allowedMethods.contains(method);
     }
 
     private boolean isSignedIn(HttpSession session) {

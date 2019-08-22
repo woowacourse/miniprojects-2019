@@ -22,11 +22,15 @@ public class MethodNeedNotSignedInInterceptor extends HandlerInterceptorAdapter 
         String method = request.getMethod();
 
         if (isNotSignedIn(request.getSession()) ||
-            !allowedMethods.contains(method)) {
+            shouldNotVerify(method)) {
             return true;
         }
 
         throw new InvalidAccessException();
+    }
+
+    private boolean shouldNotVerify(String method) {
+        return !allowedMethods.contains(method);
     }
 
     private boolean isNotSignedIn(HttpSession session) {
