@@ -21,7 +21,7 @@ public class DdabongService {
         this.memberService = memberService;
     }
 
-    public DdabongResponse saveOrRemove(Long articleId, String memberEmail) {
+    public DdabongResponse toggleDdabong(Long articleId, String memberEmail) {
         Article article = articleService.findArticleById(articleId);
         Member member = memberService.findByEmail(memberEmail);
         Ddabong ddabong = ddabongRepository.findByArticleAndMember(article, member);
