@@ -1,4 +1,6 @@
 const Article = (function () {
+    const modal = new Modal();
+    modal.init();
     const ArticleController = function () {
         const articleService = new ArticleService();
         const modalButton = () => {

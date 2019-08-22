@@ -16,24 +16,29 @@ class Request {
         return Promise.reject(error)
     }
 
-    get = async (attatchedUrl, callback) => {
+    get = async (attatchedUrl, callback = this.defaultCallback) => {
         return await this.request.get(this.baseUrl + attatchedUrl)
             .then(response => callback(response.status, response.data))
     }
 
-    delete = async (attatchedUrl, callback) => {
+    delete = async (attatchedUrl, callback = this.defaultCallback) => {
         return await this.request.delete(this.baseUrl + attatchedUrl)
             .then(response => callback(response.status, response.data))
     }
 
-    post = async (attatchedUrl, data, callback) => {
+    post = async (attatchedUrl, data, callback = this.defaultCallback) => {
         return await this.request.post(this.baseUrl + attatchedUrl, data)
             .then(response => callback(response.status, response.data))
     }
 
-    put = async (attatchedUrl, data, callback) => {
+    put = async (attatchedUrl, data, callback = this.defaultCallback) => {
         return await this.request.put(this.baseUrl + attatchedUrl, data)
             .then(response => callback(response.status, response.data))
+    }
+
+    defaultCallback = (status,data)=>{
+        console.log(status + data)
+
     }
 }
 
