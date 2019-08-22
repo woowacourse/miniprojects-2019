@@ -19,7 +19,7 @@ public class DdabongController {
 
     @PostMapping("/articles/{articleId}/ddabongs")
     public ResponseEntity<DdabongResponse> clickDdabong(@PathVariable Long articleId, MemberSession memberSession) {
-        DdabongResponse ddabongResponse = ddabongService.saveOrRemove(articleId, memberSession.getEmail());
+        DdabongResponse ddabongResponse = ddabongService.toggleDdabong(articleId, memberSession.getEmail());
         return new ResponseEntity<>(ddabongResponse, HttpStatus.OK);
     }
 }
