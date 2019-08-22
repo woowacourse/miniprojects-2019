@@ -116,7 +116,7 @@
 												<button type="button" class="btn btn-default">
 													정보 수정
 												</button>
-												<button type="button" class="btn btn-default">
+												<button id="profile-block-logout-btn" type="button" class="btn btn-default">
 													로그 아웃
 												</button>
 											</div>
@@ -124,19 +124,16 @@
 									</div>
 								</div>
 								
-								<!-- TODO : 나와 아무 관련 없는 사람 볼 때 th:if="${session.member.nickName.equals()}" -->
 								<a id="profile-block-follow-btn"
 								   class="btn btn-info mrg-left-10 font-size-10 pdd-vertical-5 pdd-horizon-10 display-none">
 									팔로우 하기
 								</a>
 								
-								<!-- TODO : 내가 팔로우하지 않는데 나를 팔로우하는 사람 볼 때 -->
 								<a id="profile-block-double-follow-btn"
 								   class="btn btn-info mrg-left-10 font-size-10 pdd-vertical-5 pdd-horizon-10 display-none">
 									맞팔로우 하기
 								</a>
 								
-								<!-- TODO : 내가 팔로우하고 있는 사람 볼 때 -->
 								<a id="profile-block-unfollow-modal-btn"
 								   class="btn btn-default mrg-left-10 font-size-10 pdd-vertical-5 pdd-horizon-10 display-none"
 								   data-toggle="modal" data-target="#modal-following-cancel">
@@ -409,6 +406,7 @@
         const profileBlockDoubleFollowBtn = document.querySelector("#profile-block-double-follow-btn");
         const profileBlockUnFollowModalBtn = document.querySelector("#profile-block-unfollow-modal-btn");
         const profileBlockUnFollowBtn = document.querySelector("#profile-block-unfollow-btn");
+        const profileBlockLogoutBtn = document.querySelector("#profile-block-logout-btn");
 
         const MyPageController = function () {
 
@@ -449,6 +447,10 @@
             const settings = function () {
                 profileBlockSettingsBtn.addEventListener("click", myPageService.settings);
             };
+            
+            const logout = function() {
+				profileBlockLogoutBtn.addEventListener("click", myPageService.logout);
+			};
 
             const init = function () {
                 toggleSearchInput();
@@ -460,6 +462,7 @@
                 unfollowMember();
                 doubleFollowMember();
                 settings();
+                logout();
             };
 
             return {
@@ -629,6 +632,15 @@
             const settings = function () {
                 // TODO setting
             };
+            
+            const logout = function () {
+            	axios({
+					method: 'get',
+					url: '/logout'
+				}).then(data => {
+					window.location = '/login';
+				});
+			};
 
             return {
                 toggleSearchInput: toggleSearchInput,
@@ -640,6 +652,7 @@
                 unfollowMember: unfollowMember,
                 doubleFollowMember: doubleFollowMember,
                 settings: settings,
+				logout: logout,
             }
         };
 
