@@ -12,7 +12,6 @@ import techcourse.w3.woostagram.user.dto.UserProfileImageDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
-import techcourse.w3.woostagram.user.exception.UserUpdateException;
 
 @Service
 public class UserService {
