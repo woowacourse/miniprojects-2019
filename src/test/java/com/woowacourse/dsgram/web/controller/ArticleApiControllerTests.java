@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class ArticleApiControllerTests extends AbstractControllerTest {
+    private static String COMMON_REQUEST_URL = "/api/articles";
 
     private String cookie;
     private String anotherCookie;
@@ -36,7 +37,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     @Test
     @DisplayName("게시글 생성 성공")
     void save() {
-        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/api/articles", cookie)
+        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, COMMON_REQUEST_URL, cookie)
                 .expectStatus()
                 .isOk();
     }
@@ -45,7 +46,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     @DisplayName("파일 조회 성공")
     void read() {
 
-        webTestClient.get().uri("/api/articles/" + articleId + "/file")
+        webTestClient.get().uri(COMMON_REQUEST_URL + articleId + "/file")
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus()
@@ -57,7 +58,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     void update() {
         ArticleEditRequest articleEditRequest = new ArticleEditRequest("update contents");
 
-        webTestClient.put().uri("/api/articles/" + articleId)
+        webTestClient.put().uri(COMMON_REQUEST_URL + articleId)
                 .header("Cookie", cookie)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(articleEditRequest), ArticleEditRequest.class)
@@ -81,7 +82,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     void update_By_Not_Author() {
         ArticleEditRequest articleEditRequest = new ArticleEditRequest("update contents");
 
-        webTestClient.put().uri("/api/articles/" + articleId)
+        webTestClient.put().uri(COMMON_REQUEST_URL + articleId)
                 .header("Cookie", anotherCookie)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(articleEditRequest), ArticleEditRequest.class)
@@ -93,7 +94,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     @Test
     @DisplayName("게시글 삭제 성공")
     void delete_by_Not_Author() {
-        webTestClient.delete().uri("/api/articles/" + articleId)
+        webTestClient.delete().uri(COMMON_REQUEST_URL + articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus()
@@ -108,7 +109,7 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     @Test
     @DisplayName("다른 사용자에 의한 게시글 삭제 실패")
     void delete() {
-        webTestClient.delete().uri("/api/articles/" + articleId)
+        webTestClient.delete().uri(COMMON_REQUEST_URL + articleId)
                 .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus()

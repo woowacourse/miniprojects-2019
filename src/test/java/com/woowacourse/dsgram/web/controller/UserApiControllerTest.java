@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import static org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 class UserApiControllerTest extends AbstractControllerTest {
+    private static String COMMON_REQUEST_URL = "/users/{userId}/edit";
 
     private String myCookie;
     private String anotherCookie;
@@ -91,7 +92,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void 회원정보_수정페이지_접근() {
-        webTestClient.get().uri("/users/{userId}/edit", LAST_USER_ID -1)
+        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID -1)
                 .header("Cookie", myCookie)
                 .exchange()
                 .expectStatus().isOk();
@@ -99,7 +100,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void 회정정보_수정페이지_접근_비로그인() {
-        webTestClient.get().uri("/users/{userId}/edit", LAST_USER_ID)
+        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID)
                 .exchange()
                 .expectStatus().isFound()
                 .expectHeader().valueMatches("Location", ".*/login");
@@ -107,7 +108,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void 회정정보_수정페이지_접근_다른_사용자() {
-        ResponseSpec response = webTestClient.get().uri("/users/{userId}/edit", LAST_USER_ID -1)
+        ResponseSpec response = webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID -1)
                 .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus().isBadRequest();
