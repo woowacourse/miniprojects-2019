@@ -23,13 +23,6 @@ public class LoginApiController {
         this.loginService = loginService;
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signUp(@RequestBody UserRequestDto userRequestDto) {
-        UserResponseDto signUpUser = loginService.save(userRequestDto);
-
-        return new ResponseEntity<>(signUpUser, HttpStatus.OK);
-    }
-
     @PostMapping("/signin")
     public ResponseEntity<UserResponseDto> signIn(HttpSession httpSession,
                                                   @RequestBody UserRequestDto userRequestDto) {

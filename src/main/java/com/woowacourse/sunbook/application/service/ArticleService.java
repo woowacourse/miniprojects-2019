@@ -20,42 +20,20 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    private final LoginService loginService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public ArticleService(final ArticleRepository articleRepository,
-                          final LoginService loginService,
+                          final UserService userService,
                           final ModelMapper modelMapper) {
         this.articleRepository = articleRepository;
-        this.loginService = loginService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
-    @Transactional
-    public ArticleResponseDto save(ArticleFeature articleFeature, Long userId) {
-        User author = loginService.findById(userId);
-        Article savedArticle = articleRepository.save(new Article(articleFeature, author));
-
-        return modelMapper.map(savedArticle, ArticleResponseDto.class);
-    }
-
-    @Transactional
-    public ArticleResponseDto modify(long articleId, ArticleFeature articleFeature, Long userId) {
-        Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
-        User user = loginService.findById(userId);
-
-        if (article.isSameUser(user)) {
-            article.update(articleFeature);
-
-            return modelMapper.map(article, ArticleResponseDto.class);
-        }
-
-        throw new MismatchAuthException();
-    }
-
     public List<ArticleResponseDto> findPageByAuthor(Pageable pageable, Long userId) {
-        User foundUser = loginService.findById(userId);
+        User foundUser = userService.findById(userId);
         return Collections.unmodifiableList(
                 articleRepository.findAllByAuthor(pageable, foundUser).getContent().stream()
                         .map(article -> modelMapper.map(article, ArticleResponseDto.class))
@@ -71,10 +49,32 @@ public class ArticleService {
         );
     }
 
+    @Transactional
+    public ArticleResponseDto save(ArticleFeature articleFeature, Long userId) {
+        User author = userService.findById(userId);
+        Article savedArticle = articleRepository.save(new Article(articleFeature, author));
+
+        return modelMapper.map(savedArticle, ArticleResponseDto.class);
+    }
+
+    @Transactional
+    public ArticleResponseDto modify(long articleId, ArticleFeature articleFeature, Long userId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
+        User user = userService.findById(userId);
+
+        if (article.isSameUser(user)) {
+            article.update(articleFeature);
+
+            return modelMapper.map(article, ArticleResponseDto.class);
+        }
+
+        throw new MismatchAuthException();
+    }
+
     public void remove(Long articleId, Long userId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(NotFoundArticleException::new);
-        User user = loginService.findById(userId);
+        User user = userService.findById(userId);
 
         checkAuth(article, user);
         articleRepository.deleteById(articleId);

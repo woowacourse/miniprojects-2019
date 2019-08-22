@@ -52,13 +52,13 @@ class ArticleServiceTest {
     private User user;
 
     @Mock
-    private LoginService loginService;
+    private UserService userService;
 
     @Test
     void 게시글_정상_생성() {
         given(articleRepository.save(any(Article.class))).willReturn(article);
         given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
-        given(loginService.findById(any(Long.class))).willReturn(user);
+        given(userService.findById(any(Long.class))).willReturn(user);
 
         articleService.save(articleFeature, USER_ID);
 
@@ -67,7 +67,7 @@ class ArticleServiceTest {
 
     @Test
     void 게시글_생성시_없는_유저() {
-        given(loginService.findById(any(Long.class))).willThrow(NotFoundUserException.class);
+        given(userService.findById(any(Long.class))).willThrow(NotFoundUserException.class);
 
         assertThrows(NotFoundUserException.class, () -> articleService.save(articleFeature, USER_ID));
     }
@@ -76,7 +76,7 @@ class ArticleServiceTest {
     void 게시글_정상_수정() {
         given(articleRepository.findById(ARTICLE_ID)).willReturn(Optional.of(article));
         given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
-        given(loginService.findById(any(Long.class))).willReturn(user);
+        given(userService.findById(any(Long.class))).willReturn(user);
         given(article.isSameUser(any(User.class))).willReturn(true);
 
         articleService.modify(ARTICLE_ID, updatedArticleFeature, USER_ID);
@@ -104,7 +104,7 @@ class ArticleServiceTest {
     @Test
     void 게시글_정상_삭제() {
         given(articleRepository.findById(ARTICLE_ID)).willReturn(Optional.of(article));
-        given(loginService.findById(any(Long.class))).willReturn(user);
+        given(userService.findById(any(Long.class))).willReturn(user);
         given(article.isSameUser(any(User.class))).willReturn(true);
 
         articleService.remove(ARTICLE_ID, USER_ID);

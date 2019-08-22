@@ -1,8 +1,11 @@
 package com.woowacourse.sunbook.application.service;
 
+import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.dto.user.UserUpdateRequestDto;
+import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
 import com.woowacourse.sunbook.application.exception.LoginException;
+import com.woowacourse.sunbook.application.exception.NotFoundUserException;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserChangePassword;
 import com.woowacourse.sunbook.domain.user.UserPassword;
@@ -22,6 +25,20 @@ public class UserService {
     }
 
     @Transactional
+    public UserResponseDto save(final UserRequestDto userRequestDto) {
+        checkDuplicateEmail(userRequestDto);
+        User user = userRepository.save(modelMapper.map(userRequestDto, User.class));
+
+        return modelMapper.map(user, UserResponseDto.class);
+    }
+
+    private void checkDuplicateEmail(final UserRequestDto userRequestDto) {
+        if (userRepository.existsByUserEmail(userRequestDto.getUserEmail())) {
+            throw new DuplicateEmailException();
+        }
+    }
+
+    @Transactional
     public UserResponseDto update(final UserResponseDto loginUser, final UserUpdateRequestDto userUpdateRequestDto) {
         User user = userRepository.findByUserEmailAndUserPassword(
                 loginUser.getUserEmail(),
@@ -36,5 +53,9 @@ public class UserService {
         user.updatePassword(user, userChangePassword.updatedPassword(loginUserPassword));
 
         return modelMapper.map(user, UserResponseDto.class);
+    }
+
+    protected User findById(final Long id) {
+        return userRepository.findById(id).orElseThrow(NotFoundUserException::new);
     }
 }

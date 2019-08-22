@@ -1,6 +1,5 @@
 package com.woowacourse.sunbook.application.service;
 
-import com.woowacourse.sunbook.application.dto.reaction.ReactionDto;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.reaction.ReactionArticle;
 import com.woowacourse.sunbook.domain.reaction.ReactionArticleRepository;
@@ -31,7 +30,7 @@ public class ReactionArticleServiceTest {
     private ArticleService articleService;
 
     @Mock
-    private LoginService loginService;
+    private UserService userService;
 
     @Mock
     private User author;
@@ -42,12 +41,9 @@ public class ReactionArticleServiceTest {
     @Mock
     private ReactionArticle reactionArticle;
 
-    @Mock
-    private ReactionDto reactionDto;
-
     @Test
     void 좋아요_처음_누르기_정상() {
-        given(loginService.findById(AUTHOR_ID)).willReturn(author);
+        given(userService.findById(AUTHOR_ID)).willReturn(author);
         given(articleService.findById(ARTICLE_ID)).willReturn(article);
         given(reactionArticleRepository.existsByAuthorAndArticle(author, article)).willReturn(false);
         given(reactionArticleRepository.findByAuthorAndArticle(author, article)).willReturn(reactionArticle);
@@ -59,7 +55,7 @@ public class ReactionArticleServiceTest {
 
     @Test
     void 좋아요_취소_정상() {
-        given(loginService.findById(AUTHOR_ID)).willReturn(author);
+        given(userService.findById(AUTHOR_ID)).willReturn(author);
         given(articleService.findById(ARTICLE_ID)).willReturn(article);
         given(reactionArticleRepository.existsByAuthorAndArticle(author, article)).willReturn(true);
         given(reactionArticleRepository.findByAuthorAndArticle(author, article)).willReturn(reactionArticle);

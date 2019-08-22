@@ -18,6 +18,13 @@ public class ReactionApiController {
         this.reactionArticleService = reactionArticleService;
     }
 
+    @GetMapping
+    public ResponseEntity<ReactionDto> showGood(@PathVariable Long articleId) {
+        ReactionDto reactionDto = reactionArticleService.showCount(articleId);
+
+        return new ResponseEntity<>(reactionDto, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<ReactionDto> clickGood(@PathVariable Long articleId,
                                                  LoginUser loginUser) {
@@ -25,12 +32,5 @@ public class ReactionApiController {
                 clickGood(articleId, loginUser.getId());
 
         return new ResponseEntity<>(resultReactionDto, HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<ReactionDto> showGood(@PathVariable Long articleId) {
-        ReactionDto reactionDto = reactionArticleService.showCount(articleId);
-
-        return new ResponseEntity<>(reactionDto, HttpStatus.OK);
     }
 }

@@ -2,7 +2,6 @@ package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
-import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
 import com.woowacourse.sunbook.application.exception.LoginException;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserEmail;
@@ -42,27 +41,6 @@ class LoginServiceTest {
 
     @Mock
     private User user;
-
-    @Test
-    void 사용자_생성_성공() {
-        given(modelMapper.map(userRequestDto, User.class)).willReturn(user);
-        given(userRepository.save(any(User.class))).willReturn(user);
-        given(modelMapper.map(user, UserResponseDto.class)).willReturn(mock(UserResponseDto.class));
-
-        loginService.save(userRequestDto);
-
-        verify(userRepository, times(1)).save(any(User.class));
-    }
-
-    @Test
-    void 중복_이메일로_인한_사용자_생성_실패() {
-        given(userRequestDto.getUserEmail()).willReturn(mock(UserEmail.class));
-        given(userRepository.existsByUserEmail(any(UserEmail.class))).willReturn(true);
-
-        assertThrows(DuplicateEmailException.class, () -> {
-            loginService.save(userRequestDto);
-        });
-    }
 
     @Test
     void 로그인_성공() {

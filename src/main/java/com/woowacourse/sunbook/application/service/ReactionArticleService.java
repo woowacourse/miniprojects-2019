@@ -14,20 +14,20 @@ import javax.transaction.Transactional;
 public class ReactionArticleService {
     private ReactionArticleRepository reactionArticleRepository;
     private ArticleService articleService;
-    private LoginService loginService;
+    private UserService userService;
 
     @Autowired
     public ReactionArticleService(final ReactionArticleRepository reactionArticleRepository,
                                   final ArticleService articleService,
-                                  final LoginService loginService) {
+                                  final UserService userService) {
         this.reactionArticleRepository = reactionArticleRepository;
         this.articleService = articleService;
-        this.loginService = loginService;
+        this.userService = userService;
     }
 
     @Transactional
     public ReactionDto clickGood(final Long articleId, final Long userId) {
-        User author = loginService.findById(userId);
+        User author = userService.findById(userId);
         Article article = articleService.findById(articleId);
 
         if (!reactionArticleRepository.existsByAuthorAndArticle(author, article)) {
@@ -44,6 +44,7 @@ public class ReactionArticleService {
     public ReactionDto showCount(final Long articleId) {
         Article article = articleService.findById(articleId);
         Long countOfGood = getCount(article);
+
         return new ReactionDto(countOfGood);
     }
 

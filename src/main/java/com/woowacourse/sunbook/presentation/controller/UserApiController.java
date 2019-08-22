@@ -1,5 +1,6 @@
 package com.woowacourse.sunbook.presentation.controller;
 
+import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.dto.user.UserUpdateRequestDto;
 import com.woowacourse.sunbook.application.service.UserService;
@@ -20,17 +21,19 @@ public class UserApiController {
     }
 
     @GetMapping
-    public ResponseEntity<UserResponseDto> getLoginUser(LoginUser loginUser) {
-        if (loginUser == null) {
-            // 예외 이름 결정 및 생성
-            throw new IllegalArgumentException();
-        }
-
+    public ResponseEntity<UserResponseDto> show(LoginUser loginUser) {
         return new ResponseEntity<>(loginUser.getUserResponseDto(), HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto userRequestDto) {
+        UserResponseDto signUpUser = userService.save(userRequestDto);
+
+        return new ResponseEntity<>(signUpUser, HttpStatus.OK);
+    }
+
     @PutMapping
-    public ResponseEntity<UserResponseDto> updateUser(LoginUser loginUser, HttpSession httpSession,
+    public ResponseEntity<UserResponseDto> update(LoginUser loginUser, HttpSession httpSession,
                                                       @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         UserResponseDto updateUser = userService.update(loginUser.getUserResponseDto(), userUpdateRequestDto);
         httpSession.setAttribute("loginUser", updateUser);

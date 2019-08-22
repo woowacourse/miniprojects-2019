@@ -19,30 +19,19 @@ import java.util.stream.Collectors;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final LoginService loginService;
+    private final UserService userService;
     private final ArticleService articleService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public CommentService(final CommentRepository commentRepository,
-                          final LoginService loginService,
+                          final UserService userService,
                           final ArticleService articleService,
                           final ModelMapper modelMapper) {
         this.commentRepository = commentRepository;
-        this.loginService = loginService;
+        this.userService = userService;
         this.articleService = articleService;
         this.modelMapper = modelMapper;
-    }
-
-    @Transactional
-    public CommentResponseDto save(final CommentFeature commentFeature,
-                                   final Long articleId,
-                                   final Long userId) {
-        User user = loginService.findById(userId);
-        Article article = articleService.findById(articleId);
-        Comment comment = commentRepository.save(new Comment(commentFeature, user, article));
-
-        return modelMapper.map(comment, CommentResponseDto.class);
     }
 
     @Transactional(readOnly = true)
@@ -55,11 +44,22 @@ public class CommentService {
     }
 
     @Transactional
+    public CommentResponseDto save(final CommentFeature commentFeature,
+                                   final Long articleId,
+                                   final Long userId) {
+        User user = userService.findById(userId);
+        Article article = articleService.findById(articleId);
+        Comment comment = commentRepository.save(new Comment(commentFeature, user, article));
+
+        return modelMapper.map(comment, CommentResponseDto.class);
+    }
+
+    @Transactional
     public CommentResponseDto modify(final Long commentId,
                                      final CommentFeature commentFeature,
                                      final Long articleId,
                                      final Long userId) {
-        User user = loginService.findById(userId);
+        User user = userService.findById(userId);
         Article article = articleService.findById(articleId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(NotFoundCommentException::new);
@@ -72,7 +72,7 @@ public class CommentService {
     public Boolean remove(final Long commentId,
                           final Long articleId,
                           final Long userId) {
-        User user = loginService.findById(userId);
+        User user = userService.findById(userId);
         Article article = articleService.findById(articleId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(NotFoundCommentException::new);

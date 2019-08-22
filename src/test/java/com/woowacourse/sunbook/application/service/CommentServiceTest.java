@@ -32,7 +32,7 @@ class CommentServiceTest {
     private CommentRepository commentRepository;
 
     @Mock
-    private LoginService loginService;
+    private UserService userService;
 
     @Mock
     private ArticleService articleService;
@@ -45,7 +45,7 @@ class CommentServiceTest {
 
     @Test
     void 댓글_작성() {
-        given(loginService.findById(ID)).willReturn(mock(User.class));
+        given(userService.findById(ID)).willReturn(mock(User.class));
         given(articleService.findById(ID)).willReturn(mock(Article.class));
         given(commentRepository.save(any(Comment.class))).willReturn(comment);
         given(modelMapper.map(mock(Comment.class), CommentResponseDto.class)).willReturn(mock(CommentResponseDto.class));
@@ -64,7 +64,7 @@ class CommentServiceTest {
 
     @Test
     void 없는_게시글_댓글_수정() {
-        given(loginService.findById(ID)).willReturn(mock(User.class));
+        given(userService.findById(ID)).willReturn(mock(User.class));
         given(articleService.findById(ID)).willThrow(NotFoundArticleException.class);
 
         assertThrows(NotFoundArticleException.class, () -> {
@@ -74,7 +74,7 @@ class CommentServiceTest {
 
     @Test
     void 게시글_댓글_수정_성공() {
-        given(loginService.findById(ID)).willReturn(mock(User.class));
+        given(userService.findById(ID)).willReturn(mock(User.class));
         given(articleService.findById(ID)).willReturn(mock(Article.class));
         given(commentRepository.findById(ID)).willReturn(Optional.of(comment));
         doNothing().when(mock(Comment.class)).validateAuth(mock(User.class), mock(Article.class));
@@ -87,7 +87,7 @@ class CommentServiceTest {
 
     @Test
     void 없는_게시글_댓글_삭제() {
-        given(loginService.findById(ID)).willReturn(mock(User.class));
+        given(userService.findById(ID)).willReturn(mock(User.class));
         given(articleService.findById(ID)).willThrow(NotFoundArticleException.class);
 
         assertThrows(NotFoundArticleException.class, () -> {
@@ -97,7 +97,7 @@ class CommentServiceTest {
 
     @Test
     void 게시글_댓글_삭제_성공() {
-        given(loginService.findById(ID)).willReturn(mock(User.class));
+        given(userService.findById(ID)).willReturn(mock(User.class));
         given(articleService.findById(ID)).willReturn(mock(Article.class));
         given(commentRepository.findById(ID)).willReturn(Optional.of(mock(Comment.class)));
         doNothing().when(mock(Comment.class)).validateAuth(mock(User.class), mock(Article.class));
