@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <property name="USER_HOME" value="/home/ubuntu" />
+
     <springProfile name="console-logging">
         <appender name="LOCAL_CONSOLE_POLICY" class="ch.qos.logback.core.ConsoleAppender">
             <layout class="ch.qos.logback.classic.PatternLayout">
@@ -13,7 +15,7 @@
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter" >
                 <level>INFO</level>
             </filter>
-            <file>target/logs/zzazan.log</file>
+            <file>${USER_HOME}/zzazan/logs/zzazan.log</file>
             <encoder>
                 <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%thread] [%logger{36}] - %m%n</pattern>
             </encoder>
@@ -31,7 +33,7 @@
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter" >
                 <level>ERROR</level>
             </filter>
-            <file>target/logs/zazzan_error.log</file>
+            <file>${USER_HOME}/zzazan/logs/zazzan_error.log</file>
             <encoder>
                 <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%thread] [%logger{36}] - %m%n</pattern>
             </encoder>
