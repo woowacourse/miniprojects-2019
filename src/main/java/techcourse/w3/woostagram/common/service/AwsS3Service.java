@@ -1,14 +1,14 @@
 package techcourse.w3.woostagram.common.service;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.article.exception.FileSaveFailException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
+import techcourse.w3.woostagram.common.support.AwsS3Properties;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,17 +19,17 @@ import java.util.UUID;
 
 @Service
 public class AwsS3Service implements StorageService {
-    private static final String AWS_S3_URL = "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com";
-    private static final String BUCKET_NAME = "woowahan-crews";
     private static final List<String> VALID_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
     private static final String PATH_DELIMITER = ".";
+    private final String AWS_S3_URL;
+    private final String BUCKET_NAME;
     private final AmazonS3 s3;
 
-    public AwsS3Service() {
-        this.s3 = AmazonS3ClientBuilder
-                .standard()
-                .withRegion(Regions.AP_NORTHEAST_2)
-                .build();
+    @Autowired
+    public AwsS3Service(AwsS3Properties awsS3Properties, AmazonS3 s3) {
+        AWS_S3_URL = awsS3Properties.getUrl();
+        BUCKET_NAME = awsS3Properties.getBucket();
+        this.s3 = s3;
     }
 
     @Override
