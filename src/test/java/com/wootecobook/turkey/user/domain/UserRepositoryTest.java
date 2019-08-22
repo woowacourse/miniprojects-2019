@@ -3,8 +3,9 @@ package com.wootecobook.turkey.user.domain;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,6 +19,9 @@ class UserRepositoryTest {
     void 다섯명만_검색되는지_확인() {
         // given
         final String name = "name";
+        final int size = 5;
+        final Pageable pageable = PageRequest.of(0, size);
+
         userRepository.save(new User("UserRepoTest1@gmail.com", "A" + name, "P@ssw0rd"));
         userRepository.save(new User("UserRepoTest2@gmail.com", name + "A", "P@ssw0rd"));
         userRepository.save(new User("UserRepoTest3@gmail.com", "qwrqwr" + name, "P@ssw0rd"));
@@ -27,9 +31,9 @@ class UserRepositoryTest {
         userRepository.save(new User("UserRepoTest7@gmail.com", "qwrqwr" + name, "P@ssw0rd"));
 
         // when
-        final List<User> users = userRepository.findTop5ByNameIsContaining(name);
+        final Page<User> users = userRepository.findAllByNameIsContaining(name,pageable);
 
         // then
-        assertThat(users).hasSize(5);
+        assertThat(users).hasSize(size);
     }
 }

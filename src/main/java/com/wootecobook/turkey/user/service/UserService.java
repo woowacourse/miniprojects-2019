@@ -5,6 +5,10 @@ import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import com.wootecobook.turkey.user.service.exception.SignUpException;
+import com.wootecobook.turkey.user.service.exception.UserDeleteException;
+import com.wootecobook.turkey.user.service.exception.UserMismatchException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,14 +51,24 @@ public class UserService {
         }
     }
 
-    public void delete(Long userId) {
-        userRepository.deleteById(userId);
+    public void delete(Long userId, Long sessionUserId) {
+        matchId(userId, sessionUserId);
+        try {
+            userRepository.deleteById(userId);
+        } catch (Exception e) {
+            throw new UserDeleteException();
+        }
     }
 
-    public List<UserResponse> findByName(String name) {
-        return userRepository.findTop5ByNameIsContaining(name).stream()
-                .map(UserResponse::from)
-                .collect(Collectors.toList());
+    private void matchId(Long userId, Long sessionUserId) {
+        if (userId == null || !userId.equals(sessionUserId)) {
+            throw new UserMismatchException();
+        }
+    }
+
+    public Page<UserResponse> findByName(String name, Pageable pageable) {
+        return userRepository.findAllByNameIsContaining(name, pageable)
+                .map(UserResponse::from);
     }
 
     public List<UserResponse> findAllUsersWithoutCurrentUser(Long id) {

@@ -24,7 +24,7 @@ public class UserDeleteService {
     public void delete(Long userId, Long sessionUserId) {
         matchId(userId, sessionUserId);
         try {
-            userService.delete(userId);
+            userService.delete(userId, sessionUserId);
             friendAskService.deleteBySenderIdOrReceiverId(userId);
             friendService.deleteByRelatedUserIdOrRelatingUserId(userId);
         } catch (Exception e) {
