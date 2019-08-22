@@ -90,4 +90,12 @@ class MemberControllerTest extends RequestTemplate {
                 .expectHeader().valueMatches("location", URL_REGEX + "/login" + JSESSIONID_URL)
                 .expectStatus().is3xxRedirection();
     }
+
+    @Test
+    void 로그아웃() {
+        getHeaderWithLogin("/logout")
+                .exchange()
+                .expectHeader().valueMatches("location", URL_REGEX + "/login")
+                .expectStatus().is3xxRedirection();
+    }
 }
