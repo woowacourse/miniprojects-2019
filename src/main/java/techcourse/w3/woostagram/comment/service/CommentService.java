@@ -50,7 +50,7 @@ public class CommentService {
         User user = userService.findUserByEmail(email);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
-        if (!user.equals(comment.getUser())) {
+        if (!comment.isAuthor(user.getId())) {
             throw new UnauthorizedException();
         }
     }

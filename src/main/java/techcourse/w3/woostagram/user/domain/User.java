@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @ToString
 public class User extends AuditLog {
     public static final String ERROR_EMAIL = "올바른 email 형식이 아닙니다.";
