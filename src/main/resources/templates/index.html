@@ -12,7 +12,7 @@
                 <div class="container-fluid max-width-lg mx-auto">
                     <div class="row">
                         <div class="col-lg-7 mx-auto">
-                            <button type="button" id="write-article-button" class="btn btn-outline-primary">피드 작성</button>
+                            <button type="button" id="write-article-button" class="btn btn-outline-primary" accesskey="w">피드 작성</button>
                             <div id="cards" th:each="article : ${articles}" class="card widget-feed no-pdd mrg-btm-70">
                                 <th:block th:include="fragments/card"></th:block>
                             </div>
@@ -22,19 +22,20 @@
             </div>
         </div>
     </div>
-<script src="/js/write-article.js"></script>
-<script src="/js/fetchApi.js"></script>
-<script src="/js/fileLoadApi.js"></script>
-<script src="/js/card.js"></script>
+    <script src="/js/article.js"></script>
+    <script src="/js/fetchApi.js"></script>
+    <script src="/js/fileLoadApi.js"></script>
+    <script src="/js/card.js"></script>
     <script th:inline="javascript">
+        // TODO 무한 스크롤로 변경 시 이동
         let articles = [[${articles}]];
 
-        for(let i = 0; i < articles.length; i++) {
+        for (let i = 0; i < articles.length; i++) {
             let articleId = articles[i].id;
             let articleFileName = articles[i].fileName;
 
-            const connector = FETCH_APP.fetchApi();
-            const fileLoader = FILE_LOAD_APP.fileLoadApi();
+            const connector = FETCH_APP.FetchApi();
+            const fileLoader = FILE_LOAD_APP.FileLoadService();
 
             const loadFile = response => {
                 response.arrayBuffer().then(function (buffer) {
@@ -49,7 +50,7 @@
                 });
             };
 
-            connector.fetchTemplateWithoutBody('/api/articles/' + articleId + "/file", connector.GET, loadFile);
+            connector.fetchTemplateWithoutBody(`/api/articles/${articleId}/file`, connector.GET, loadFile);
         }
     </script>
 </th:block>

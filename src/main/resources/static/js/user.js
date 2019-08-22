@@ -27,8 +27,12 @@ const USER_APP = (() => {
         const changeImageJustOnFront = () => {
             const imageInput = document.getElementById("img-upload");
             imageInput ? imageInput.addEventListener("change", userService.changeImageJustOnFront) : undefined;
+        };
 
-        }
+        const showThumbnailImage = () => {
+            const userProfileImage = document.getElementById('profile-image');
+            userProfileImage ? userService.showThumbnail(userProfileImage) : undefined;
+        };
 
         const init = () => {
             signUp();
@@ -36,6 +40,7 @@ const USER_APP = (() => {
             login();
             changeImageJustOnFront();
             deleteUser();
+            showThumbnailImage();
         };
 
         return {
@@ -44,7 +49,7 @@ const USER_APP = (() => {
     };
 
     const UserService = function () {
-        const connector = FETCH_APP.fetchApi();
+        const connector = FETCH_APP.FetchApi();
         const header = {
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json'
@@ -98,7 +103,7 @@ const USER_APP = (() => {
 
             const ifSucceed = () => window.location.href = '/';
 
-            connector.fetchTemplate('/api/users/' + userId.value,
+            connector.fetchTemplate(`/api/users/${userId.value}`,
                 connector.PUT,
                 {},
                 formData,
@@ -107,7 +112,7 @@ const USER_APP = (() => {
 
         const deleteUser = function (event) {
             event.preventDefault();
-            connector.fetchTemplateWithoutBody('/api/users/' + userId.value,
+            connector.fetchTemplateWithoutBody(`/api/users/${userId.value}`,
                 connector.DELETE,
                 () => window.location.href = '/login')
         };
@@ -135,19 +140,50 @@ const USER_APP = (() => {
             // it's onload event and you forgot (parameters)
             reader.onload = function (readEvent) {
                 profileImage.src = readEvent.target.result;
-
-            }
+            };
             // you have to declare the file loading
             reader.readAsDataURL(file);
 
-        }
+        };
+
+        const showThumbnail = function (userProfileImage) {
+            const fileLoadService = FILE_LOAD_APP.FileLoadService();
+            const connector = FETCH_APP.FetchApi();
+
+            const getImage = response => {
+                response.arrayBuffer().then(function (buffer) {
+                    let bytes = new Uint8Array(buffer);
+                    console.log('byte', bytes);
+
+                    let binary = '';
+                    bytes.forEach(b => binary += String.fromCharCode(b));
+
+                    const blob = fileLoadService.b64StringToBlob(binary);
+                    console.log('blob', blob);
+
+                    const blobUrl = URL.createObjectURL(blob);
+
+                    userProfileImage.style.display = 'block';
+                    userProfileImage.src = blobUrl;
+                });
+            };
+
+            connector.fetchTemplateWithoutBody(`/api/users/${userId.value}/image`, connector.GET, getImage);
+        };
+
+        // TODO I want to PRIVATE method
+        const setUrl = (userProfileImage, url) => {
+            userProfileImage.style.display = 'block';
+            userProfileImage.src = url;
+        };
 
         return {
             saveUser: saveUser,
             updateUser: updateUser,
             deleteUser: deleteUser,
             login: login,
-            changeImageJustOnFront: changeImageJustOnFront
+            changeImageJustOnFront: changeImageJustOnFront,
+            showThumbnail: showThumbnail
         }
     };
 

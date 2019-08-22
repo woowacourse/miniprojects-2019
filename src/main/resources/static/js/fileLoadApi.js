@@ -1,10 +1,11 @@
 const FILE_LOAD_APP = (() => {
 
-    const fileLoadApi = function () {
+    const FileLoadService = function () {
 
-        const b64StringToBlob = (b64Data, contentType = '', sliceSize = 512) => {
+        const b64StringToBlob = b64Data => {
             const byteCharacters = atob(b64Data);
             const byteArrays = [];
+            const sliceSize = 512;
 
             for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
                 const slice = byteCharacters.slice(offset, offset + sliceSize);
@@ -15,8 +16,7 @@ const FILE_LOAD_APP = (() => {
                 const byteArray = new Uint8Array(byteNumbers);
                 byteArrays.push(byteArray);
             }
-            const blob = new Blob(byteArrays, {type: contentType});
-            return blob;
+            return new Blob(byteArrays, {type: ''});
         };
 
         function setSrcAttribute(url, fileName, articleId) {
@@ -45,6 +45,6 @@ const FILE_LOAD_APP = (() => {
     };
 
     return {
-        fileLoadApi: fileLoadApi
+        FileLoadService: FileLoadService
     }
 })();

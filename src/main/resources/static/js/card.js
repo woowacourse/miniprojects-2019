@@ -1,49 +1,95 @@
-const editArticle = function (cardContents, articleId) {
-    const header = {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Accept': 'application/json'
-    };
-    const articleInfo = {
-        contents: cardContents.children[1].children[0].value
-        // todo: hashtag 추가하셈
-    };
-    const connector = FETCH_APP.fetchApi();
+const CARD_APP = (() => {
 
-    connector.fetchTemplate('/api/articles/' + articleId,
-        connector.PUT,
-        header,
-        JSON.stringify(articleInfo),
-        () => window.location.reload());
-};
+    const CardController = function () {
+        const cardService = new CardService();
 
-document.getElementById('cards').addEventListener('click', event => {
-    let target = event.target;
-    if (target.tagName === 'I' || target.tagName === 'SPAN') {
-        target = target.parentNode;
-    }
-    const articleId = target.getAttribute('data-id');
+        const deleteCard = () => {
+            const cards = document.getElementById('cards');
+            cards ? cards.addEventListener('click', cardService.deleteCard) : undefined;
+        };
 
-    if (target.classList.contains('article-edit')) {
-        const cardContents = document.getElementById('article-contents-' + articleId);
-        cardContents.children[0].style.display = 'none';
-        cardContents.children[1].style.display = 'block';
-        cardContents.children[1].children[1].addEventListener('click', function() { editArticle(cardContents, articleId) }, false);
-    }
-});
+        const changeEditForm = () => {
+            const cards = document.getElementById('cards');
+            cards ? cards.addEventListener('click', cardService.changeEditForm) : undefined;
+        };
 
-document.getElementById('cards').addEventListener('click', event => {
-    let target = event.target;
-    if (target.tagName === 'I' || target.tagName === 'SPAN') {
-        target = target.parentNode;
-    }
-    const articleId = target.getAttribute('data-id');
+        const init = () => {
+            deleteCard();
+            changeEditForm();
+        };
 
-    if (target.classList.contains('article-delete')) {
-        if (confirm("삭제하시겠습니까?") === true) {
-        const connector = FETCH_APP.fetchApi();
-        connector.fetchTemplateWithoutBody('/api/articles/' + articleId,
-            connector.DELETE,
-            () => window.location.href = '/');
+        return {
+            init: init,
         }
+    };
+
+    const CardService = function () {
+        const changeEditForm = event => {
+            let target = event.target;
+            if (target.tagName === 'I' || target.tagName === 'SPAN') {
+                target = target.parentNode;
+            }
+            const articleId = target.getAttribute('data-id');
+
+            if (target.classList.contains('article-edit')) {
+                const cardContents = document.getElementById(`article-contents-${articleId}`);
+                cardContents.children[0].style.display = 'none';
+                cardContents.children[1].style.display = 'block';
+                cardContents.children[1].children[1].addEventListener('click', function () {
+                    editArticle(cardContents, articleId)
+                }, false);
+            }
+        };
+
+        const deleteCard = event => {
+            let target = event.target;
+            if (target.tagName === 'I' || target.tagName === 'SPAN') {
+                target = target.parentNode;
+            }
+            const articleId = target.getAttribute('data-id');
+
+            if (target.classList.contains('article-delete')) {
+                if (confirm("삭제하시겠습니까?")) {
+                    const connector = FETCH_APP.FetchApi();
+                    connector.fetchTemplateWithoutBody(`/api/articles/${articleId}`,
+                        connector.DELETE,
+                        () => window.location.href = '/');
+                }
+            }
+        };
+
+        return {
+            deleteCard: deleteCard,
+            changeEditForm: changeEditForm
+        }
+    };
+
+    const editArticle = function (cardContents, articleId) {
+        const header = {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json'
+        };
+        const articleInfo = {
+            // TODO 좋은 말할때 바꿔놔라 (미르)
+            contents: cardContents.children[1].children[0].value
+        };
+        const connector = FETCH_APP.FetchApi();
+
+        connector.fetchTemplate(`/api/articles/${articleId}`,
+            connector.PUT,
+            header,
+            JSON.stringify(articleInfo),
+            () => window.location.reload());
+    };
+
+    const init = () => {
+        const cardController = new CardController();
+        cardController.init();
+    };
+
+    return {
+        init: init,
     }
-});
+})();
+
+CARD_APP.init();

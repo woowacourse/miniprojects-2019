@@ -18,6 +18,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String showMainPage(Model model) {
+        // TODO: 2019-08-22 무한 스크롤 -> ApiController 이동 및 받아오기, Pagination
         List<Article> articles = articleApiService.findAll();
         model.addAttribute("articles", articles);
         return "index";
