@@ -14,9 +14,15 @@ const ARTICLE_APP = (() => {
             writeArticleButton ? writeArticleButton.addEventListener('click', articleService.writeArticle) : undefined;
         };
 
+        const showThumbnail = () => {
+            const imageInput = document.getElementById("file");
+            imageInput ? imageInput.addEventListener("change", articleService.changeImageJustOnFront) : undefined;
+        };
+
         const init = () => {
             saveArticle();
             writeArticle();
+            showThumbnail();
         };
 
         return {
@@ -47,6 +53,17 @@ const ARTICLE_APP = (() => {
             location.href = "/articles/writing";
         };
 
+        // TODO User꺼랑 합치기!!
+        const changeImageJustOnFront = event => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (readEvent) {
+                const articleImage = document.getElementById('article-image');
+                articleImage.src = readEvent.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+
         // TODO 슬로스의 유작... 여기로 옮겨지다. (사용되지 않고 있음)
         const copyUrl = articleId => {
             const copiedUrl = window.location.host + `/articles/${articleId}`;
@@ -63,7 +80,8 @@ const ARTICLE_APP = (() => {
 
         return {
             save: save,
-            writeArticle: writeArticle
+            writeArticle: writeArticle,
+            changeImageJustOnFront: changeImageJustOnFront
         }
     };
 
