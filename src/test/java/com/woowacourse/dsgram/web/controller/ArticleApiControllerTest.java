@@ -14,17 +14,16 @@ import java.util.Objects;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class ArticleApiControllerTest extends AbstractControllerTest {
-    private static String COMMON_REQUEST_URL = "/api/articles";
+class ArticleApiControllerTest extends AbstractControllerTest {
+    private static String COMMON_REQUEST_URL = "/api/articles/{articleId}";
 
     private String cookie;
     private String anotherCookie;
     private long articleId;
-    private SignUpUserRequest signUpUserRequest;
 
     @BeforeEach
     void setUp() {
-        signUpUserRequest = createSignUpUser();
+        SignUpUserRequest signUpUserRequest = createSignUpUser();
 
         cookie = getCookieAfterSignUpAndLogin(signUpUserRequest);
         articleId = saveArticle(cookie);
@@ -37,7 +36,7 @@ public class ArticleApiControllerTest extends AbstractControllerTest {
     @Test
     @DisplayName("게시글 생성 성공")
     void save() {
-        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, COMMON_REQUEST_URL, cookie)
+        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/api/articles", cookie)
                 .expectStatus()
                 .isOk();
     }
@@ -46,7 +45,7 @@ public class ArticleApiControllerTest extends AbstractControllerTest {
     @DisplayName("파일 조회 성공")
     void read() {
 
-        webTestClient.get().uri(COMMON_REQUEST_URL + articleId + "/file")
+        webTestClient.get().uri(COMMON_REQUEST_URL + "/file", articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus()
@@ -58,7 +57,7 @@ public class ArticleApiControllerTest extends AbstractControllerTest {
     void update() {
         ArticleEditRequest articleEditRequest = new ArticleEditRequest("update contents");
 
-        webTestClient.put().uri(COMMON_REQUEST_URL + articleId)
+        webTestClient.put().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", cookie)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(articleEditRequest), ArticleEditRequest.class)
@@ -66,7 +65,7 @@ public class ArticleApiControllerTest extends AbstractControllerTest {
                 .expectStatus()
                 .isOk();
 
-        webTestClient.get().uri("/articles/" + articleId)
+        webTestClient.get().uri("/articles/{articleId}", articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus().isOk()
@@ -82,7 +81,7 @@ public class ArticleApiControllerTest extends AbstractControllerTest {
     void update_By_Not_Author() {
         ArticleEditRequest articleEditRequest = new ArticleEditRequest("update contents");
 
-        webTestClient.put().uri(COMMON_REQUEST_URL + articleId)
+        webTestClient.put().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", anotherCookie)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(articleEditRequest), ArticleEditRequest.class)
@@ -94,13 +93,13 @@ public class ArticleApiControllerTest extends AbstractControllerTest {
     @Test
     @DisplayName("게시글 삭제 성공")
     void delete_by_Not_Author() {
-        webTestClient.delete().uri(COMMON_REQUEST_URL + articleId)
+        webTestClient.delete().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus()
                 .isOk();
 
-        webTestClient.get().uri("/articles/" + articleId)
+        webTestClient.get().uri("/articles/{articleId}", articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -109,7 +108,7 @@ public class ArticleApiControllerTest extends AbstractControllerTest {
     @Test
     @DisplayName("다른 사용자에 의한 게시글 삭제 실패")
     void delete() {
-        webTestClient.delete().uri(COMMON_REQUEST_URL + articleId)
+        webTestClient.delete().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus()

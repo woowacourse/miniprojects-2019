@@ -1,13 +1,17 @@
 package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
-import com.woowacourse.dsgram.domain.ArticleRepository;
+import com.woowacourse.dsgram.domain.FileInfo;
 import com.woowacourse.dsgram.domain.User;
+import com.woowacourse.dsgram.domain.repository.ArticleRepository;
+import com.woowacourse.dsgram.service.dto.ArticleRequest;
+import com.woowacourse.dsgram.service.dto.user.LoggedInUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
@@ -20,20 +24,29 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
-public class ArticleServiceTest {
-
-    private Article article;
+class ArticleServiceTest {
 
     @InjectMocks
     private ArticleService articleService;
 
     @Mock
-    ArticleRepository articleRepository;
+    private ArticleRepository articleRepository;
 
+    @Mock
+    private UserService userService;
+
+    @Mock
+    private FileService fileService;
+
+    private Article article;
+    private final ArticleRequest articleRequest = new ArticleRequest("qwe", new MockMultipartFile("name", "qwe".getBytes()));
+    private final LoggedInUser loggedInUser = new LoggedInUser(1, "qwe@naver.com", "qwe", "qwe");
+
+    private User user;
 
     @BeforeEach
     void setUp() {
-        User user = User.builder()
+        user = User.builder()
                 .userName("test")
                 .nickName("test")
                 .email("test@gmail.com")
@@ -41,14 +54,15 @@ public class ArticleServiceTest {
                 .webSite("")
                 .intro("")
                 .build();
-        article = new Article("contents", "fileName", "filePath", user);
+
+        article = new Article("contents", new FileInfo("fileName", "filePath"), user);
     }
 
     @Test
     void 게시글_생성_성공() {
         given(articleRepository.save(article)).willReturn(article);
-
-        articleService.create(article);
+        given(userService.findUserById(anyLong())).willReturn(user);
+        articleService.create(articleRequest, loggedInUser);
 
         verify(articleRepository).save(article);
     }
@@ -62,7 +76,7 @@ public class ArticleServiceTest {
 
     @Test
     void 게시글_조회_실패() {
-        articleService.create(article);
+        given(articleRepository.findById(anyLong())).willReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> articleService.findById(1L));
     }
 }

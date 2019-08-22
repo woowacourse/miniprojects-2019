@@ -92,7 +92,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void 회원정보_수정페이지_접근() {
-        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID -1)
+        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID - 1)
                 .header("Cookie", myCookie)
                 .exchange()
                 .expectStatus().isOk();
@@ -108,7 +108,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void 회정정보_수정페이지_접근_다른_사용자() {
-        ResponseSpec response = webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID -1)
+        ResponseSpec response = webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID - 1)
                 .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -124,7 +124,7 @@ class UserApiControllerTest extends AbstractControllerTest {
                 createMultipartBodyBuilder("포비", "intro", "포비", "dsdsds", "");
 
         webTestClient.put()
-                .uri("/api/users/{userId}", LAST_USER_ID -1)
+                .uri("/api/users/{userId}", LAST_USER_ID - 1)
                 .header("Cookie", myCookie)
                 .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
                 .exchange()
@@ -193,7 +193,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void user_다른_사용자가_탈퇴_시도() {
-        webTestClient.delete().uri("/api/users/{userId}", LAST_USER_ID -1)
+        webTestClient.delete().uri("/api/users/{userId}", LAST_USER_ID - 1)
                 .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus().isBadRequest();

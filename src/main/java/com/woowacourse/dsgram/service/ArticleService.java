@@ -1,9 +1,12 @@
 package com.woowacourse.dsgram.service;
 
 import com.woowacourse.dsgram.domain.Article;
-import com.woowacourse.dsgram.domain.ArticleRepository;
+import com.woowacourse.dsgram.domain.FileInfo;
+import com.woowacourse.dsgram.domain.repository.ArticleRepository;
 import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
+import com.woowacourse.dsgram.service.dto.ArticleRequest;
 import com.woowacourse.dsgram.service.dto.user.LoggedInUser;
+import com.woowacourse.dsgram.service.strategy.ArticleFileNamingStrategy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +17,22 @@ import java.util.List;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private FileService fileService;
+    private UserService userService; // TODO: 빼고싶음
 
-    public ArticleService(ArticleRepository articleRepository) {
+    public ArticleService(ArticleRepository articleRepository, FileService fileService, UserService userService) {
         this.articleRepository = articleRepository;
+        this.fileService = fileService;
+        this.userService = userService;
     }
 
-    public Article create(Article article) {
+    public Article create(ArticleRequest articleRequest, LoggedInUser loggedInUser) {
+        FileInfo fileInfo = fileService.save(articleRequest.getFile(), new ArticleFileNamingStrategy());
+        Article article = Article.builder()
+                .contents(articleRequest.getContents())
+                .fileInfo(fileInfo)
+                .author(userService.findUserById(loggedInUser.getId()))
+                .build();
         return articleRepository.save(article);
     }
 
@@ -46,5 +59,9 @@ public class ArticleService {
         Article article = findById(articleId);
         article.checkAccessibleAuthor(loggedInUser.getId());
         articleRepository.delete(article);
+    }
+
+    public byte[] findFileById(long articleId) {
+        return fileService.readFileByFileInfo(findById(articleId).getFileInfo());
     }
 }
