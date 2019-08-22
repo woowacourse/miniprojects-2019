@@ -1,4 +1,4 @@
-const getArticleTemplate = function (articleId, userId, userName, imageUrl, profileUrl, contents) {
+const getArticleTemplate = function (articleId, userId, userName, imageUrl, profileUrl, contents, comments, likeNum, liking) {
     return `<div class="article-card card widget-feed no-pdd mrg-btm-70" data-article-id = ${articleId} data-user-id = ${userId}>
                             <div class="feed-header padding-15">
                                 <ul class="list-unstyled list-info">
@@ -31,8 +31,8 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                             </div>
                             <ul class="feed-action pdd-horizon-15 pdd-top-5">
                                 <li>
-                                    <a href="">
-                                        <i class="fa fa-heart-o font-size-25"></i>
+                                    <a class="like-btn" data-liking=${liking}>
+                                        <i class="fa ${liking ? 'fa-heart' : 'fa-heart-o'} font-size-25"></i>
                                     </a>
                                 </li>
                                 <li>
@@ -53,7 +53,7 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                             </ul>
                             <div class="feedback-status-container pdd-horizon-15">
                                 <p class="no-mrg pdd-left-5 d-inline-block">
-                                    <span class="text-bold">11 Likes<span class="text-bold">
+                                    <span class="text-bold">${likeNum} Likes<span class="text-bold">
                                 </p>
                             </div>
                             <div class="feed-footer">
@@ -66,6 +66,7 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                                    class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
                                                    <span class="font-size-14">${contents}</span>
                                                 </div>
+                                                ${comments}
                                             </div>
                                            <time class="font-size-8 text-gray d-block">12시간 전</time>                           
                                      </li>
@@ -82,16 +83,15 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                         </div>`
 };
 
-const commentTemplate =(userName,contents)=>
-{
-    `
-    <div class="info pdd-left-15 pdd-vertical-5">
+const getCommentTemplate = (commentId, userName, contents) => {
+    return `
+    <div class="info pdd-left-15 pdd-vertical-5" data-comment-id = ${commentId} >
        <a href=""
        class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
        <span class="font-size-14">${contents}</span>
     </div>
       `;
-}
+};
 const Index = (function () {
 
     const pageSize = 10;
@@ -104,12 +104,21 @@ const Index = (function () {
             indexService.getPageData(0);
         };
 
-        const likeButton = ()=>{
+        const likeButton = () => {
+            articleList.addEventListener('click', function (event) {
+                console.log(event.target.classList);
+                if (event.target.classList.contains('like-btn')) {
+                    const articleId = event.target.closest('.article-card').dataset.articleId;
+                    const isLike = event.target.dataset.liking;
+                    indexService.addLike(articleId, isLike, event.target);
+                }
+            })
 
-        }
+        };
 
         const init = function () {
-            loadInit()
+            loadInit();
+            likeButton()
         };
 
         return {
@@ -120,12 +129,12 @@ const Index = (function () {
 
     const IndexService = function () {
         const indexRequest = new Request("/api/main");
-
+        const like = new Like();
         const getPageData = (pageNum) => {
-            indexRequest.get('?page=' + pageNum + "&size=" + pageSize
+            indexRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
                 , (status, data) => {
                     let pagesHtml = "";
-                    for (let i = 0; i < pageSize; i++) {
+                    for (let i = 0; i < data.content.length; i++) {
                         pagesHtml += parsingPage(data.content[i]);
                     }
                     const container = document.querySelector(".article-card-con");
@@ -133,21 +142,46 @@ const Index = (function () {
                 })
         };
 
+        const addLike = (articleId, isLike, e) => {
+            console.log(like.addLike(articleId, isLike));
+            if(isLike=="false") {
+                e.childNodes[1].classList.add("fa-heart");
+                e.childNodes[1].classList.remove("fa-heart-o");
+            }
+        };
+
         const parsingPage = (pageData) => {
-            console.log(pageData);
             const article = pageData.article;
             const user = pageData.article.userInfoDto;
+            const comments = parsingComments(pageData.comments);
             return getArticleTemplate(
                 article.id,
                 user.id,
                 user.userContentsDto.userName,
                 article.imageUrl,
                 user.userContentsDto.profile,
-                article.contents)
+                article.contents,
+                comments,
+                pageData.likes,
+                pageData.liking
+            )
+        };
+
+        const parsingComments = (commentsData) => {
+            let commentsHtml = "";
+            commentsData.forEach((data) => {
+                commentsHtml += getCommentTemplate(
+                    data.id,
+                    data.userInfoDto.userContentsDto.userName,
+                    data.contents
+                )
+            });
+            return commentsHtml;
         };
 
         return {
-            getPageData: getPageData
+            getPageData: getPageData,
+            addLike: addLike
         }
     };
 

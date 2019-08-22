@@ -1,14 +1,37 @@
 class Follow {
-    constructor(loginId){
+    constructor(loginId) {
         this.loginId = loginId;
-        this.request  = new Request('/api/follows');
-
+        this.request = new Request('/api/follows');
     }
 
-    addFollow =  (targetId)=>{
-        this.request.post('/'+targetId)
+    addFollow = (targetId) => {
+        this.request.post('/' + targetId)
+    };
+    deleteFollow = (targetId) => {
+        this.request.delete('/' + targetId)
     }
-    deleteFollow =  (targetId)=>{
-        this.request.delete('/'+targetId)
+}
+
+class Like {
+    constructor() {
+        this.request = new Request('api/articles');
+    }
+    addLike = (articleId, liking) => {
+        if (liking == "false") {
+            this.request.post('/'+articleId+'/likes' ,null,
+                ()=>{
+                return true;
+                })
+        }
+        return false
+    }
+    deleteLike = (articleId,liking)=>{
+        if (liking == "true") {
+            this.request.delete('/'+articleId+'/likes' ,
+                ()=>{
+                    return true;
+                })
+        }
+        return false
     }
 }

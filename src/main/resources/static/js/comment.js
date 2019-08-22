@@ -24,7 +24,7 @@ const Comment = (function () {
     }
 
     const CommentService = function () {
-        const request = new Request("/api/comments/" + articleId);
+        const request = new Request("/api/articles/" + articleId+"/comments");
 
         const commentTemplate =
             `<div class="contents-inner">
