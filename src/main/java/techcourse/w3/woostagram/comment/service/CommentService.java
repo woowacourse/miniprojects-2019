@@ -7,7 +7,7 @@ import techcourse.w3.woostagram.comment.domain.Comment;
 import techcourse.w3.woostagram.comment.domain.CommentRepository;
 import techcourse.w3.woostagram.comment.dto.CommentDto;
 import techcourse.w3.woostagram.comment.exception.CommentNotFoundException;
-import techcourse.w3.woostagram.common.exception.UnauthorizedException;
+import techcourse.w3.woostagram.common.exception.UnAuthorizedException;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.service.UserService;
 
@@ -51,7 +51,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         if (!comment.isAuthor(user.getId())) {
-            throw new UnauthorizedException();
+            throw new UnAuthorizedException();
         }
     }
 }

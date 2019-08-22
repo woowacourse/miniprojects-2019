@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.service.ArticleService;
+import techcourse.w3.woostagram.user.support.LoggedInUser;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -20,8 +21,8 @@ public class ArticleRestController {
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody ArticleDto articleDto) {
-        articleService.update(articleDto);
+    public ResponseEntity update(@RequestBody ArticleDto articleDto, @LoggedInUser String email) {
+        articleService.update(articleDto, email);
         return ResponseEntity.ok().build();
     }
 
