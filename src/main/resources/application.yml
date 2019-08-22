@@ -35,3 +35,5 @@ spring:
             max-request-size: 3MB
     thymeleaf:
         cache: false
+    profiles:
+        active: prod
