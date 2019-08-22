@@ -1,17 +1,15 @@
 package com.woowacourse.sunbook.application.service;
 
+import com.woowacourse.sunbook.MockStorage;
 import com.woowacourse.sunbook.application.dto.comment.CommentResponseDto;
 import com.woowacourse.sunbook.application.exception.NotFoundArticleException;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.comment.Comment;
 import com.woowacourse.sunbook.domain.comment.CommentFeature;
-import com.woowacourse.sunbook.domain.comment.CommentRepository;
 import com.woowacourse.sunbook.domain.user.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -22,26 +20,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-class CommentServiceTest {
+class CommentServiceTest extends MockStorage {
     private static final Long ID = 1L;
 
     @InjectMocks
-    private CommentService commentService;
-
-    @Mock
-    private CommentRepository commentRepository;
-
-    @Mock
-    private UserService userService;
-
-    @Mock
-    private ArticleService articleService;
-
-    @Mock
-    private Comment comment;
-
-    @Mock
-    private ModelMapper modelMapper;
+    private CommentService injectCommentService;
 
     @Test
     void 댓글_작성() {
@@ -50,14 +33,14 @@ class CommentServiceTest {
         given(commentRepository.save(any(Comment.class))).willReturn(comment);
         given(modelMapper.map(mock(Comment.class), CommentResponseDto.class)).willReturn(mock(CommentResponseDto.class));
 
-        commentService.save(mock(CommentFeature.class), ID, ID);
+        injectCommentService.save(mock(CommentFeature.class), ID, ID);
 
         verify(commentRepository).save(any(Comment.class));
     }
 
     @Test
     void 댓글_전체_조회() {
-        commentService.findAll();
+        injectCommentService.findAll();
 
         verify(commentRepository).findAll();
     }
@@ -68,7 +51,7 @@ class CommentServiceTest {
         given(articleService.findById(ID)).willThrow(NotFoundArticleException.class);
 
         assertThrows(NotFoundArticleException.class, () -> {
-            commentService.modify(ID, mock(CommentFeature.class), ID, ID);
+            injectCommentService.modify(ID, mock(CommentFeature.class), ID, ID);
         });
     }
 
@@ -80,7 +63,7 @@ class CommentServiceTest {
         doNothing().when(mock(Comment.class)).validateAuth(mock(User.class), mock(Article.class));
         given(modelMapper.map(mock(Comment.class), CommentResponseDto.class)).willReturn(mock(CommentResponseDto.class));
 
-        commentService.modify(ID, mock(CommentFeature.class), ID, ID);
+        injectCommentService.modify(ID, mock(CommentFeature.class), ID, ID);
 
         verify(comment, times(1)).modify(any(CommentFeature.class), any(User.class), any(Article.class));
     }
@@ -91,7 +74,7 @@ class CommentServiceTest {
         given(articleService.findById(ID)).willThrow(NotFoundArticleException.class);
 
         assertThrows(NotFoundArticleException.class, () -> {
-            commentService.remove(ID, ID, ID);
+            injectCommentService.remove(ID, ID, ID);
         });
     }
 
@@ -104,7 +87,7 @@ class CommentServiceTest {
         doNothing().when(commentRepository).delete(mock(Comment.class));
         given(modelMapper.map(mock(Comment.class), CommentResponseDto.class)).willReturn(mock(CommentResponseDto.class));
 
-        commentService.remove(ID, ID, ID);
+        injectCommentService.remove(ID, ID, ID);
 
         verify(commentRepository, times(1)).delete(any(Comment.class));
     }

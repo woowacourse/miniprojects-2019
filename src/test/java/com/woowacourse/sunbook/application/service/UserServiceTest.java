@@ -1,17 +1,14 @@
 package com.woowacourse.sunbook.application.service;
 
-import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
+import com.woowacourse.sunbook.MockStorage;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
-import com.woowacourse.sunbook.application.dto.user.UserUpdateRequestDto;
 import com.woowacourse.sunbook.application.exception.DuplicateEmailException;
 import com.woowacourse.sunbook.application.exception.LoginException;
-import com.woowacourse.sunbook.domain.user.*;
+import com.woowacourse.sunbook.domain.user.User;
+import com.woowacourse.sunbook.domain.user.UserEmail;
+import com.woowacourse.sunbook.domain.user.UserPassword;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.modelmapper.ModelMapper;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
@@ -19,41 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
-class UserServiceTest {
+class UserServiceTest extends MockStorage {
 
     @InjectMocks
-    private UserService userService;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private UserUpdateRequestDto userUpdateRequestDto;
-
-    @Mock
-    private UserChangePassword userChangePassword;
-
-    @Mock
-    private User user;
-
-    @Mock
-    private UserRequestDto userRequestDto;
-
-    @Mock
-    private UserResponseDto userResponseDto;
-
-    @Mock
-    private ModelMapper modelMapper;
-
-    @Mock
-    private UserEmail userEmail;
-
-    @Mock
-    private UserName userName;
-
-    @Mock
-    private UserPassword userPassword;
+    private UserService injectUserService;
 
     @Test
     void 사용자_생성_성공() {
@@ -61,7 +27,7 @@ class UserServiceTest {
         given(userRepository.save(any(User.class))).willReturn(user);
         given(modelMapper.map(user, UserResponseDto.class)).willReturn(mock(UserResponseDto.class));
 
-        userService.save(userRequestDto);
+        injectUserService.save(userRequestDto);
 
         verify(userRepository, times(1)).save(any(User.class));
     }
@@ -72,7 +38,7 @@ class UserServiceTest {
         given(userRepository.existsByUserEmail(any(UserEmail.class))).willReturn(true);
 
         assertThrows(DuplicateEmailException.class, () -> {
-            userService.save(userRequestDto);
+            injectUserService.save(userRequestDto);
         });
     }
 
@@ -88,7 +54,7 @@ class UserServiceTest {
         given(userUpdateRequestDto.getChangePassword()).willReturn(userChangePassword);
         given(userChangePassword.updatedPassword(userPassword)).willReturn(userPassword);
 
-        userService.update(userResponseDto, userUpdateRequestDto);
+        injectUserService.update(userResponseDto, userUpdateRequestDto);
 
         verify(user, times(1)).updateEmail(user, userEmail);
         verify(user, times(1)).updateName(user, userName);
@@ -101,7 +67,7 @@ class UserServiceTest {
                 .willReturn((Optional.empty()));
 
         assertThrows(LoginException.class, () -> {
-            userService.update(userResponseDto, userUpdateRequestDto);
+            injectUserService.update(userResponseDto, userUpdateRequestDto);
         });
     }
 }
