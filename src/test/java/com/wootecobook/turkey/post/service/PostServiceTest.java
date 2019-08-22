@@ -44,6 +44,9 @@ public class PostServiceTest {
     private PostRepository postRepository;
 
     @Mock
+    private PostGoodService postGoodService;
+
+    @Mock
     private UserService userService;
 
     @Mock
@@ -56,7 +59,6 @@ public class PostServiceTest {
     private User author;
     private User other;
     private Long savedPostId;
-
 
     @BeforeEach
     void setUp() {
@@ -217,5 +219,4 @@ public class PostServiceTest {
                 .size(multipartFile.getSize())
                 .build();
     }
-
 }

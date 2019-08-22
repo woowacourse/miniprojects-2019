@@ -6,6 +6,7 @@ import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.comment.service.exception.CommentSaveException;
+import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.service.PostService;
 import com.wootecobook.turkey.user.domain.User;
@@ -25,11 +26,14 @@ public class CommentService {
 
     private final PostService postService;
     private final UserService userService;
+    private final CommentGoodService commentGoodService;
     private final CommentRepository commentRepository;
 
-    public CommentService(final PostService postService, final UserService userService, final CommentRepository commentRepository) {
+    public CommentService(final PostService postService, final UserService userService,
+                          final CommentGoodService commentGoodService, final CommentRepository commentRepository) {
         this.postService = postService;
         this.userService = userService;
+        this.commentGoodService = commentGoodService;
         this.commentRepository = commentRepository;
     }
 
@@ -78,5 +82,18 @@ public class CommentService {
         Comment comment = findById(id);
         comment.isWrittenBy(userId);
         comment.delete();
+    }
+
+    public GoodResponse good(final Long id, final Long userId) {
+        Comment comment = findById(id);
+        User user = userService.findById(userId);
+
+        return new GoodResponse(commentGoodService.good(comment, user));
+    }
+
+    public GoodResponse countGoodResponseByComment(Long commentId) {
+        Comment comment = findById(commentId);
+
+        return new GoodResponse(commentGoodService.countByComment(comment));
     }
 }

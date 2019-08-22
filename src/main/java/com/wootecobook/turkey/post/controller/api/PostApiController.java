@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.post.controller.api;
 
+import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.post.service.PostService;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
@@ -30,7 +31,7 @@ public class PostApiController {
     public ResponseEntity<PostResponse> create(@Valid PostRequest postRequest, UserSession userSession) {
 
         PostResponse postResponse = postService.save(postRequest, userSession.getId());
-        final URI uri = linkTo(PostApiController.class).toUri(); //todo: uri 적절한가
+        final URI uri = linkTo(PostApiController.class).toUri();
         return ResponseEntity.created(uri).body(postResponse);
     }
 
@@ -53,5 +54,17 @@ public class PostApiController {
     public ResponseEntity delete(@PathVariable Long postId, UserSession userSession) {
         postService.delete(postId, userSession.getId());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{postId}/good")
+    public ResponseEntity good(@PathVariable Long postId, UserSession userSession) {
+        GoodResponse goodResponse = postService.good(postId, userSession.getId());
+        return ResponseEntity.ok(goodResponse);
+    }
+
+    @GetMapping("/{postId}/good/count")
+    public ResponseEntity countGood(@PathVariable Long postId) {
+        GoodResponse goodResponse = postService.countPostGoodByPost(postId);
+        return ResponseEntity.ok(goodResponse);
     }
 }

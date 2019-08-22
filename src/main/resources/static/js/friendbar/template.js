@@ -1,4 +1,6 @@
-const allUserTemplate = (user) => `
+const allUserTemplate = (user) =
+>
+`
 <div class="btn-group dropleft" data-id="${user.id}">
     <button type="button" class="list-group-item list-group-item-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img class="img-circle width-25px" src="/images/default/eastjun_profile.jpg">
@@ -13,7 +15,9 @@ const allUserTemplate = (user) => `
 </div>
 `
 
-const friendTemplate = (friend) => `
+const friendTemplate = (friend) =
+>
+`
 <div class="btn-group dropleft" data-id="${friend.friendId}">
     <button type="button" class="list-group-item list-group-item-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img class="img-circle width-25px" src="/images/default/eastjun_profile.jpg">

@@ -6,6 +6,7 @@ import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.commons.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
+import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.config.AwsMockConfig;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
 import org.junit.jupiter.api.AfterEach;
@@ -38,7 +39,6 @@ class CommentApiControllerTests extends BaseControllerTests {
         userId = addUser("name", VALID_USER_EMAIL, VALID_USER_PASSWORD);
         jSessionId = logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD);
 
-        // 글작성
         //given
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("contents", "contents");
@@ -181,6 +181,33 @@ class CommentApiControllerTests extends BaseControllerTests {
         // then
         assertThat(commentCreate.getContents()).isEqualTo(commentResponse.getContents());
         assertThat(commentId).isEqualTo(commentResponse.getParentId());
+    }
+
+    @Test
+    void 댓글_좋아요_및_좋아요_취소_정상_로직() {
+        // given & when
+        GoodResponse goodResponse = webTestClient.get().uri(uri + "/{id}/good", commentId)
+                .cookie(JSESSIONID, jSessionId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(GoodResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        // then
+        assertThat(goodResponse.getTotalGood()).isEqualTo(1);
+
+        // given & when
+        GoodResponse goodCencelResponse = webTestClient.get().uri(uri + "/{id}/good", commentId)
+                .cookie(JSESSIONID, jSessionId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(GoodResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        // then
+        assertThat(goodCencelResponse.getTotalGood()).isEqualTo(0);
     }
 
     private Long addComment(CommentCreate commentCreate) {

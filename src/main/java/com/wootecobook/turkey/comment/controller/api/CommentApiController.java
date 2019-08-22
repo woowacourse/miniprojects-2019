@@ -4,6 +4,7 @@ import com.wootecobook.turkey.comment.service.CommentService;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
+import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.commons.resolver.UserSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,6 +69,20 @@ public class CommentApiController {
         commentService.delete(id, userSession.getId());
         final URI uri = linkTo(CommentApiController.class, postId).toUri();
         return ResponseEntity.noContent().location(uri).build();
+    }
+
+    @GetMapping("/{id}/good")
+    public ResponseEntity<GoodResponse> good(@PathVariable Long id, UserSession userSession) {
+        GoodResponse goodResponse = commentService.good(id, userSession.getId());
+
+        return ResponseEntity.ok(goodResponse);
+    }
+
+    @GetMapping("/{id}/good/count")
+    public ResponseEntity<GoodResponse> countGood(@PathVariable Long id) {
+        GoodResponse goodResponse = commentService.countGoodResponseByComment(id);
+
+        return ResponseEntity.ok(goodResponse);
     }
 }
 

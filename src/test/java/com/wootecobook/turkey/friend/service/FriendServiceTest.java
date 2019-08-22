@@ -1,10 +1,10 @@
 package com.wootecobook.turkey.friend.service;
 
 import com.wootecobook.turkey.friend.domain.Friend;
-import com.wootecobook.turkey.friend.domain.FriendRepository;
 import com.wootecobook.turkey.friend.domain.FriendAskRepository;
-import com.wootecobook.turkey.friend.service.dto.FriendCreate;
+import com.wootecobook.turkey.friend.domain.FriendRepository;
 import com.wootecobook.turkey.friend.service.dto.FriendAskCreate;
+import com.wootecobook.turkey.friend.service.dto.FriendCreate;
 import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;

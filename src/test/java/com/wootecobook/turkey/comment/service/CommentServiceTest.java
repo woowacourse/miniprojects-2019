@@ -45,7 +45,11 @@ class CommentServiceTest {
     private UserService userService;
 
     @Mock
+    private CommentGoodService commentGoodService;
+
+    @Mock
     private CommentRepository commentRepository;
+
     private User user;
     private Post post;
     private Comment comment;
@@ -186,5 +190,19 @@ class CommentServiceTest {
 
         // then
         verify(commentRepository).findAllByParentIdAndIsDeletedIsFalse(COMMENT_ID, pageable);
+    }
+
+    @Test
+    void 댓글_좋아요_테스트() {
+        // given
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
+        when(userService.findById(USER_ID)).thenReturn(user);
+        when(commentGoodService.good(any(Comment.class), any(User.class))).thenReturn(1);
+
+        // when
+        commentService.good(USER_ID, COMMENT_ID);
+
+        // then
+        verify(commentGoodService).good(comment, user);
     }
 }

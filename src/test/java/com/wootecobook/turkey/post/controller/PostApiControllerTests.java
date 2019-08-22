@@ -2,6 +2,7 @@ package com.wootecobook.turkey.post.controller;
 
 import com.wootecobook.turkey.commons.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
+import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.config.AwsMockConfig;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
@@ -177,12 +178,42 @@ class PostApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest();
     }
 
+    @Test
+    void 게시글_좋아요_생성_삭제_테스트() {
+        // given
+        Long postId = addPost("olaf");
+
+        // when
+        GoodResponse goodResponse = webTestClient.get().uri(POST_URL + "/{postId}/good", postId)
+                .cookie(JSESSIONID, jSessionId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(GoodResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        // then
+        assertThat(goodResponse.getTotalGood()).isEqualTo(1);
+
+        // when
+        GoodResponse postGoodCencelResponse = webTestClient.get().uri(POST_URL + "/{postId}/good", postId)
+                .cookie(JSESSIONID, jSessionId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(GoodResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        // then
+        assertThat(postGoodCencelResponse.getTotalGood()).isEqualTo(0);
+    }
+
+
     private Long addPost(String contents) {
         //given
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("contents", contents);
 
-        //when
         PostResponse postResponse = webTestClient.post().uri(POST_URL)
                 .cookie(JSESSIONID, jSessionId)
                 .syncBody(bodyBuilder.build())

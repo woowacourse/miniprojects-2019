@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.post.service;
 
+import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.service.UploadFileService;
 import com.wootecobook.turkey.post.domain.Contents;
@@ -10,7 +11,6 @@ import com.wootecobook.turkey.post.service.dto.PostResponse;
 import com.wootecobook.turkey.post.service.exception.NotPostOwnerException;
 import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,18 +29,19 @@ public class PostService {
     private static final String NOT_FOUND_MESSAGE = "존재하지 않는 게시글입니다.";
 
     private final PostRepository postRepository;
+    private final PostGoodService postGoodService;
     private final UserService userService;
+    private final UploadFileService uploadFileService;
 
-    @Autowired
-    private UploadFileService uploadFileService;
-
-    public PostService(final PostRepository postRepository, final UserService userService, final UploadFileService uploadFileService) {
+    public PostService(final PostRepository postRepository, final PostGoodService postGoodService,
+                       final UserService userService, final UploadFileService uploadFileService) {
         this.postRepository = postRepository;
+        this.postGoodService = postGoodService;
         this.userService = userService;
         this.uploadFileService = uploadFileService;
     }
 
-    public PostResponse save(PostRequest postRequest, Long userId) {
+    public PostResponse save(final PostRequest postRequest, final Long userId) {
         User user = userService.findById(userId);
         List<UploadFile> savedFiles = saveAttachments(postRequest.getFiles(), user);
 
@@ -59,7 +60,7 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Post findById(Long id) {
+    public Post findById(final Long id) {
         return postRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
     }
@@ -69,7 +70,7 @@ public class PostService {
         return postRepository.findAll(pageable).map(PostResponse::from);
     }
 
-    public PostResponse update(PostRequest postRequest, Long postId, Long userId) {
+    public PostResponse update(final PostRequest postRequest, final Long postId, final Long userId) {
         Post post = findById(postId);
 
         if (post.isWrittenBy(userId)) {
@@ -85,7 +86,7 @@ public class PostService {
         throw new NotPostOwnerException();
     }
 
-    public void delete(Long postId, Long userId) {
+    public void delete(final Long postId, final Long userId) {
         Post post = findById(postId);
 
         if (!post.isWrittenBy(userId)) {
@@ -93,5 +94,18 @@ public class PostService {
         }
 
         postRepository.delete(post);
+    }
+
+    public GoodResponse good(final Long postId, final Long userId) {
+        Post post = findById(postId);
+        User user = userService.findById(userId);
+
+        return new GoodResponse(postGoodService.good(post, user));
+    }
+
+    public GoodResponse countPostGoodByPost(Long postId) {
+        Post post = findById(postId);
+
+        return new GoodResponse(postGoodService.countByPost(post));
     }
 }

@@ -11,17 +11,19 @@ let currentPageNumber = 1;
 writeBtn.addEventListener('click', (event) => {
     const contents = writeArea.value
     const formData = new FormData();
-    formData.append('contents', contents)
-    fetch('/api/posts', {
-        method: 'POST',
-        enctype: "multipart/form-data",
-        body: formData
-    }).then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-        throw res
-    })
+formData.append('contents', contents)
+fetch('/api/posts', {
+    method: 'POST',
+    enctype: "multipart/form-data",
+    body: formData
+}).then(res = > {
+    if(res.ok
+)
+{
+    return res.json();
+}
+throw res
+})
         .then(post => posts.prepend(createPostDOM(post)))
         .catch(error => {
             error.json()
@@ -296,11 +298,11 @@ const postOperateButton = (function () {
                 api.PUT(`/api/posts/${postId}/comments/${commentId}`, commentUpdate)
                     .then(res => res.json())
                     .then(comment => {
-                        const contentsNode = commentItem.querySelector('span');
-                        const editContentsNode = commentItem.querySelector('textarea.bg-lightgray');
-                        contentsNode.innerText = comment.contents
-                        editContentsNode.value = comment.contents
-                        commentItem.querySelector('.info').classList.toggle('editing')
+                    const contentsNode = commentItem.querySelector('span');
+                const editContentsNode = commentItem.querySelector('textarea.bg-lightgray');
+                contentsNode.innerText = comment.contents
+                editContentsNode.value = comment.contents
+                commentItem.querySelector('.info').classList.toggle('editing')
                     })
                     .catch(error => console.error(error))
             }

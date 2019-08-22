@@ -3,9 +3,9 @@ package com.wootecobook.turkey.friend.controller.api;
 import com.wootecobook.turkey.commons.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.friend.service.FriendAskService;
-import com.wootecobook.turkey.friend.service.dto.FriendCreate;
 import com.wootecobook.turkey.friend.service.dto.FriendAskCreate;
 import com.wootecobook.turkey.friend.service.dto.FriendAskResponse;
+import com.wootecobook.turkey.friend.service.dto.FriendCreate;
 import com.wootecobook.turkey.friend.service.dto.FriendResponse;
 import com.wootecobook.turkey.user.service.UserService;
 import org.junit.jupiter.api.AfterEach;
@@ -29,12 +29,10 @@ class FriendApiControllerTests extends BaseControllerTests {
     private static final String SENDER_EMAIL = "sender@abc.abc";
     private static final String RECEIVER_NAME = "receiver";
     private static final String RECEIVER_EMAIL = "receiver@abc.abc";
-
-    private Long senderId;
-    private Long receiverId;
-
     @Autowired
     WebTestClient webTestClient;
+    private Long senderId;
+    private Long receiverId;
 
     @BeforeEach
     void setUp() {
