@@ -7,11 +7,11 @@ import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.service.UserService;
-import techcourse.w3.woostagram.user.support.LoggedInUser;
+import techcourse.w3.woostagram.common.support.LoggedInUser;
 
 import javax.servlet.http.HttpSession;
 
-import static techcourse.w3.woostagram.user.support.UserEmailArgumentResolver.LOGGED_IN_USER_SESSION_KEY;
+import static techcourse.w3.woostagram.common.support.UserEmailArgumentResolver.LOGGED_IN_USER_SESSION_KEY;
 
 @Controller
 @RequestMapping("users")

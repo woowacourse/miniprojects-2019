@@ -1,4 +1,4 @@
-package techcourse.w3.woostagram.user.support;
+package techcourse.w3.woostagram.common.support;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

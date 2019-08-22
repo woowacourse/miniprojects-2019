@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.like.service.LikesService;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
-import techcourse.w3.woostagram.user.support.LoggedInUser;
+import techcourse.w3.woostagram.common.support.LoggedInUser;
 
 import java.util.List;
 
