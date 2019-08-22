@@ -9,7 +9,7 @@ import techcourse.w3.woostagram.common.support.LoggedInUser;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/follows")
+@RequestMapping("/api/users/{targetId}/follows")
 public class FollowRestController {
     private final FollowService followService;
 
@@ -17,36 +17,36 @@ public class FollowRestController {
         this.followService = followService;
     }
 
-    @GetMapping("/{userId}/followers")
-    public ResponseEntity<List<UserInfoDto>> readFollowers(@PathVariable Long userId) {
-        return ResponseEntity.ok(followService.getFollowers(userId));
+    @GetMapping("/followers")
+    public ResponseEntity<List<UserInfoDto>> readFollowers(@PathVariable Long targetId) {
+        return ResponseEntity.ok(followService.getFollowers(targetId));
     }
 
-    @GetMapping("/{userId}/followings")
-    public ResponseEntity<List<UserInfoDto>> readFollowing(@PathVariable Long userId) {
-        List<UserInfoDto> dtos = followService.getFollowing(userId);
+    @GetMapping("/followings")
+    public ResponseEntity<List<UserInfoDto>> readFollowing(@PathVariable Long targetId) {
+        List<UserInfoDto> dtos = followService.getFollowing(targetId);
         return ResponseEntity.ok(dtos);
     }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity create(@PathVariable Long userId, @LoggedInUser String email) {
-        followService.add(email, userId);
+    @PostMapping
+    public ResponseEntity create(@PathVariable Long targetId, @LoggedInUser String email) {
+        followService.add(email, targetId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity delete(@PathVariable Long userId, @LoggedInUser String email) {
-        followService.remove(email, userId);
+    @DeleteMapping
+    public ResponseEntity delete(@PathVariable Long targetId, @LoggedInUser String email) {
+        followService.remove(email, targetId);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/num/{userId}/followers")
-    public ResponseEntity<Integer> readNumberOfFollowers(@PathVariable Long userId) {
-        return ResponseEntity.ok(followService.getFollowers(userId).size());
+    @GetMapping("/followers/num")
+    public ResponseEntity<Integer> readNumberOfFollowers(@PathVariable Long targetId) {
+        return ResponseEntity.ok(followService.getFollowers(targetId).size());
     }
 
-    @GetMapping("/num/{userId}/followings")
-    public ResponseEntity<Integer> readNumberOfFollowing(@PathVariable Long userId) {
-        return ResponseEntity.ok(followService.getFollowing(userId).size());
+    @GetMapping("/followings/num")
+    public ResponseEntity<Integer> readNumberOfFollowing(@PathVariable Long targetId) {
+        return ResponseEntity.ok(followService.getFollowing(targetId).size());
     }
 }
