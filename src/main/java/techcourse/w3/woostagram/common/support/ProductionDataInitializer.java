@@ -46,7 +46,7 @@ public class ProductionDataInitializer implements ApplicationRunner {
         Article gdArticle1 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
         Article mmArticle1 = saveArticle(mm, "moomin is moomin", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/mm.png");
         Article ivArticle1 = saveArticle(iv, "hello world", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/harry_moomin_gd.png");
-        Article hrArticle1 = saveArticle(hr, "", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/harry.png");
+        Article hrArticle1 = saveArticle(hr, "", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/harry.jpeg");
         Article uniArticle1 = saveArticle(uni, "", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/uni.png");
 
         Comment mmComment = saveComment(gdArticle1, "대박대박", mm);
