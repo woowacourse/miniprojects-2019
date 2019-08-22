@@ -28,9 +28,11 @@ const ArticleApp = (() => {
             articleService.read();
         };
 
-        const temp = () => {
+        const photoAndVideo = () => {
             const photoVideoBtn = document.getElementById('photo-video-btn');
-            photoVideoBtn.addEventListener('click', articleService.temp);
+            photoVideoBtn.addEventListener('click', articleService.hideFileInputTag);
+            const photoVideoInputTag = document.getElementById('photo-video-input');
+            photoVideoInputTag.addEventListener('change', articleService.showThumbnail)
         };
 
         const init = () => {
@@ -39,13 +41,25 @@ const ArticleApp = (() => {
             remove();
             read();
             update();
-            temp();
+            photoAndVideo();
+            clickGood();
         };
 
         return {
             init: init,
         }
     };
+
+    function checkBlank() {
+        const videoTag = document.querySelector('video[data-object="article-video"]');
+        const imageTag = document.querySelector('img[data-object="article-image"]');
+        if (videoTag.getAttribute('src') === "") {
+            videoTag.setAttribute('style', 'display:none');
+        }
+        if (imageTag.getAttribute('src') === "") {
+            imageTag.setAttribute('style', 'display:none');
+        }
+    }
 
     const ArticleService = function () {
         const articleApi = new ArticleApi();
@@ -61,11 +75,12 @@ const ArticleApp = (() => {
                             "id": article.id,
                             "updatedTime": article.updatedTime,
                             "article-contents": article.articleFeature.contents,
-                            "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
-                            "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png",
+                            "article-videoUrl": article.articleFeature.videoUrl,
+                            "article-imageUrl": article.articleFeature.imageUrl,
                             "authorName": article.authorName.name,
                         }));
                         ReactionApp.service().showGoodCount(article.id);
+                        checkBlank();
                     })
                 })
                 .catch(error => console.log("error: " + error));
@@ -79,27 +94,70 @@ const ArticleApp = (() => {
             }
             AppStorage.set('article-add-run', true);
 
-            articleApi.add({
-                contents: contents.value,
-                imageUrl: "",
-                videoUrl: "",
-            })
-                .then(response => response.json())
-                .then((article) => {
-                    document.getElementById('article-list')
-                        .insertAdjacentHTML('afterbegin', articleTemplate({
-                            "id": article.id,
-                            "updatedTime": article.updatedTime,
-                            "article-contents": article.articleFeature.contents,
-                            "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
-                            "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png",
-                            "authorName": article.authorName.name,
-                        }));
-                    ReactionApp.service().showGoodCount(article.id);
+            let file = document.querySelector('#photo-video-input').files[0];
+            let formData = new FormData();
+            formData.append('data', file);
 
-                    AppStorage.set('article-add-run', false);
-                });
-            contents.value = "";
+            $.ajax({
+                type: 'POST',
+                url: '/upload',
+                data: formData,
+                processData: false,
+                contentType: false
+            }).then(res => {
+                console.log(res);
+                return res;
+            }).then(res => {
+                let imgExtension = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+                let videoExtension = /(\.mov|\.mp4)$/i;
+                let data;
+                if(imgExtension.exec(res)){
+                    data = {
+                        contents: contents.value,
+                        imageUrl: res,
+                        videoUrl: "",
+                    };
+                } else if (videoExtension.exec(res)) {
+                    data = {
+                        contents: contents.value,
+                        imageUrl: "",
+                        videoUrl: res,
+                    };
+                } else {
+                    data = {
+                        contents: contents.value,
+                        imageUrl: "",
+                        videoUrl: "",
+                    };
+                }
+                return data;
+            }).then(data => {
+                articleApi.add(data)
+                    .then(response => response.json())
+                    .then((article) => {
+                        document.getElementById('article-list')
+                            .insertAdjacentHTML('afterbegin', articleTemplate({
+                                "id": article.id,
+                                "updatedTime": article.updatedTime,
+                                "article-contents": article.articleFeature.contents,
+                                "article-videoUrl": article.articleFeature.videoUrl,
+                                "article-imageUrl": article.articleFeature.imageUrl,
+                                "authorName": article.authorName.name,
+                            }));
+                        ReactionApp.service().showGoodCount(article.id);
+                        const videoTag = document.querySelector('video[data-object="article-video"]');
+                        const imageTag = document.querySelector('img[data-object="article-image"]');
+                        if (videoTag.getAttribute('src') === "") {
+                            videoTag.setAttribute('style', 'display:none');
+                        }
+                        if (imageTag.getAttribute('src') === "") {
+                            imageTag.setAttribute('style', 'display:none');
+                        }
+                        AppStorage.set('article-add-run', false);
+                    });
+                contents.value = "";
+                document.querySelector('#preview').src = "";
+            });
         };
 
         const update = (event) => {
@@ -145,10 +203,76 @@ const ArticleApp = (() => {
             }
         };
 
-        const temp = (event) => {
+        const hideFileInputTag = (event) => {
             const target = event.target;
-            const inputTag = document.getElementById("temptemp");
+            const inputTag = document.getElementById("photo-video-input");
             inputTag.click();
+        };
+
+
+        const clickGood = (event) => {
+            const target = event.target;
+            if (target.closest('li[data-btn="reaction-good-btn"]')) {
+                const article = target.closest('div[data-object="article"]');
+                const articleId = article.getAttribute('data-article-id');
+                const data = document.getElementById(`good-count-${articleId}`).innerText;
+
+                articleApi.clickGood(Number(data), articleId)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.numberOfGood);
+                        document.getElementById(`good-count-${articleId}`)
+                            .innerText = data.numberOfGood;
+                    });
+            }
+        };
+
+        const showThumbnail = () => {
+            const file = document.querySelector('#photo-video-input');
+            let files = file.files;
+
+            let allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mov|\.mp4)$/i;
+            if(!allowedExtensions.exec(files[0].name)){
+                alert('Please upload file having extensions .jpeg/.jpg/.png/.gif/.mov/.mp4 only.');
+                file.value = '';
+                return false;
+            } else {
+                let reader = new FileReader();
+                reader.readAsDataURL(files[0]);
+                //로드 한 후
+                reader.onload = function  () {
+                    document.querySelector('#preview').src = reader.result ;
+                };
+            }
+        };
+
+        const upload = () => {
+            // let file = document.querySelector('#photo-video-input').files[0];
+            // const fileName = file.name;
+            // let formData = new FormData();
+            // formData.append('data', file);
+            //
+            // let srcUrl;
+            // $.ajax({
+            //     type: 'POST',
+            //     url: '/upload',
+            //     data: formData,
+            //     processData: false,
+            //     contentType: false
+            // }).then(res => {
+            //     console.log(res);
+            //     srcUrl = res;
+            // });
+            // return srcUrl;
+
+            // articleApi.upload(formData)
+            //     .then(response => {
+            //         console.log(response.body);
+            //         console.log(response);
+            //         return response;
+            //     })
+            //     .then(success => console.log(success))
+            //     .catch(error => console.log(error));
         };
 
         return {
@@ -157,7 +281,10 @@ const ArticleApp = (() => {
             update: update,
             remove: remove,
             showModal: showModal,
-            temp: temp,
+            hideFileInputTag: hideFileInputTag,
+            clickGood: clickGood,
+            showThumbnail: showThumbnail,
+            upload: upload,
         }
     };
 
@@ -179,11 +306,26 @@ const ArticleApp = (() => {
             return Api.put(`/api/articles/${articleId}`, data);
         };
 
+        const clickGood = (data, articleId) => {
+            return Api.post(`/api/articles/${articleId}/good`, data)
+        };
+
+        const showGood = (articleId) => {
+            return Api.get(`/api/articles/${articleId}/good`);
+        };
+
+        const upload = (data) => {
+            return Api.postImage(`/upload`, data);
+        };
+
         return {
             add: add,
             remove: remove,
             render: render,
             update: update,
+            clickGood: clickGood,
+            showGood: showGood,
+            upload: upload,
         };
     };
 

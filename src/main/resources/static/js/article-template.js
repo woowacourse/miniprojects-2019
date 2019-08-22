@@ -34,9 +34,8 @@ const template = (function () {
                     <div class="feed-body no-pdd">
                         <p>
                             <span data-object="article-contents">{{article-contents}}</span> <br>
-                            <iframe src="{{article-videoUrl}}" height="380"
-                                    allowfullscreen></iframe>
-                            <img src="{{article-imageUrl}}" height="100" width="100"/>
+                            <video data-object="article-video" src="{{article-videoUrl}}" width=320" height="240" controls></video>
+                            <img data-object="article-image" src="{{article-imageUrl}}" height="100" width="100" alt="">
                         </p>
                     </div>
                     <ul class="feed-action pdd-btm-5 border bottom">

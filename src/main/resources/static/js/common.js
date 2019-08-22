@@ -27,6 +27,14 @@ const Api = {
             method: 'DELETE',
         });
     },
+
+    postImage: function (url, data) {
+        return fetch(url, {
+            method: 'POST',
+            enctype: "multipart/form-data",
+            body: data,
+        });
+    },
 };
 
 const AppStorage = (function() {
