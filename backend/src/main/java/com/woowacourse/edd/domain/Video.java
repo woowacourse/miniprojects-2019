@@ -37,11 +37,11 @@ public class Video {
     @Column(nullable = false)
     private LocalDateTime createDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
-    private Video() {
+    public Video() {
     }
 
     public Video(String youtubeId, String title, String contents, User creator) {

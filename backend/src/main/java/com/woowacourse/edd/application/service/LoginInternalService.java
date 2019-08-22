@@ -5,10 +5,8 @@ import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.exceptions.PasswordNotMatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 class LoginInternalService {
 
     private final UserInternalService userInternalService;

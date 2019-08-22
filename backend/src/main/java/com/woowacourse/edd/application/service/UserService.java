@@ -5,8 +5,10 @@ import com.woowacourse.edd.application.dto.UserRequestDto;
 import com.woowacourse.edd.application.response.UserResponse;
 import com.woowacourse.edd.domain.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserService {
 
     private final UserInternalService userInternalService;

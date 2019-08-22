@@ -36,7 +36,7 @@ public class User {
 
     private boolean isDeleted;
 
-    private User() {
+    public User() {
     }
 
     public User(String name, String email, String password, boolean isDeleted) {
