@@ -31,12 +31,12 @@ public class LoginControllerTests extends BasicControllerTests {
     @Test
     void login_unavailable_user() {
         String testEmail = "edan@gmail.com";
-        String testPassword = "passW0rd";
+        String testPassword = "p@ssW0rd";
 
         UserRequestDto userRequestDto = new UserRequestDto("edan", testEmail, testPassword);
         String url = signUp(userRequestDto).getResponseHeaders().getLocation().toASCIIString();
 
-        String sid = getLoginCookie(new LoginRequestDto("edan@gmail.com", "passW0rd"));
+        String sid = getLoginCookie(new LoginRequestDto("edan@gmail.com", "p@ssW0rd"));
 
         webTestClient.delete().uri(url)
             .cookie(COOKIE_JSESSIONID, sid)

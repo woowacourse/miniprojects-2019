@@ -2,16 +2,34 @@ package com.woowacourse.edd.presentation.controller;
 
 import com.woowacourse.edd.application.dto.LoginRequestDto;
 import com.woowacourse.edd.application.dto.UserRequestDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.StatusAssertions;
 import reactor.core.publisher.Mono;
 
+import static com.woowacourse.edd.application.dto.UserRequestDto.*;
 import static com.woowacourse.edd.presentation.controller.UserController.USER_URL;
 
 public class UserControllerTests extends BasicControllerTests {
+
+    @Test
+    void email_validation() {
+        UserRequestDto userRequestDto = new UserRequestDto("robby", "asdadasdasd", "P@ssW0rd");
+        assertFailBadRequest(assertRequestValidation(userRequestDto), INVALID_EMAIL_MESSAGE);
+    }
+
+    @Test
+    void name_validation() {
+        UserRequestDto userRequestDto = new UserRequestDto("r", "als5610@naver.com", "P@ssW0rd");
+        assertFailBadRequest(assertRequestValidation(userRequestDto), INVALID_NAME_MESSAGE);
+    }
+
+    @Test
+    void password_validation() {
+        UserRequestDto userRequestDto = new UserRequestDto("robby", "als5610@naver.com", "Passw0rd");
+        assertFailBadRequest(assertRequestValidation(userRequestDto), INVALID_PASSWORD_MESSAGE);
+    }
 
     @Test
     void user_save() {
@@ -97,6 +115,13 @@ public class UserControllerTests extends BasicControllerTests {
     @Test
     void find_by_id() {
         findUser(USER_URL + "/1").isOk();
+    }
+
+    private StatusAssertions assertRequestValidation(UserRequestDto userRequestDto) {
+        return executePost(USER_URL)
+            .body(Mono.just(userRequestDto), UserRequestDto.class)
+            .exchange()
+            .expectStatus();
     }
 
     private String getUrl(EntityExchangeResult<byte[]> entityExchangeResult) {
