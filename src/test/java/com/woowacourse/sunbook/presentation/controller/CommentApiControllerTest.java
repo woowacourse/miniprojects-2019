@@ -21,7 +21,7 @@ class CommentApiControllerTest extends TestTemplate {
 
     @Test
     void 댓글_전체_조회() {
-        respondApi(request(HttpMethod.GET, "/api/articles/1/comments", Void.class, HttpStatus.OK))
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/articles/1/comments", Void.class, HttpStatus.OK, loginSessionId(userRequestDto)))
                 .jsonPath("$").isNotEmpty();
     }
 
@@ -37,7 +37,7 @@ class CommentApiControllerTest extends TestTemplate {
 
     @Test
     void 권한_없는_사용자_댓글_수정() {
-        String sessionId = loginSessionId(otherRequestDto);
+        String sessionId = loginSessionId(anotherRequestDto);
         respondApi(loginAndRequest(HttpMethod.PUT, "/api/articles/1/comments/1", new CommentFeature("abcd"), HttpStatus.OK, sessionId))
                 .jsonPath("$.errorMessage").isEqualTo("권한이 없습니다.")
                 ;
@@ -75,7 +75,7 @@ class CommentApiControllerTest extends TestTemplate {
 
     @Test
     void 권한_없는_사용자_댓글_삭제() {
-        String sessionId = loginSessionId(otherRequestDto);
+        String sessionId = loginSessionId(anotherRequestDto);
         respondApi(loginAndRequest(HttpMethod.DELETE, "/api/articles/1/comments/1", Void.class, HttpStatus.OK, sessionId))
                 .jsonPath("$.errorMessage").isEqualTo("권한이 없습니다.")
                 ;

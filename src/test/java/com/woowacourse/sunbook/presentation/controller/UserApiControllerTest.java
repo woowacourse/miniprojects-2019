@@ -39,7 +39,7 @@ class UserApiControllerTest extends TestTemplate {
 
     @Test
     void 회원가입_성공() {
-        respondApi(request(HttpMethod.POST, "/api/users", userSignInRequestDto, HttpStatus.OK))
+        respondApi(request(HttpMethod.POST, "/api/users/signup", userSignInRequestDto, HttpStatus.OK))
                 .jsonPath("$..email").isEqualTo(NEW_USER_EMAIL)
                 .jsonPath("$..name").isEqualTo(USER_NAME)
                 ;
@@ -47,7 +47,7 @@ class UserApiControllerTest extends TestTemplate {
 
     @Test
     void 중복된_이메일로_인한_회원가입_실패() {
-        respondApi(request(HttpMethod.POST, "/api/users", userLoginRequestDto, HttpStatus.OK))
+        respondApi(request(HttpMethod.POST, "/api/users/signup", userLoginRequestDto, HttpStatus.OK))
                 .jsonPath("$.errorMessage").isEqualTo("중복된 이메일입니다.")
                 ;
     }
