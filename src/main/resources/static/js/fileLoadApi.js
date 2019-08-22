@@ -1,7 +1,6 @@
 const FILE_LOAD_APP = (() => {
 
     const FileLoadService = function () {
-
         const b64StringToBlob = b64Data => {
             const byteCharacters = atob(b64Data);
             const byteArrays = [];
@@ -38,9 +37,29 @@ const FILE_LOAD_APP = (() => {
             }
         };
 
+        const loadMediaFile = (fileLoader, fileName, id) => {
+            const connector  = FETCH_APP.FetchApi();
+
+            const loadFile = response => {
+                response.arrayBuffer().then(buffer => {
+                    const bytes = new Uint8Array(buffer);
+                    let binary = '';
+                    bytes.forEach((b) => binary += String.fromCharCode(b));
+
+                    const blob = fileLoader.b64StringToBlob(binary);
+                    const blobUrl = URL.createObjectURL(blob);
+
+                    fileLoader.setSrcAttribute(blobUrl, fileName, id);
+                });
+            };
+
+            connector.fetchTemplateWithoutBody(`/api/articles/${id}/file`, connector.GET, loadFile);
+        };
+
         return {
             b64StringToBlob: b64StringToBlob,
-            setSrcAttribute: setSrcAttribute
+            setSrcAttribute: setSrcAttribute,
+            loadMediaFile: loadMediaFile,
         }
     };
 
