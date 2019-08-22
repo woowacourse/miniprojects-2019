@@ -3,6 +3,7 @@ package techcourse.w3.woostagram.comment.controller;
 import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
 import techcourse.w3.woostagram.comment.dto.CommentDto;
+import techcourse.w3.woostagram.common.support.TestDataInitializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ class CommentRestControllerTest extends AbstractControllerTests {
     @Test
     void read_correct_isOk() {
         CommentDto[] response = getRequest("/api/comments/1", CommentDto[].class);
-        assertThat(response[0].getContents()).isEqualTo("내용");
+        assertThat(response[0].getContents()).isEqualTo(TestDataInitializer.COMMENT1_CONTENTS);
     }
 
     @Test

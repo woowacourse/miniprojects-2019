@@ -20,6 +20,25 @@ import techcourse.w3.woostagram.user.domain.UserRepository;
 @Profile("test")
 @Component
 public class TestDataInitializer implements ApplicationRunner {
+    public static User authorUser;
+    public static User updateUser;
+    public static User deleteUser;
+    public static User unAuthorUser;
+
+    public static Article basicArticle;
+    public static Article updateArticle;
+    public static Article deleteArticle;
+
+    public static Comment basicComment;
+    public static Comment updateComment;
+    public static Comment deleteComment;
+
+    public static Follow basicFollow;
+    public static Follow deleteFollow;
+
+    public static Likes basicLikes;
+    public static Likes deleteLikes;
+
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
     private final CommentRepository commentRepository;
@@ -37,89 +56,65 @@ public class TestDataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        User user1 = userRepository.save(User.builder()
-                .email("a@naver.com")
-                .password("Aa1234!!")
+        authorUser = saveUser("a@naver.com", "Aa1234!!", "user1");
+        updateUser = saveUser("b@naver.com", "Aa1234!!", "user2");
+        deleteUser = saveUser("c@naver.com", "Aa1234!!", "user3");
+        unAuthorUser = saveUser("d@naver.com", "Aa1234!!", "user4");
+
+        basicArticle = saveArticle(authorUser, "moomin is moomin1", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/feee6754-8855-4461-b154-86cbda2b8864.png");
+        updateArticle = saveArticle(authorUser, "moomin is moomin2", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/feee6754-8855-4461-b154-86cbda2b8864.png");
+        deleteArticle = saveArticle(authorUser, "moomin is moomin3", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/feee6754-8855-4461-b154-86cbda2b8864.png");
+
+        basicComment = saveComment(basicArticle, "contents1", authorUser);
+        updateComment = saveComment(basicArticle, "contents2", authorUser);
+        deleteComment = saveComment(basicArticle, "contents3", authorUser);
+
+        basicFollow = saveFollow(authorUser, unAuthorUser);
+        deleteFollow = saveFollow(unAuthorUser, authorUser);
+
+        basicLikes = saveLikes(authorUser, basicArticle);
+        deleteLikes = saveLikes(authorUser, updateArticle);
+    }
+
+    private Likes saveLikes(User liker, Article article) {
+        return likesRepository.save(Likes.builder()
+                .article(article)
+                .likeUser(liker)
+                .build());
+    }
+
+    private Follow saveFollow(User from, User to) {
+        return followRepository.save(Follow.builder()
+                .from(from)
+                .to(to)
+                .build());
+    }
+
+    private Comment saveComment(Article article, String contents, User commenter) {
+        return commentRepository.save(Comment.builder()
+                .article(article)
+                .contents(contents)
+                .user(commenter)
+                .build());
+    }
+
+    private Article saveArticle(User author, String contents, String image) {
+        return articleRepository.save(Article.builder()
+                .user(author)
+                .contents(contents)
+                .imageUrl(image)
+                .build());
+    }
+
+    private User saveUser(String email, String password, String userName) {
+        return userRepository.save(User.builder()
+                .email(email)
+                .password(password)
                 .userContents(
                         UserContents.builder()
-                                .userName("user")
+                                .userName(userName)
                                 .build()
                 )
-                .build());
-
-        User user2 = userRepository.save(User.builder()
-                .email("b@naver.com")
-                .password("Aa1234!!")
-                .userContents(
-                        UserContents.builder()
-                                .userName("user2")
-                                .build()
-                )
-                .build());
-
-        User user3 = userRepository.save(User.builder()
-                .email("c@naver.com")
-                .password("Aa1234!!")
-                .userContents(
-                        UserContents.builder()
-                                .userName("user3")
-                                .build()
-                )
-                .build());
-
-        Article article1 = articleRepository.save(Article.builder()
-                .user(user1)
-                .contents("moomin is moomin1")
-                .imageUrl("https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/feee6754-8855-4461-b154-86cbda2b8864.png")
-                .build());
-
-        Article article2 = articleRepository.save(Article.builder()
-                .user(user1)
-                .contents("moomin is moomin2")
-                .imageUrl("https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/feee6754-8855-4461-b154-86cbda2b8864.png")
-                .build());
-
-        Article article3 = articleRepository.save(Article.builder()
-                .user(user1)
-                .contents("moomin is moomin3")
-                .imageUrl("https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/feee6754-8855-4461-b154-86cbda2b8864.png")
-                .build());
-
-        Comment comment1 = commentRepository.save(Comment.builder()
-                .article(article1)
-                .contents("contents1")
-                .user(user1)
-                .build());
-
-        Comment comment2 = commentRepository.save(Comment.builder()
-                .article(article1)
-                .contents("contents2")
-                .user(user1)
-                .build());
-
-        Follow follow1 = followRepository.save(Follow.builder()
-                .from(user1)
-                .to(user2)
-                .build());
-
-        Follow follow2 = followRepository.save(Follow.builder()
-                .from(user1)
-                .to(user3)
-                .build());
-
-        Likes likes1 = likesRepository.save(Likes.builder()
-                .article(article1)
-                .likeUser(user1)
-                .build());
-
-        Likes likes2 = likesRepository.save(Likes.builder()
-                .article(article1)
-                .likeUser(user2)
-                .build());
-
-        Likes likes3 = likesRepository.save(Likes.builder()
-                .article(article1)
-                .likeUser(user3)
                 .build());
     }
 }
