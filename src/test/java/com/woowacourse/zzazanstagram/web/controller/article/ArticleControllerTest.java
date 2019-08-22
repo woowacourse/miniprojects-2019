@@ -15,7 +15,6 @@ import static com.woowacourse.zzazanstagram.model.article.ArticleConstant.CONTEN
 import static com.woowacourse.zzazanstagram.model.article.ArticleConstant.HASHTAG;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AutoConfigureWebTestClient
 @Import(S3MockConfig.class)
 class ArticleControllerTest extends RequestTemplate {
     private ByteArrayResource file;
