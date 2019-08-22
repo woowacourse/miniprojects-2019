@@ -8,10 +8,11 @@ import techcourse.w3.woostagram.user.dto.UserInfoDto;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
-@NoArgsConstructor
+@ToString
 public class ArticleDto {
     private MultipartFile imageFile;
     private Long id;

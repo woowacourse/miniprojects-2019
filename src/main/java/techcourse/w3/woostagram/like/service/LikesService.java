@@ -19,7 +19,7 @@ public class LikesService {
     private final UserService userService;
     private final ArticleService articleService;
 
-    public LikesService(LikesRepository likesRepository, UserService userService, ArticleService articleService) {
+    public LikesService(final LikesRepository likesRepository, final UserService userService, final ArticleService articleService) {
         this.likesRepository = likesRepository;
         this.userService = userService;
         this.articleService = articleService;

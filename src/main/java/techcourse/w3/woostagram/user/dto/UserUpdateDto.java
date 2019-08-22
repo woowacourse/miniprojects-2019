@@ -1,13 +1,13 @@
 package techcourse.w3.woostagram.user.dto;
 
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.user.domain.UserContents;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class UserUpdateDto {
     private String name;
     private String userName;

@@ -20,7 +20,7 @@ public class CommentService {
     private final UserService userService;
     private final ArticleService articleService;
 
-    public CommentService(CommentRepository commentRepository, UserService userService, ArticleService articleService) {
+    public CommentService(final CommentRepository commentRepository, final UserService userService, final ArticleService articleService) {
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.articleService = articleService;
