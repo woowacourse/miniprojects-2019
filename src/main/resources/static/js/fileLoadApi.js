@@ -20,19 +20,19 @@ const FILE_LOAD_APP = (() => {
         };
 
         function setSrcAttribute(url, fileName, articleId) {
-            let words = fileName.split('.');
-            let extension = words[words.length - 1];
+            const words = fileName.split('.');
+            const extension = words[words.length - 1];
 
-            let imageExtensions = ['jpg', 'png', 'jpeg'];
-            let videoExtensions = ['avi', 'mp4'];
+            const imageExtensions = ['jpg', 'png', 'jpeg'];
+            const videoExtensions = ['avi', 'mp4'];
 
             if (imageExtensions.includes(extension)) {
-                let articleImage = document.getElementById('article-image-' + articleId);
+                const articleImage = document.getElementById('article-image-' + articleId);
                 articleImage.style.display = "block";
                 articleImage.src = url;
             }
             if (videoExtensions.includes(extension)) {
-                let articleVideo = document.getElementById('article-video-' + articleId);
+                const articleVideo = document.getElementById('article-video-' + articleId);
                 articleVideo.style.display = "block";
                 articleVideo.src = url;
             }

@@ -68,7 +68,7 @@ const USER_APP = (() => {
         const saveUser = function (event) {
             event.preventDefault();
 
-            let userBasicInfo = {
+            const userBasicInfo = {
                 email: email.value,
                 nickName: nickName.value,
                 userName: userName.value,
@@ -120,7 +120,7 @@ const USER_APP = (() => {
         const login = function (event) {
             event.preventDefault();
 
-            let userBasicInfo = {
+            const userBasicInfo = {
                 email: email.value,
                 password: password.value,
             };
@@ -152,7 +152,7 @@ const USER_APP = (() => {
 
             const getImage = response => {
                 response.arrayBuffer().then(function (buffer) {
-                    let bytes = new Uint8Array(buffer);
+                    const bytes = new Uint8Array(buffer);
                     let binary = '';
                     bytes.forEach(b => binary += String.fromCharCode(b));
 

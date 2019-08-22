@@ -49,8 +49,8 @@ const ARTICLE_APP = (() => {
 
         // TODO 슬로스의 유작... 여기로 옮겨지다. (사용되지 않고 있음)
         const copyUrl = (articleId) => {
-            let copiedUrl = window.location.host + `/articles/${articleId}`;
-            let copyTarget = document.createElement('textarea');
+            const copiedUrl = window.location.host + `/articles/${articleId}`;
+            const copyTarget = document.createElement('textarea');
 
             document.body.appendChild(copyTarget);
             copyTarget.value = copiedUrl;

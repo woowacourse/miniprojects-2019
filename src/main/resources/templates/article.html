@@ -32,8 +32,8 @@
     <script src="/js/fileLoadApi.js"></script>
     <script src="/js/card.js"></script>
     <script th:inline="javascript">
-        let articleId = [[${article.id}]];
-        let articleFileName = [[${article.fileName}]];
+        const articleId = [[${article.id}]];
+        const articleFileName = [[${article.fileName}]];
 
         const connector = FETCH_APP.FetchApi();
         const fileLoader = FILE_LOAD_APP.FileLoadService();

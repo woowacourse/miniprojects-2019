@@ -17,7 +17,7 @@
         }
 
         function showSearchedList(event) {
-            let query = event.target.value;
+            const query = event.target.value;
             if (query.length > 0) {
                 document.querySelector(".advanced-search").classList.add("active");
                 fetch('/api/hashTag?query=' + query, {
