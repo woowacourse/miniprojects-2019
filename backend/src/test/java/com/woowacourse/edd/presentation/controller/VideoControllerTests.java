@@ -1,6 +1,5 @@
 package com.woowacourse.edd.presentation.controller;
 
-import com.woowacourse.edd.application.dto.LoginRequestDto;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import com.woowacourse.edd.utils.Utils;

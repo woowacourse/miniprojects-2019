@@ -1,7 +1,7 @@
 package com.woowacourse.edd.config;
 
-import com.woowacourse.edd.interceptor.MethodNeedNotSignedInInterceptor;
-import com.woowacourse.edd.interceptor.MethodNeedSignedInInterceptor;
+import com.woowacourse.edd.interceptor.NoSignInRequiredInterceptor;
+import com.woowacourse.edd.interceptor.SignInRequiredInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -21,12 +21,12 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     private void needSignedIn(InterceptorRegistry registry, String pathPattern, String... allowedMethods) {
-        registry.addInterceptor(new MethodNeedSignedInInterceptor(allowedMethods))
+        registry.addInterceptor(new NoSignInRequiredInterceptor(allowedMethods))
             .addPathPatterns(pathPattern);
     }
 
     private void needNotSignedIn(InterceptorRegistry registry, String pathPattern, String... allowedMethods) {
-        registry.addInterceptor(new MethodNeedNotSignedInInterceptor(allowedMethods))
+        registry.addInterceptor(new SignInRequiredInterceptor(allowedMethods))
             .addPathPatterns(pathPattern);
     }
 
