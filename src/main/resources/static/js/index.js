@@ -126,7 +126,7 @@ const IndexApp = (() => {
         };
 
         const signUp = (data) => {
-            return Api.post('/api/signup', data);
+            return Api.post('/api/users/signup', data);
         };
 
         return {

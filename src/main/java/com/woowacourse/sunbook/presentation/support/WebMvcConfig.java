@@ -19,14 +19,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
         this.userSessionArgumentResolver = userSessionArgumentResolver;
     }
 
-    // TODO :  데모 전 설정 바꾸기
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        List<String> patterns = Arrays.asList("/", "/test", "/upload", "/api/signin", "/api/signup", "/js/**", "/css/**", "/images/**");
+        List<String> patterns = Arrays.asList("/", "/api/signin", "/api/users/signup", "/js/**", "/css/**", "/images/**");
         registry.addInterceptor(interceptor)
                 .excludePathPatterns(patterns)
-                .excludePathPatterns("/**");
-//                .addPathPatterns("/**");
+//                .excludePathPatterns("/**");
+                .addPathPatterns("/**");
     }
 
     @Override
