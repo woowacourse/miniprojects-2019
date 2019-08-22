@@ -27,4 +27,3 @@ fi
 
 echo "> 새 어플리케이션 배포"
 
-nohup java -jar build/libs/*.jar &
