@@ -33,25 +33,27 @@
           href="https://fonts.googleapis.com/css?family=Amiri:400,400i|Source+Sans+Pro:400,400i,600,700'">
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800&display=swap"
           rel="stylesheet">
-
-    <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/attachment.css">
-</head>
-<body>
-<div id="wootecobook-app">
-    <header class="header navbar">
-        <nav class="header-container max-width-lg mx-auto">
-            <ul class="nav-left mrg-left-0">
-                <li>
-                    <a href="/newsfeed">
-                        <div class="logo logo-small" style="background-image: url('/images/default/icons.png')"></div>
-                    </a>
-                </li>
-                <li class="search-container">
+        <link rel="stylesheet" href="/css/app.css">
+        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/search.css">
+        <link rel="stylesheet" href="/css/attachment.css">
+    </head>
+    <body>
+    <div id="wootecobook-app">
+        <header class="header navbar">
+            <nav class="header-container max-width-lg mx-auto">
+                <ul class="nav-left mrg-left-0">
+                    <li>
+                        <a href="/newsfeed">
+                            <div class="logo logo-small" style="background-image: url('/images/default/icons.png')"></div>
+                        </a>
+                    </li>
+                    <li class="search-container">
                     <span class="search">
-                        <form action="" method="get">
-                            <input type="text" class="searchbox" placeholder="검색">
+                        <form action="" id="searchform" method="get">
+                            <input class="searchbox" id="search" placeholder="검색" type="text">
+                            <div class="dropdown" id="autocomplete">
+                            </div>
                             <button type="submit" class="search-btn">
                                 <i class="ti-search"></i>
                             </button>
@@ -279,24 +281,22 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
-    <footer class="footer mrg-top-65">
-        <a href="https://github.com/woowahan-rescue9" title="우아한9조대">
-            &copy; 2019 <img src="/images/logo/res9-logo.gif" alt="우아한9조대" width="20" height="20">
-        </a>
-        <div class="mrg-top-20"></div>
-    </footer>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
-<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"
-        integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-<script src="/js/app.js"></script>
-<script src="/js/attachment.js"></script>
-</body>
+        </main>
+        <footer class="footer mrg-top-65">
+            <a href="https://github.com/woowahan-rescue9" title="우아한9조대">
+                &copy; 2019 <img src="/images/logo/res9-logo.gif" alt="우아한9조대" width="20" height="20">
+            </a>
+            <div class="mrg-top-20"> </div>
+        </footer>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/search.js"></script>
+    <script src="/js/attachment.js"></script>
+    </body>
 </html>
