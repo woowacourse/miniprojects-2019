@@ -1,11 +1,12 @@
 package techcourse.w3.woostagram.common.support;
 
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import techcourse.w3.woostagram.user.interceptor.LoggedInInterceptor;
 
-@Configurable
+@Configuration
 public class LoggedInConfig implements WebMvcConfigurer {
     private final LoggedInInterceptor loggedInInterceptor;
 

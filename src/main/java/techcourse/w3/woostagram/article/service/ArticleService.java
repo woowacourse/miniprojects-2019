@@ -42,7 +42,8 @@ public class ArticleService {
     }
 
     @Transactional
-    public void update(ArticleDto articleDto) {
+    public void update(ArticleDto articleDto, String email) {
+        User loggedInUser = userService.findUserByEmail(email);
         Article article = articleRepository.findById(articleDto.getId()).orElseThrow(ArticleNotFoundException::new);
         article.updateContents(articleDto.getContents());
     }
