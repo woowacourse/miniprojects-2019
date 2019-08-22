@@ -15,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class FriendAsk extends BaseEntity {
 
+    private static final String NULL_INPUT_MESSAGE = "Null 값을 입력할 수 없습니다.";
+
     @Column(nullable = false, updatable = false)
     private Long senderId;
 
@@ -23,10 +25,17 @@ public class FriendAsk extends BaseEntity {
 
     @Builder
     public FriendAsk(Long senderId, Long receiverId) {
+        validateNotNull(senderId);
+        validateNotNull(receiverId);
         this.senderId = senderId;
         this.receiverId = receiverId;
     }
 
+    private void validateNotNull(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException(NULL_INPUT_MESSAGE);
+        }
+    }
 
     public List<Friend> createBidirectionalFriends() {
         return Arrays.asList(
@@ -39,5 +48,9 @@ public class FriendAsk extends BaseEntity {
                         .relatedUserId(senderId)
                         .build()
         );
+    }
+
+    public boolean matchUserId(Long userId) {
+        return receiverId.equals(userId) || senderId.equals(userId);
     }
 }

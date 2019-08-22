@@ -4,6 +4,7 @@ import com.wootecobook.turkey.friend.domain.FriendAskRepository;
 import com.wootecobook.turkey.friend.service.dto.FriendAskCreate;
 import com.wootecobook.turkey.friend.service.dto.FriendAskResponse;
 import com.wootecobook.turkey.friend.service.exception.FriendAskFailException;
+import com.wootecobook.turkey.friend.service.exception.MismatchedUserException;
 import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -107,5 +109,58 @@ class FriendAskServiceTest {
 
         //then
         assertThrows(FriendAskFailException.class, () -> friendAskService.save(senderId, friendAskCreate));
+    }
+
+    @Test
+    void 상대방이_친구_요청을_보낸_경우() {
+        //given
+        FriendAskCreate friendAskCreate = FriendAskCreate.builder()
+                .receiverId(receiverId)
+                .build();
+        FriendAskCreate friendAskCreateReverse = FriendAskCreate.builder()
+                .receiverId(senderId)
+                .build();
+
+        friendAskService.save(senderId, friendAskCreate);
+
+        //when & then
+        assertThrows(FriendAskFailException.class, () -> friendAskService.save(receiverId, friendAskCreateReverse));
+    }
+
+    @Test
+    void receiver_친구_요청_삭제() {
+        //given
+        FriendAskCreate friendAskCreate = FriendAskCreate.builder()
+                .receiverId(receiverId)
+                .build();
+        FriendAskResponse friendAskResponse = friendAskService.save(senderId, friendAskCreate);
+
+        //when & then
+        assertDoesNotThrow(() -> friendAskService.deleteById(friendAskResponse.getFriendAskId(), receiverId));
+    }
+
+    @Test
+    void sender_친구_요청_삭제() {
+        //given
+        FriendAskCreate friendAskCreate = FriendAskCreate.builder()
+                .receiverId(receiverId)
+                .build();
+        FriendAskResponse friendAskResponse = friendAskService.save(senderId, friendAskCreate);
+
+        //when & then
+        assertDoesNotThrow(() -> friendAskService.deleteById(friendAskResponse.getFriendAskId(), senderId));
+    }
+
+    @Test
+    void 잘못된_유저가_친구_요청_삭제() {
+        //given
+        FriendAskCreate friendAskCreate = FriendAskCreate.builder()
+                .receiverId(receiverId)
+                .build();
+        FriendAskResponse friendAskResponse = friendAskService.save(senderId, friendAskCreate);
+
+        //when & then
+        assertThrows(MismatchedUserException.class,
+                () -> friendAskService.deleteById(friendAskResponse.getFriendAskId(), Long.MAX_VALUE));
     }
 }

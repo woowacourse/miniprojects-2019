@@ -10,4 +10,6 @@ public interface FriendAskRepository extends JpaRepository<FriendAsk, Long> {
     List<FriendAsk> findAllByReceiverId(Long receiverId);
 
     Optional<FriendAsk> findBySenderIdAndReceiverId(Long senderId, Long receiverId);
+
+    void deleteBySenderIdOrReceiverId(Long senderId, Long receiverId);
 }

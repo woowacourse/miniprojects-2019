@@ -31,6 +31,8 @@ let friendBarModule = (function () {
         for (let i = 0; i < data.length; i++) {
             createFriendDOM(data[i])
         }
+
+        addFriendsRemoveBtnClickListener()
     }
 
     function createUserDOM(user) {
@@ -56,14 +58,37 @@ let friendBarModule = (function () {
                     data: JSON.stringify(data)
                 })
 
-                if (res.status == 201) {
-                    alert('success')
-                } else if (res.status == 400) {
-                    alert(res.responseJSON.message)
-                }
-            })
-        }
-    }
+	            if(res.status == 201) {
+	                alert('친구 요청을 보냈습니다.')
+	            } else if(res.status == 400) {
+    	            alert(res.responseJSON.message)
+	            }
+			})
+		}
+	}
+
+	function addFriendsRemoveBtnClickListener() {
+		let btns = document.getElementsByClassName('FriendRemove')
+		for(let i = 0; i < btns.length; i++) {
+			btns[i].addEventListener('click', function() {
+			    const friendId = btns[i].parentNode.parentNode.getAttribute("data-id")
+
+	            let res = $.ajax({
+	                url:"/api/friends/" + friendId,
+	                type:"DELETE",
+	                async:false
+	            })
+
+	            if(res.status == 204) {
+	                alert('친구가 삭제되었습니다.')
+                    let grandParent = btns[i].parentNode.parentNode
+                    grandParent.parentNode.removeChild(grandParent)
+	            } else if(res.status == 400) {
+    	            alert(res.responseJSON.message)
+	            }
+			})
+		}
+	}
 
     function preventDropdownHide() {
         $('div.btn-group.dropleft').on('click', function (event) {

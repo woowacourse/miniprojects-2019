@@ -1,12 +1,14 @@
 package com.wootecobook.turkey.user.controller.api;
 
 import com.wootecobook.turkey.commons.resolver.UserSession;
+import com.wootecobook.turkey.user.service.UserDeleteService;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.net.URI;
 import java.util.List;
 
@@ -17,9 +19,11 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class UserApiController {
 
     private UserService userService;
+    private UserDeleteService userDeleteService;
 
-    public UserApiController(UserService userService) {
+    public UserApiController(UserService userService, UserDeleteService userDeleteService) {
         this.userService = userService;
+        this.userDeleteService = userDeleteService;
     }
 
     @GetMapping("/{id}")
@@ -40,8 +44,9 @@ public class UserApiController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id, UserSession userSession) {
-        userService.delete(id, userSession.getId());
+    public ResponseEntity delete(@PathVariable Long id, UserSession userSession, HttpSession httpSession) {
+        userDeleteService.delete(id, userSession.getId());
+        httpSession.removeAttribute(UserSession.USER_SESSION_KEY);
         return ResponseEntity.noContent().build();
     }
 

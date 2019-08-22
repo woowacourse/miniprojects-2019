@@ -32,8 +32,15 @@ public class FriendApiController {
     @PostMapping("/asks")
     public ResponseEntity<FriendAskResponse> createAsk(@RequestBody FriendAskCreate friendAskCreate,
                                                        UserSession userSession) {
+        friendService.checkAlreadyFriend(friendAskCreate.getReceiverId(), userSession.getId());
         return ResponseEntity.created(null)
                 .body(friendAskService.save(userSession.getId(), friendAskCreate));
+    }
+
+    @DeleteMapping("/asks/{id}")
+    public ResponseEntity deleteAsk(@PathVariable Long id, UserSession userSession) {
+        friendAskService.deleteById(id, userSession.getId());
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -47,4 +54,9 @@ public class FriendApiController {
         return ResponseEntity.created(null).build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id, UserSession userSession) {
+        friendService.deleteById(id, userSession.getId());
+        return ResponseEntity.noContent().build();
+    }
 }

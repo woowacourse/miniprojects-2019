@@ -5,8 +5,6 @@ import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import com.wootecobook.turkey.user.service.exception.SignUpException;
-import com.wootecobook.turkey.user.service.exception.UserDeleteException;
-import com.wootecobook.turkey.user.service.exception.UserMismatchException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -15,7 +13,6 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
@@ -138,49 +135,6 @@ class UserServiceTest {
     void 없는_유저_email로_조회() {
         //when & then
         assertThrows(EntityNotFoundException.class, () -> userService.findByEmail("invalid@invalid.invalid"));
-    }
-
-    @Test
-    void 유저_삭제() {
-        //given
-        UserRequest userRequest = UserRequest.builder()
-                .email(VALID_EMAIL)
-                .name(VALID_NAME)
-                .password(VALID_PASSWORD)
-                .build();
-
-        //when
-        UserResponse userResponse = userService.save(userRequest);
-
-        //then
-        assertDoesNotThrow(() -> userService.delete(userResponse.getId(), userResponse.getId()));
-    }
-
-    @Test
-    void 없는_유저_삭제() {
-        //when & then
-        assertThrows(UserDeleteException.class, () -> userService.delete(Long.MAX_VALUE, Long.MAX_VALUE));
-    }
-
-    @Test
-    void null_유저_삭제() {
-        //given
-        UserRequest userRequest = UserRequest.builder()
-                .email(VALID_EMAIL)
-                .name(VALID_NAME)
-                .password(VALID_PASSWORD)
-                .build();
-
-        UserResponse userResponse = userService.save(userRequest);
-
-        //when & then
-        assertThrows(UserMismatchException.class, () -> userService.delete(null, userResponse.getId()));
-    }
-
-    @Test
-    void 다른_id_유저_삭제() {
-        //when & then
-        assertThrows(UserMismatchException.class, () -> userService.delete(1L, 2L));
     }
 
     @Test

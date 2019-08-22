@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+import static com.wootecobook.turkey.friend.service.FriendService.ALREADY_FRIEND_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,10 +30,14 @@ class FriendApiControllerTests extends BaseControllerTests {
     private static final String SENDER_EMAIL = "sender@abc.abc";
     private static final String RECEIVER_NAME = "receiver";
     private static final String RECEIVER_EMAIL = "receiver@abc.abc";
-    @Autowired
-    WebTestClient webTestClient;
+    private static final String MISMATCH_NAME = "mismatch";
+    private static final String MISMATCH_EMAIL = "mismatch@abc.abc";
+
     private Long senderId;
     private Long receiverId;
+
+    @Autowired
+    private WebTestClient webTestClient;
 
     @BeforeEach
     void setUp() {
@@ -52,6 +57,30 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .body(Mono.just(friendAskCreate), FriendAskCreate.class)
                 .exchange()
                 .expectStatus().isCreated();
+    }
+
+    @Test
+    void 이미_친구인_경우_친구_요청_실패() {
+        // given
+        Long friendAskId = createFriendAsk();
+        FriendCreate friendCreate = FriendCreate.builder()
+                .friendAskId(friendAskId)
+                .build();
+        createFriend(friendCreate);
+        FriendAskCreate friendAskCreate = new FriendAskCreate(receiverId);
+
+        // when & then
+        ErrorMessage errorMessage = webTestClient.post().uri(FRIEND_ASK_API_URI)
+                .contentType(MEDIA_TYPE)
+                .cookie(JSESSIONID, logIn(SENDER_EMAIL, VALID_USER_PASSWORD))
+                .body(Mono.just(friendAskCreate), FriendAskCreate.class)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorMessage.getMessage()).isEqualTo(ALREADY_FRIEND_MESSAGE);
     }
 
     @Test
@@ -77,17 +106,10 @@ class FriendApiControllerTests extends BaseControllerTests {
     @Test
     void 친구_요청_조회() {
         // given
-        final FriendAskCreate friendAskCreate = new FriendAskCreate(receiverId);
-
-        webTestClient.post().uri(FRIEND_ASK_API_URI)
-                .contentType(MEDIA_TYPE)
-                .cookie(JSESSIONID, logIn(SENDER_EMAIL, VALID_USER_PASSWORD))
-                .body(Mono.just(friendAskCreate), FriendAskCreate.class)
-                .exchange()
-                .expectStatus().isCreated();
+        createFriendAsk();
 
         // when & then
-        List<FriendAskResponse> friendAskRespons = webTestClient.get().uri(FRIEND_ASK_API_URI)
+        List<FriendAskResponse> friendAskResponse = webTestClient.get().uri(FRIEND_ASK_API_URI)
                 .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
@@ -95,8 +117,8 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .returnResult()
                 .getResponseBody();
 
-        FriendAskResponse sender = friendAskRespons.get(0);
-        assertThat(friendAskRespons.size()).isEqualTo(1);
+        FriendAskResponse sender = friendAskResponse.get(0);
+        assertThat(friendAskResponse.size()).isEqualTo(1);
         assertThat(sender.getSenderName()).isEqualTo(SENDER_NAME);
         assertThat(sender.getSenderId()).isEqualTo(senderId);
     }
@@ -126,25 +148,45 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .getResponseBody();
 
         //then
-        assertThat(errorMessage.getMessage()).isEqualTo(FriendAskService.ALREADY_FRIEND_REQUEST_EXIST_MESSAGE);
+        assertThat(errorMessage.getMessage()).isEqualTo(FriendAskService.ALREADY_FRIEND_ASK_EXIST_MESSAGE);
+    }
+
+    @Test
+    void 상대방이_친구_요청을_보낸_경우() {
+        // given
+        final FriendAskCreate friendAskCreate = new FriendAskCreate(receiverId);
+        final FriendAskCreate friendAskCreateReverse = new FriendAskCreate(senderId);
+
+        webTestClient.post().uri(FRIEND_ASK_API_URI)
+                .contentType(MEDIA_TYPE)
+                .cookie(JSESSIONID, logIn(SENDER_EMAIL, VALID_USER_PASSWORD))
+                .body(Mono.just(friendAskCreate), FriendAskCreate.class)
+                .exchange()
+                .expectStatus().isCreated();
+
+        //when
+        ErrorMessage errorMessage = webTestClient.post().uri(FRIEND_ASK_API_URI)
+                .contentType(MEDIA_TYPE)
+                .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
+                .body(Mono.just(friendAskCreateReverse), FriendAskCreate.class)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MEDIA_TYPE)
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        //then
+        assertThat(errorMessage.getMessage()).isEqualTo(FriendAskService.ALREADY_OTHER_FRIEND_ASK_EXIST_MESSAGE);
     }
 
     @Test
     void 친구_요청_수락_후_친구_목록에_등록됐는지_확인() {
         // given
-        final FriendAskCreate friendAskCreate = new FriendAskCreate(receiverId);
-        FriendAskResponse response = webTestClient.post().uri(FRIEND_ASK_API_URI)
-                .contentType(MEDIA_TYPE)
-                .cookie(JSESSIONID, logIn(SENDER_EMAIL, VALID_USER_PASSWORD))
-                .body(Mono.just(friendAskCreate), FriendAskCreate.class)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectBody(FriendAskResponse.class)
-                .returnResult()
-                .getResponseBody();
-        FriendCreate friendCreate = FriendCreate.builder().friendAskId(response.getFriendAskId()).build();
+        Long friendAskId = createFriendAsk();
+        FriendCreate friendCreate = FriendCreate.builder().friendAskId(friendAskId).build();
 
-        // when & then
+        // when
         webTestClient.post().uri(FRIEND_API_URI)
                 .contentType(MEDIA_TYPE)
                 .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
@@ -161,7 +203,110 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .getResponseBody();
 
         boolean isFriend = friendResponses.stream().anyMatch(friendResponse -> friendResponse.getRelatedUserId().equals(senderId));
+
+        //then
         assertThat(isFriend).isTrue();
+    }
+
+    @Test
+    void sender_친구_요청_삭제() {
+        //given
+        Long friendAskId = createFriendAsk();
+
+        //when & then
+        webTestClient.delete()
+                .uri(FRIEND_ASK_API_URI + "/" + friendAskId)
+                .cookie(JSESSIONID, logIn(SENDER_EMAIL, VALID_USER_PASSWORD))
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
+    @Test
+    void receiver_친구_요청_삭제() {
+        //given
+        Long friendAskId = createFriendAsk();
+
+        //when & then
+        webTestClient.delete()
+                .uri(FRIEND_ASK_API_URI + "/" + friendAskId)
+                .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
+    @Test
+    void 잘못된_유저_친구_요청_삭제() {
+        //given
+        Long friendAskId = createFriendAsk();
+        addUser(MISMATCH_NAME, MISMATCH_EMAIL, VALID_USER_PASSWORD);
+
+        //when
+        ErrorMessage errorMessage = webTestClient.delete()
+                .uri(FRIEND_ASK_API_URI + "/" + friendAskId)
+                .cookie(JSESSIONID, logIn(MISMATCH_EMAIL, VALID_USER_PASSWORD))
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        //then
+        assertThat(errorMessage.getMessage()).isEqualTo(FriendAskService.MISMATCHED_USER_MESSAGE);
+    }
+
+    @Test
+    void 친구_삭제() {
+        // given
+        Long friendAskId = createFriendAsk();
+        FriendCreate friendCreate = FriendCreate.builder()
+                .friendAskId(friendAskId)
+                .build();
+
+        Long friendId = createFriend(friendCreate);
+
+        //when & then
+        webTestClient.delete().uri(FRIEND_API_URI + "/" + friendId)
+                .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
+    private Long createFriendAsk() {
+        final FriendAskCreate friendAskCreate = new FriendAskCreate(receiverId);
+        FriendAskResponse response = webTestClient.post()
+                .uri(FRIEND_ASK_API_URI)
+                .contentType(MEDIA_TYPE)
+                .cookie(JSESSIONID, logIn(SENDER_EMAIL, VALID_USER_PASSWORD))
+                .body(Mono.just(friendAskCreate), FriendAskCreate.class)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(FriendAskResponse.class)
+                .returnResult()
+                .getResponseBody();
+        return response.getFriendAskId();
+    }
+
+    private Long createFriend(FriendCreate friendCreate) {
+        webTestClient.post().uri(FRIEND_API_URI)
+                .contentType(MEDIA_TYPE)
+                .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
+                .body(Mono.just(friendCreate), FriendCreate.class)
+                .exchange()
+                .expectStatus().isCreated();
+
+        List<FriendResponse> friendResponses = webTestClient.get().uri(FRIEND_API_URI)
+                .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(FriendResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        return friendResponses.stream()
+                .filter(friendResponse -> friendResponse.getRelatedUserId().equals(senderId))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new)
+                .getFriendId();
     }
 
     @AfterEach
