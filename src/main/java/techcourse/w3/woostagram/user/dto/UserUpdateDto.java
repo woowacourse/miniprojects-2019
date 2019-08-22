@@ -12,24 +12,19 @@ public class UserUpdateDto {
     private String name;
     private String userName;
     private String contents;
-    private String originalImageFile;
-    private MultipartFile imageFile;
 
     @Builder
-    public UserUpdateDto(String name, String userName, String contents, String originalImageFile, MultipartFile imageFile) {
+    public UserUpdateDto(String name, String userName, String contents) {
         this.name = name;
         this.userName = userName;
         this.contents = contents;
-        this.originalImageFile = originalImageFile;
-        this.imageFile = imageFile;
     }
 
-    public UserContents toEntity(String fullPath) {
+    public UserContents toEntity() {
         return UserContents.builder()
                 .userName(userName)
                 .name(name)
                 .contents(contents)
-                .profile(fullPath)
                 .build();
     }
 }

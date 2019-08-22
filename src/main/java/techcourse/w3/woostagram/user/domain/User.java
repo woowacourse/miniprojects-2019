@@ -2,13 +2,10 @@ package techcourse.w3.woostagram.user.domain;
 
 import lombok.*;
 import techcourse.w3.woostagram.common.support.AuditLog;
-import techcourse.w3.woostagram.follow.domain.Follow;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -35,15 +32,23 @@ public class User extends AuditLog {
     @Embedded
     private UserContents userContents;
 
+    @Column(length = 1000)
+    private String profile;
+
     @Builder
-    public User(Long id, String email, String password, UserContents userContents) {
+    public User(Long id, String email, String password, UserContents userContents, String profile) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.userContents = userContents;
+        this.profile = profile;
     }
 
     public void updateContents(UserContents userContents) {
         this.userContents = userContents;
+    }
+
+    public void updateProfile(String profile) {
+        this.profile = profile;
     }
 }
