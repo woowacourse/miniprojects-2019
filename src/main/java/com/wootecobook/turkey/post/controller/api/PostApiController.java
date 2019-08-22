@@ -29,7 +29,6 @@ public class PostApiController {
 
     @PostMapping
     public ResponseEntity<PostResponse> create(@Valid PostRequest postRequest, UserSession userSession) {
-
         PostResponse postResponse = postService.save(postRequest, userSession.getId());
         final URI uri = linkTo(PostApiController.class).toUri();
         return ResponseEntity.created(uri).body(postResponse);
@@ -41,30 +40,29 @@ public class PostApiController {
         return ResponseEntity.ok(postResponses);
     }
 
-    @PutMapping("/{postId}")
-    public ResponseEntity<PostResponse> update(@PathVariable Long postId, @RequestBody @Valid PostRequest postRequest,
+    @PutMapping("/{id}")
+    public ResponseEntity<PostResponse> update(@PathVariable Long id, @RequestBody @Valid PostRequest postRequest,
                                                UserSession userSession) {
-
-        PostResponse postResponse = postService.update(postRequest, postId, userSession.getId());
+        PostResponse postResponse = postService.update(postRequest, id, userSession.getId());
 
         return ResponseEntity.ok(postResponse);
     }
 
-    @DeleteMapping("/{postId}")
-    public ResponseEntity delete(@PathVariable Long postId, UserSession userSession) {
-        postService.delete(postId, userSession.getId());
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id, UserSession userSession) {
+        postService.delete(id, userSession.getId());
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{postId}/good")
-    public ResponseEntity good(@PathVariable Long postId, UserSession userSession) {
-        GoodResponse goodResponse = postService.good(postId, userSession.getId());
+    @GetMapping("/{id}/good")
+    public ResponseEntity good(@PathVariable Long id, UserSession userSession) {
+        GoodResponse goodResponse = postService.good(id, userSession.getId());
         return ResponseEntity.ok(goodResponse);
     }
 
-    @GetMapping("/{postId}/good/count")
-    public ResponseEntity countGood(@PathVariable Long postId) {
-        GoodResponse goodResponse = postService.countPostGoodByPost(postId);
+    @GetMapping("/{id}/good/count")
+    public ResponseEntity countGood(@PathVariable Long id) {
+        GoodResponse goodResponse = postService.countPostGoodByPost(id);
         return ResponseEntity.ok(goodResponse);
     }
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class FileDto {
+public class FileResponse {
 
     private Long id;
     private FileFeature fileFeature;
@@ -20,7 +20,8 @@ public class FileDto {
     private LocalDateTime updatedAt;
 
     @Builder
-    public FileDto(Long id, FileFeature fileFeature, UserResponse owner, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public FileResponse(final Long id, final FileFeature fileFeature, final UserResponse owner,
+                        final LocalDateTime createdAt, final LocalDateTime updatedAt) {
         this.id = id;
         this.fileFeature = fileFeature;
         this.owner = owner;
@@ -28,8 +29,8 @@ public class FileDto {
         this.updatedAt = updatedAt;
     }
 
-    public static FileDto from(UploadFile uploadFile) {
-        return FileDto.builder()
+    public static FileResponse from(final UploadFile uploadFile) {
+        return FileResponse.builder()
                 .id(uploadFile.getId())
                 .fileFeature(uploadFile.getFileFeature())
                 .owner(UserResponse.from(uploadFile.getOwner()))

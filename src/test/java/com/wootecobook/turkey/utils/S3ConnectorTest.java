@@ -31,12 +31,14 @@ class S3ConnectorTest {
 
     private MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "mock1.png", "image/png", "test data".getBytes());
-    private String key = "savedFileName";
+    private String dirName = "dir";
+    private String fileName = "savedFileName";
 
     @Test
     void 파일_업로드_테스트() throws IOException {
         //when
-        String savedUrl = s3Connector.upload(mockMultipartFile, key);
+        String savedUrl = s3Connector.upload(mockMultipartFile, dirName, fileName);
+        String key = getFileKey(dirName, fileName);
 
         // then
         String resourceUrl = String.format("%s/%s/%s", S3MOCK_ENDPOINT, bucket, key);
@@ -46,7 +48,8 @@ class S3ConnectorTest {
     @Test
     void 파일_삭제_테스트() throws IOException {
         //given
-        s3Connector.upload(mockMultipartFile, key);
+        s3Connector.upload(mockMultipartFile, dirName, fileName);
+        String key = getFileKey(dirName, fileName);//
         assertDoesNotThrow(() -> mockS3Client.getObject(bucket, key));
 
         //when
@@ -54,5 +57,9 @@ class S3ConnectorTest {
 
         //then
         assertThrows(AmazonS3Exception.class, () -> mockS3Client.getObject(bucket, key));
+    }
+
+    private String getFileKey(String dirName, String fileName) {
+        return String.format("%s/%s", dirName, fileName);
     }
 }

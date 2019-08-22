@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,57 +14,56 @@ import java.io.IOException;
 
 @Component
 public class S3Connector {
+
     private static final Logger log = LoggerFactory.getLogger(S3Connector.class);
-
     private final AmazonS3 amazonS3Client;
+    private final String bucket;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
-
-    public S3Connector(AmazonS3 amazonS3Client) {
+    public S3Connector(final AmazonS3 amazonS3Client, final String bucket) {
         this.amazonS3Client = amazonS3Client;
+        this.bucket = bucket;
     }
 
-    public String upload(MultipartFile multipartFile, String filePath) throws IOException {
-        File uploadFile = convert(multipartFile);
+    public String upload(final MultipartFile multipartFile, final String directoryName, final String fileName) throws IOException {
+        File uploadFile = convert(multipartFile, fileName);
+        String filePath = joinDirectoryAndFileName(directoryName, fileName);
 
         return upload(uploadFile, filePath);
     }
 
-    private String upload(File file, String filePath) {
+    private File convert(final MultipartFile multipartFile, final String fileName) throws IOException {
+        File convertFile = new File(fileName);
+        try (FileOutputStream fos = new FileOutputStream((convertFile))) {
+            fos.write(multipartFile.getBytes());
+        }
+
+        return convertFile;
+    }
+
+    private String joinDirectoryAndFileName(final String directoryName, final String fileName) {
+        return String.format("%s/%s", directoryName, fileName);
+    }
+
+    private String upload(final File file, final String filePath) {
         String uploadImageUrl = putS3(file, filePath);
-        removeNewFile(file);
+        removeTmpFile(file);
         return uploadImageUrl;
     }
 
-    private void removeNewFile(File file) {
-        if (file.delete()) {
-            log.info("파일이 삭제되었습니다.");
-        } else {
-            log.info("파일이 삭제되지 못했습니다");
+    private void removeTmpFile(final File file) {
+        if (!file.delete()) {
+            log.info("임시파일이 삭제되지 못했습니다");
         }
     }
 
-    private String putS3(File file, String filePath) {
+    private String putS3(final File file, final String filePath) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, filePath, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
 
         return amazonS3Client.getUrl(bucket, filePath).toString();
     }
 
-    private File convert(MultipartFile multipartFile) throws IOException {
-        File convertFile = new File(multipartFile.getOriginalFilename());
-        if (!convertFile.createNewFile()) {
-            throw new IllegalArgumentException("MultipartFile -> File 전환 실패");
-        }
-
-        try (FileOutputStream fos = new FileOutputStream((convertFile))) {
-            fos.write(multipartFile.getBytes());
-        }
-        return convertFile;
-    }
-
-    public void delete(String filePath) {
+    public void delete(final String filePath) {
         amazonS3Client.deleteObject(bucket, filePath);
     }
 }

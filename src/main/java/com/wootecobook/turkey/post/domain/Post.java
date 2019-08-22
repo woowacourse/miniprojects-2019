@@ -29,10 +29,10 @@ public class Post extends UpdatableEntity {
     @JoinTable(name = "post_file",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "file_id"))
-    private List<UploadFile> fileEntities = new ArrayList<>();
+    private List<UploadFile> uploadFiles = new ArrayList<>();
 
     @Builder
-    private Post(final Long id, final Contents contents, final User author, List<UploadFile> fileEntities) {
+    private Post(final Long id, final Contents contents, final User author, List<UploadFile> uploadFiles) {
         if (id == null) {
             validateAuthor(author);
         }
@@ -40,7 +40,7 @@ public class Post extends UpdatableEntity {
 
         this.contents = contents;
         this.author = author;
-        this.fileEntities = fileEntities;
+        this.uploadFiles = uploadFiles;
     }
 
     private void validateContents(final Contents contents) {
@@ -55,7 +55,7 @@ public class Post extends UpdatableEntity {
         }
     }
 
-    public Post update(Post other) {
+    public Post update(final Post other) {
         if (other == null) {
             throw new PostUpdateFailException();
         }

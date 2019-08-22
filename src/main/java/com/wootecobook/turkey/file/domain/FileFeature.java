@@ -27,7 +27,7 @@ public class FileFeature {
     private long size;
 
     @Builder
-    public FileFeature(String path, String originalName, String type, long size) {
+    private FileFeature(final String path, final String originalName, final String type, final long size) {
         this.path = path;
         this.originalName = originalName;
         this.type = type;

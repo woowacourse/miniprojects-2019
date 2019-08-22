@@ -64,6 +64,7 @@ public class PostServiceTest {
     void setUp() {
         author = new User("pobi@woowa.com", "pobi", "Passw0rd!");
         author.setId(1L);
+
         other = new User("olaf@woowa.com", "olaf", "Passw0rd!");
         other.setId(2L);
 
@@ -71,7 +72,9 @@ public class PostServiceTest {
         postRequestWithoutFiles = PostRequest.builder()
                 .contents(contentsText)
                 .build();
+
         defaultContents = new Contents(contentsText);
+
         updatePostRequest = PostRequest.builder()
                 .contents("update")
                 .build();
@@ -80,7 +83,7 @@ public class PostServiceTest {
         savedPost = Post.builder()
                 .contents(defaultContents)
                 .author(author)
-                .fileEntities(new ArrayList<>())
+                .uploadFiles(new ArrayList<>())
                 .id(savedPostId)
                 .build();
     }
@@ -98,7 +101,10 @@ public class PostServiceTest {
         when(uploadFileService.save(any(MultipartFile.class), any(), any(User.class))).thenReturn(uploadFile);
 
         //when
-        PostRequest postRequestWithFiles = new PostRequest(defaultContents.getContents(), Arrays.asList(mockMultipartFile));
+        PostRequest postRequestWithFiles = PostRequest.builder()
+                .contents(defaultContents.getContents())
+                .files(Arrays.asList(mockMultipartFile))
+                .build();
         PostResponse result = postService.save(postRequestWithFiles, author.getId());
 
         //then
@@ -219,4 +225,5 @@ public class PostServiceTest {
                 .size(multipartFile.getSize())
                 .build();
     }
+
 }

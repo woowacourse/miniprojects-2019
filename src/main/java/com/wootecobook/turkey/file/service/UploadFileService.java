@@ -33,22 +33,18 @@ public class UploadFileService {
                 .type(multipartFile.getContentType())
                 .size(multipartFile.getSize())
                 .build();
-        UploadFile savedFileFeature = uploadFileRepository.save(new UploadFile(fileFeature, owner));
 
+        UploadFile savedFileFeature = uploadFileRepository.save(new UploadFile(fileFeature, owner));
         return savedFileFeature;
     }
 
     private String getUploadPath(final MultipartFile multipartFile, final String directoryName) {
         try {
             String fileName = createUniqueFileName();
-            return s3Connector.upload(multipartFile, getFilePath(directoryName, fileName));
+            return s3Connector.upload(multipartFile, directoryName, fileName);
         } catch (IOException e) {
             throw new FailedSaveFileException(e.getMessage());
         }
-    }
-
-    private String getFilePath(final String directoryName, final String fileName) {
-        return String.format("%s/%s", directoryName, fileName);
     }
 
     private String createUniqueFileName() {

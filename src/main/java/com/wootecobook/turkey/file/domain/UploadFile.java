@@ -16,15 +16,15 @@ public class UploadFile extends UpdatableEntity {
     private FileFeature fileFeature;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_fileentity_to_user"))
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_upload_file_to_user"))
     private User owner;
 
-    public UploadFile(FileFeature fileFeature, User owner) {
+    public UploadFile(final FileFeature fileFeature, final User owner) {
         this.fileFeature = fileFeature;
         this.owner = owner;
     }
 
-    public boolean isOwner(User user) {
+    public boolean isOwner(final User user) {
         return owner.equals(user);
     }
 }

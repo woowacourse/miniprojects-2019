@@ -23,16 +23,16 @@ public class PostRequest {
     private List<MultipartFile> files;
 
     @Builder
-    public PostRequest(final String contents, final List<MultipartFile> files) {
+    private PostRequest(final String contents, final List<MultipartFile> files) {
         this.contents = contents;
         this.files = files;
     }
 
-    public Post toEntity(User author, List<UploadFile> savedFiles) {
+    public Post toEntity(final User author, final List<UploadFile> savedFiles) {
         return Post.builder()
                 .author(author)
                 .contents(new Contents(contents))
-                .fileEntities(savedFiles)
+                .uploadFiles(savedFiles)
                 .build();
     }
 }
