@@ -41,7 +41,8 @@ public class LoginInternalServiceTests {
     void authenticate_invalid_email() {
         LoginRequestDto loginRequestDto = new LoginRequestDto("aaa@bbb.com", "p@ssW0rd");
 
-        when(userInternalService.findByEmail(anyString())).thenThrow(UserNotFoundException.class);
+        when(userInternalService.findByEmail(anyString())).
+            thenThrow(UserNotFoundException.class);
 
         assertThrows(UserNotFoundException.class, () -> {
             loginInternalService.authenticate(loginRequestDto);

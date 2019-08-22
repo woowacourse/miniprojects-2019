@@ -1,8 +1,12 @@
 package com.woowacourse.edd.presentation.controller;
 
+import com.woowacourse.edd.application.dto.LoginRequestDto;
 import com.woowacourse.edd.application.dto.UserRequestDto;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import org.springframework.test.web.reactive.server.StatusAssertions;
 import reactor.core.publisher.Mono;
 
 import static com.woowacourse.edd.presentation.controller.UserController.USER_URL;
@@ -12,13 +16,8 @@ public class UserControllerTests extends BasicControllerTests {
     @Test
     void user_save() {
         UserRequestDto userSaveRequestDto = new UserRequestDto("robby", "shit@email.com", "P@ssW0rd");
-        EntityExchangeResult<byte[]> result = signUp(userSaveRequestDto);
 
-        webTestClient
-            .get()
-            .uri(result.getResponseHeaders().getLocation().toASCIIString())
-            .exchange()
-            .expectStatus()
+        findUser(getUrl(signUp(userSaveRequestDto)))
             .isOk()
             .expectBody()
             .jsonPath("$.name").isEqualTo("robby")
@@ -28,17 +27,13 @@ public class UserControllerTests extends BasicControllerTests {
     @Test
     void user_update() {
         UserRequestDto userSaveRequestDto = new UserRequestDto("robby", "shit123@email.com", "P@ssW0rd");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("shit123@email.com", "P@ssW0rd");
+
+        String url = getUrl(signUp(userSaveRequestDto));
+        String sid = getLoginCookie(loginRequestDto);
         UserRequestDto userRequestDto = new UserRequestDto("jm", "hansome@gmail.com", "P!ssW0rd");
 
-        EntityExchangeResult<byte[]> result = signUp(userSaveRequestDto);
-        String uri = result.getResponseHeaders().getLocation().toASCIIString();
-
-        webTestClient.put()
-            .uri(uri)
-            .cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
-            .body(Mono.just(userRequestDto), UserRequestDto.class)
-            .exchange()
-            .expectStatus()
+        updateUser(userRequestDto, url, sid)
             .isOk()
             .expectBody()
             .jsonPath("$.name").isEqualTo(userRequestDto.getName())
@@ -46,55 +41,93 @@ public class UserControllerTests extends BasicControllerTests {
     }
 
     @Test
-    void user_delete_not_found() {
-        webTestClient.delete()
-            .uri(USER_URL + "/999")
-            .cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
-            .exchange()
-            .expectStatus()
-            .isNotFound();  //404
+    @DisplayName("가입된 유저가 다른 유저의 수정을 시도할 때")
+    void unauthorized_user_update() {
+        UserRequestDto authorizedUser = new UserRequestDto("Jmm", "jm@naver.com", "p@ssW0rd");
+        UserRequestDto unauthorizedUser = new UserRequestDto("conas", "conas@naver.com", "p@ssW0rd");
+        UserRequestDto unauthorizedUpdateRequest = new UserRequestDto("pobi", "conas@naver.com", "p@ssW0rd");
+
+        String url = getUrl(signUp(authorizedUser));
+        signUp(unauthorizedUser);
+        LoginRequestDto loginRequestDto = new LoginRequestDto("conas@naver.com", "p@ssW0rd");
+        String sid = getLoginCookie(loginRequestDto);
+
+        updateUser(unauthorizedUpdateRequest, url, sid).isForbidden();
     }
 
     @Test
-    void user_delete_no_content() {
-        UserRequestDto userSaveRequestDto = new UserRequestDto("robby", "shit222@email.com", "P@ssW0rd");
-        EntityExchangeResult<byte[]> result = signUp(userSaveRequestDto);
-        String url = result.getResponseHeaders().getLocation().toASCIIString();
-        webTestClient.delete()
-            .uri(url)
-            .cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
-            .exchange()
-            .expectStatus()
+    @DisplayName("가입되지 않은 유저가 가입되지 않은 유저 삭제를 시도할 때")
+    void no_signin_delete_no_signin_user() {
+        deleteUser(USER_URL + "/999", null)
+            .isUnauthorized();
+    }
+
+    @Test
+    @DisplayName("가입되지 않은 유저가 가입된 유저 삭제를 시도할 때")
+    void no_sigin_delete_user() {
+        deleteUser(USER_URL + "/1", null)
+            .isUnauthorized();
+    }
+
+    @Test
+    @DisplayName("가입된 유저가 자신의 유저 삭제를 시도할 때")
+    void authorized_user_delete_no_content() {
+        UserRequestDto userRequestDto = new UserRequestDto("robby", "shit222@email.com", "P@ssW0rd");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("shit222@email.com", "P@ssW0rd");
+        String url = getUrl(signUp(userRequestDto));
+        String sid = getLoginCookie(loginRequestDto);
+        deleteUser(url, sid)
             .isNoContent();
     }
 
     @Test
-    void user_delete_when_already_deleted() {
-        UserRequestDto userRequestDto = new UserRequestDto("conas", "conas@email.com", "P@ssW0rd");
+    @DisplayName("가입된 유저가 다른 유저의 삭제를 시도할 때")
+    void unauthorized_user_delete() {
+        UserRequestDto authorizedUserDto = new UserRequestDto("normal", "normalUser@gmail.com", "p@ssW0rd");
+        UserRequestDto unauthorizedUserDto = new UserRequestDto("conas", "conas@gmail.com", "p@ssW0rd");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("conas@gmail.com", "p@ssW0rd");
+        String authorizedUserUrl = getUrl(signUp(authorizedUserDto));
+        signUp(unauthorizedUserDto);
 
-        EntityExchangeResult<byte[]> result = signUp(userRequestDto);
-        String url = result.getResponseHeaders().getLocation().toASCIIString();
-        String jsessionid = getDefaultLoginSessionId();
-
-        webTestClient.delete()
-            .uri(url)
-            .cookie(COOKIE_JSESSIONID, jsessionid)
-            .exchange()
-            .expectStatus()
-            .isNoContent();
-
-        webTestClient.delete()
-            .uri(url)
-            .cookie(COOKIE_JSESSIONID, jsessionid)
-            .exchange()
-            .expectStatus()
-            .isNotFound();
+        String sid = getLoginCookie(loginRequestDto);
+        deleteUser(authorizedUserUrl, sid)
+            .isForbidden();
     }
 
     @Test
     void find_by_id() {
-        webTestClient.get().uri(USER_URL + "/1")
+        findUser(USER_URL + "/1").isOk();
+    }
+
+    private String getUrl(EntityExchangeResult<byte[]> entityExchangeResult) {
+        return entityExchangeResult
+            .getResponseHeaders()
+            .getLocation()
+            .toASCIIString();
+    }
+
+    private StatusAssertions findUser(String url) {
+        return webTestClient
+            .get()
+            .uri(url)
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus();
+    }
+
+    private StatusAssertions updateUser(UserRequestDto userRequestDto, String uri, String sid) {
+        return webTestClient.put()
+            .uri(uri)
+            .cookie(COOKIE_JSESSIONID, sid)
+            .body(Mono.just(userRequestDto), UserRequestDto.class)
+            .exchange()
+            .expectStatus();
+    }
+
+    private StatusAssertions deleteUser(String url, String sid) {
+        return webTestClient.delete()
+            .uri(url)
+            .cookie(COOKIE_JSESSIONID, sid)
+            .exchange()
+            .expectStatus();
     }
 }

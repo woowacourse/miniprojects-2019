@@ -2,6 +2,7 @@ package com.woowacourse.edd.application.service;
 
 import com.woowacourse.edd.application.dto.UserRequestDto;
 import com.woowacourse.edd.domain.User;
+import com.woowacourse.edd.exceptions.UnauthorizedAccessException;
 import com.woowacourse.edd.exceptions.UserNotFoundException;
 import com.woowacourse.edd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,15 @@ class UserInternalService {
             .orElseThrow(UserNotFoundException::new);
     }
 
-    public User update(Long id, UserRequestDto userRequestDto) {
+    public User update(Long id, Long loggedInId, UserRequestDto userRequestDto) {
+        checkAuthorization(id, loggedInId);
         User user = findById(id);
         user.update(userRequestDto.getName(), userRequestDto.getEmail(), userRequestDto.getPassword());
         return user;
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, Long loggedInId) {
+        checkAuthorization(id, loggedInId);
         User user = findById(id);
         if (user.isDeleted()) {
             throw new UserNotFoundException();
@@ -47,5 +50,11 @@ class UserInternalService {
         return userRepository.findByEmail(email)
             .filter(user -> !user.isDeleted())
             .orElseThrow(UserNotFoundException::new);
+    }
+
+    private void checkAuthorization(Long id, Long loggedInId) {
+        if (id != loggedInId) {
+            throw new UnauthorizedAccessException();
+        }
     }
 }

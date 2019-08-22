@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.woowacourse.edd.exceptions.PasswordNotMatchException.PASSWORD_NOT_MATCH_MESSAGE;
 import static com.woowacourse.edd.exceptions.UserNotFoundException.USER_NOT_FOUND_MESSAGE;
+import static com.woowacourse.edd.presentation.controller.LoginController.LOGOUT_URL;
 
 public class LoginControllerTests extends BasicControllerTests {
 
@@ -48,7 +49,7 @@ public class LoginControllerTests extends BasicControllerTests {
 
     @Test
     void logout() {
-        executePost("/v1/logout").cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
+        executePost(LOGOUT_URL).cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
             .exchange()
             .expectStatus().isOk();
     }
