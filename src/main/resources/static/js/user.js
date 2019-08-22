@@ -27,8 +27,12 @@ const USER_APP = (() => {
         const changeImageJustOnFront = () => {
             const imageInput = document.getElementById("img-upload");
             imageInput ? imageInput.addEventListener("change", userService.changeImageJustOnFront) : undefined;
+        };
 
-        }
+        const showThumbnailImage = () => {
+            const userProfileImage = document.getElementById('profile-image');
+            userProfileImage ? userService.showThumbnail(userProfileImage) : undefined;
+        };
 
         const init = () => {
             signUp();
@@ -36,6 +40,7 @@ const USER_APP = (() => {
             login();
             changeImageJustOnFront();
             deleteUser();
+            showThumbnailImage();
         };
 
         return {
@@ -44,7 +49,7 @@ const USER_APP = (() => {
     };
 
     const UserService = function () {
-        const connector = FETCH_APP.fetchApi();
+        const connector = FETCH_APP.FetchApi();
         const header = {
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json'
@@ -60,10 +65,10 @@ const USER_APP = (() => {
         const imageInput = document.getElementById("img-upload");
         const profileImage = document.getElementById('profile-image');
 
-        const saveUser = function (event) {
+        const saveUser = event => {
             event.preventDefault();
 
-            let userBasicInfo = {
+            const userBasicInfo = {
                 email: email.value,
                 nickName: nickName.value,
                 userName: userName.value,
@@ -79,7 +84,7 @@ const USER_APP = (() => {
                 ifSucceed);
         };
 
-        const updateUser = function (event) {
+        const updateUser = event => {
             event.preventDefault();
 
             const formData = new FormData();
@@ -97,7 +102,7 @@ const USER_APP = (() => {
 
             const ifSucceed = () => window.location.href = '/';
 
-            connector.fetchTemplate('/api/users/' + userId.value,
+            connector.fetchTemplate(`/api/users/${userId.value}`,
                 connector.PUT,
                 {},
                 formData,
@@ -106,15 +111,15 @@ const USER_APP = (() => {
 
         const deleteUser = function (event) {
             event.preventDefault();
-            connector.fetchTemplateWithoutBody('/api/users/' + userId.value,
+            connector.fetchTemplateWithoutBody(`/api/users/${userId.value}`,
                 connector.DELETE,
                 () => window.location.href = '/login')
         };
 
-        const login = function (event) {
+        const login = event => {
             event.preventDefault();
 
-            let userBasicInfo = {
+            const userBasicInfo = {
                 email: email.value,
                 password: password.value,
             };
@@ -128,25 +133,48 @@ const USER_APP = (() => {
                 ifSucceed);
         };
 
-        const changeImageJustOnFront = function (event) {
+        const changeImageJustOnFront = event => {
             const file = event.target.files[0];
             const reader = new FileReader();
             // it's onload event and you forgot (parameters)
-            reader.onload = function (readEvent) {
+            reader.onload = readEvent => {
                 profileImage.src = readEvent.target.result;
-
-            }
+            };
             // you have to declare the file loading
             reader.readAsDataURL(file);
 
-        }
+        };
+
+        const showThumbnail = userProfileImage => {
+            const fileLoadService = FILE_LOAD_APP.FileLoadService();
+            const connector = FETCH_APP.FetchApi();
+
+            const getImage = response => {
+                response.arrayBuffer().then(buffer => {
+                    const bytes = new Uint8Array(buffer);
+                    let binary = '';
+                    bytes.forEach(b => binary += String.fromCharCode(b));
+
+                    const blob = fileLoadService.b64StringToBlob(binary);
+                    setUrl(URL.createObjectURL(blob));
+                });
+
+                const setUrl = url => {
+                    userProfileImage.style.display = 'block';
+                    userProfileImage.src = url;
+                };
+            };
+
+            connector.fetchTemplateWithoutBody(`/api/users/${userId.value}/image`, connector.GET, getImage);
+        };
 
         return {
             saveUser: saveUser,
             updateUser: updateUser,
             deleteUser: deleteUser,
             login: login,
-            changeImageJustOnFront: changeImageJustOnFront
+            changeImageJustOnFront: changeImageJustOnFront,
+            showThumbnail: showThumbnail
         }
     };
 

@@ -1,10 +1,10 @@
 const FILE_LOAD_APP = (() => {
 
-    const fileLoadApi = function () {
-
-        const b64StringToBlob = (b64Data, contentType = '', sliceSize = 512) => {
+    const FileLoadService = function () {
+        const b64StringToBlob = b64Data => {
             const byteCharacters = atob(b64Data);
             const byteArrays = [];
+            const sliceSize = 512;
 
             for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
                 const slice = byteCharacters.slice(offset, offset + sliceSize);
@@ -15,36 +15,55 @@ const FILE_LOAD_APP = (() => {
                 const byteArray = new Uint8Array(byteNumbers);
                 byteArrays.push(byteArray);
             }
-            const blob = new Blob(byteArrays, {type: contentType});
-            return blob;
+            return new Blob(byteArrays, {type: ''});
         };
 
-        function setSrcAttribute(url, fileName, articleId) {
-            let words = fileName.split('.');
-            let extension = words[words.length - 1];
+        const setSrcAttribute = (url, fileName, articleId) => {
+            const words = fileName.split('.');
+            const extension = words[words.length - 1];
 
-            let imageExtensions = ['jpg', 'png', 'jpeg'];
-            let videoExtensions = ['avi', 'mp4'];
+            const imageExtensions = ['jpg', 'png', 'jpeg'];
+            const videoExtensions = ['avi', 'mp4'];
 
             if (imageExtensions.includes(extension)) {
-                let articleImage = document.getElementById('article-image-' + articleId);
+                const articleImage = document.getElementById('article-image-' + articleId);
                 articleImage.style.display = "block";
                 articleImage.src = url;
             }
             if (videoExtensions.includes(extension)) {
-                let articleVideo = document.getElementById('article-video-' + articleId);
+                const articleVideo = document.getElementById('article-video-' + articleId);
                 articleVideo.style.display = "block";
                 articleVideo.src = url;
             }
-        }
+        };
+
+        const loadMediaFile = (fileLoader, fileName, id) => {
+            const connector  = FETCH_APP.FetchApi();
+
+            const loadFile = response => {
+                response.arrayBuffer().then(buffer => {
+                    const bytes = new Uint8Array(buffer);
+                    let binary = '';
+                    bytes.forEach((b) => binary += String.fromCharCode(b));
+
+                    const blob = fileLoader.b64StringToBlob(binary);
+                    const blobUrl = URL.createObjectURL(blob);
+
+                    fileLoader.setSrcAttribute(blobUrl, fileName, id);
+                });
+            };
+
+            connector.fetchTemplateWithoutBody(`/api/articles/${id}/file`, connector.GET, loadFile);
+        };
 
         return {
             b64StringToBlob: b64StringToBlob,
-            setSrcAttribute: setSrcAttribute
+            setSrcAttribute: setSrcAttribute,
+            loadMediaFile: loadMediaFile,
         }
     };
 
     return {
-        fileLoadApi: fileLoadApi
+        FileLoadService: FileLoadService
     }
 })();

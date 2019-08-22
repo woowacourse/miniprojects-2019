@@ -1,19 +1,18 @@
 const FETCH_APP = (() => {
+    'use strict';
 
-    const fetchApi = function () {
+    const FetchApi = function () {
         const GET = 'GET';
         const POST = 'POST';
         const PUT = 'PUT';
         const DELETE = 'DELETE';
 
-        const fetchTemplate = function (requestUrl, method, header, body, ifSucceed) {
-            return fetch(
-                requestUrl, {
+        const fetchTemplate = (requestUrl, method, header, body, ifSucceed) => {
+            fetch(requestUrl, {
                 method: method,
                 headers: header,
                 body: body
             }).then(response => {
-                console.log(response)
                 if (response.status === 200) {
                     return ifSucceed(response);
                 }
@@ -23,7 +22,7 @@ const FETCH_APP = (() => {
             });
         };
 
-        const fetchTemplateWithoutBody = function (requestUrl, method, ifSucceed) {
+        const fetchTemplateWithoutBody = (requestUrl, method, ifSucceed) => {
             fetch(requestUrl, {
                 method: method,
                 headers: {
@@ -40,7 +39,7 @@ const FETCH_APP = (() => {
             });
         };
 
-        const errorHandler = function (error) {
+        const errorHandler = error => {
             error.json()
                 .then(exception => {
                     alert(exception.message)
@@ -58,6 +57,6 @@ const FETCH_APP = (() => {
     };
 
     return {
-        fetchApi: fetchApi
+        FetchApi: FetchApi
     }
 })();

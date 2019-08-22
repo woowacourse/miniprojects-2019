@@ -15,7 +15,9 @@
                 <div class="container-fluid max-width-lg mx-auto">
                     <div class="row">
                         <div class="col-lg-7 mx-auto">
-                            <button type="button" id="write-article-button" class="btn btn-outline-primary">피드 작성</button>
+                            <button type="button" id="write-article-button" class="btn btn-outline-primary">
+                                피드 작성
+                            </button>
                             <div id="cards" class="card widget-feed no-pdd mrg-btm-70">
                                 <th:block th:include="fragments/card"></th:block>
                             </div>
@@ -25,45 +27,16 @@
             </div>
         </div>
     </div>
-<script src="/js/write-article.js"></script>
-<script src="/js/fetchApi.js"></script>
-<script src="/js/fileLoadApi.js"></script>
-<script src="/js/card.js"></script>
-<script th:inline="javascript">
-    let articleId = [[${article.id}]];
-    let articleFileName = [[${article.fileInfo.fileName}]];
-
-    const connector = FETCH_APP.fetchApi();
-    const fileLoader = FILE_LOAD_APP.fileLoadApi();
-
-    const loadFile = response => {
-        response.arrayBuffer().then(function (buffer) {
-            const bytes = new Uint8Array(buffer);
-            let binary = '';
-            bytes.forEach((b) => binary += String.fromCharCode(b));
-
-            const blob = fileLoader.b64StringToBlob(binary);
-            const blobUrl = URL.createObjectURL(blob);
-
-            fileLoader.setSrcAttribute(blobUrl, articleFileName, articleId);
-        });
-    };
-
-    window.onload = function () {
-        connector.fetchTemplateWithoutBody('/api/articles/' + articleId + "/file", connector.GET, loadFile);
-    }
-</script>
-<script>
-    function copyUrl(articleId) {
-        let copiedUrl = window.location.host + "/articles/" + articleId;
-        let copyTarget = document.createElement("textarea");
-        document.body.appendChild(copyTarget);
-        copyTarget.value = copiedUrl;
-        copyTarget.select();
-        document.execCommand('copy');
-        document.body.removeChild(copyTarget);
-        alert("링크가 복사되었습니다." + copiedUrl);
-    }
-</script>
+    <script src="/js/article.js"></script>
+    <script src="/js/fetchApi.js"></script>
+    <script src="/js/fileLoadApi.js"></script>
+    <script src="/js/card.js"></script>
+    <script th:inline="javascript">
+        const fileLoad = function () {
+            const fileLoader = FILE_LOAD_APP.FileLoadService();
+            fileLoader.loadMediaFile(fileLoader, [[${article.fileInfo.fileName}]], [[${article.id}]]);
+        };
+        window.addEventListener('DOMContentLoaded', fileLoad);
+    </script>
 </th:block>
 </html>
