@@ -2,8 +2,6 @@ package com.woowacourse.zzazanstagram.model.article.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
-
 public class ArticleRequest {
 
     private MultipartFile file;
