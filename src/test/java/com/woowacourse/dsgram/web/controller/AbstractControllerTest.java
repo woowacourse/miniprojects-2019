@@ -16,14 +16,12 @@ import static org.springframework.test.web.reactive.server.WebTestClient.Respons
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AbstractControllerTest {
-    static int AUTO_INCREMENT = 0;
+    static int LAST_USER_ID = 0;
 
     @Autowired
     WebTestClient webTestClient;
 
     ResponseSpec getResponseAfterSignUp(SignUpUserRequest signUpUserRequest) {
-        AUTO_INCREMENT++;
-
         return webTestClient.post().uri("/api/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(signUpUserRequest), SignUpUserRequest.class)
@@ -32,20 +30,13 @@ public class AbstractControllerTest {
 
     }
 
-    long getUserIdAfterSignUp (SignUpUserRequest signUpUserRequest) {
-        long[] userId = new long[1];
-
-        AUTO_INCREMENT++;
-
-        webTestClient.post().uri("/api/users")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(signUpUserRequest), SignUpUserRequest.class)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .exchange()
-                .expectBody().jsonPath("$.id")
-                .value(id -> userId[0] = Long.parseLong(id.toString()));
-
-        return userId[0];
+    SignUpUserRequest createSignUpUser() {
+        return SignUpUserRequest.builder()
+                .email(LAST_USER_ID + "success@gmail.com")
+                .userName("success")
+                .nickName(LAST_USER_ID + "success")
+                .password("1234")
+                .build();
     }
 
     void checkExceptionMessage(ResponseSpec response, String message) {
@@ -87,15 +78,9 @@ public class AbstractControllerTest {
     }
 
 
-    String getCookieAfterSignUpAndLogin() {
-        SignUpUserRequest userInfo = SignUpUserRequest.builder()
-                .email(AUTO_INCREMENT + "user@gmail.com")
-                .userName("buddy")
-                .nickName(AUTO_INCREMENT + "user")
-                .password("1234")
-                .build();
-
+    String getCookieAfterSignUpAndLogin(SignUpUserRequest userInfo) {
         getResponseAfterSignUp(userInfo);
+        LAST_USER_ID++;
         return getCookieAfterLogin(new AuthUserRequest(userInfo.getEmail(), userInfo.getPassword()));
     }
 

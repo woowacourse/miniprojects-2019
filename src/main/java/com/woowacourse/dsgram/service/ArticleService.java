@@ -4,7 +4,7 @@ import com.woowacourse.dsgram.domain.Article;
 import com.woowacourse.dsgram.domain.ArticleRepository;
 import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
-import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
+import com.woowacourse.dsgram.service.dto.user.LoggedInUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,11 +12,11 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
-public class ArticleApiService {
+public class ArticleService {
 
     private final ArticleRepository articleRepository;
 
-    public ArticleApiService(ArticleRepository articleRepository) {
+    public ArticleService(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
 
@@ -37,20 +37,20 @@ public class ArticleApiService {
     }
 
     @Transactional
-    public Article update(long articleId, ArticleEditRequest articleEditRequest, LoginUserRequest loginUserRequest) {
-        Article article = checkAuthor(articleId, loginUserRequest);
+    public Article update(long articleId, ArticleEditRequest articleEditRequest, LoggedInUser loggedInUser) {
+        Article article = checkAuthor(articleId, loggedInUser);
         return article.update(articleEditRequest.getContents());
     }
 
     @Transactional
-    public void delete(long articleId, LoginUserRequest loginUserRequest) {
-        Article article = checkAuthor(articleId, loginUserRequest);
+    public void delete(long articleId, LoggedInUser loggedInUser) {
+        Article article = checkAuthor(articleId, loggedInUser);
         articleRepository.delete(article);
     }
 
-    private Article checkAuthor(long articleId, LoginUserRequest loginUserRequest) {
+    private Article checkAuthor(long articleId, LoggedInUser loggedInUser) {
         Article article = findById(articleId);
-        if (article.notEqualAuthorId(loginUserRequest.getId())) {
+        if (article.notEqualAuthorId(loggedInUser.getId())) {
             throw new InvalidUserException("글 작성자만 수정, 삭제가 가능합니다.");
         }
         return article;

@@ -30,9 +30,10 @@ public class EditUserRequest {
     private String intro;
     private Optional<MultipartFile> file;
 
-    public EditUserRequest(String nickName, String userName, String webSite, String intro, Optional<MultipartFile> file) {
+    public EditUserRequest(String nickName, String userName, String password, String webSite, String intro, Optional<MultipartFile> file) {
         this.nickName = nickName;
         this.userName = userName;
+        this.password = password;
         this.webSite = webSite;
         this.intro = intro;
         this.file = file;

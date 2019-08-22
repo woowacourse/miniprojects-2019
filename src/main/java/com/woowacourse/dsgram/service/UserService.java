@@ -6,7 +6,7 @@ import com.woowacourse.dsgram.domain.exception.InvalidUserException;
 import com.woowacourse.dsgram.service.assembler.UserAssembler;
 import com.woowacourse.dsgram.service.dto.oauth.OAuthUserInfoResponse;
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
-import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
+import com.woowacourse.dsgram.service.dto.user.LoggedInUser;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import com.woowacourse.dsgram.service.dto.user.UserDto;
 import com.woowacourse.dsgram.service.exception.DuplicatedAttributeException;
@@ -46,9 +46,9 @@ public class UserService {
                 .orElseThrow(NotFoundUserException::new);
     }
 
-    public UserDto findUserInfoById(long userId, LoginUserRequest loginUserRequest) {
+    public UserDto findUserInfoById(long userId, LoggedInUser loggedInUser) {
         User user = findById(userId);
-        user.checkEmail(loginUserRequest.getEmail());
+        user.checkEmail(loggedInUser.getEmail());
         return UserAssembler.toDto(findById(userId));
     }
 
@@ -58,10 +58,10 @@ public class UserService {
     }
 
     @Transactional
-    public LoginUserRequest update(long userId, UserDto userDto, LoginUserRequest loginUserRequest) {
+    public LoggedInUser update(long userId, UserDto userDto, LoggedInUser loggedInUser) {
         User user = findById(userId);
         checkDuplicatedNickName(userDto, user);
-        user.update(UserAssembler.toEntity(userDto), loginUserRequest.getEmail());
+        user.update(UserAssembler.toEntity(userDto), loggedInUser.getEmail());
         return UserAssembler.toLoginUser(user);
     }
 
@@ -72,7 +72,7 @@ public class UserService {
         }
     }
 
-    public LoginUserRequest login(AuthUserRequest authUserRequest) {
+    public LoggedInUser login(AuthUserRequest authUserRequest) {
         User user = findByEmail(authUserRequest.getEmail())
                 .orElseThrow(() -> new InvalidUserException("회원정보가 일치하지 않습니다."));
         user.checkPassword(authUserRequest.getPassword());
@@ -84,7 +84,7 @@ public class UserService {
     }
 
     @Transactional
-    public LoginUserRequest oauth(String code) {
+    public LoggedInUser oauth(String code) {
         String accessToken = githubClient.getToken(code);
         String email = githubClient.getUserEmail(accessToken);
 
@@ -101,9 +101,9 @@ public class UserService {
         return userRepository.save(UserAssembler.toEntity(email, userInfo));
     }
 
-    public void deleteById(long id, LoginUserRequest loginUserRequest) {
+    public void deleteById(long id, LoggedInUser loggedInUser) {
         // TODO: 2019-08-20 OAUTH revoke?
-        User user = findByEmail(loginUserRequest.getEmail())
+        User user = findByEmail(loggedInUser.getEmail())
                 .orElseThrow(NotFoundUserException::new);
         if (user.isNotSameId(id)) {
             throw new InvalidUserException("회원정보가 일치하지 않습니다.");

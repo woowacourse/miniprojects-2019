@@ -1,7 +1,7 @@
 package com.woowacourse.dsgram.web.controller;
 
 import com.woowacourse.dsgram.service.UserService;
-import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
+import com.woowacourse.dsgram.service.dto.user.LoggedInUser;
 import com.woowacourse.dsgram.web.argumentresolver.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,21 +33,21 @@ public class UserController {
     @GetMapping("/users/{userId}/edit")
     public String showUserEdit(@PathVariable long userId,
                                Model model,
-                               @UserSession LoginUserRequest loginUserRequest) {
-        model.addAttribute("user", userService.findUserInfoById(userId, loginUserRequest));
+                               @UserSession LoggedInUser loggedInUser) {
+        model.addAttribute("user", userService.findUserInfoById(userId, loggedInUser));
 
         return "account-edit";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession httpSession) {
-        httpSession.removeAttribute(LoginUserRequest.SESSION_USER);
+        httpSession.removeAttribute(LoggedInUser.SESSION_USER);
         return "redirect:/login";
     }
 
     @GetMapping("/oauth")
     public String test(@RequestParam String code, HttpSession httpSession) {
-        httpSession.setAttribute(LoginUserRequest.SESSION_USER, userService.oauth(code));
+        httpSession.setAttribute(LoggedInUser.SESSION_USER, userService.oauth(code));
         return "redirect:/login";
     }
 

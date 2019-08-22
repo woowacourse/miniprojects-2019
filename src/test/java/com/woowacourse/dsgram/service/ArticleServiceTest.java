@@ -20,12 +20,12 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
-public class ArticleApiServiceTest {
+public class ArticleServiceTest {
 
     private Article article;
 
     @InjectMocks
-    private ArticleApiService articleApiService;
+    private ArticleService articleService;
 
     @Mock
     ArticleRepository articleRepository;
@@ -48,7 +48,7 @@ public class ArticleApiServiceTest {
     void 게시글_생성_성공() {
         given(articleRepository.save(article)).willReturn(article);
 
-        articleApiService.create(article);
+        articleService.create(article);
 
         verify(articleRepository).save(article);
     }
@@ -56,13 +56,13 @@ public class ArticleApiServiceTest {
     @Test
     void 게시글_조회_성공() {
         given(articleRepository.findById(any())).willReturn(Optional.of(article));
-        articleApiService.findById(1L);
+        articleService.findById(1L);
         verify(articleRepository).findById(anyLong());
     }
 
     @Test
     void 게시글_조회_실패() {
-        articleApiService.create(article);
-        assertThrows(EntityNotFoundException.class, () -> articleApiService.findById(1L));
+        articleService.create(article);
+        assertThrows(EntityNotFoundException.class, () -> articleService.findById(1L));
     }
 }

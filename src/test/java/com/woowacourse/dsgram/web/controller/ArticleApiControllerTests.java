@@ -1,6 +1,7 @@
 package com.woowacourse.dsgram.web.controller;
 
 import com.woowacourse.dsgram.service.dto.ArticleEditRequest;
+import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,12 +17,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ArticleApiControllerTests extends AbstractControllerTest {
 
     private String cookie;
+    private String anotherCookie;
     private long articleId;
+    private SignUpUserRequest signUpUserRequest;
 
     @BeforeEach
     void setUp() {
-        cookie = getCookieAfterSignUpAndLogin();
+        signUpUserRequest = createSignUpUser();
+
+        cookie = getCookieAfterSignUpAndLogin(signUpUserRequest);
         articleId = saveArticle(cookie);
+
+        signUpUserRequest = createSignUpUser();
+        anotherCookie = getCookieAfterSignUpAndLogin(signUpUserRequest);
+
     }
 
     @Test
@@ -72,8 +81,6 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     void update_By_Not_Author() {
         ArticleEditRequest articleEditRequest = new ArticleEditRequest("update contents");
 
-        String anotherCookie = getCookieAfterSignUpAndLogin();
-
         webTestClient.put().uri("/api/articles/" + articleId)
                 .header("Cookie", anotherCookie)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -101,9 +108,8 @@ public class ArticleApiControllerTests extends AbstractControllerTest {
     @Test
     @DisplayName("다른 사용자에 의한 게시글 삭제 실패")
     void delete() {
-        String anotherSessionCookie = getCookieAfterSignUpAndLogin();
         webTestClient.delete().uri("/api/articles/" + articleId)
-                .header("Cookie", anotherSessionCookie)
+                .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus()
                 .isBadRequest();

@@ -6,7 +6,7 @@ import com.woowacourse.dsgram.service.UserProfileImageFileService;
 import com.woowacourse.dsgram.service.UserService;
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.EditUserRequest;
-import com.woowacourse.dsgram.service.dto.user.LoginUserRequest;
+import com.woowacourse.dsgram.service.dto.user.LoggedInUser;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import com.woowacourse.dsgram.web.argumentresolver.UserSession;
 import com.woowacourse.dsgram.web.controller.exception.InvalidPatternException;
@@ -50,7 +50,7 @@ public class UserApiController {
     public ResponseEntity update(@PathVariable long userId,
                                  @Valid EditUserRequest editUserRequest,
                                  BindingResult bindingResult,
-                                 @UserSession LoginUserRequest loginUserRequest,
+                                 @UserSession LoggedInUser loggedInUser,
                                  HttpSession httpSession) {
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
@@ -60,23 +60,23 @@ public class UserApiController {
         editUserRequest.getFile().ifPresent((uploadedFile) ->
                 userProfileImageFileService.saveOrUpdate(userId, uploadedFile));
 
-        loginUserRequest = userService.update(userId, editUserRequest.toUserDto(), loginUserRequest);
-        httpSession.setAttribute(LoginUserRequest.SESSION_USER, loginUserRequest);
+        loggedInUser = userService.update(userId, editUserRequest.toUserDto(), loggedInUser);
+        httpSession.setAttribute(LoggedInUser.SESSION_USER, loggedInUser);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthUserRequest authUserRequest, HttpSession httpSession) {
-        httpSession.setAttribute(LoginUserRequest.SESSION_USER, userService.login(authUserRequest));
+        httpSession.setAttribute(LoggedInUser.SESSION_USER, userService.login(authUserRequest));
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity deleteUser(@PathVariable long userId,
-                                     @UserSession LoginUserRequest loginUserRequest,
+                                     @UserSession LoggedInUser loggedInUser,
                                      HttpSession httpSession) {
-        userService.deleteById(userId, loginUserRequest);
-        httpSession.removeAttribute(LoginUserRequest.SESSION_USER);
+        userService.deleteById(userId, loggedInUser);
+        httpSession.removeAttribute(LoggedInUser.SESSION_USER);
         return new ResponseEntity(HttpStatus.OK);
     }
 
