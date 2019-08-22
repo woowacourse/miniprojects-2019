@@ -6,7 +6,6 @@ import javax.validation.constraints.NotBlank;
 
 public class ArticleRequest {
 
-    @NotBlank
     private MultipartFile file;
     private String contents;
     private String hashTag;
