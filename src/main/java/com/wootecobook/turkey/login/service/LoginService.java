@@ -12,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class LoginService {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public LoginService(UserService userService) {
+    public LoginService(final UserService userService) {
         this.userService = userService;
     }
 
     @Transactional(readOnly = true)
-    public UserSession login(LoginRequest loginRequest) {
+    public UserSession login(final LoginRequest loginRequest) {
         try {
             User user = userService.findByEmail(loginRequest.getEmail());
             user.matchPassword(loginRequest.getPassword());

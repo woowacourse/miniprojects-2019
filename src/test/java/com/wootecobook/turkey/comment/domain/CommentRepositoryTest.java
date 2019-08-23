@@ -87,4 +87,19 @@ class CommentRepositoryTest {
         // then
         assertThat(actualSize).isEqualTo(comments.getTotalElements());
     }
+
+    @Test
+    void 삭제후_댓글만_조회() {
+        // given
+        final int size = 10;
+        final Pageable pageable = PageRequest.of(0, size);
+
+        // when
+        final Page<Comment> actual = commentRepository.findAllByPostIdAndParentIdIsNull(comment.getId(), pageable);
+        comment.isDeleted();
+        final Page<Comment> expected = commentRepository.findAllByPostIdAndParentIdIsNull(comment.getId(), pageable);
+
+        // then
+        assertThat(actual.getTotalElements()).isEqualTo(expected.getTotalElements());
+    }
 }

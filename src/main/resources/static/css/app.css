@@ -1251,7 +1251,7 @@ blockquote:before{font-family:themify;content:"\E67F";position:absolute;left:0;c
 .widget-feed .feed-action>li{display:inline-block}
 .widget-feed .feed-action>li>a{display:block;color:#333;font-size:16px;font-weight:500;padding:10px 25px 10px 0}
 .widget-feed .feed-action>li.active a,.widget-feed .feed-action>li>a:focus,.widget-feed .feed-action>li>a:hover{color:#333}
-.widget-feed .comment .comment-item{padding:30px 0;border-bottom:1px solid #e6ecf5}
+.widget-feed .comment .comment-item{padding:10px 0;border-bottom:1px}
 .widget-feed .comment .add-comment textarea{min-height:50px;resize:none;border:0;padding:20px 10px 5px}
 .widget-feed .comment .list-info .info{height:auto}
 .widget-feed .comment .list-info .info p{margin-bottom:0}
@@ -1259,6 +1259,8 @@ blockquote:before{font-family:themify;content:"\E67F";position:absolute;left:0;c
 .widget-feed .shared-item .item-image{flex:4;width:30%}
 .widget-feed .shared-item .item-content{flex:6;width:70%;padding:30px}
 .widget-feed iframe{border:0;width:100%;min-height:300px}
+.child-comment {position: relative; left: 40px;}
+
 
 button{box-shadow:none;cursor:pointer}
 button,button:focus{outline:none}
@@ -1537,6 +1539,9 @@ button.disabled,button:disabled{opacity:.5;cursor:not-allowed}
 .border-top-3 {border-top: 3px solid;}
 .border-top-4 {border-top: 4px solid;}
 .border-top-5 {border-top: 5px solid;}
+
+.user-result-card {background-color: white; width: 500px; }
+.user-result-li {display: flex; padding: 10px; }
 
 .border-radius-btm-round {
     border-top-right-radius: 0px;

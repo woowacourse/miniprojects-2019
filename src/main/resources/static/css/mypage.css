@@ -1,0 +1,85 @@
+/* feed-header */
+
+.mypage-header {
+    height: 350px;
+    background-image: url('/images/default/default.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
+}
+
+.background {
+    position: relative;
+    height: 300px;
+}
+
+.background .username {
+    position: relative;
+    top: 230px;
+    left: 200px;
+    font: bold 40px sans-serif;
+}
+
+.mypage-header .categories {
+    height: 50px;
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+.mypage-header .profile {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    left: 1rem;
+    bottom: 10rem;
+    color: #fff;
+    z-index: 1;
+}
+
+/* feed-body */
+
+.mypage-body {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.mypage-body .left-side {
+    width: 40vw;
+}
+
+/* 소개 카드 창 */
+.card .card-title {
+    padding: 1rem 0 1rem 1rem;
+    margin: 0 1rem;
+    border-bottom: 1px solid #E9E9E9;
+    font-size: 20px;
+}
+
+.mypage-body .contents {
+    width: 58vw;
+    margin-left: 2vw;
+}
+
+.card-block {
+    margin: 1rem;
+}
+
+.card-block .card-contents {
+    padding: 0.5rem;
+}
+
+.card-block .card-images {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-block .card-images .image {
+    width: 12vw;
+}

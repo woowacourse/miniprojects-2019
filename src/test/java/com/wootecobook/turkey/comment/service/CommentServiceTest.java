@@ -1,12 +1,12 @@
 package com.wootecobook.turkey.comment.service;
 
 import com.wootecobook.turkey.comment.domain.Comment;
+import com.wootecobook.turkey.comment.domain.CommentGood;
 import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
-import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.service.PostService;
@@ -21,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +47,11 @@ class CommentServiceTest {
     private UserService userService;
 
     @Mock
+    private CommentGoodService commentGoodService;
+
+    @Mock
     private CommentRepository commentRepository;
+
     private User user;
     private Post post;
     private Comment comment;
@@ -149,10 +155,10 @@ class CommentServiceTest {
     void 존재하지_않는_댓글_조회_예외처리() {
         // given
         final Long commentId = 2101725L;
-        when(commentRepository.findById(commentId)).thenThrow(CommentNotFoundException.class);
+        when(commentRepository.findById(commentId)).thenThrow(EntityNotFoundException.class);
 
         // when & then
-        assertThrows(CommentNotFoundException.class, () -> commentService.findById(commentId));
+        assertThrows(EntityNotFoundException.class, () -> commentService.findById(commentId));
         verify(commentRepository).findById(commentId);
     }
 
@@ -186,5 +192,19 @@ class CommentServiceTest {
 
         // then
         verify(commentRepository).findAllByParentId(COMMENT_ID, pageable);
+    }
+
+    @Test
+    void 댓글_좋아요_테스트() {
+        // given
+        when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
+        when(userService.findById(USER_ID)).thenReturn(user);
+        when(commentGoodService.toggleGood(any(Comment.class), any(User.class))).thenReturn(Arrays.asList(new CommentGood(user, comment)));
+
+        // when
+        commentService.good(USER_ID, COMMENT_ID);
+
+        // then
+        verify(commentGoodService).toggleGood(comment, user);
     }
 }

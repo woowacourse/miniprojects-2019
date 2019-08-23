@@ -24,7 +24,7 @@ public class Contents {
         this.contents = contents;
     }
 
-    private void validate(String contents) {
+    private void validate(final String contents) {
         if (contents == null || contents.trim().equals("")) {
             throw new InvalidContentException();
         }

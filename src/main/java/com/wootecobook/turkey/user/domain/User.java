@@ -1,6 +1,6 @@
 package com.wootecobook.turkey.user.domain;
 
-import com.wootecobook.turkey.commons.BaseEntity;
+import com.wootecobook.turkey.commons.domain.UpdatableEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Email;
 @Entity
 @Getter
 @NoArgsConstructor
-public class User extends BaseEntity {
+public class User extends UpdatableEntity {
 
     public static final String INVALID_PASSWORD_MESSAGE = "비밀번호가 틀렸습니다.";
 

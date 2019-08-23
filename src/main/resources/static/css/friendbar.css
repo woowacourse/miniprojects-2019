@@ -1,0 +1,65 @@
+.fbFriendSidebar {
+    background-clip: padding-box;
+    background-color: transparent;
+    border-left: 0.3px solid rgba(0, 0, 0, .4);
+    font-size: 12px;
+    height: calc(100% - 42px);
+    line-height: 16px;
+    right: 0;
+    bottom: 0;
+    width: 205px;
+    z-index: 300;
+    position: fixed;
+    overflow-y: scroll;
+    overflow: visible !important;
+}
+
+.dropleft > button > img {
+    margin-right: 5px;
+}
+
+.list-group-item {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.FriendAsk, .FriendRemove {
+    background-clip: padding-box;
+    border-color: rgba(0, 0, 0, .4);
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    white-space: nowrap;
+    line-height: 26px;
+    padding: 0 10px;
+    color: #4b4f56;
+    background-color: #f5f6f7;
+    border: 1px solid;
+    border-radius: 2px;
+    box-sizing: content-box;
+    font-size: 12px;
+    -webkit-font-smoothing: antialised;
+    font-weight: bold;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    text-shadow: none;
+    vertical-align: middle;
+    margin: 0;
+    margin-left: 10px;
+}
+
+.friendAddBtn {
+    background-image: url(/images/default/icons3.png);
+    background-size: 54px 470px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+    margin-right: 4px;
+    font-style: italic;
+    background-position: 0 -386px;
+    bottom: 1px;
+    position: relative;
+    vertical-align: middle;
+}

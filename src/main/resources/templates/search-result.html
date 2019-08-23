@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Turkeybook</title>
+    <th:block th:include="fragments/head"/>
+</head>
+<body>
+<div id="wootecobook-app">
+    <th:block th:include="fragments/nav"/>
+
+    <nav class="search-bar navbar max-width-lg mx-auto">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a href="#tab-info-1" id="search-all" class="nav-link active show" role="tab" data-toggle="tab" aria-selected="true">전체</a>
+            </li>
+            <li class="nav-item">
+                <a href="#tab-info-2" id="search-users" class="nav-link" role="tab" data-toggle="tab" aria-selected="false">사람</a>
+            </li>
+            <li class="nav-item">
+                <a href="#tab-info-3" id="search-posts" class="nav-link" role="tab" data-toggle="tab" aria-selected="false">게시물</a>
+            </li>
+            <li class="nav-item">
+                <a href="#tab-info-4" id="search-images" class="nav-link" role="tab" data-toggle="tab" aria-selected="false">사진</a>
+            </li>
+        </ul>
+    </nav>
+
+
+
+    <div id="main-content" class="container-fluid max-width-lg mx-auto mrg-top-70">
+        <div class="row">
+            <th:block th:include="fragments/left-panel"/>
+            <div id="app-content">
+                <div id="result-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const keyword = `[[${keyword}]]`;
+    searchbox.value = keyword
+
+
+</script>
+<th:block th:include="fragments/script"/>
+<th:block layout:fragment="custom-js">
+    <script src="/js/comment/template.js"></script>
+    <script src="/js/commons/api.js"></script>
+    <script src="/js/post/template.js"></script>
+    <script src="/js/post/post.js"></script>
+    <script src="/js/login/logout.js"></script>
+    <script src="/js/search/searchbox.js"></script>
+    <script src="/js/search/searchResult.js"></script>
+    <script src="/js/search/template.js"></script>
+</th:block>
+</body>
+</html>

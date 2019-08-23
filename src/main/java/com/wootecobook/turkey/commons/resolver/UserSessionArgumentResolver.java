@@ -16,7 +16,7 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return UserSession.class.isAssignableFrom(parameter.getParameterType());
+        return parameter.hasParameterAnnotation(LoginUser.class);
     }
 
     @Override

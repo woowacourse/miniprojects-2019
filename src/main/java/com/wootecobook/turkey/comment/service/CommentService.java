@@ -5,8 +5,8 @@ import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
-import com.wootecobook.turkey.comment.service.exception.CommentNotFoundException;
 import com.wootecobook.turkey.comment.service.exception.CommentSaveException;
+import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.service.PostService;
 import com.wootecobook.turkey.user.domain.User;
@@ -16,23 +16,30 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @Transactional
 public class CommentService {
 
+    private static final String NOT_FOUND_MESSAGE = "해당 댓글을 찾을 수 없습니다.";
+
     private final PostService postService;
     private final UserService userService;
+    private final CommentGoodService commentGoodService;
     private final CommentRepository commentRepository;
 
-    public CommentService(final PostService postService, final UserService userService, final CommentRepository commentRepository) {
+    public CommentService(final PostService postService, final UserService userService,
+                          final CommentGoodService commentGoodService, final CommentRepository commentRepository) {
         this.postService = postService;
         this.userService = userService;
+        this.commentGoodService = commentGoodService;
         this.commentRepository = commentRepository;
     }
 
     @Transactional(readOnly = true)
     public Comment findById(final Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
+        return commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
     }
 
     @Transactional(readOnly = true)
@@ -76,4 +83,23 @@ public class CommentService {
         comment.isWrittenBy(userId);
         comment.delete();
     }
+
+    public int countByPost(final Post post) {
+        return commentRepository.countByPost(post);
+    }
+
+    public GoodResponse good(final Long id, final Long userId) {
+        Comment comment = findById(id);
+        User user = userService.findById(userId);
+
+        return GoodResponse.of(commentGoodService.toggleGood(comment, user), user);
+    }
+
+    public GoodResponse countGoodResponseByComment(final Long commentId, final Long userId) {
+        Comment comment = findById(commentId);
+        User user = userService.findById(userId);
+
+        return GoodResponse.of(commentGoodService.findBy(comment), user);
+    }
+
 }

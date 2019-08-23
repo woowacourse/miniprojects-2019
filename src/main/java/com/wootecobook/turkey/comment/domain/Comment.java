@@ -3,7 +3,7 @@ package com.wootecobook.turkey.comment.domain;
 import com.wootecobook.turkey.comment.domain.exception.CommentUpdateFailException;
 import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
-import com.wootecobook.turkey.commons.BaseEntity;
+import com.wootecobook.turkey.commons.domain.UpdatableEntity;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;
 import lombok.Builder;
@@ -11,14 +11,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Comment extends BaseEntity {
+@Where(clause = "deleted = 0")
+public class Comment extends UpdatableEntity {
 
     protected static final String CONTENTS_DELETE_MESSAGE = "삭제된 글입니다.";
 
@@ -27,7 +31,7 @@ public class Comment extends BaseEntity {
     private String contents;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean isDeleted;
+    private boolean deleted;
 
     @ManyToOne
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comment_to_user"), nullable = false)
@@ -42,6 +46,9 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_comment_to_comment"))
     private Comment parent;
 
+    @OneToMany(mappedBy = "parent")
+    private List<Comment> children = new ArrayList<>();
+
     @Builder
     public Comment(final String contents, final User user, final Post post, final Comment parent) {
         CommentValidator.validateContents(contents);
@@ -50,7 +57,7 @@ public class Comment extends BaseEntity {
         this.user = user;
         this.post = post;
         this.parent = parent;
-        this.isDeleted = false;
+        this.deleted = false;
     }
 
     public boolean isWrittenBy(Long userId) {
@@ -70,14 +77,18 @@ public class Comment extends BaseEntity {
 
     public void delete() {
         validateDelete();
-        isDeleted = true;
+        deleted = true;
         contents = CONTENTS_DELETE_MESSAGE;
     }
 
     private void validateDelete() {
-        if (this.isDeleted) {
+        if (this.deleted) {
             throw new AlreadyDeleteException(this.getId());
         }
+    }
+
+    public int getCountOfChildren() {
+        return children.size();
     }
 
     public Optional<Comment> getParent() {
@@ -91,3 +102,4 @@ public class Comment extends BaseEntity {
         return Optional.of(parent.getId());
     }
 }
+

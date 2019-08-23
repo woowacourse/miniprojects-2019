@@ -1,0 +1,13 @@
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+li {
+    margin: 0;
+}
+
+.good-active {
+    color: #2caae1;
+}

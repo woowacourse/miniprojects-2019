@@ -1,6 +1,7 @@
 package com.wootecobook.turkey.post.domain;
 
-import com.wootecobook.turkey.commons.BaseEntity;
+import com.wootecobook.turkey.commons.domain.UpdatableEntity;
+import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.post.domain.exception.InvalidPostException;
 import com.wootecobook.turkey.post.domain.exception.PostUpdateFailException;
 import com.wootecobook.turkey.user.domain.User;
@@ -9,11 +10,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Post extends BaseEntity {
+public class Post extends UpdatableEntity {
 
     @Embedded
     private Contents contents;
@@ -22,8 +25,14 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_post_to_user"))
     private User author;
 
+    @OneToMany
+    @JoinTable(name = "post_file",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id"))
+    private List<UploadFile> uploadFiles = new ArrayList<>();
+
     @Builder
-    private Post(final Long id, final Contents contents, final User author) {
+    private Post(final Long id, final Contents contents, final User author, List<UploadFile> uploadFiles) {
         if (id == null) {
             validateAuthor(author);
         }
@@ -31,6 +40,7 @@ public class Post extends BaseEntity {
 
         this.contents = contents;
         this.author = author;
+        this.uploadFiles = uploadFiles;
     }
 
     private void validateContents(final Contents contents) {
@@ -45,7 +55,7 @@ public class Post extends BaseEntity {
         }
     }
 
-    public Post update(Post other) {
+    public Post update(final Post other) {
         if (other == null) {
             throw new PostUpdateFailException();
         }

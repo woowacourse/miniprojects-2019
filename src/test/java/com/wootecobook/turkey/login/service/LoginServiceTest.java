@@ -43,34 +43,41 @@ class LoginServiceTest {
 
     @Test
     void 로그인() {
+        //given
         LoginRequest loginRequest = LoginRequest.builder()
                 .email(VALID_EMAIL)
                 .password(VALID_PASSWORD)
                 .build();
 
+        //when
         UserSession userSession = loginService.login(loginRequest);
 
+        //then
         assertThat(userSession.getEmail()).isEqualTo(VALID_EMAIL);
         assertThat(userSession.getName()).isEqualTo(VALID_NAME);
     }
 
     @Test
     void 로그인_없는_이메일() {
+        //given
         LoginRequest loginRequest = LoginRequest.builder()
                 .email("invalid@invalid.invalid")
                 .password(VALID_PASSWORD)
                 .build();
 
+        //when & then
         assertThrows(LoginFailException.class, () -> loginService.login(loginRequest));
     }
 
     @Test
     void 로그인_비밀번호_불일치() {
+        //given
         LoginRequest loginRequest = LoginRequest.builder()
                 .email(VALID_EMAIL)
                 .password("invalid")
                 .build();
 
+        //when & then
         assertThrows(LoginFailException.class, () -> loginService.login(loginRequest));
     }
 }

@@ -15,6 +15,14 @@ header ul.nav-right li, header ul.nav-left li {
     min-width: 992px;
 }
 
+.search-bar  {
+    background-color: white;
+    color: white;
+    height: 56px;
+    top: 40px;
+    width: 100%;
+}
+
 .logo {
     background-repeat: no-repeat;
     -webkit-background-size: 283px 396px;
@@ -64,7 +72,7 @@ header ul.nav-right li, header ul.nav-left li {
     top: 12px;
     left: 383px;
     background: none;
-    background-image: url('../images/default/icons.png');
+    background-image: url('/images/default/icons.png');
     background-position: -26px -202px;
     border-style: none;
     border-left: 1px solid rgb(220, 220, 220);
@@ -104,10 +112,18 @@ header ul.nav-right li, header ul.nav-left li {
 }
 
 .friend-btn, .message-btn, .notification-btn, .dropdown-btn {
-    background-image: url('../images/default/icons.png');
+    background-image: url('/images/default/icons.png');
     background-repeat: no-repeat;
     height: 24px;
     width: 24px;
+}
+
+.dropdown-item {
+    display: -webkit-inline-box;
+}
+
+.dropdown-item > button {
+    margin-left: 10px;
 }
 
 .story-user-list {
@@ -197,7 +213,7 @@ header ul.nav-right li, header ul.nav-left li {
     margin: 3.5px;
     vertical-align: middle;
     display: inline-block;
-    background-image: url('../images/default/icons2.png');
+    background-image: url('/images/default/icons2.png');
     background-repeat: no-repeat;
 }
 .icon-name {
@@ -278,4 +294,8 @@ header ul.nav-right li, header ul.nav-left li {
 
 .composor-tools div li {
     display: flex;
+}
+
+.one-line {
+    display: block;
 }
