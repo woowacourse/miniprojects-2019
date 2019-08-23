@@ -16,8 +16,8 @@ import techcourse.w3.woostagram.user.exception.UserNotFoundException;
 
 @Service
 public class UserService {
-    private static final String DEFAULT_PROFILE_IMAGE =
-            "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
+//    private static final String DEFAULT_PROFILE_IMAGE =
+//            "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
 
     private final UserRepository userRepository;
     private final StorageService storageService;
@@ -62,20 +62,38 @@ public class UserService {
         return userRepository.findById(targetId).orElseThrow(UserNotFoundException::new);
     }
 
+//    @Transactional
+//    public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
+//        User user = findUserByEmail(email);
+//        String fileUrl = userProfileImageDto.getOriginalImageFile();
+//        deleteFile(fileUrl);
+//        if (!userProfileImageDto.getImageFile().isEmpty()) {
+//            fileUrl = storageService.saveMultipartFile(userProfileImageDto.getImageFile());
+//        }
+//        user.updateProfile(fileUrl);
+//        return fileUrl;
+//    }
+
     @Transactional
     public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
         User user = findUserByEmail(email);
-        String fileUrl = userProfileImageDto.getOriginalImageFile();
+        String fileUrl = user.getProfile();
         deleteFile(fileUrl);
         if (!userProfileImageDto.getImageFile().isEmpty()) {
             fileUrl = storageService.saveMultipartFile(userProfileImageDto.getImageFile());
+            user.updateProfile(fileUrl);
         }
-        user.updateProfile(fileUrl);
         return fileUrl;
     }
 
+    public void deleteProfileImage(String email) {
+        User user = findUserByEmail(email);
+        deleteFile(user.getProfile());
+        user.updateProfile(null);
+    }
+
     private void deleteFile(String fileUrl) {
-        if (!StringUtils.isEmpty(fileUrl) && !fileUrl.equals(DEFAULT_PROFILE_IMAGE)) {
+        if (!StringUtils.isEmpty(fileUrl)) {
             storageService.deleteFile(fileUrl);
         }
     }
