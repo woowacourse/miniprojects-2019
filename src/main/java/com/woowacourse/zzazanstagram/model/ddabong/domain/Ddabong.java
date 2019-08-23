@@ -17,6 +17,8 @@ public class Ddabong extends BaseEntity {
     @JoinColumn(name = "author_id", foreignKey = @ForeignKey(name = "fk_like_to_member"), nullable = false)
     private Member member;
 
+    private boolean clicked = true;
+
     protected Ddabong() {
     }
 
@@ -25,11 +27,19 @@ public class Ddabong extends BaseEntity {
         this.member = member;
     }
 
+    public void changeClicked() {
+        clicked = !clicked;
+    }
+
     public Article getArticle() {
         return article;
     }
 
     public Member getMember() {
         return member;
+    }
+
+    public boolean isClicked() {
+        return clicked;
     }
 }
