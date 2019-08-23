@@ -47,7 +47,6 @@ public class AwsTest {
         assertDoesNotThrow(() -> s3.putObject(bucketName, getTestFileName, fileContent));
         assertDoesNotThrow(() -> s3.getObject(bucketName, getTestFileName));
         assertDoesNotThrow(() -> s3.deleteObject(bucketName, getTestFileName));
-
     }
 
     @Test
