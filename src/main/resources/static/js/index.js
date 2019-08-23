@@ -57,7 +57,6 @@ const IndexApp = (() => {
 
         const login = (event) => {
             event.preventDefault();
-            event.stopPropagation();
 
             const email = document.getElementById('login-email');
             const password = document.getElementById('login-password');
@@ -81,7 +80,9 @@ const IndexApp = (() => {
 
         const signUp = (event) => {
             event.preventDefault();
-            event.stopPropagation();
+
+            if(AppStorage.check('sign-up-run')) return;
+            AppStorage.set('sign-up-run', true);
 
             const firstName = document.getElementById('signup-first-name');
             const lastName = document.getElementById('signup-last-name');
@@ -107,6 +108,7 @@ const IndexApp = (() => {
                         password.value = "";
                         alert('가입을 완료했습니다. 로그인 하세요.');
                     }
+                    AppStorage.set('sign-up-run', false);
                 })
         };
 
@@ -122,7 +124,7 @@ const IndexApp = (() => {
         };
 
         const signUp = (data) => {
-            return Api.post('/api/signup', data);
+            return Api.post('/api/users/signup', data);
         };
 
         return {

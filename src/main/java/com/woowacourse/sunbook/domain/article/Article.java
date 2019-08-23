@@ -24,11 +24,16 @@ public class Article extends BaseEntity {
     @ManyToOne
     private User author;
 
-    public Article(ArticleFeature articleFeature) {
+    public Article(ArticleFeature articleFeature, User author) {
         this.articleFeature = articleFeature;
+        this.author = author;
     }
 
     public void update(ArticleFeature updatedArticleFeature) {
         articleFeature = updatedArticleFeature;
+    }
+
+    public boolean isSameUser(User user) {
+        return this.author.equals(user);
     }
 }

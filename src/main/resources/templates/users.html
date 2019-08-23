@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/head"/>
+</head>
+<body>
+<div id="wootecobook-app">
+    <header id="header" class="header navbar">
+        <div class="header-container max-width-lg mx-auto">
+            <ul class="nav-left mrg-left-0">
+                <li>
+                    <a href="/newsfeed">
+                        <div class="logo" style="background-image: url('/images/default/icons.png')"></div>
+                    </a>
+                </li>
+                <li class="search-container">
+                <span class="search">
+                    <form action="" method="get">
+                        <input type="text" class="searchbox" placeholder="검색">
+                        <button type="submit" class="search-btn">
+                            <i class="ti-search"></i>
+                        </button>
+                    </form>
+                </span>
+                </li>
+            </ul>
+            <ul class="nav-right">
+                <li class="user-profile">
+                    <a href="/users">
+                        <img class="profile-img img-fluid" src="/images/default/eastjun_profile.jpg" alt="">
+                        <div class="user-info mrg-left-5">
+                            <span class="name pdd-right-5 text-white text-bold" id="login-user-name">eastjun</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="">
+                    <a class="pointer" href="/newsfeed">
+                        <span class="text-white text-bold font-size-12">홈</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="pointer">
+                        <span class="text-white text-bold font-size-12">만들기</span>
+                    </a>
+                </li>
+                <li>
+                    <div class="friend-btn pointer mrg-vertical-10 mrg-horizon-5" id="friend-list-btn"></div>
+                </li>
+                <li>
+                    <div class="message-btn pointer mrg-vertical-10 mrg-horizon-5"></div>
+                </li>
+                <li>
+                    <div class="notification-btn pointer mrg-vertical-10 mrg-horizon-5"></div>
+                </li>
+
+            </ul>
+        </div>
+    </header>
+    <div class="container-fluid max-width-lg mx-auto">
+        <div class="row jumbo mrg-top-30">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="d-flex">
+                    <div class="pdd-right-5">
+                        <img class="jumbo-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
+                    </div>
+                    <div class="mr-auto align-self-end"><span class="font-size-50">EastJun</span></div>
+                    <div class="align-self-end">
+                        <button type="button" class="btn btn-info" id="user-update-form-btn">
+                            프로필 수정
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mrg-top-30">
+            <div id="left-profile-container" class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                <div class="left">
+                    <div class="left-menus">
+                        <ul class="left-sub-menus">
+                            <li class="left-sub-sub-menus mrg-btm-5 pointer">
+                                <div class="icons newspeed"></div>
+                                <span class="icon-name">  뉴스피드</span>
+                            </li>
+                            <li class="left-sub-sub-menus mrg-btm-5 pointer">
+                                <div class="icons message"></div>
+                                <span class="icon-name">  Messenger</span>
+                            </li>
+                            <li class="left-sub-sub-menus mrg-btm-5 pointer">
+                                <div class="icons watch"></div>
+                                <span class="icon-name">  Watch</span>
+                            </li>
+                        </ul>
+                        <ul class="left-sub-menus">
+                            <div class="left-group-title">바로가기</div>
+                            <li class="left-sub-sub-menus pointer">
+                                <div class="icons group"></div>
+                                <span class="icon-name">  우테코 1기</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                <div class="social-feeds">
+                    <div class="card widget-compose">
+                        <p class="border bottom width-100 pdd-btm-5 text-bold">게시물 만들기</p>
+                        <textarea id="article-contents"
+                                  class="resize-none form-control border bottom resize-none"
+                                  placeholder="oo님, 무슨 생각을 하고 계신가요?"></textarea>
+                        <ul class="composor-tools pdd-top-15">
+                            <li class="bg-lightgray border-radius-round mrg-right-5">
+                                <a class="pdd-vertical-5 pdd-horizon-10 pointer">
+                                    <div class="icons photo-video"></div>
+                                    <span class="icon-name font-size-13 text-bold"> 사진/동영상</span>
+                                </a>
+                            </li>
+                            <li class="bg-lightgray border-radius-round mrg-right-5">
+                                <a class="pdd-vertical-5 pdd-horizon-10 pointer">
+                                    <div class="icons tag-friend"></div>
+                                    <span class="icon-name font-size-13 text-bold"> 친구 태그하기</span>
+                                </a>
+                            </li>
+                            <li class="bg-lightgray border-radius-round mrg-right-5">
+                                <a class="pdd-vertical-5 pdd-horizon-10 pointer">
+                                    <div class="icons feeling-activity"></div>
+                                    <span class="icon-name font-size-13 text-bold"> 기분/활동</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="composor-tools pdd-top-15">
+                            <li class="mrg-right-5 block">
+                                <button class="btn block btn-info btn-rounded" id="article-save-btn" type="button" value="1">
+                                    <span>작성</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="article-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--modal start-->
+<input type="hidden" id="show-user-update-modal-btn" data-toggle="modal" data-target="#user-update-modal">
+<div class="modal fade" id="user-update-modal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="text-bold">프로필 수정</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="user-update-now-password" class="col-form-label">현재 비밀번호</label>
+                    <input type="password" class="form-control" id="user-update-now-password" required>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="user-update-email" class="col-form-label">이메일</label>
+                    <input type="email" class="form-control" id="user-update-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-update-last-name" class="col-form-label">성</label>
+                    <input type="text" class="form-control" id="user-update-last-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-update-first-name" class="col-form-label">이름</label>
+                    <input type="text" class="form-control" id="user-update-first-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-update-change-password" class="col-form-label">변경할 비밀번호:</label>
+                    <input type="password" class="form-control" id="user-update-change-password">
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-info btn-sm" id="user-update-btn" data-dismiss="modal">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--modal end-->
+<th:block th:include="fragments/common-modal" />
+<th:block th:include="fragments/common-scripts" />
+<script src="/js/users.js"></script>
+</body>
+</html>

@@ -10,8 +10,8 @@ const ArticleApp = (() => {
         };
 
         const showUpdateModal = () => {
-            const updateBtn = document.getElementById('update-btn');
-            updateBtn.addEventListener('click', articleService.showModal);
+            const articleList = document.getElementById('article-list');
+            articleList.addEventListener('click', articleService.showModal);
         };
 
         const remove = () => {
@@ -19,8 +19,20 @@ const ArticleApp = (() => {
             articleList.addEventListener('click', articleService.remove);
         };
 
+        const update = () => {
+            const updateBtn = document.getElementById('update-btn');
+            updateBtn.addEventListener('click', articleService.update);
+        };
+
         const read = () => {
             articleService.read();
+        };
+
+        const photoAndVideo = () => {
+            const photoVideoBtn = document.getElementById('photo-video-btn');
+            photoVideoBtn.addEventListener('click', articleService.hideFileInputTag);
+            const photoVideoInputTag = document.getElementById('photo-video-input');
+            photoVideoInputTag.addEventListener('change', articleService.showThumbnail)
         };
 
         const init = () => {
@@ -28,6 +40,8 @@ const ArticleApp = (() => {
             showUpdateModal();
             remove();
             read();
+            update();
+            photoAndVideo();
         };
 
         return {
@@ -45,14 +59,16 @@ const ArticleApp = (() => {
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(article => {
-                        articleList
-                            .insertAdjacentHTML('afterbegin', articleTemplate({
-                                "id": article.id,
-                                "updatedTime": article.updatedTime,
-                                "article-contents": article.articleFeature.contents,
-                                "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
-                                "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png"
-                            }));
+                        articleList.insertAdjacentHTML('afterbegin', articleTemplate({
+                            "id": article.id,
+                            "updatedTime": article.updatedTime,
+                            "article-contents": article.articleFeature.contents,
+                            "article-videoUrl": article.articleFeature.videoUrl,
+                            "article-imageUrl": article.articleFeature.imageUrl,
+                            "authorName": article.authorName.name,
+                        }));
+                        ReactionApp.service().showGoodCount(article.id);
+                        checkBlank();
                     })
                 })
                 .catch(error => console.log("error: " + error));
@@ -60,32 +76,57 @@ const ArticleApp = (() => {
 
         const add = () => {
             const contents = document.getElementById("article-contents");
-            const data = {
-                contents: contents.value,
-                imageUrl: "",
-                videoUrl: "",
-            };
 
-            articleApi.add(data)
-                .then(response => response.json())
-                .then((article) => {
-                    document.getElementById('article-list')
-                        .insertAdjacentHTML('afterbegin', articleTemplate({
-                            "id": article.id,
-                            "updatedTime": article.updatedTime,
-                            "article-contents": article.articleFeature.contents,
-                            "article-videoUrl": "https://www.youtube.com/embed/rA_2B7Yj4QE",
-                            "article-imageUrl": "https://i.pinimg.com/originals/e5/64/d6/e564d613befe30dfcef2d22a4498fc70.png"
-                        }));
-                });
+            if (AppStorage.check('article-add-run')) {
+                return;
+            }
+            AppStorage.set('article-add-run', true);
+
+            upload(contents).then(data => {
+                articleApi.add(data)
+                    .then(response => response.json())
+                    .then((article) => {
+                        document.getElementById('article-list')
+                            .insertAdjacentHTML('afterbegin', articleTemplate({
+                                "id": article.id,
+                                "updatedTime": article.updatedTime,
+                                "article-contents": article.articleFeature.contents,
+                                "article-videoUrl": article.articleFeature.videoUrl,
+                                "article-imageUrl": article.articleFeature.imageUrl,
+                                "authorName": article.authorName.name,
+                            }));
+                        ReactionApp.service().showGoodCount(article.id);
+                        const videoTag = document.querySelector('video[data-object="article-video"]');
+                        const imageTag = document.querySelector('img[data-object="article-image"]');
+                        if (videoTag.getAttribute('src') === "") {
+                            videoTag.setAttribute('style', 'display:none');
+                        }
+                        if (imageTag.getAttribute('src') === "") {
+                            imageTag.setAttribute('style', 'display:none');
+                        }
+                        AppStorage.set('article-add-run', false);
+                    });
+                contents.value = "";
+                document.querySelector('#preview').src = "";
+            });
         };
 
         const update = (event) => {
             const target = event.target;
-            if (target.closest('li[data-btn="update"]')) {
-                const article = target.closest('div[data-object="article"]');
-                showModal(article);
-            }
+            const updateArea = document.getElementById('article-update-contents');
+            const article = target.closest('div[data-object="article"]');
+            console.log(article);
+            const articleId = article.getAttribute('data-article-id');
+            const data = {
+                contents: updateArea.value,
+                imageUrl: "",
+                videoUrl: "",
+            };
+
+            articleApi.update(data, articleId)
+                .then(() => {
+                    read();
+                });
         };
 
         const remove = (event) => {
@@ -102,10 +143,106 @@ const ArticleApp = (() => {
 
         const showModal = (event) => {
             const target = event.target;
-            const article = target.closest('div[data-object="article"]');
-            const updateArea = document.getElementById('article-update-contents');
-            const articleId = article.getAttribute('data-article-id');
-            updateArea.innerText = article.querySelector('span[data-object="article-contents"]').innerText;
+            if (target.closest('li[data-btn="update"]')) {
+                const article = target.closest('div[data-object="article"]');
+                const updateArea = document.getElementById('article-update-contents');
+                const articleId = article.getAttribute('data-article-id');
+                updateArea.value = article.querySelector('span[data-object="article-contents"]').innerText;
+
+                const showModalBtn = document.getElementById('show-article-modal-btn');
+                showModalBtn.click();
+            }
+        };
+
+        const hideFileInputTag = () => {
+            const inputTag = document.getElementById("photo-video-input");
+            inputTag.click();
+        };
+
+        const showThumbnail = () => {
+            const file = document.querySelector('#photo-video-input');
+            let files = file.files;
+
+            let allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mov|\.mp4)$/i;
+            if(!allowedExtensions.exec(files[0].name)){
+                alert('Please upload file having extensions .jpeg/.jpg/.png/.gif/.mov/.mp4 only.');
+                file.value = '';
+                return false;
+            } else {
+                let reader = new FileReader();
+                reader.readAsDataURL(files[0]);
+                //로드 한 후
+                reader.onload = function  () {
+                    document.querySelector('#preview').src = reader.result ;
+                };
+            }
+        };
+
+        const upload = (contents) => {
+            const files = document.querySelector('#photo-video-input');
+            const file = files.files[0];
+            const formData = new FormData();
+            formData.append('data', file);
+
+            if (!file && !contents.value) {
+                AppStorage.set('article-add-run', false);
+                alert("뭐라도 쓰세요");
+                throw new Error();
+            }
+            else if (!file) {
+                return new Promise((resolve) => {
+                    resolve({
+                        contents: contents.value,
+                        imageUrl: "",
+                        videoUrl: "",
+                    });
+                });
+            }
+
+            return $.ajax({
+                type: 'POST',
+                url: '/upload',
+                data: formData,
+                processData: false,
+                contentType: false
+            }).then(res => {
+                let imgExtension = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+                let videoExtension = /(\.mov|\.mp4)$/i;
+                let data;
+                files.value = null;
+
+                if (imgExtension.exec(res)) {
+                    data = {
+                        contents: contents.value,
+                        imageUrl: res,
+                        videoUrl: "",
+                    };
+                } else if (videoExtension.exec(res)) {
+                    data = {
+                        contents: contents.value,
+                        imageUrl: "",
+                        videoUrl: res,
+                    };
+                } else {
+                    data = {
+                        contents: contents.value,
+                        imageUrl: "",
+                        videoUrl: "",
+                    };
+                }
+                return data;
+            });
+        };
+
+        const checkBlank = () => {
+            const videoTag = document.querySelector('video[data-object="article-video"]');
+            const imageTag = document.querySelector('img[data-object="article-image"]');
+            if (videoTag.getAttribute('src') === "") {
+                videoTag.setAttribute('style', 'display:none');
+            }
+            if (imageTag.getAttribute('src') === "") {
+                imageTag.setAttribute('style', 'display:none');
+            }
         };
 
         return {
@@ -114,6 +251,9 @@ const ArticleApp = (() => {
             update: update,
             remove: remove,
             showModal: showModal,
+            hideFileInputTag: hideFileInputTag,
+            showThumbnail: showThumbnail,
+            upload: upload,
         }
     };
 
@@ -130,10 +270,26 @@ const ArticleApp = (() => {
             return Api.get(`/api/articles`);
         };
 
+        const update = (data, articleId) => {
+            console.log("request!!");
+            return Api.put(`/api/articles/${articleId}`, data);
+        };
+
+        const showGood = (articleId) => {
+            return Api.get(`/api/articles/${articleId}/good`);
+        };
+
+        const upload = (data) => {
+            return Api.postImage(`/upload`, data);
+        };
+
         return {
             add: add,
             remove: remove,
             render: render,
+            update: update,
+            showGood: showGood,
+            upload: upload,
         };
     };
 
@@ -144,7 +300,8 @@ const ArticleApp = (() => {
 
     return {
         init: init,
-    }
+    };
+
 })();
 
 ArticleApp.init();

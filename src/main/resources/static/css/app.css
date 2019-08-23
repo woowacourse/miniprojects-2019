@@ -46,6 +46,8 @@ a.text-gray.active,a.text-gray:focus,a.text-gray:hover{color:#8f92a1!important}
 :focus{outline:none}
 hr{border-top:1px solid #e6ecf5}
 
+.block{display:block!important; width:100%!important;text-align:center;}
+
 .text-link:focus,.text-link:hover{text-decoration:underline}
 .text-opacity{opacity:.85}
 .text-white{color:#fff!important}
@@ -61,7 +63,7 @@ hr{border-top:1px solid #e6ecf5}
 .bg-dark{background-color:#333!important}
 .bg-gray{background-color:#ebeef6!important}
 .bg-primary{background-color:#7774e7!important}
-.bg-info{background-color:#0f9aee!important}
+.bg-info{background-color:#4267b2!important}
 .bg-success{background-color:#37c936!important}
 .bg-warning{background-color:#fc0!important}
 .bg-danger{background-color:#ff3c7e!important}
@@ -78,6 +80,15 @@ hr{border-top:1px solid #e6ecf5}
 blockquote:before{font-family:themify;content:"\E67F";position:absolute;left:0;color:#333}
 
 .fade.in{opacity:1}.collapse.in{display:block}
+
+.jumbo{border-radius: 0.5em; padding: 7em 1em 0.5em 5em; vertical-align: bottom;}
+.jumbo img.jumbo-img{height:150px;width:150px;}
+.jumbo img.jumbo-img.img-circle{border-radius:50%; border:0.4em solid white;}
+.jumbo .btn.jumbo-btn{cursor:pointer;font-family:Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;letter-spacing:1px;font-size:13px;padding:10px 20px;border-radius:6px;margin-right:5px;margin-bottom:10px;transition:all .3s ease-in-out;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;-ms-transition:all .3s ease-in-out}
+
+
+.friend img.friend-img{height:60px;width:60px;}
+
 
 .no-mrg{margin:0!important}
 .no-mrg-top{margin-top:0!important}
@@ -1218,6 +1229,7 @@ blockquote:before{font-family:themify;content:"\E67F";position:absolute;left:0;c
 }
 .vertical-align{display:table;height:100%;width:100%}
 .vertical-align .table-cell{display:table-cell;vertical-align:middle}
+.vertical-align .table-cell.top{display:table-cell;vertical-align:top}
 .vertical-align-super{vertical-align:super}
 
 .border-radius-4{border-radius:4px!important}
@@ -1452,7 +1464,7 @@ button.disabled,button:disabled{opacity:.5;cursor:not-allowed}
 .bg-lightblue {background-color: lightblue !important;}
 .bg-darkseagreen {background-color: darkseagreen !important;}
 .bg-bisque {background-color: bisque !important;}
-.bg-gray {background-color: gray !important;}
+.bg-gray {background-color: #e9ecef !important;}
 .bg-whitesmoke {background-color: whitesmoke !important;}
 .bg-f8 {background-color: #f8f8f8; !important;}
 .bg-gainsboro {background-color: gainsboro;}

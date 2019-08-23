@@ -47,6 +47,7 @@ public class User extends BaseEntity {
         if (this.equals(user)) {
             return;
         }
+
         throw new IllegalArgumentException();
     }
 }

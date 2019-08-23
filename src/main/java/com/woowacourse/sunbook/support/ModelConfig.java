@@ -1,5 +1,8 @@
 package com.woowacourse.sunbook.support;
 
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,5 +20,12 @@ public class ModelConfig {
                 .setFieldMatchingEnabled(true);
 
         return modelMapper;
+    }
+
+    @Bean
+    AmazonS3 amazonS3() {
+        return  AmazonS3ClientBuilder.standard()
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .build();
     }
 }
