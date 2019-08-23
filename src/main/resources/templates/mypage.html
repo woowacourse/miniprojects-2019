@@ -114,15 +114,8 @@
 <script src="/js/user.js"></script>
 <script th:inline="javascript">
     const profileUrl = [[ ${userInfo.profile} ]];
-    const defaultProfileImage = "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
-    const profileImage = document.querySelector('#profile-image');
-    const originalImage = document.querySelector('#original-image');
-    profileImage.setAttribute("src", profileUrl);
-    if (profileUrl === null) {
-        profileImage.setAttribute("src", defaultProfileImage);
-        originalImage.setAttribute("value", defaultProfileImage);
-    }
 </script>
+<script src="/js/mypage.js"></script>
 </body>
 
 </html>
