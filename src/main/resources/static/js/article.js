@@ -154,28 +154,9 @@ const ArticleApp = (() => {
             }
         };
 
-        const hideFileInputTag = (event) => {
-            const target = event.target;
+        const hideFileInputTag = () => {
             const inputTag = document.getElementById("photo-video-input");
             inputTag.click();
-        };
-
-
-        const clickGood = (event) => {
-            const target = event.target;
-            if (target.closest('li[data-btn="reaction-good-btn"]')) {
-                const article = target.closest('div[data-object="article"]');
-                const articleId = article.getAttribute('data-article-id');
-                const data = document.getElementById(`good-count-${articleId}`).innerText;
-
-                articleApi.clickGood(Number(data), articleId)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data.numberOfGood);
-                        document.getElementById(`good-count-${articleId}`)
-                            .innerText = data.numberOfGood;
-                    });
-            }
         };
 
         const showThumbnail = () => {
@@ -198,11 +179,17 @@ const ArticleApp = (() => {
         };
 
         const upload = (contents) => {
-            let file = document.querySelector('#photo-video-input').files[0];
-            let formData = new FormData();
+            const files = document.querySelector('#photo-video-input');
+            const file = files.files[0];
+            const formData = new FormData();
             formData.append('data', file);
 
-            if (!file) {
+            if (!file && !contents.value) {
+                AppStorage.set('article-add-run', false);
+                alert("뭐라도 쓰세요");
+                throw new Error();
+            }
+            else if (!file) {
                 return new Promise((resolve) => {
                     resolve({
                         contents: contents.value,
@@ -211,6 +198,7 @@ const ArticleApp = (() => {
                     });
                 });
             }
+
             return $.ajax({
                 type: 'POST',
                 url: '/upload',
@@ -218,12 +206,11 @@ const ArticleApp = (() => {
                 processData: false,
                 contentType: false
             }).then(res => {
-                console.log(res);
-                return res;
-            }).then(res => {
                 let imgExtension = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
                 let videoExtension = /(\.mov|\.mp4)$/i;
                 let data;
+                files.value = null;
+
                 if (imgExtension.exec(res)) {
                     data = {
                         contents: contents.value,
@@ -265,7 +252,6 @@ const ArticleApp = (() => {
             remove: remove,
             showModal: showModal,
             hideFileInputTag: hideFileInputTag,
-            clickGood: clickGood,
             showThumbnail: showThumbnail,
             upload: upload,
         }
@@ -289,10 +275,6 @@ const ArticleApp = (() => {
             return Api.put(`/api/articles/${articleId}`, data);
         };
 
-        const clickGood = (data, articleId) => {
-            return Api.post(`/api/articles/${articleId}/good`, data)
-        };
-
         const showGood = (articleId) => {
             return Api.get(`/api/articles/${articleId}/good`);
         };
@@ -306,7 +288,6 @@ const ArticleApp = (() => {
             remove: remove,
             render: render,
             update: update,
-            clickGood: clickGood,
             showGood: showGood,
             upload: upload,
         };

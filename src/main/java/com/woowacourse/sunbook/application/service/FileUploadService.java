@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.presentation.controller;
+package com.woowacourse.sunbook.application.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class S3Uploader {
+public class FileUploadService {
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
