@@ -58,7 +58,7 @@ public class CommentApiControllerTest extends CommonControllerTest {
         when().
                 post(basicPath() + "/api/videos/" + NOT_EXIST_VIDEO_ID + "/comments").
         then().
-                statusCode(400);
+                statusCode(302);
     }
 
     @Test
