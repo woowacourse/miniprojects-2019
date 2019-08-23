@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/fragments/head.html"/>
+    <th:block th:include="fragments/head"/>
 </head>
 <body>
 <div id="wootecobook-app">
@@ -181,8 +181,8 @@
     </div>
 </div>
 
-<th:block th:include="/fragments/common-modal.html" />
-<th:block th:include="/fragments/common-scripts.html" />
+<th:block th:include="fragments/common-modal" />
+<th:block th:include="fragments/common-scripts" />
 <script src="/js/article-template.js"></script>
 <script src="/js/reaction.js"></script>
 <script src="/js/article.js"></script>
