@@ -220,23 +220,25 @@
     const INDEXPAGE = (function () {
 
         const IndexPageController = function () {
-            const indexPageService = new IndexPageService();
+            const searchService = new SearchService();
+            const commentService = new CommentService();
+            const ddabongService = new DdabongService();
 
             const toggleSearchInput = function () {
-                document.querySelector('.search-toggle').addEventListener('click', indexPageService.toggleSearchInput);
+                document.querySelector('.search-toggle').addEventListener('click', searchService.toggleSearchInput);
             };
 
             const showSearchedList = function () {
-                document.querySelector(".search-input input").addEventListener("keyup", indexPageService.showSearchedList);
+                document.querySelector(".search-input input").addEventListener('keyup', searchService.showSearchedList);
             };
 
             const addComment = function () {
                 document.querySelectorAll('.btn-add-comment')
-                    .forEach(el => el.addEventListener('click', indexPageService.addComment));
+                    .forEach(el => el.addEventListener('click', commentService.addComment));
             };
             const toggleHeart = function () {
                 document.querySelectorAll('.fa-heart-o').forEach((el) => {
-                    el.addEventListener('click', indexPageService.toggleHeart);
+                    el.addEventListener('click', ddabongService.toggleHeart);
                 })
             };
 
@@ -252,7 +254,7 @@
             }
         };
 
-        const IndexPageService = function () {
+        const SearchService = function () {
             const toggleSearchInput = function (event) {
                 event.preventDefault();
                 document.querySelector('.search-box').classList.toggle('active')
@@ -268,6 +270,13 @@
                 }
             };
 
+            return {
+                toggleSearchInput: toggleSearchInput,
+                showSearchedList: showSearchedList,
+            }
+        };
+
+        const CommentService = function () {
             const getCommentTemplate = function (nickName, commentContents) {
                 return `<li>
                               <p class="inline-block text-bold  no-mrg-btm mrg-left-15">
@@ -309,6 +318,13 @@
 
             };
 
+            return {
+                addComment: addComment,
+            }
+        };
+
+        const DdabongService = function () {
+
             const toggleHeart = function (event) {
                 event.preventDefault();
                 const articleId = event.target.closest("div").id;
@@ -337,13 +353,9 @@
                 });
             };
             return {
-                toggleSearchInput: toggleSearchInput,
-                showSearchedList: showSearchedList,
-                addComment: addComment,
                 toggleHeart: toggleHeart,
             }
         };
-
 
         const init = function () {
             const indexPageController = new IndexPageController();
