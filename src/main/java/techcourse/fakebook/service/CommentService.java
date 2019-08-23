@@ -1,7 +1,6 @@
 package techcourse.fakebook.service;
 
 import org.springframework.stereotype.Service;
-import techcourse.fakebook.service.dto.UserOutline;
 import techcourse.fakebook.domain.article.Article;
 import techcourse.fakebook.domain.comment.Comment;
 import techcourse.fakebook.domain.comment.CommentRepository;
@@ -10,11 +9,10 @@ import techcourse.fakebook.domain.like.CommentLikeRepository;
 import techcourse.fakebook.domain.user.User;
 import techcourse.fakebook.exception.InvalidAuthorException;
 import techcourse.fakebook.exception.NotFoundCommentException;
-import techcourse.fakebook.service.dto.CommentLikeResponse;
 import techcourse.fakebook.service.dto.CommentRequest;
 import techcourse.fakebook.service.dto.CommentResponse;
+import techcourse.fakebook.service.dto.UserOutline;
 import techcourse.fakebook.service.utils.CommentAssembler;
-import techcourse.fakebook.service.utils.UserAssembler;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -24,11 +22,11 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class CommentService {
-    private ArticleService articleService;
-    private UserService userService;
-    private CommentRepository commentRepository;
-    private CommentLikeRepository commentLikeRepository;
-    private CommentAssembler commentAssembler;
+    private final ArticleService articleService;
+    private final UserService userService;
+    private final CommentRepository commentRepository;
+    private final CommentLikeRepository commentLikeRepository;
+    private final CommentAssembler commentAssembler;
 
     public CommentService(ArticleService articleService, UserService userService,
                           CommentRepository commentRepository, CommentLikeRepository commentLikeRepository, CommentAssembler commentAssembler) {
@@ -45,7 +43,7 @@ public class CommentService {
     }
 
     public List<CommentResponse> findAllByArticleId(Long id) {
-        return commentRepository.findAllByArticleId(id).stream()
+        return commentRepository.findAllByArticleIdOrderByCreatedDateAsc(id).stream()
                 .map(commentAssembler::toResponse)
                 .collect(Collectors.toList());
     }
@@ -70,9 +68,31 @@ public class CommentService {
         comment.delete();
     }
 
+    public boolean like(Long commentId, UserOutline userOutline) {
+        Optional<CommentLike> commentLike = Optional.ofNullable(commentLikeRepository.findByUserIdAndCommentId(userOutline.getId(), commentId));
+        if (commentLike.isPresent()) {
+            commentLikeRepository.delete(commentLike.get());
+            return false;
+        }
+        commentLikeRepository.save(new CommentLike(userService.getUser(userOutline.getId()), getComment(commentId)));
+        return true;
+    }
+
+    public boolean isLiked(Long commentId, UserOutline userOutline) {
+        return commentLikeRepository.existsByUserIdAndCommentId(userOutline.getId(), commentId);
+    }
+
+    public Integer getLikeCountOf(Long commentId) {
+        return commentLikeRepository.countCommentLikeByCommentId(commentId);
+    }
+
+    public Integer getCommentsCountOf(Long articleId) {
+        return commentRepository.countCommentByArticleId(articleId);
+    }
+
     private Comment getComment(Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(NotFoundCommentException::new);
-        if (comment.isNotPresent()) {
+        if (comment.isDeleted()) {
             throw new NotFoundCommentException();
         }
         return comment;
@@ -82,21 +102,5 @@ public class CommentService {
         if (comment.isNotAuthor(userOutline.getId())) {
             throw new InvalidAuthorException();
         }
-    }
-
-    public boolean like(Long commentId, UserOutline userOutline) {
-        Optional<CommentLike> commentLike = Optional.ofNullable(commentLikeRepository.findByUserIdAndCommentId(userOutline.getId(), commentId));
-
-        if (commentLike.isPresent()) {
-            commentLikeRepository.delete(commentLike.get());
-            return false;
-        }
-
-        commentLikeRepository.save(new CommentLike(userService.getUser(userOutline.getId()), getComment(commentId)));
-        return true;
-    }
-
-    public boolean isLiked(Long commentId, UserOutline userOutline) {
-        return commentLikeRepository.existsByUserIdAndCommentId(userOutline.getId(), commentId);
     }
 }

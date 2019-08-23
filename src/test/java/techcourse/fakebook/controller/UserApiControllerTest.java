@@ -2,13 +2,16 @@ package techcourse.fakebook.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
-import techcourse.fakebook.service.dto.LoginRequest;
 import techcourse.fakebook.service.dto.UserSignupRequest;
 import techcourse.fakebook.service.dto.UserUpdateRequest;
 
+import java.util.HashMap;
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 class UserApiControllerTest extends ControllerTestHelper {
@@ -18,13 +21,10 @@ class UserApiControllerTest extends ControllerTestHelper {
     @Test
     void 로그인_존재하는_유저_수정() {
         UserSignupRequest userSignupRequest = newUserSignupRequest();
-        signup(userSignupRequest);
+        String cookie = getCookie(signup(userSignupRequest));
         Long userId = getId(userSignupRequest.getEmail());
 
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest("updatedCoverUrl", "updatedIntroduction");
-
-        ResponseSpec rs = login(new LoginRequest(userSignupRequest.getEmail(), userSignupRequest.getPassword()));
-        String cookie = getCookie(rs);
 
         given().
                 port(port).
@@ -35,7 +35,7 @@ class UserApiControllerTest extends ControllerTestHelper {
         when().
                 put("/api/users/" + userId).
         then().
-                statusCode(200).
+                statusCode(HttpStatus.OK.value()).
                 body("coverUrl", equalTo(userUpdateRequest.getCoverUrl())).
                 body("introduction", equalTo(userUpdateRequest.getIntroduction()));
     }
@@ -56,6 +56,30 @@ class UserApiControllerTest extends ControllerTestHelper {
         when().
                 put("/api/users/" + userId).
         then().
-                statusCode(302);
+                statusCode(HttpStatus.FOUND.value());
+    }
+
+    @Test
+    void 로그인_키워드로_유저이름_조회() {
+        UserSignupRequest userSignupRequest =
+                new UserSignupRequest("aa@bb.cc", "keyword", "qwe", "1q2w3e$R", "M", "123456");
+
+        String cookie = getCookie(signup(userSignupRequest));
+
+        List<HashMap> userResponses =
+                given().
+                        port(port).
+                        cookie(cookie).
+                        accept(MediaType.APPLICATION_JSON_UTF8_VALUE).
+                when().
+                        get("/api/users/" + "keyword").
+                then().
+                        statusCode(200).
+                        extract().
+                        body().
+                        jsonPath().
+                        getList(".");
+
+        assertThat(userResponses.get(0).get("name")).isEqualTo("keywordqwe");
     }
 }
