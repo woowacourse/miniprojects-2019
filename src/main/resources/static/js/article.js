@@ -61,7 +61,7 @@ const Article = (function () {
 
         const loadImageProcess = (src) => {
             return new Promise((resolve, reject) => {
-                let img = new Image();
+                const img = new Image();
                 img.onload = () => resolve(img);
                 img.onerror = reject;
                 img.src = src
@@ -80,7 +80,7 @@ const Article = (function () {
         };
 
         const modify = () => {
-            let contents = document.querySelector(".modify-input").value;
+            const contents = document.querySelector(".modify-input").value;
             request.put('/', {
                 id: articleId,
                 contents: contents
