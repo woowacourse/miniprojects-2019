@@ -25,13 +25,10 @@ const UsersApp = (() => {
     const UserService = function () {
         const userApi = new UserApi();
 
-        const showUserUpdateModal = (event) => {
-            const modal = document.getElementById('user-update-modal');
-
+        const showUserUpdateModal = () => {
             const email = document.getElementById('user-update-email');
             const lastName = document.getElementById('user-update-last-name');
             const firstName = document.getElementById('user-update-first-name');
-
 
             const loginUser = AppStorage.get('login-user');
             email.value = loginUser.userEmail.email;

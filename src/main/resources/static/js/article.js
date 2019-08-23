@@ -71,7 +71,7 @@ const ArticleApp = (() => {
                 .catch(error => console.log("error: " + error));
         };
 
-        const add = (event) => {
+        const add = () => {
             const contents = document.getElementById("article-contents");
 
             if (AppStorage.check('article-add-run')) {
@@ -145,9 +145,8 @@ const ArticleApp = (() => {
             }
         };
 
-        const temp = (event) => {
-            const target = event.target;
-            const inputTag = document.getElementById("temptemp");
+        const hideFileInputTag = () => {
+            const inputTag = document.getElementById("photo-video-input");
             inputTag.click();
         };
 
@@ -157,7 +156,7 @@ const ArticleApp = (() => {
             update: update,
             remove: remove,
             showModal: showModal,
-            temp: temp,
+            hideFileInputTag: hideFileInputTag,
         }
     };
 
