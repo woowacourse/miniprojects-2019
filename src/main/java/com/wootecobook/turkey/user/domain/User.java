@@ -1,7 +1,6 @@
 package com.wootecobook.turkey.user.domain;
 
 import com.wootecobook.turkey.commons.domain.UpdatableEntity;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
