@@ -37,8 +37,10 @@ public class Article extends BaseEntity {
         this.comments = new ArrayList<>();
     }
 
-    public int getDdabongCount() {
-        return ddabongs.size();
+    public long getDdabongCount() {
+        return ddabongs.stream()
+                .filter(Ddabong::isClicked)
+                .count();
     }
 
     public void deleteDdabong(Ddabong ddabong) {
