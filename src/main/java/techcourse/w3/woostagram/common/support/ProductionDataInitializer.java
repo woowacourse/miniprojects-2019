@@ -39,7 +39,7 @@ public class ProductionDataInitializer implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         User gd = saveUser("gyudong@woowahan.com", "Aa1234!!", "규동");
         User mm = saveUser("moomin@woowahan.com", "Aa1234!!", "무민");
-        User iv = saveUser("iva@woowahan.com", "Aa1234!!", "이바");
+        User iv = saveUser("iva@woowahan.com", "Aa1234!!", "이바", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg");
         User hr = saveUser("harry-potter@woowahan.com", "Aa1234!!", "해리");
         User uni = saveUser("uni@woowahan.com", "Aa1234!!", "유니");
 
@@ -96,6 +96,19 @@ public class ProductionDataInitializer implements ApplicationRunner {
         return userRepository.save(User.builder()
                 .email(email)
                 .password(password)
+                .userContents(
+                        UserContents.builder()
+                                .userName(userName)
+                                .build()
+                )
+                .build());
+    }
+
+    private User saveUser(String email, String password, String userName, String profile) {
+        return userRepository.save(User.builder()
+                .email(email)
+                .password(password)
+                .profile(profile)
                 .userContents(
                         UserContents.builder()
                                 .userName(userName)

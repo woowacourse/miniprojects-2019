@@ -12,8 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MainControllerTest extends AbstractControllerTests {
     @Test
     public void read_correctPageable_isOk() {
-        String json = new String(Objects.requireNonNull(getRequest("/api/main").getResponseBody()));
+        String json = new String(Objects.requireNonNull(getRequest("/api/main?page=0&size=2").getResponseBody()));
         List<String> articles = JsonPath.read(json, "$.content.*");
-        assertThat(articles.size()).isEqualTo(3);
+        assertThat(articles.size()).isEqualTo(2);
     }
 }
