@@ -16,9 +16,6 @@ import techcourse.w3.woostagram.user.exception.UserNotFoundException;
 
 @Service
 public class UserService {
-//    private static final String DEFAULT_PROFILE_IMAGE =
-//            "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
-
     private final UserRepository userRepository;
     private final StorageService storageService;
 
@@ -61,18 +58,6 @@ public class UserService {
     public User findById(long targetId) {
         return userRepository.findById(targetId).orElseThrow(UserNotFoundException::new);
     }
-
-//    @Transactional
-//    public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
-//        User user = findUserByEmail(email);
-//        String fileUrl = userProfileImageDto.getOriginalImageFile();
-//        deleteFile(fileUrl);
-//        if (!userProfileImageDto.getImageFile().isEmpty()) {
-//            fileUrl = storageService.saveMultipartFile(userProfileImageDto.getImageFile());
-//        }
-//        user.updateProfile(fileUrl);
-//        return fileUrl;
-//    }
 
     @Transactional
     public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
