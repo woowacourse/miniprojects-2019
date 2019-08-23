@@ -25,11 +25,13 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final MemberService memberService;
     private final S3Uploader s3Uploader;
+    private final String dirName;
 
-    public ArticleService(ArticleRepository articleRepository, MemberService memberService, S3Uploader s3Uploader) {
+    public ArticleService(ArticleRepository articleRepository, MemberService memberService, S3Uploader s3Uploader, @Value("${cloud.aws.s3.dirName.article}") String dirName) {
         this.articleRepository = articleRepository;
         this.memberService = memberService;
         this.s3Uploader = s3Uploader;
+        this.dirName = dirName;
     }
 
     public List<ArticleResponse> getArticleResponses() {
@@ -39,7 +41,7 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    public void save(ArticleRequest dto, String email, @Value("${cloud.aws.s3.dirName.article}") String dirName) {
+    public void save(ArticleRequest dto, String email) {
         Member author = memberService.findByEmail(email);
         MultipartFile file = dto.getFile();
         String imageUrl = s3Uploader.upload(file, dirName);
