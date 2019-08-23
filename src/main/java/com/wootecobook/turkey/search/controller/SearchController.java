@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SearchController {
 
     @GetMapping("/{keyword}")
-    public String form(@PathVariable String keyword, Model model){
+    public String form(@PathVariable String keyword, Model model) {
         model.addAttribute("keyword", keyword);
         return "search-result";
     }

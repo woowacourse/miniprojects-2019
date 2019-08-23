@@ -12,9 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(final UserService userService) {
         this.userService = userService;
     }
 

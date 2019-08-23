@@ -16,8 +16,8 @@ import java.util.List;
 @RequestMapping("/api/friends")
 public class FriendApiController {
 
-    private FriendAskService friendAskService;
-    private FriendService friendService;
+    private final FriendAskService friendAskService;
+    private final FriendService friendService;
 
     public FriendApiController(FriendAskService friendAskService, FriendService friendService) {
         this.friendAskService = friendAskService;

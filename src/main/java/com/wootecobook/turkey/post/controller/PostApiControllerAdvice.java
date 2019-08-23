@@ -1,7 +1,6 @@
 package com.wootecobook.turkey.post.controller;
 
 import com.wootecobook.turkey.commons.ErrorMessage;
-import com.wootecobook.turkey.post.controller.PostApiController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

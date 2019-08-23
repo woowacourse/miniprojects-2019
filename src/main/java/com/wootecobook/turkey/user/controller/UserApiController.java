@@ -58,7 +58,7 @@ public class UserApiController {
     public ResponseEntity<Page<UserResponse>> search(@PathVariable String name,
                                                      @PageableDefault(size = 5, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        Page<UserResponse> userResponses = userService.findByName(name,pageable);
+        Page<UserResponse> userResponses = userService.findByName(name, pageable);
         return ResponseEntity.ok(userResponses);
     }
 

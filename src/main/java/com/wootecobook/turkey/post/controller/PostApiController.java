@@ -28,41 +28,42 @@ public class PostApiController {
     }
 
     @PostMapping
-    public ResponseEntity<PostResponse> create(@Valid PostRequest postRequest, UserSession userSession) {
+    public ResponseEntity<PostResponse> create(@Valid final PostRequest postRequest, final UserSession userSession) {
         PostResponse postResponse = postService.save(postRequest, userSession.getId());
         final URI uri = linkTo(PostApiController.class).toUri();
         return ResponseEntity.created(uri).body(postResponse);
     }
 
     @GetMapping
-    public ResponseEntity<Page<PostResponse>> list(@PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable,
-                                                   UserSession userSession) {
+    public ResponseEntity<Page<PostResponse>> list(@PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) final Pageable pageable,
+                                                   final UserSession userSession) {
         Page<PostResponse> postResponses = postService.findPostResponses(pageable, userSession.getId());
         return ResponseEntity.ok(postResponses);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostResponse> update(@PathVariable Long id, @RequestBody @Valid PostRequest postRequest,
-                                               UserSession userSession) {
+    public ResponseEntity<PostResponse> update(@PathVariable final Long id,
+                                               @RequestBody @Valid final PostRequest postRequest,
+                                               final UserSession userSession) {
         PostResponse postResponse = postService.update(postRequest, id, userSession.getId());
 
         return ResponseEntity.ok(postResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id, UserSession userSession) {
+    public ResponseEntity delete(@PathVariable final Long id, final UserSession userSession) {
         postService.delete(id, userSession.getId());
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/good")
-    public ResponseEntity good(@PathVariable Long id, UserSession userSession) {
+    public ResponseEntity good(@PathVariable final Long id, final UserSession userSession) {
         GoodResponse goodResponse = postService.good(id, userSession.getId());
         return ResponseEntity.ok(goodResponse);
     }
 
     @GetMapping("/{postId}/good/count")
-    public ResponseEntity countGood(@PathVariable Long postId, UserSession userSession) {
+    public ResponseEntity countGood(@PathVariable final Long postId, final UserSession userSession) {
         GoodResponse goodResponse = postService.countPostGoodByPost(postId, userSession.getId());
         return ResponseEntity.ok(goodResponse);
     }

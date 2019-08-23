@@ -24,7 +24,7 @@ public class PostGoodService {
         Optional<PostGood> maybeGood = postGoodRepository.findByPostAndUser(post, user);
 
         if (maybeGood.isPresent()) {
-            cencelGoodRequest(maybeGood.get());
+            cancelGoodRequest(maybeGood.get());
         } else {
             approveGoodRequest(new PostGood(user, post));
         }
@@ -36,7 +36,7 @@ public class PostGoodService {
         postGoodRepository.save(postGood);
     }
 
-    private void cencelGoodRequest(PostGood postGood) {
+    private void cancelGoodRequest(PostGood postGood) {
         postGoodRepository.delete(postGood);
     }
 
