@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.friend.controller;
 
+import com.wootecobook.turkey.commons.resolver.LoginUser;
 import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.friend.service.FriendAskService;
 import com.wootecobook.turkey.friend.service.FriendService;
@@ -19,32 +20,32 @@ public class FriendApiController {
     private final FriendAskService friendAskService;
     private final FriendService friendService;
 
-    public FriendApiController(FriendAskService friendAskService, FriendService friendService) {
+    public FriendApiController(final FriendAskService friendAskService, final FriendService friendService) {
         this.friendAskService = friendAskService;
         this.friendService = friendService;
     }
 
     @GetMapping("/asks")
-    public ResponseEntity<List<FriendAskResponse>> showAsk(UserSession userSession) {
+    public ResponseEntity<List<FriendAskResponse>> showAsk(@LoginUser UserSession userSession) {
         return ResponseEntity.ok(friendAskService.findAllByReceiverId(userSession.getId()));
     }
 
     @PostMapping("/asks")
     public ResponseEntity<FriendAskResponse> createAsk(@RequestBody FriendAskCreate friendAskCreate,
-                                                       UserSession userSession) {
+                                                       @LoginUser UserSession userSession) {
         friendService.checkAlreadyFriend(friendAskCreate.getReceiverId(), userSession.getId());
         return ResponseEntity.created(null)
                 .body(friendAskService.save(userSession.getId(), friendAskCreate));
     }
 
     @DeleteMapping("/asks/{id}")
-    public ResponseEntity deleteAsk(@PathVariable Long id, UserSession userSession) {
+    public ResponseEntity deleteAsk(@PathVariable Long id, @LoginUser UserSession userSession) {
         friendAskService.deleteById(id, userSession.getId());
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<FriendResponse>> show(UserSession userSession) {
+    public ResponseEntity<List<FriendResponse>> show(@LoginUser UserSession userSession) {
         return ResponseEntity.ok(friendService.findAllFriendResponseByRelatingUserId(userSession.getId()));
     }
 
@@ -55,7 +56,7 @@ public class FriendApiController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id, UserSession userSession) {
+    public ResponseEntity delete(@PathVariable Long id, @LoginUser UserSession userSession) {
         friendService.deleteById(id, userSession.getId());
         return ResponseEntity.noContent().build();
     }
