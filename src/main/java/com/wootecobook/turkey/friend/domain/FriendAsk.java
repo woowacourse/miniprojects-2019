@@ -1,6 +1,7 @@
 package com.wootecobook.turkey.friend.domain;
 
 import com.wootecobook.turkey.commons.domain.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FriendAsk extends BaseEntity {
 
     private static final String NULL_INPUT_MESSAGE = "Null 값을 입력할 수 없습니다.";

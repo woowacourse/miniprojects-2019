@@ -15,6 +15,14 @@ header ul.nav-right li, header ul.nav-left li {
     min-width: 992px;
 }
 
+.search-bar  {
+    background-color: white;
+    color: white;
+    height: 56px;
+    top: 40px;
+    width: 100%;
+}
+
 .logo {
     background-repeat: no-repeat;
     -webkit-background-size: 283px 396px;

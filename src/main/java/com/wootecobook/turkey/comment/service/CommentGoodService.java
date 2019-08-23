@@ -22,7 +22,7 @@ public class CommentGoodService {
         Optional<CommentGood> maybeCommentGood = commentGoodRepository.findByCommentAndUser(comment, user);
 
         if (maybeCommentGood.isPresent()) {
-            cencelGoodRequest(maybeCommentGood.get());
+            cancelGoodRequest(maybeCommentGood.get());
         } else {
             approveGoodRequest(new CommentGood(user, comment));
         }
@@ -34,7 +34,7 @@ public class CommentGoodService {
         commentGoodRepository.save(commentGood);
     }
 
-    private void cencelGoodRequest(CommentGood commentGood) {
+    private void cancelGoodRequest(CommentGood commentGood) {
         commentGoodRepository.delete(commentGood);
     }
 

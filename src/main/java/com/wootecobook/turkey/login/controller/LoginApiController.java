@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.login.controller.api;
+package com.wootecobook.turkey.login.controller;
 
 import com.wootecobook.turkey.login.service.LoginService;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
@@ -14,9 +14,9 @@ import static com.wootecobook.turkey.commons.resolver.UserSession.USER_SESSION_K
 @RestController
 public class LoginApiController {
 
-    private LoginService loginService;
+    private final LoginService loginService;
 
-    public LoginApiController(LoginService loginService) {
+    public LoginApiController(final LoginService loginService) {
         this.loginService = loginService;
     }
 

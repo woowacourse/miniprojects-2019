@@ -1,6 +1,7 @@
 package com.wootecobook.turkey.friend.domain;
 
 import com.wootecobook.turkey.commons.domain.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import javax.persistence.Entity;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Friend extends BaseEntity {
 
     private static final String NULL_INPUT_MESSAGE = "Null 값을 입력할 수 없습니다.";

@@ -11,20 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserDeleteService {
 
-    private UserService userService;
-    private FriendAskService friendAskService;
-    private FriendService friendService;
+    private final UserService userService;
+    private final FriendAskService friendAskService;
+    private final FriendService friendService;
 
-    public UserDeleteService(UserService userService, FriendAskService friendAskService, FriendService friendService) {
+    public UserDeleteService(final UserService userService,
+                             final FriendAskService friendAskService,
+                             final FriendService friendService) {
         this.userService = userService;
         this.friendAskService = friendAskService;
         this.friendService = friendService;
     }
 
-    public void delete(Long userId, Long sessionUserId) {
+    public void delete(final Long userId, final Long sessionUserId) {
         matchId(userId, sessionUserId);
         try {
-            userService.delete(userId);
+            userService.delete(userId, sessionUserId);
             friendAskService.deleteBySenderIdOrReceiverId(userId);
             friendService.deleteByRelatedUserIdOrRelatingUserId(userId);
         } catch (Exception e) {
@@ -32,7 +34,7 @@ public class UserDeleteService {
         }
     }
 
-    private void matchId(Long userId, Long sessionUserId) {
+    private void matchId(final Long userId, final Long sessionUserId) {
         if (userId == null || !userId.equals(sessionUserId)) {
             throw new UserMismatchException();
         }

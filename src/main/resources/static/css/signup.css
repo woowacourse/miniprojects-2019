@@ -241,7 +241,7 @@ i.img u {
 .uiStickyPlaceholderInput input {
 	background-color: transparent;
 	position: relative;
-	border: 1px solid ##ccd0d5;
+	border: 1px solid #ccd0d5;
 	color: #1c1e21;
 	text-rendering: auto;
 	letter-spacing: normal;
@@ -319,7 +319,7 @@ td {
 }
 
 i {
-	font: italic;
+	font-style: italic;
 }
 
 h1 {

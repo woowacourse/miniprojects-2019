@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.commons;
+package com.wootecobook.turkey;
 
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
 import com.wootecobook.turkey.user.service.dto.UserRequest;

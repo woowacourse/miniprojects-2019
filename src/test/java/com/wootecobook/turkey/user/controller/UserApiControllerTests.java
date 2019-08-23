@@ -1,6 +1,6 @@
-package com.wootecobook.turkey.user.controller.api;
+package com.wootecobook.turkey.user.controller;
 
-import com.wootecobook.turkey.commons.BaseControllerTests;
+import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 import static com.wootecobook.turkey.user.domain.UserValidator.*;
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
@@ -256,25 +254,21 @@ class UserApiControllerTests extends BaseControllerTests {
     @Test
     void 이름으로_유저_검색() {
         // given
-        String name = "jun";
+        String name = "LSD";
         String email = "search@delete.del";
 
         addUser("AA" + name, email, VALID_USER_PASSWORD);
         addUser(name + "BBD", email + "b", VALID_USER_PASSWORD);
         addUser("AA" + name + "BB", email + "c", VALID_USER_PASSWORD);
 
-        // when
-        final List users = webTestClient.get()
+        // when & then
+        webTestClient.get()
                 .uri(USER_API_URI_WITH_SLASH + name + "/search")
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MEDIA_TYPE)
-                .expectBody(List.class)
-                .returnResult()
-                .getResponseBody();
-
-        // then
-        assertThat(users).hasSize(3);
+                .expectBody()
+                .jsonPath("$.totalElements").isEqualTo(3);
     }
 }

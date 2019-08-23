@@ -1,6 +1,6 @@
-package com.wootecobook.turkey.login.controller.api;
+package com.wootecobook.turkey.login.controller;
 
-import com.wootecobook.turkey.commons.BaseControllerTests;
+import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
 import com.wootecobook.turkey.user.service.UserService;

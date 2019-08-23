@@ -34,7 +34,7 @@ public class PostService {
     private final PostGoodService postGoodService;
     private final UserService userService;
     private final UploadFileService uploadFileService;
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     public PostService(final PostRepository postRepository, final PostGoodService postGoodService,
                        final UserService userService, final UploadFileService uploadFileService, final CommentRepository commentRepository) {

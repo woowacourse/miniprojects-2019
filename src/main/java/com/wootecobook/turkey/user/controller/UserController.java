@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.user.controller.web;
+package com.wootecobook.turkey.user.controller;
 
 import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.service.UserService;
@@ -12,9 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(final UserService userService) {
         this.userService = userService;
     }
 

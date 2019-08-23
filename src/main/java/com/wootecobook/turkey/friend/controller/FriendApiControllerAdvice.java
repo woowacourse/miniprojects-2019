@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.friend.controller.api;
+package com.wootecobook.turkey.friend.controller;
 
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.commons.exception.NotLoginException;

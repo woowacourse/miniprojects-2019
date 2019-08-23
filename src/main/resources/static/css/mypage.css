@@ -2,7 +2,7 @@
 
 .mypage-header {
     height: 350px;
-    background-image: url('/images/default/chelsea.jpg');
+    background-image: url('/images/default/default.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     color: #fff;
@@ -38,7 +38,6 @@
     border-radius: 50%;
     left: 1rem;
     bottom: 10rem;
-    background-color: black;
     color: #fff;
     z-index: 1;
 }
