@@ -1,6 +1,5 @@
 package techcourse.fakebook.domain.comment;
 
-import org.hibernate.annotations.Where;
 import techcourse.fakebook.domain.BaseEntity;
 import techcourse.fakebook.domain.article.Article;
 import techcourse.fakebook.domain.user.User;
@@ -9,8 +8,8 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Where(clause = "deleted = 'false'")
 public class Comment extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,32 +26,31 @@ public class Comment extends BaseEntity {
     private User user;
 
     @Column(nullable = false)
-    private boolean deleted;
+    private boolean isPresent;
 
-    private Comment() {
-    }
+    private Comment() {}
 
     public Comment(String content, Article article, User user) {
         this.content = content;
         this.article = article;
         this.user = user;
-        this.deleted = false;
+        this.isPresent = true;
     }
 
     public void update(String content) {
         this.content = content;
     }
 
-    public void delete() {
-        deleted = true;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
+    public boolean isNotPresent() {
+        return !isPresent;
     }
 
     public boolean isNotAuthor(Long id) {
         return !user.isSameWith(id);
+    }
+
+    public void delete() {
+        isPresent = false;
     }
 
     public Long getId() {

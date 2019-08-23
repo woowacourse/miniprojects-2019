@@ -18,8 +18,7 @@ public class CommentLike {
     @ManyToOne
     private Comment comment;
 
-    private CommentLike() {
-    }
+    private CommentLike() {}
 
     public CommentLike(User user, Comment comment) {
         this.user = user;

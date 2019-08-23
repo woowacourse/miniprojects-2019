@@ -38,7 +38,6 @@ public class LoginController {
         UserOutline userOutline = loginService.login(loginRequest);
 
         session.setAttribute(SESSION_USER_KEY, userOutline);
-        log.debug("userOutline: {}", userOutline);
 
         return "redirect:/newsfeed";
     }

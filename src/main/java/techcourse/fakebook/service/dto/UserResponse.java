@@ -1,7 +1,6 @@
 package techcourse.fakebook.service.dto;
 
 public class UserResponse {
-    private Long id;
     private String email;
     private String name;
     private String gender;
@@ -9,18 +8,13 @@ public class UserResponse {
     private String birth;
     private String introduction;
 
-    public UserResponse(Long id, String email, String name, String gender, String coverUrl, String birth, String introduction) {
-        this.id = id;
+    public UserResponse(String email, String name, String gender, String coverUrl, String birth, String introduction) {
         this.email = email;
         this.name = name;
         this.gender = gender;
         this.coverUrl = coverUrl;
         this.birth = birth;
         this.introduction = introduction;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getEmail() {

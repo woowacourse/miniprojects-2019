@@ -7,8 +7,7 @@ public class UserOutline {
     private String name;
     private String coverUrl;
 
-    private UserOutline() {
-    }
+    private UserOutline() { }
 
     public UserOutline(Long id, String name, String coverUrl) {
         this.id = id;
@@ -42,13 +41,5 @@ public class UserOutline {
     public int hashCode() {
         return Objects.hash(id, name, coverUrl);
     }
-
-    @Override
-    public String toString() {
-        return "UserOutline{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", coverUrl='" + coverUrl + '\'' +
-                '}';
-    }
 }
+

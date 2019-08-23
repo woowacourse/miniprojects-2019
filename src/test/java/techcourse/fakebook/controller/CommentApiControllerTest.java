@@ -1,19 +1,18 @@
 package techcourse.fakebook.controller;
 
+import io.restassured.response.ResponseBody;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import techcourse.fakebook.service.dto.ArticleResponse;
 import techcourse.fakebook.service.dto.CommentRequest;
 import techcourse.fakebook.service.dto.CommentResponse;
 import techcourse.fakebook.service.dto.LoginRequest;
 
-import java.util.List;
+import javax.xml.ws.Response;
 
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class CommentApiControllerTest extends ControllerTestHelper {
@@ -30,17 +29,13 @@ public class CommentApiControllerTest extends ControllerTestHelper {
 
     @Test
     void 댓글을_잘_불러오는지_확인한다() {
-        List<CommentResponse> comments = given().
+        given().
                 port(port).
         when().
                 get("/api/articles/1/comments").
         then().
-                statusCode(HttpStatus.OK.value()).
-                extract().
-                body().
-                jsonPath().getList(".", CommentResponse.class);
-
-        assertThat(comments.size()).isGreaterThanOrEqualTo(2);
+                statusCode(200).
+                body(containsString("댓글입니다."));
     }
 
     @Test
@@ -55,7 +50,7 @@ public class CommentApiControllerTest extends ControllerTestHelper {
         when().
                 post("/api/articles/1/comments").
         then().
-                statusCode(HttpStatus.CREATED.value()).
+                statusCode(201).
                 body("content", equalTo(commentRequest.getContent()));
     }
 
@@ -65,13 +60,13 @@ public class CommentApiControllerTest extends ControllerTestHelper {
                 port(port).
                 cookie(cookie).
         when().
-                delete("/api/comments/2").
+                delete("/api/articles/1/comments/2").
         then().
-                statusCode(HttpStatus.NO_CONTENT.value());
+                statusCode(204);
     }
 
     @Test
-    void 댓글을_잘_수정하는지_확인한다() {
+    void 댓글을_잘_수정하는지_확인() {
         CommentRequest commentRequest = new CommentRequest("수정된 댓글입니다.");
 
         given().
@@ -80,102 +75,61 @@ public class CommentApiControllerTest extends ControllerTestHelper {
                 cookie(cookie).
                 body(commentRequest).
         when().
-                put("/api/comments/1").
+                put("/api/articles/1/comments/1").
         then().
-                statusCode(HttpStatus.OK.value()).
+                statusCode(200).
                 body("content", equalTo(commentRequest.getContent()));
     }
 
     @Test
-    void 좋아요_여부를_확인한다() {
+    void 좋아요_확인_테스트() {
         CommentResponse comment = writeComment();
 
         given().
                 port(port).
                 cookie(cookie).
         when().
-                get("/api/comments/" + comment.getId() + "/like").
+                get("/api/articles/1/comments/" + comment.getId() +"/like").
         then().
-                statusCode(HttpStatus.NO_CONTENT.value());
+                statusCode(204);
     }
 
     @Test
-    void 좋아요가_잘_등록되는지_확인한다() {
+    void 좋아요_등록_테스트() {
         CommentResponse comment = writeComment();
 
         given().
                 port(port).
                 cookie(cookie).
         when().
-                post("/api/comments/" + comment.getId() + "/like").
+                post("/api/articles/1/comments/" + comment.getId() +"/like").
         then().
-                statusCode(HttpStatus.CREATED.value());
+                statusCode(201);
     }
 
     @Test
-    void 좋아요가_잘_삭제되는지_확인한다() {
+    void 좋아요_삭제_테스트() {
         CommentResponse comment = writeComment();
 
         given().
                 port(port).
                 cookie(cookie).
         when().
-                post("/api/comments/" + comment.getId() + "/like").
+                post("/api/articles/1/comments/" + comment.getId() +"/like").
         then().
-                statusCode(HttpStatus.CREATED.value());
+                statusCode(201);
 
         given().
                 port(port).
                 cookie(cookie).
         when().
-                post("/api/comments/" + comment.getId() + "/like").
+                post("/api/articles/1/comments/" + comment.getId() +"/like").
         then().
-                statusCode(HttpStatus.NO_CONTENT.value());
+                statusCode(204);
     }
 
-    @Test
-    void 좋아요_개수를_잘_불러오는지_확인한다() {
-        CommentResponse commentResponse = writeComment();
-
-        //좋아요 등록
-        given().
-                port(port).
-                cookie(cookie).
-        when().
-                post("/api/comments/" + commentResponse.getId() + "/like").
-        then().
-                statusCode(HttpStatus.CREATED.value());
-
-
-        given().
-                port(port).
-                cookie(cookie).
-        when().
-                get("/api/comments/" + commentResponse.getId() + "/like/count").
-        then().
-                statusCode(HttpStatus.OK.value()).
-                body(equalTo("1"));
-    }
-
-    @Test
-    void 게시글에_따른_댓글_개수를_잘_불러오는지_확인한다() {
-        ArticleResponse articleResponse = writeArticle();
-        writeComment(articleResponse.getId());
-
-        given().
-                port(port).
-        when().
-                get("/api/articles/" + articleResponse.getId() + "/comments/count").
-        then().
-                statusCode(HttpStatus.OK.value()).
-                body(equalTo("1"));
-    }
 
     private CommentResponse writeComment() {
-        return writeComment(1L);
-    }
-
-    private CommentResponse writeComment(Long articleId) {
         CommentRequest commentRequest = new CommentRequest("hello");
 
         return given().
@@ -184,6 +138,6 @@ public class CommentApiControllerTest extends ControllerTestHelper {
                 cookie(cookie).
                 body(commentRequest).
         when().
-                post("/api/articles/" + articleId + "/comments").as(CommentResponse.class);
+                post("/api/articles/1/comments").as(CommentResponse.class);
     }
 }

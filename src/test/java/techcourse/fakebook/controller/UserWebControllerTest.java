@@ -6,6 +6,7 @@ import techcourse.fakebook.service.dto.LoginRequest;
 import techcourse.fakebook.service.dto.UserSignupRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 class UserWebControllerTest extends ControllerTestHelper {
     @Test
@@ -18,8 +19,9 @@ class UserWebControllerTest extends ControllerTestHelper {
     @Test
     void 로그인된_유저생성_올바른_입력() {
         UserSignupRequest userSignupRequest = newUserSignupRequest();
-        String cookie = getCookie(signup(userSignupRequest));
-        login(new LoginRequest(userSignupRequest.getEmail(), userSignupRequest.getPassword()));
+        signup(userSignupRequest);
+        ResponseSpec rs = login(new LoginRequest(userSignupRequest.getEmail(), userSignupRequest.getPassword()));
+        String cookie = getCookie(rs);
 
         UserSignupRequest otherUserSignupRequest = newUserSignupRequest();
 
@@ -48,17 +50,22 @@ class UserWebControllerTest extends ControllerTestHelper {
                 .expectBody()
                 .consumeWith(response -> {
                     String body = new String(response.getResponseBody());
-                    assertThat(body.contains("성이름")).isTrue();
+                    assertThat(body.contains(userSignupRequest.getEmail())).isTrue();
+                    assertThat(body.contains(userSignupRequest.getLastName())).isTrue();
+                    assertThat(body.contains(userSignupRequest.getFirstName())).isTrue();
+                    assertThat(body.contains(userSignupRequest.getGender())).isTrue();
+                    assertThat(body.contains(userSignupRequest.getBirth())).isTrue();
                 });
     }
 
     @Test
     void 로그인된_존재하는_유저삭제() {
         UserSignupRequest userSignupRequest = newUserSignupRequest();
-        String cookie = getCookie(signup(userSignupRequest));
+        signup(userSignupRequest);
         Long userId = getId(userSignupRequest.getEmail());
 
-        login(new LoginRequest(userSignupRequest.getEmail(), userSignupRequest.getPassword()));
+        ResponseSpec rs = login(new LoginRequest(userSignupRequest.getEmail(), userSignupRequest.getPassword()));
+        String cookie = getCookie(rs);
 
         webTestClient.delete().uri("/users/" + userId)
                 .header("Cookie", cookie)
@@ -79,6 +86,6 @@ class UserWebControllerTest extends ControllerTestHelper {
         webTestClient.delete().uri("/users/" + userId)
                 .exchange()
                 .expectStatus()
-                .isFound().expectHeader().valueMatches("location", ".*/");
+                .isFound().expectHeader().valueMatches("location", ".*/login");
     }
 }

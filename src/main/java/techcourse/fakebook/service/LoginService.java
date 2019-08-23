@@ -1,15 +1,16 @@
 package techcourse.fakebook.service;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import techcourse.fakebook.service.dto.UserOutline;
 import techcourse.fakebook.domain.user.User;
 import techcourse.fakebook.domain.user.UserRepository;
 import techcourse.fakebook.exception.NotFoundUserException;
 import techcourse.fakebook.exception.NotMatchPasswordException;
 import techcourse.fakebook.service.dto.LoginRequest;
-import techcourse.fakebook.service.dto.UserOutline;
 import techcourse.fakebook.service.utils.encryptor.Encryptor;
 
 @Service
@@ -35,6 +36,11 @@ public class LoginService {
         if (!encryptor.matches(loginRequest.getPassword(), user.getEncryptedPassword())) {
             throw new NotMatchPasswordException();
         }
+
+//        String encryptedPassword = encryptor.encrypt(loginRequest.getPassword());
+//        if (!user.checkEncryptedPassword(encryptedPassword)) {
+//            throw new NotMatchPasswordException();
+//        }
 
         return new UserOutline(user.getId(), user.getName(), user.getCoverUrl());
     }

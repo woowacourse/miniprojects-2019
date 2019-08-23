@@ -25,7 +25,7 @@ public class NotLoginedInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (!sessionUser.isPresent()) {
-            response.sendRedirect("/");
+            response.sendRedirect("/login");
             return false;
         }
         return true;

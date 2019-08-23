@@ -13,9 +13,6 @@ import techcourse.fakebook.service.dto.UserSignupRequest;
 import techcourse.fakebook.service.dto.UserUpdateRequest;
 import techcourse.fakebook.service.utils.UserAssembler;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @Transactional
 public class UserService {
@@ -49,12 +46,6 @@ public class UserService {
                 .orElseThrow(NotFoundUserException::new);
     }
 
-    public List<User> findByIdIn(List<Long> userIds) {
-        log.debug("begin");
-
-        return userRepository.findByIdIn(userIds);
-    }
-
     public UserResponse update(Long userId, UserUpdateRequest userUpdateRequest) {
         log.debug("begin");
 
@@ -74,8 +65,6 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getUser(Long userId) {
-        log.debug("begin");
-
         return userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
     }
 
@@ -84,12 +73,6 @@ public class UserService {
         return userRepository.findById(userId)
                 .map(UserAssembler::toUserOutline)
                 .orElseThrow(NotFoundUserException::new);
-    }
-
-    public List<UserResponse> findUserNamesByKeyword(String keyword) {
-        return userRepository.findByNameContaining(keyword).stream()
-                .map(user -> userAssembler.toResponse(user))
-                .collect(Collectors.toList());
     }
 
     public boolean hasNotUserWithEmail(String email) {
