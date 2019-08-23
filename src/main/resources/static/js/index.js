@@ -129,8 +129,9 @@ const INDEX_PAGE = (function () {
 
         const toggleHeart = function (event) {
             event.preventDefault();
-            const articleId = event.target.closest("div").id;
-            const childNodes = event.target.parentNode.parentNode.parentNode.parentNode.childNodes;
+            const message = event.target.closest("div");
+            const articleId = message.id;
+            const childNodes = message.childNodes;
             const ddabongCountTag = childNodes[7].childNodes[3].childNodes[3];
 
             request
@@ -139,13 +140,11 @@ const INDEX_PAGE = (function () {
                     console.log(response);
                     ddabongCountTag.innerText = response.data.count;
 
-                    if (response.data.clicked === false) {
+                    if (response.data.clicked === true) {
                         event.target.classList.remove('fa-heart-o');
-                        event.target.classList.add('fa-heart');
-                        event.target.classList.add('activated-heart');
+                        event.target.classList.add('fa-heart', 'activated-heart');
                     } else {
-                        event.target.classList.remove('activated-heart');
-                        event.target.classList.remove('fa-heart');
+                        event.target.classList.remove('fa-heart', 'activated-heart');
                         event.target.classList.add('fa-heart-o');
                     }
                 });
