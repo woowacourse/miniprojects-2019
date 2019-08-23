@@ -62,6 +62,9 @@ const Index = (function () {
             const article = pageData.article;
             const user = pageData.article.userInfoDto;
             const comments = parsingComments(pageData.comments);
+            if(user.profile===null){
+                user.profile = "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
+            }
             return getArticleTemplate(
                 article.id,
                 user.id,
