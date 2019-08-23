@@ -1,18 +1,18 @@
 package com.woowacourse.zzazanstagram.model.ddabong.dto;
 
 public class DdabongResponse {
-    private int count;
+    private long count;
     private boolean isClicked;
 
     public DdabongResponse() {
     }
 
-    public DdabongResponse(int count, boolean isClicked) {
+    public DdabongResponse(long count, boolean isClicked) {
         this.count = count;
         this.isClicked = isClicked;
     }
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 
