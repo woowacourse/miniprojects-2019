@@ -1,29 +1,21 @@
 package com.wootube.ioi.domain.model;
 
-import com.wootube.ioi.domain.exception.NotMatchPasswordException;
-import com.wootube.ioi.domain.validator.Password;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
-import lombok.EqualsAndHashCode;
+import com.wootube.ioi.domain.exception.ActivatedException;
+import com.wootube.ioi.domain.exception.InactivatedException;
+import com.wootube.ioi.domain.exception.NotMatchPasswordException;
+import com.wootube.ioi.domain.validator.Password;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BaseEntity {
 
     @Pattern(regexp = "[^ \\-!@#$%^&*(),.?\":{}|<>0-9]{2,10}",
             message = "이름은 2~10자, 숫자나 특수문자가 포함될 수 없습니다.")
@@ -42,6 +34,11 @@ public class User {
     @Password(message = "비밀번호 양식 오류, 8-32자, 영문자 숫자 조합")
     private String password;
 
+
+    @Column(name = "is_active")
+    private boolean isActive = true;
+
+
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -58,5 +55,20 @@ public class User {
     public User updateName(String name) {
         this.name = name;
         return this;
+    }
+
+    public void delete() {
+        if (!this.isActive) {
+            throw new InactivatedException();
+        }
+
+        this.isActive = false;
+    }
+
+    public void activeUser() {
+        if (this.isActive) {
+            throw new ActivatedException();
+        }
+        this.isActive = true;
     }
 }

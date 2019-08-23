@@ -1,13 +1,11 @@
 package com.wootube.ioi.domain.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -30,6 +28,10 @@ public class Video extends BaseEntity {
     @Column(nullable = false)
     private String originFileName;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_video_to_user"), nullable = false)
+    private User writer;
+
     public Video(String title, String description) {
         this.title = title;
         this.description = description;
@@ -43,11 +45,17 @@ public class Video extends BaseEntity {
         this.description = updateVideo.description;
     }
 
-    public void setContentPath(String contentPath) {
+    public void updateContentPath(String contentPath) {
         this.contentPath = contentPath;
     }
 
-    public void setOriginFileName(String originFileName) {
+    public void initialize(String contentPath, String originFileName, User writer) {
+        this.contentPath = contentPath;
         this.originFileName = originFileName;
+        this.writer = writer;
+    }
+
+    public boolean matchWriter(Long userId) {
+        return writer.isSameUserAndWriter(userId);
     }
 }

@@ -1,15 +1,14 @@
 package com.wootube.ioi.domain.model;
 
+import javax.persistence.*;
+
 import com.wootube.ioi.domain.exception.NotMatchCommentException;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-
+import com.wootube.ioi.domain.exception.NotMatchWriterException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -19,17 +18,33 @@ public class Reply extends BaseEntity {
     @Column(nullable = false)
     private String contents;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_comment"), nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment comment;
 
-    public Reply(String contents, Comment comment) {
-        this.contents = contents;
-        this.comment = comment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_reply_to_user"), nullable = false)
+    private User writer;
+
+    public static Reply of(String contents, Comment comment, User writer) {
+        Reply reply = new Reply();
+        reply.contents = contents;
+        reply.comment = comment;
+        reply.writer = writer;
+        return reply;
     }
 
-    public void update(Comment comment, String contents) {
+    public void update(User writer, Comment comment, String contents) {
+        checkMatchWriter(writer);
         checkMatchComment(comment);
         this.contents = contents;
+    }
+
+    public void checkMatchWriter(User writer) {
+        if (!this.writer.equals(writer)) {
+            throw new NotMatchWriterException();
+        }
     }
 
     public void checkMatchComment(Comment comment) {

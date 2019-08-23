@@ -39,7 +39,7 @@ const commentButton = (function () {
     };
 
     const CommentService = function () {
-        const videoId = 1;
+        const videoId = document.querySelector("#video-contents").dataset.videoid;
         const commentCount = document.querySelector("#comment-count");
 
         function toggleCommentCancel(event) {
@@ -172,6 +172,8 @@ const commentButton = (function () {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
                     target.closest("li").remove();
+                    let currentCommentCount = parseInt(commentCount.innerText)
+                    commentCount.innerText = String(currentCommentCount - 1);
                 } else {
                     throw response;
                 }
@@ -187,7 +189,7 @@ const commentButton = (function () {
                 <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
                 <div class="comment-block">
                     <div class="font-size-13">
-                        <span class="user-name">${comment.authorName}</span>
+                        <span class="user-name">${comment.writer.name}</span>
                         <span class="update-date">${writtenTime}</span>
                     </div>
                     <div class="comment-more-box">
@@ -216,18 +218,18 @@ const commentButton = (function () {
                     <button class="btn comment-btn comment-update-cancel-btn">취소</button>
                     <button class="btn comment-btn edit comment-update-btn">수정</button>
                 </div>
-                <div class="mrg-top-5">
-                    <div class="display-none">
+                <div class="mrg-top-5 reply-area">
+                    <div class="reply-edit display-none">
                         <div class="mrg-btm-10">
                             <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
                                  alt="">
                             <input class="comment-input" type="text" placeholder="공개 답글 추가...">
                         </div>
-                        <button class="btn comment-btn edit comment-save-btn disabled">답글</button>
-                        <button class="btn comment-btn comment-cancel-btn">취소</button>
+                        <button class="btn comment-btn edit reply-save-btn disabled">답글</button>
+                        <button class="btn comment-btn reply-cancel-btn">취소</button>
                     </div>
-                    <ul class="reply-area">
-                        
+                    <ul class="reply-list">
+
                     </ul>
                 </div>
             </li>`;
