@@ -78,7 +78,7 @@
                             </div>
                             <form id="image-form" enctype="multipart/form-data" method="post" role="presentation">
                                 <input class="d-none" name="imageFile" multiple id="img-upload" type="file"
-                                       accept="image/jpeg,image/png,image/jpg">
+                                       accept="image/jpeg, image/png, image/jpg">
                                 <input type="hidden" name="originalImageFile" id="original-image"
                                        th:value="${userInfo.profile}">
                             </form>
@@ -97,15 +97,6 @@
     </div>
 </div>
 
-<div class="modal inactive modal-animation">
-    <div class="modal-dialog-inner">
-        <div class="modal-dialog-custom common-flex">
-            <button class="choose-image-btn" tabindex="0">사진 선택</button>
-            <button class="default-image-btn delete-btn font-cap" type="button" tabindex="0">기본 사진</button>
-        </div>
-    </div>
-</div>
-
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -117,21 +108,19 @@
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="/js/user.js"></script>
 <script src="/js/template.js"></script>
 <script src="/js/modal.js"></script>
 <script src="/js/util.js"></script>
+<script src="/js/user.js"></script>
 <script th:inline="javascript">
     const profileUrl = [[ ${userInfo.profile} ]];
-
+    const defaultProfileImage = "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
     const profileImage = document.querySelector('#profile-image');
     const originalImage = document.querySelector('#original-image');
     profileImage.setAttribute("src", profileUrl);
     if (profileUrl === null) {
-        profileImage.setAttribute("src",
-            "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg");
-        originalImage.setAttribute("value",
-            "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg");
+        profileImage.setAttribute("src", defaultProfileImage);
+        originalImage.setAttribute("value", defaultProfileImage);
     }
 </script>
 </body>

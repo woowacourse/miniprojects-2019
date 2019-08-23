@@ -1,9 +1,7 @@
 package techcourse.w3.woostagram.user.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.user.dto.UserProfileImageDto;
 import techcourse.w3.woostagram.user.service.UserService;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
@@ -22,5 +20,11 @@ public class UserRestController {
                                                      @LoggedInUser String email) {
         String imageUrl = userService.uploadProfileImage(userProfileImageDto, email);
         return ResponseEntity.ok(imageUrl);
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteProfileImage(@LoggedInUser String email) {
+        userService.deleteProfileImage(email);
+        return ResponseEntity.ok().build();
     }
 }

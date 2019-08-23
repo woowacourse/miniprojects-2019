@@ -1,4 +1,10 @@
 const User = (function () {
+    const modalButton =
+        `<button class="create-modify-btn" tabindex="0">사진 선택</button>
+        <button class="contents-remove-btn delete-btn font-cap" type="button" tabindex="0">기본 사진</button>`;
+    const modal = new Modal(modalButton);
+    modal.init();
+
     const UserController = function () {
         const userService = new UserService();
 
@@ -8,12 +14,12 @@ const User = (function () {
         };
 
         const imageButton = () => {
-            const button = document.querySelector('.choose-image-btn');
+            const button = document.querySelector('.create-modify-btn');
             button.addEventListener('click', userService.chooseImage);
         };
 
         const defaultImageButton = () => {
-            const button = document.querySelector('.default-image-btn');
+            const button = document.querySelector('.contents-remove-btn');
             button.addEventListener('click', userService.defaultImage);
         };
 
@@ -35,6 +41,8 @@ const User = (function () {
     };
 
     const UserService = function () {
+        const request = new Request("/api/users");
+
         const modalActive = () => {
             modal.active()
         };
@@ -55,12 +63,17 @@ const User = (function () {
         };
 
         const defaultImage = () => {
-            const image = document.querySelector('#original-image');
-            image.setAttribute("value", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg");
+            // const image = document.querySelector('#original-image');
+            // const profileImage = image.value;
+            // const data ={'profileImage':profileImage};
+            request.delete("/",
+                () => {
+                    const profileImage = document.querySelector("#profile-image");
+                    profileImage.setAttribute("src", defaultProfileImage);
+                });
         };
 
         const uploadImageFile = () => {
-            const request = new Request("/api/users");
             const formData = new FormData();
 
             const imageFile = document.querySelector("#img-upload").files[0];

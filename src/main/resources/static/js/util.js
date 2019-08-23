@@ -16,23 +16,23 @@ class Request {
         return Promise.reject(error)
     };
 
-    get = (attatchedUrl, callback = this.defaultCallback) => {
-        return this.request.get(this.baseUrl + attatchedUrl)
+    get = (attachedUrl, callback = this.defaultCallback) => {
+        return this.request.get(this.baseUrl + attachedUrl)
             .then(response => callback(response.status, response.data))
     };
 
-    delete = (attatchedUrl, callback = this.defaultCallback) => {
-        return this.request.delete(this.baseUrl + attatchedUrl)
+    delete = (attachedUrl, callback = this.defaultCallback) => {
+        return this.request.delete(this.baseUrl + attachedUrl)
             .then(response => callback(response.status, response.data))
     };
 
-    post = (attatchedUrl, data, callback = this.defaultCallback) => {
-        return this.request.post(this.baseUrl + attatchedUrl, data)
+    post = (attachedUrl, data, callback = this.defaultCallback) => {
+        return this.request.post(this.baseUrl + attachedUrl, data)
             .then(response => callback(response.status, response.data))
     };
 
-    put = (attatchedUrl, data, callback = this.defaultCallback) => {
-        return this.request.put(this.baseUrl + attatchedUrl, data)
+    put = (attachedUrl, data, callback = this.defaultCallback) => {
+        return this.request.put(this.baseUrl + attachedUrl, data)
             .then(response => callback(response.status, response.data))
     };
 

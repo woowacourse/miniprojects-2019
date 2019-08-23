@@ -1,4 +1,3 @@
-
 const Index = (function () {
 
     const pageSize = 10;
@@ -68,7 +67,7 @@ const Index = (function () {
                 user.id,
                 user.userContentsDto.userName,
                 article.imageUrl,
-                user.userContentsDto.profile,
+                user.profile,
                 article.contents,
                 comments,
                 pageData.likes,
