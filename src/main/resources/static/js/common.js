@@ -17,19 +17,11 @@ class Like {
         this.request = new Request('api/articles');
     }
 
-    addLike = (articleId, liking) => {
-        if (liking == "false") {
-            return this.request.post('/' + articleId + '/likes', null)
-        }
-        return false
+    addLike = (articleId) => {
+        return this.request.post('/' + articleId + '/likes', null)
+
     };
-    deleteLike = (articleId, liking) => {
-        if (liking == "true") {
-            this.request.delete('/' + articleId + '/likes',
-                () => {
-                    return true;
-                })
-        }
-        return false
+    deleteLike = (articleId) => {
+        return this.request.delete('/' + articleId + '/likes')
     }
 }
