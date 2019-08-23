@@ -22,7 +22,7 @@ public class Article extends BaseEntity {
     private Member author;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "article", orphanRemoval = true)
     private List<Ddabong> ddabongs = new ArrayList<>();
@@ -34,7 +34,6 @@ public class Article extends BaseEntity {
         this.image = image;
         this.contents = contents;
         this.author = author;
-        this.comments = new ArrayList<>();
     }
 
     public int getDdabongCount() {
