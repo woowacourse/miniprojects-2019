@@ -476,7 +476,17 @@
 
             let isFollower = false;
             let isFollowing = false;
-
+	
+			function showBtn(btn) {
+				btn.classList.remove('display-none');
+				btn.classList.add('display-inline-block');
+			}
+	
+			function hideBtn(btn) {
+				btn.classList.remove('display-inline-block');
+				btn.classList.add('display-none');
+			}
+	
             const followMemberTemplate = function (json) {
                 return `<div class="pdd-vertical-10 pdd-horizon-20 mrg-vertical-5">
 							<img class="thumb-img img-circle"
@@ -490,14 +500,14 @@
 							</div>
 						</div>`
             };
-
+	
             const toggleSearchInput = function (event) {
                 event.preventDefault();
                 document.querySelector('.search-box').classList.toggle('active')
                 document.querySelector(".search-input").classList.toggle("active")
                 document.querySelector(".search-input input").focus()
             };
-
+	
             const showSearchedList = function (event) {
                 if (event.target.value.length > 0) {
                     document.querySelector(".advanced-search").classList.add("active")
@@ -505,7 +515,7 @@
                     document.querySelector(".advanced-search").classList.remove("active")
                 }
             };
-
+	
             const showFollowingMembers = function (event) {
                 event.preventDefault();
                 axios({
@@ -522,7 +532,7 @@
                     })
                 });
             };
-
+	
             const showFollowerMembers = function (event) {
                 event.preventDefault();
                 axios({
@@ -539,11 +549,11 @@
                     });
                 });
             };
-
-            const getFollowRelation = function () {
+	
+			const getFollowRelation = function () {
                 if ([[${session.member.nickName.equals(member.nickName)}]]) {
-                    profileBlockSettingsBtn.setAttribute('style', 'display: inline-block;');
-                    return;
+					showBtn(profileBlockSettingsBtn);
+					return;
                 }
 
                 axios({
@@ -556,19 +566,19 @@
                     isFollowing = data.following;
 
                     if (isFollowing) {
-                        profileBlockUnFollowModalBtn.setAttribute('style', 'display: inline-block;');
+                    	showBtn(profileBlockUnFollowModalBtn);
                         return;
                     }
 
                     if (isFollower) {
-                        profileBlockDoubleFollowBtn.setAttribute('style', 'display: inline-block;');
+                    	showBtn(profileBlockDoubleFollowBtn);
                         return;
                     }
-
-                    profileBlockFollowBtn.setAttribute('style', 'display: inline-block;');
+	
+                    showBtn(profileBlockFollowBtn);
                 });
             };
-
+			
             const followMember = function () {
                 const followeeId = [[${session.member.id}]];
                 const followerId = [[${member.id}]];
@@ -582,11 +592,11 @@
                     url: '/follow',
                     data: formData
                 }).then(() => {
-                    profileBlockFollowBtn.setAttribute('style', 'display: none;');
-                    profileBlockUnFollowModalBtn.setAttribute('style', 'display: inline-block;');
+                	hideBtn(profileBlockFollowBtn);
+                	showBtn(profileBlockUnFollowModalBtn);
                 });
             };
-
+	
             const unfollowMember = function () {
                 const followeeId = [[${session.member.id}]];
                 const followerId = [[${member.id}]];
@@ -600,16 +610,30 @@
                     url: '/follow',
                     data: formData
                 }).then(() => {
-                    profileBlockUnFollowModalBtn.setAttribute('style', 'display: none;');
-                    document.querySelector('#modal-following-cancel').click();
-
-                    if (isFollowing) {
-                        profileBlockDoubleFollowBtn.setAttribute('style', 'display: inline-block;');
-                        return;
-                    }
-                    profileBlockFollowBtn.setAttribute('style', 'display: inline-block;');
+					refreshFollowBtn();
                 });
             };
+			
+			const refreshFollowBtn = function () {
+				axios({
+					method: 'get',
+					url: '/follow/relation/' + [[${member.id}]]
+				}).then(response => {
+					return response.data;
+				}).then(data => {
+					isFollower = data.follower;
+					isFollowing = data.following;
+				}).then(() => {
+					hideBtn(profileBlockUnFollowModalBtn);
+					document.querySelector('#modal-following-cancel').click();
+					
+					if (isFollower) {
+						showBtn(profileBlockDoubleFollowBtn);
+						return;
+					}
+					showBtn(profileBlockFollowBtn);
+				});
+			};
 
             const doubleFollowMember = function () {
                 const followeeId = [[${session.member.id}]];
@@ -624,8 +648,8 @@
                     url: '/follow',
                     data: formData
                 }).then(() => {
-                    profileBlockDoubleFollowBtn.setAttribute('style', 'display: none;');
-                    profileBlockUnFollowModalBtn.setAttribute('style', 'display: inline-block;');
+                	hideBtn(profileBlockDoubleFollowBtn);
+                	showBtn(profileBlockUnFollowModalBtn);
                 });
             };
 
