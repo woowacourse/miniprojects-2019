@@ -3,14 +3,15 @@ package techcourse.w3.woostagram.user.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import techcourse.w3.woostagram.user.dto.UserContentsDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
+import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.service.UserService;
-import techcourse.w3.woostagram.user.support.LoggedInUser;
+import techcourse.w3.woostagram.common.support.LoggedInUser;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+
+import static techcourse.w3.woostagram.common.support.UserEmailArgumentResolver.LOGGED_IN_USER_SESSION_KEY;
 
 @Controller
 @RequestMapping("users")
@@ -29,7 +30,7 @@ public class UserController {
     @PostMapping("login")
     public String login(UserDto userDto, HttpSession httpSession) {
         String email = userService.authUser(userDto);
-        httpSession.setAttribute("email", email);
+        httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, email);
         return "redirect:/";
     }
 
@@ -59,13 +60,14 @@ public class UserController {
     }
 
     @PutMapping
-    public String update(@Valid UserContentsDto userContentsDto, @LoggedInUser String email) {
-        userService.update(userContentsDto, email);
+    public String update(UserUpdateDto userUpdateDto, @LoggedInUser String email) {
+        userService.update(userUpdateDto, email);
         return "redirect:/users/mypage";
     }
 
     @DeleteMapping
-    public String delete(@LoggedInUser String email) {
+    public String delete(@LoggedInUser String email, HttpSession httpSession) {
+        httpSession.removeAttribute(LOGGED_IN_USER_SESSION_KEY);
         userService.deleteByEmail(email);
         return "redirect:/users/login/form";
     }

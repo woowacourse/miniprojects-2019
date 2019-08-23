@@ -1,6 +1,7 @@
 package techcourse.w3.woostagram.user.domain;
 
 import lombok.*;
+import techcourse.w3.woostagram.common.domain.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -9,9 +10,9 @@ import javax.validation.constraints.Pattern;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @ToString
-public class User {
+public class User extends BaseEntity {
     public static final String ERROR_EMAIL = "올바른 email 형식이 아닙니다.";
     public static final String ERROR_PASSWORD = "올바른 비밀번호 형식이 아닙니다.";
     public static final String PATTERN_PASSWORD = ".*(?=^.{8,}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*";
@@ -31,15 +32,23 @@ public class User {
     @Embedded
     private UserContents userContents;
 
+    @Column(length = 1000)
+    private String profile;
+
     @Builder
-    public User(Long id, String email, String password, UserContents userContents) {
+    public User(Long id, String email, String password, UserContents userContents, String profile) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.userContents = userContents;
+        this.profile = profile;
     }
 
     public void updateContents(UserContents userContents) {
         this.userContents = userContents;
+    }
+
+    public void updateProfile(String profile) {
+        this.profile = profile;
     }
 }

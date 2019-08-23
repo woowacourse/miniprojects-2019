@@ -14,7 +14,8 @@ import techcourse.w3.woostagram.article.domain.ArticleRepository;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
-import techcourse.w3.woostagram.common.service.FileService;
+import techcourse.w3.woostagram.common.exception.UnAuthorizedException;
+import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserContents;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -35,7 +36,7 @@ class ArticleServiceTest {
     @Mock
     private UserService userService;
     @Mock
-    private FileService fileService;
+    private StorageService storageService;
     private Article article;
     private User user;
 
@@ -65,7 +66,7 @@ class ArticleServiceTest {
                 .imageFile(multipartFile)
                 .build();
 
-        when(fileService.saveMultipartFile(multipartFile)).thenReturn("aaminiprojects-2019bb");
+        when(storageService.saveMultipartFile(multipartFile)).thenReturn("aaminiprojects-2019bb");
         when(userService.findUserByEmail(USER_EMAIL)).thenReturn(user);
         when(articleRepository.save(article)).thenReturn(article);
         articleService.save(articleDto, USER_EMAIL);
@@ -80,7 +81,7 @@ class ArticleServiceTest {
                 .contents("Test article")
                 .imageFile(multipartFile)
                 .build();
-        when(fileService.saveMultipartFile(multipartFile)).thenThrow(InvalidExtensionException.class);
+        when(storageService.saveMultipartFile(multipartFile)).thenThrow(InvalidExtensionException.class);
         assertThrows(InvalidExtensionException.class, () -> articleService.save(articleDto, USER_EMAIL));
     }
 
@@ -104,7 +105,19 @@ class ArticleServiceTest {
                 .contents("Test article")
                 .build();
         when(articleRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(ArticleNotFoundException.class, () -> articleService.update(articleDto));
+
+        assertThrows(ArticleNotFoundException.class, () -> articleService.update(articleDto, "moomin@naver.com"));
+    }
+
+    @Test
+    void update_incorrectUser_exception() {
+        ArticleDto articleDto = ArticleDto.builder()
+                .id(1L)
+                .contents("Test article")
+                .build();
+        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article));
+        when(userService.findUserByEmail(anyString())).thenReturn(User.builder().id(2L).build());
+        assertThrows(UnAuthorizedException.class, () -> articleService.update(articleDto, "moomin@naver.com"));
     }
 
     @Test
@@ -114,12 +127,22 @@ class ArticleServiceTest {
                 .contents("Test article")
                 .build();
         when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article));
-        assertDoesNotThrow(() -> articleService.update(articleDto));
+        when(userService.findUserByEmail(anyString())).thenReturn(User.builder().id(1L).build());
+        assertDoesNotThrow(() -> articleService.update(articleDto, "moomin@naver.com"));
+    }
+
+    @Test
+    void delete_incorrectUser_exception() {
+        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article));
+        when(userService.findUserByEmail(anyString())).thenReturn(User.builder().id(2L).build());
+        assertThrows(UnAuthorizedException.class, () -> articleService.deleteById(anyLong(), "moomin@naver.com"));
     }
 
     @Test
     void delete_correctArticleId_isOk() {
         doNothing().when(articleRepository).deleteById(anyLong());
-        assertDoesNotThrow(() -> articleService.deleteById(anyLong()));
+        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article));
+        when(userService.findUserByEmail(anyString())).thenReturn(User.builder().id(1L).build());
+        assertDoesNotThrow(() -> articleService.deleteById(anyLong(), "moomin@naver.com"));
     }
 }

@@ -22,13 +22,10 @@ public class UserContents {
     @Lob
     private String contents;
 
-    private String profile;
-
     @Builder
-    public UserContents(String userName, String name, String contents, String profile) {
+    public UserContents(String userName, String name, String contents) {
         this.userName = userName;
         this.name = name;
         this.contents = contents;
-        this.profile = profile;
     }
 }

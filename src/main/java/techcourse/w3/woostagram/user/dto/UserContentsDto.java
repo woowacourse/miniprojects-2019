@@ -12,14 +12,12 @@ public class UserContentsDto {
     private String name;
     private String userName;
     private String contents;
-    private String profile;
 
     @Builder
-    public UserContentsDto(String name, String userName, String contents, String profile) {
+    public UserContentsDto(String name, String userName, String contents) {
         this.name = name;
         this.userName = userName;
         this.contents = contents;
-        this.profile = profile;
     }
 
     public static UserContentsDto from(UserContents userContents) {
@@ -27,7 +25,7 @@ public class UserContentsDto {
                 .name(userContents.getName())
                 .userName(userContents.getUserName())
                 .contents(userContents.getContents())
-                .profile(userContents.getProfile()).build();
+                .build();
     }
 
     public UserContents toEntity() {
@@ -35,7 +33,6 @@ public class UserContentsDto {
                 .userName(userName)
                 .name(name)
                 .contents(contents)
-                .profile(profile)
                 .build();
     }
 }

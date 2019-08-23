@@ -5,7 +5,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import techcourse.w3.woostagram.AbstractControllerTests;
-import techcourse.w3.woostagram.article.dto.ArticleDto;
+import techcourse.w3.woostagram.common.support.TestDataInitializer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,8 +19,9 @@ class ArticleControllerTest extends AbstractControllerTests {
                 return "test_image.jpg";
             }
         }, MediaType.IMAGE_JPEG);
+        bodyBuilder.part("contents", "Moomin contents");
 
-        assertThat(postMultipartRequest("/articles", ArticleDto.class, bodyBuilder, "", "hello", "", "", "").getStatus().is3xxRedirection()).isTrue();
+        assertThat(postMultipartRequest("/articles", bodyBuilder.build()).getStatus().is3xxRedirection()).isTrue();
     }
 
     @Test
@@ -30,16 +31,16 @@ class ArticleControllerTest extends AbstractControllerTests {
 
     @Test
     void show_correctArticleId_isOk() {
-        assertThat(getRequest("/articles/1").getStatus().is2xxSuccessful()).isTrue();
+        assertThat(getRequest("/articles/" + TestDataInitializer.basicArticle.getId()).getStatus().is2xxSuccessful()).isTrue();
     }
 
     @Test
     void delete_correctArticleId_isOk() {
-        assertThat(deleteRequest("/articles/1").getStatus().is3xxRedirection()).isTrue();
+        assertThat(deleteRequest("/articles/" + TestDataInitializer.deleteArticle.getId()).getStatus().is3xxRedirection()).isTrue();
     }
 
     @Test
     void delete_incorrectArticleId_isNotFound() {
-        assertThat(deleteRequest("/articles/2").getStatus().is4xxClientError()).isTrue();
+        assertThat(deleteRequest("/articles/11231").getStatus().is4xxClientError()).isTrue();
     }
 }

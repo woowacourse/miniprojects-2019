@@ -14,38 +14,42 @@ class Request {
 
     handleError = (error) => {
         return Promise.reject(error)
-    }
+    };
 
-    get = async(attatchedUrl,callback)=> {
-        return await this.request.get(this.baseUrl + attatchedUrl)
-            .then(response => callback(response.status,response.data))
-    }
+    get = (attachedUrl, callback = this.defaultCallback) => {
+        return this.request.get(this.baseUrl + attachedUrl)
+            .then(response => callback(response.status, response.data))
+    };
 
-    delete = async(attatchedUrl,callback)=> {
-        return await this.request.delete(this.baseUrl + attatchedUrl)
-            .then(response => callback(response.status,response.data))
-    }
+    delete = (attachedUrl, callback = this.defaultCallback) => {
+        return this.request.delete(this.baseUrl + attachedUrl)
+            .then(response => callback(response.status, response.data))
+    };
 
-    post = async(attatchedUrl,data, callback)=> {
-        return await this.request.post(this.baseUrl + attatchedUrl,data)
-            .then(response => callback(response.status,response.data))
-    }
+    post = (attachedUrl, data, callback = this.defaultCallback) => {
+        return this.request.post(this.baseUrl + attachedUrl, data)
+            .then(response => callback(response.status, response.data))
+    };
 
-    put = async(attatchedUrl,data, callback)=> {
-        return await this.request.put(this.baseUrl + attatchedUrl,data)
-            .then(response => callback(response.status,response.data))
+    put = (attachedUrl, data, callback = this.defaultCallback) => {
+        return this.request.put(this.baseUrl + attachedUrl, data)
+            .then(response => callback(response.status, response.data))
+    };
+
+    defaultCallback = (status, data) => {
+        console.log(status + data)
     }
 }
 
 const DomUtil = {
-    active(domName){
+    active(domName) {
         const element = document.querySelector(domName);
-        if(element.classList.contains("inactive")) {
+        if (element.classList.contains("inactive")) {
             element.classList.remove("inactive");
         }
     },
-    inactive(domName){
+    inactive(domName) {
         const element = document.querySelector(domName);
         element.classList.add("inactive")
     }
-}
+};
