@@ -24,7 +24,7 @@ public class FollowController {
 
     @PostMapping("/follow")
     public ResponseEntity follow(FollowRequest followRequest) {
-        followService.save(followRequest);
+        followService.follow(followRequest);
         return new ResponseEntity(HttpStatus.OK);
     }
 

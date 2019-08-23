@@ -23,20 +23,17 @@ public class FollowService {
         this.followRepository = followRepository;
     }
 
-    // TODO refactoring
-    public void save(FollowRequest followRequest) {
+    public boolean follow(FollowRequest followRequest) {
         Member followee = findMember(followRequest.getFolloweeId());
         Member follower = findMember(followRequest.getFollowerId());
-        Follow follow = new Follow(followee, follower);
-
-        Follow maybeFollow = followRepository.findByFolloweeAndFollower(followee, follower);
-
-        if (maybeFollow != null) {
-            followRepository.delete(maybeFollow);
-            return;
-        }
-
-        followRepository.save(follow);
+        return followRepository.findByFolloweeAndFollower(followee, follower)
+                .map(x -> {
+                    followRepository.delete(x);
+                    return false;
+                }).orElseGet(() -> {
+                    followRepository.save(new Follow(followee, follower));
+                    return true;
+                });
     }
 
     public List<FollowResponse> findFollowers(Long id) {
