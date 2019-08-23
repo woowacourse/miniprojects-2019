@@ -48,6 +48,14 @@ public class BasicControllerTests {
         checkErrorResponse(bodyContentSpec, errorMessage);
     }
 
+    protected void assertFailUnauthorized(StatusAssertions statusAssertions, String errorMessage) {
+        WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
+            .isUnauthorized()
+            .expectBody();
+
+        checkErrorResponse(bodyContentSpec, errorMessage);
+    }
+
     protected void checkErrorResponse(WebTestClient.BodyContentSpec bodyContentSpec, String errorMessage) {
         bodyContentSpec.jsonPath("$.result").isEqualTo("FAIL")
             .jsonPath("$.message").isEqualTo(errorMessage);

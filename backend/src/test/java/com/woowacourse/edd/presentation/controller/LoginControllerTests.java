@@ -2,11 +2,15 @@ package com.woowacourse.edd.presentation.controller;
 
 import com.woowacourse.edd.application.dto.LoginRequestDto;
 import com.woowacourse.edd.application.dto.UserRequestDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.web.reactive.server.StatusAssertions;
 
 import static com.woowacourse.edd.exceptions.PasswordNotMatchException.PASSWORD_NOT_MATCH_MESSAGE;
+import static com.woowacourse.edd.exceptions.UnauthenticatedException.UNAUTHENTICATED_MESSAGE;
 import static com.woowacourse.edd.exceptions.UserNotFoundException.USER_NOT_FOUND_MESSAGE;
 import static com.woowacourse.edd.presentation.controller.LoginController.LOGOUT_URL;
+import static com.woowacourse.edd.presentation.controller.LoginController.LOOKUP_URL;
 
 public class LoginControllerTests extends BasicControllerTests {
 
@@ -52,5 +56,26 @@ public class LoginControllerTests extends BasicControllerTests {
         executePost(LOGOUT_URL).cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
             .exchange()
             .expectStatus().isOk();
+    }
+
+    @Test
+    @DisplayName("현재 로그인된 사용자 정보 조회")
+    void lookup() {
+        executeGet(LOOKUP_URL).cookie(COOKIE_JSESSIONID, getDefaultLoginSessionId())
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .jsonPath("$.name").isEqualTo(DEFAULT_LOGIN_NAME)
+            .jsonPath("$.id").isEqualTo(DEFAULT_LOGIN_ID);
+    }
+
+    @Test
+    @DisplayName("비로그인 상태에서 로그인 정보 조회")
+    void lookup_fail() {
+        StatusAssertions statusAssertions = executeGet(LOOKUP_URL)
+            .exchange()
+            .expectStatus();
+
+        assertFailUnauthorized(statusAssertions, UNAUTHENTICATED_MESSAGE);
     }
 }
