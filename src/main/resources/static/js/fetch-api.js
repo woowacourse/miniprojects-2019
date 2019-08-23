@@ -1,25 +1,40 @@
 const AjaxApi = function() {
-    this.bodyData = function(method, data) {
-        this.method = method;
-        this.headers = {
-            'Content-Type': 'application/json'
-        };
-        this.body = JSON.stringify(data);
+    this.post = (url, data) => {
+        return fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
     };
 
-    this.post = function(url, data) {
-        return fetch(url, new this.bodyData("POST", data));
+    this.put = (url, data) => {
+        return fetch(url, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
     };
 
-    this.put = function(url, data) {
-        return fetch(url, new this.bodyData("PUT", data));
+    this.delete = (url) => {
+        return fetch(url, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     };
 
-    this.delete = function(url) {
-        return fetch(url, new this.bodyData("DELETE"));
-    };
-
-    this.get = function(url) {
-        return fetch(url, new this.bodyData("GET"));
+    this.get = (url) => {
+        return fetch(url, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     };
 }
+const Api = new AjaxApi();
