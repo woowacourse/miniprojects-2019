@@ -1,4 +1,4 @@
-function addHeader(headerElement){
+const addHeader = function (headerElement){
     // TODO: 로그인 여부를 확인해서 삽입할 헤더를 결정해야 한다.
     const signedInHeaderTemplate = 
     `<header id="header" class="header navbar shadow-sm">
@@ -80,3 +80,5 @@ function addHeader(headerElement){
 
     headerElement.insertAdjacentHTML('afterbegin', notSignedInHeaderTemplate)
 }
+
+addHeader(document.querySelector('.header-wrapper'));

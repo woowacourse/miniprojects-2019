@@ -4,7 +4,7 @@ const channelCtx = {
     }
 }
 
-loadVideoCards = function (page, size, sort) {
+const loadVideoCards = function (page, size, sort) {
     api.requestVideos(page, size, sort)
         .then(response => response.json())
         .then(json => addVideoCardTemplates(json.content, 'dateVideoCard'))
@@ -15,7 +15,7 @@ document.querySelector('#btn-update').addEventListener('click', (event) => {
     channelCtx.flags.isInUpdate = changeUpdateState(channelCtx.flags.isInUpdate)
 })
 
-changeUpdateState = function (flags) {
+const changeUpdateState = function (flags) {
     const nameElm = document.querySelector('#user-name')
     const emailElm = document.querySelector('#user-email')
     const nameInput = document.querySelector('#update-name')

@@ -1,4 +1,4 @@
-function addVideoDetailTemplate(data) {
+const addVideoDetailTemplate = function (data) {
     const videoDetailTemplate =
         `<iframe width="913" height="514"
             src="https://www.youtube.com/embed/${data.youtubeId}" frameborder="0"

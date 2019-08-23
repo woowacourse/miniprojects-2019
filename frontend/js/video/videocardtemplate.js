@@ -1,4 +1,4 @@
-function addVideoCardTemplate(data, number, categorie) {
+const addVideoCardTemplate = function (data, number, categorie) {
     const dateDifference = wootubeCtx.util.calculateDate(data[number].createDate)
     const videoCardTemplate = 
     `<div class="col-lg-2 padding-2">
@@ -23,7 +23,7 @@ function addVideoCardTemplate(data, number, categorie) {
     videoCards.insertAdjacentHTML('beforeend', videoCardTemplate)
 }
 
-function addVideoCardTemplates(data, categorie) {
+const addVideoCardTemplates = function (data, categorie) {
     for(let i = 0; i < Math.min(wootubeCtx.constants.videoPageSize, data.length); i++) {
         addVideoCardTemplate(data, i, categorie)
     }
