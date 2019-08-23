@@ -38,7 +38,6 @@ class Request {
 
     defaultCallback = (status, data) => {
         console.log(status + data)
-
     }
 }
 

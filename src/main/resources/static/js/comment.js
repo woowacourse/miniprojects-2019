@@ -7,24 +7,24 @@ const Comment = (function () {
         const createButton = () => {
             const button = document.querySelector(".comment-create-btn");
             button.addEventListener('click', commentService.create);
-        }
+        };
 
         const removeButton = () => {
             const button = document.querySelector(".comment-list");
             button.addEventListener('click', commentService.remove);
-        }
+        };
 
         const init = function () {
-            createButton()
+            createButton();
             removeButton()
-        }
+        };
         return {
             init: init
         }
-    }
+    };
 
     const CommentService = function () {
-        const request = new Request("/api/articles/" + articleId+"/comments");
+        const request = new Request(`/api/articles/${articleId}/comments`);
 
         const commentTemplate =
             `<div class="contents-inner">
@@ -36,7 +36,7 @@ const Comment = (function () {
                     </div>
                     <button class="comment-delete" data-id={{id}}>삭제</button>
                 </div>
-            </div>`
+            </div>`;
 
         const commentItemTemplate = Handlebars.compile(commentTemplate);
 
@@ -48,7 +48,7 @@ const Comment = (function () {
                     document.querySelector('.comment-list').insertAdjacentHTML('beforeend', commentItemTemplate(e))
                 });
             })
-        }
+        };
 
         const create = () => {
             const commentInput = document.querySelector(".comment-input");
@@ -59,12 +59,12 @@ const Comment = (function () {
             }
 
             request.post('/', {
-                contents : contents
+                contents: contents
             }, (status, data) => {
                 commentInput.value = "";
                 read();
             })
-        }
+        };
 
         const remove = (event) => {
             const commentId = event.target.getAttribute("data-id");
@@ -73,14 +73,14 @@ const Comment = (function () {
                 console.log(data);
                 read();
             })
-        }
+        };
 
         return {
-            create : create,
-            read : read,
-            remove : remove
+            create: create,
+            read: read,
+            remove: remove
         }
-    }
+    };
     const init = () => {
         const commentController = new CommentController();
         commentController.init();

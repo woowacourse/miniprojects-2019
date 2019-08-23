@@ -1,13 +1,3 @@
-const getModalTemplate = (buttons) => {
-   return `<div class="modal inactive modal-animation">
-        <div class="modal-dialog-inner">
-            <div class="modal-dialog-custom common-flex">
-               ${buttons}
-            </div>
-        </div>
-    </div>`
-};
-
 class Modal {
     constructor(buttons) {
         this.modalHtml = getModalTemplate(buttons)
