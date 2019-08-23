@@ -108,13 +108,13 @@
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="/js/util.js"></script>
+<script src="/js/template.js"></script>
 <script src="/js/modal.js"></script>
+<script src="/js/util.js"></script>
 <script src="/js/user.js"></script>
 <script th:inline="javascript">
     const profileUrl = [[ ${userInfo.profile} ]];
     const defaultProfileImage = "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
-
     const profileImage = document.querySelector('#profile-image');
     const originalImage = document.querySelector('#original-image');
     profileImage.setAttribute("src", profileUrl);

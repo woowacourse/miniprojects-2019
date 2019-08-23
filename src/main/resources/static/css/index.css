@@ -1,3 +1,7 @@
+i {
+    pointer-events: none;
+}
+
 .add-comment textarea::placeholder {
     color: #666;
 }
