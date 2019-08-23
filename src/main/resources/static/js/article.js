@@ -74,7 +74,7 @@ const ArticleApp = (() => {
                 .catch(error => console.log("error: " + error));
         };
 
-        const add = (event) => {
+        const add = () => {
             const contents = document.getElementById("article-contents");
 
             if (AppStorage.check('article-add-run')) {
@@ -202,7 +202,15 @@ const ArticleApp = (() => {
             let formData = new FormData();
             formData.append('data', file);
 
-            //TODO: ajax --> fetch 변경
+            if (!file) {
+                return new Promise((resolve) => {
+                    resolve({
+                        contents: contents.value,
+                        imageUrl: "",
+                        videoUrl: "",
+                    });
+                });
+            }
             return $.ajax({
                 type: 'POST',
                 url: '/upload',
