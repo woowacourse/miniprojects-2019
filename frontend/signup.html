@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+    <script src="./js/headTemplate.js"></script>
+    
+    <link rel="stylesheet" href="./css/app.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="./css/signup.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="wrapper-signup">
+            <form>
+                <div class="form-header">
+                    <a href="/"><img src="/images/logo/youtube-logo.png" alt="우투브"></a>
+                    <h1>회원가입</h1>
+                </div>
+                <div class="tab-content">
+                    <div class="form-horizontal mrg-top-40 pdd-right-30">
+                        <div class="form-group row">
+                            <label for="form-name" class="col-md-3">닉네임</label>
+                            <div class="col-md-9">
+                                <input type="name" class="form-control" id="form-name" name="name" placeholder="닉네임을 입력하세요"
+                                    class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="form-email" class="col-md-3">이메일</label>
+                            <div class="col-md-9">
+                                <input type="email" name="email" id="form-email" placeholder="이메일을 입력하세요" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="form-password" class="col-md-3">패스워드</label>
+                            <div class="col-md-9">
+                                <input type="password" name="password" id="form-password" placeholder="패스워드를 입력하세요" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="form-password-check" class="col-md-3">패스워드확인</label>
+                            <div class="col-md-9">
+                                <input type="password" name="password_confirm" id="form-password-check" placeholder="패스워드를 다시 한번 입력하세요" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-danger d-none" role="alert">아이디 혹은 비밀번호가 일치하지 않습니다</div>
+                <div> 계정이 있으신가요? <a href="/login.html">로그인</a></div>
+                <button type="button" class="btn btn-primary btn-signup">회원가입</button>
+            </form>
+        </div>
+    </div>
+    <script src="./js/common.js"></script>
+    <script src="./js/signup.js"></script>
+</body>
+
+</html>

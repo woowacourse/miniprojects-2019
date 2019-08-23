@@ -6,7 +6,8 @@ const wootubeCtx = {
             return params;
         },
         calculateDate: function (responseDate) {
-            const videoDate = new Date(responseDate.substr(0, 4), responseDate.substr(4, 2), responseDate.substr(6, 2), responseDate.substr(8, 2))
+            const localResponseDate = moment.utc(responseDate,'YYYYMMDDHH').local().format('YYYYMMDDHH')
+            const videoDate = new Date(localResponseDate.substr(0, 4), localResponseDate.substr(4, 2), localResponseDate.substr(6, 2), localResponseDate.substr(8, 2))
             const currentDate = new Date()
             const yearDifference = currentDate.getFullYear() - videoDate.getFullYear()
             const monthDifference = currentDate.getMonth() + 1 - videoDate.getMonth()
@@ -25,6 +26,10 @@ const wootubeCtx = {
             }
         }
     },
+    constants : {
+        videoPageSize : 6,
+        videoChannelPageSize : 18
+    }
 }
 
 const Api = function () {
@@ -34,12 +39,14 @@ const Api = function () {
     }
 
     const baseUrl = '/api'
-    
+
     const request = (url, method, body) => {
         return fetch(url, {
             method: method,
             headers: defaultHeader,
             body: body
+            body: body,
+            credentials: 'include'
         })
     }
 
@@ -47,11 +54,12 @@ const Api = function () {
         return fetch(url, {
             method: method,
             headers: defaultHeader,
+            credentials: 'include'
         })
     }
     
-    const requestVideos = (filter) => {
-        return requestWithoutBody(`${baseUrl}/v1/videos?page=0&size=6&sort=${filter},DESC`,'GET')
+    const requestVideos = (page, size, sort) => {
+        return requestWithoutBody(`${baseUrl}/v1/videos?page=${page}&size=${size}&sort=${sort},DESC`,'GET')
     }
 
     const requestVideo = (videoId) => {
@@ -62,10 +70,30 @@ const Api = function () {
         return request(`${baseUrl}/v1/videos`, 'POST', dataBody)
     }
 
+    const updateVideo = (dataBody, vidoeId) => {
+        return request(`${baseUrl}/v1/videos/${vidoeId}`, 'PUT', dataBody)
+    }
+
+    const deleteVideo = (videoId) => {
+        return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}`, 'DELETE')
+    }
+
+    const postLogin = (dataBody) => {
+        return request(`${baseUrl}/v1/login`, 'POST', dataBody)
+    }
+
+    const signup = (dataBody) => {
+        return request(`${baseUrl}/v1/users`, 'POST', dataBody)
+    }
+
     return {
-        requestVideos: requestVideos,
-        requestVideo: requestVideo,
-        saveVideo: saveVideo
+        requestVideos,
+        requestVideo,
+        saveVideo,
+        updateVideo,
+        deleteVideo,
+        postLogin,
+        signup
     }
 
 }

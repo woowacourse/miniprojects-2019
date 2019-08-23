@@ -1,0 +1,12 @@
+.wrapper-signup {
+    border: 1px solid #dedce0;
+    margin: 0 auto;
+    width: 500px;
+    padding: 24px 24px;
+    border-radius: 8px;
+}
+
+.btn-signin {
+    margin-top: 12px;
+}
+

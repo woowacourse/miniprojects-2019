@@ -3,28 +3,33 @@ package com.woowacourse.edd.application.converter;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.response.VideoPreviewResponse;
 import com.woowacourse.edd.application.response.VideoResponse;
+import com.woowacourse.edd.application.response.VideoUpdateResponse;
+import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.domain.Video;
-import com.woowacourse.edd.domain.vo.Contents;
-import com.woowacourse.edd.domain.vo.Title;
-import com.woowacourse.edd.domain.vo.YoutubeId;
 
 import java.time.format.DateTimeFormatter;
 
 public class VideoConverter {
 
-    public Video toEntity(VideoSaveRequestDto requestDto) {
-        return new Video(new YoutubeId(requestDto.getYoutubeId()), new Title(requestDto.getTitle()), new Contents(requestDto.getContents()));
+    public static Video toEntity(VideoSaveRequestDto requestDto, User creator) {
+        return new Video(requestDto.getYoutubeId(), requestDto.getTitle(), requestDto.getContents(), creator);
     }
 
-    public VideoResponse toResponse(Video video) {
+    public static VideoResponse toResponse(Video video) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHH");
         String date = video.getCreateDate().format(format);
-        return new VideoResponse(video.getId(), video.getYoutubeId(), video.getTitle(), video.getContents(), date);
+        VideoResponse.CreatorResponse creatorResponse = new VideoResponse.CreatorResponse(video.getCreator().getId(), video.getCreator().getName());
+        return new VideoResponse(video.getId(), video.getYoutubeId(), video.getTitle(), video.getContents(), date, creatorResponse);
     }
 
-    public VideoPreviewResponse toPreviewResponse(Video video) {
+    public static VideoPreviewResponse toPreviewResponse(Video video) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHH");
         String date = video.getCreateDate().format(format);
-        return new VideoPreviewResponse(video.getId(), video.getYoutubeId(), video.getTitle(), date);
+        VideoResponse.CreatorResponse creatorResponse = new VideoResponse.CreatorResponse(video.getCreator().getId(), video.getCreator().getName());
+        return new VideoPreviewResponse(video.getId(), video.getYoutubeId(), video.getTitle(), date, creatorResponse);
+    }
+
+    public static VideoUpdateResponse toUpdateResponse(Video video) {
+        return new VideoUpdateResponse(video.getId());
     }
 }

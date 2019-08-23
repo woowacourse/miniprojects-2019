@@ -2,8 +2,8 @@ package com.woowacourse.edd.presentation.exceptionhandler;
 
 public class ErrorResponse {
 
-    private String result;
-    private String message;
+    private final String result;
+    private final String message;
 
     public ErrorResponse(String result, String message) {
         this.result = result;

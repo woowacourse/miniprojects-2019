@@ -6,13 +6,13 @@ public class VideoSaveRequestDto {
     private String title;
     private String contents;
 
+    private VideoSaveRequestDto() {
+    }
+
     public VideoSaveRequestDto(String youtubeId, String title, String contents) {
         this.youtubeId = youtubeId;
         this.title = title;
         this.contents = contents;
-    }
-
-    public VideoSaveRequestDto() {
     }
 
     public String getYoutubeId() {
