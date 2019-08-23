@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.comment.controller.api;
+package com.wootecobook.turkey.comment.controller;
 
 import com.wootecobook.turkey.comment.service.CommentService;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;

@@ -1,10 +1,10 @@
-package com.wootecobook.turkey.comment.controller.api;
+package com.wootecobook.turkey.comment.controller;
 
 import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
-import com.wootecobook.turkey.commons.BaseControllerTests;
+import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.config.AwsMockConfig;

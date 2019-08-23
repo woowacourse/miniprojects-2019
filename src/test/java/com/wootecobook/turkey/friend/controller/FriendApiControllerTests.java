@@ -1,6 +1,6 @@
-package com.wootecobook.turkey.friend.controller.api;
+package com.wootecobook.turkey.friend.controller;
 
-import com.wootecobook.turkey.commons.BaseControllerTests;
+import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.friend.service.FriendAskService;
 import com.wootecobook.turkey.friend.service.dto.FriendAskCreate;

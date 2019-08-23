@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.post.controller.api;
+package com.wootecobook.turkey.post.controller;
 
 import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.commons.resolver.UserSession;

@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.login.controller.api;
+package com.wootecobook.turkey.login.controller;
 
 import com.wootecobook.turkey.login.service.LoginService;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;

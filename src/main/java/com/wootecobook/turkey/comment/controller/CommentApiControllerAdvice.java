@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.comment.controller.api;
+package com.wootecobook.turkey.comment.controller;
 
 import com.wootecobook.turkey.comment.domain.exception.CommentUpdateFailException;
 import com.wootecobook.turkey.comment.domain.exception.InvalidCommentException;

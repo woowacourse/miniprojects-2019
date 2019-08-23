@@ -1,6 +1,6 @@
-package com.wootecobook.turkey.search.controller.web;
+package com.wootecobook.turkey.search.controller;
 
-import com.wootecobook.turkey.commons.BaseControllerTests;
+import com.wootecobook.turkey.BaseControllerTests;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

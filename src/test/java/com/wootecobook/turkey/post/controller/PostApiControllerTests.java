@@ -1,6 +1,6 @@
 package com.wootecobook.turkey.post.controller;
 
-import com.wootecobook.turkey.commons.BaseControllerTests;
+import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.config.AwsMockConfig;

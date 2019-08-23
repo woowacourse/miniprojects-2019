@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.user.controller.api;
+package com.wootecobook.turkey.user.controller;
 
 import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.user.service.UserDeleteService;

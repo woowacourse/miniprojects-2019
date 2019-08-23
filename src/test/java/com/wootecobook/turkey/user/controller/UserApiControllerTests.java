@@ -1,6 +1,6 @@
-package com.wootecobook.turkey.user.controller.api;
+package com.wootecobook.turkey.user.controller;
 
-import com.wootecobook.turkey.commons.BaseControllerTests;
+import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
