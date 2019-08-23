@@ -63,7 +63,7 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                             </ul>
                             <div class="feedback-status-container pdd-horizon-15">
                                 <p class="no-mrg pdd-left-5 d-inline-block">
-                                    <span class="text-bold">${likeNum} Likes<span class="text-bold">
+                                    <span class="text-bold"><span class ="like-num">${likeNum}</span> Likes<span class="text-bold">
                                 </p>
                             </div>
                             <div class="feed-footer">
