@@ -21,6 +21,10 @@ spring:
                 dialect: org.hibernate.dialect.MySQL5Dialect
                 format_sql: true
         show-sql: true
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
 cloud:
     aws:
         s3:
@@ -49,6 +53,10 @@ spring:
                 dialect: org.hibernate.dialect.MySQL5Dialect
                 format_sql: true
         show-sql: true
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
 cloud:
     aws:
         s3:
