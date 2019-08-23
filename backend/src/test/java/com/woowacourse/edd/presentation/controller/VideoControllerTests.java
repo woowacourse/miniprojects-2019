@@ -6,6 +6,7 @@ import com.woowacourse.edd.utils.Utils;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.StatusAssertions;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -151,7 +152,13 @@ public class VideoControllerTests extends BasicControllerTests {
     }
 
     private StatusAssertions findVideos(int page, int size, String sort, String direction) {
-        return executeGet(VIDEOS_URI + "?page=" + page + "&size=" + size + "&sort=" + sort + "," + direction)
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        builder.path(VIDEOS_URI)
+            .query("page=" + page)
+            .query("size=" + size)
+            .query("sort=" + sort + "," + direction);
+        String uri = builder.build().toUriString();
+        return executeGet(uri)
             .exchange()
             .expectStatus();
     }
