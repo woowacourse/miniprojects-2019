@@ -37,7 +37,7 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                 </ul>
                             </div>
                             <div class="feed-body no-pdd">
-                                <img class="img-fluid" src=${imageUrl} alt="">
+                                <img class="article-image" src=${imageUrl} alt="">
                             </div>
                             <ul class="feed-action pdd-horizon-15 pdd-top-5">
                                 <li>
