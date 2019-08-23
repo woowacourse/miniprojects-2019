@@ -1,19 +1,17 @@
 const INDEX_PAGE = (function () {
     const Api = function () {
-        const domain = "http://localhost:8080";
-
         const request = {
             get(path) {
-                return axios.get(`${domain + path}`);
+                return axios.get(`${path}`);
             },
             post(path, data) {
-                return axios.post(`${domain + path}`, data);
+                return axios.post(`${path}`, data);
             },
             put(path, data) {
-                return axios.put(`${domain + path}`, data);
+                return axios.put(`${path}`, data);
             },
             delete(path) {
-                return axios.delete(`${domain + path}`);
+                return axios.delete(`${path}`);
             }
         };
 
