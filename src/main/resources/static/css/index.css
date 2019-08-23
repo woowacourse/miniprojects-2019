@@ -20,8 +20,13 @@
     height: 40px;
 }
 
-.article-card{
+.article-card {
 
+}
+
+.article-image {
+    width: 100%;
+    height: auto;
 }
 
 a:hover{

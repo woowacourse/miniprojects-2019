@@ -44,7 +44,6 @@ public class AwsS3Service implements StorageService {
             s3.putObject(BUCKET_NAME, fileName, file);
         } catch (AmazonServiceException e) {
             System.err.println(e.getErrorMessage());
-            System.exit(1);
         } catch (IOException e) {
             throw new FileSaveFailException();
         } finally {
