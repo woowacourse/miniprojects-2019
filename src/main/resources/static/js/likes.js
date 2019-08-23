@@ -8,7 +8,7 @@ const Index = (function () {
 
         const loadInit = function () {
             indexService.getPageData(0);
-            document.querySelector("i").addEventListener("click", function (e) {
+            document.querySelector("i").addEventListener("click", function(e) {
                 e.stopPropagation();
                 e.preventDefault();
             });
@@ -36,7 +36,7 @@ const Index = (function () {
 
 
     const IndexService = function () {
-        const indexRequest = new Request("/api/main");
+        const indexRequest = new Request("/api/likes");
         const like = new Like();
         const getPageData = (pageNum) => {
             indexRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
@@ -51,37 +51,17 @@ const Index = (function () {
         };
 
         const eventLike = (articleId, isLike, e) => {
-            if (isLike == 'false') {
-                like.addLike(articleId)
-                    .then(() => {
-                        e.childNodes[1].classList.add("fa-heart");
-                        e.childNodes[1].classList.remove("fa-heart-o");
-                        e.dataset.liking= "true";
-                        const likeNumElement = e.closest(".article-card").querySelector(".like-num")
-                        const likeNum = parseInt(likeNumElement.innerText)+1;
-                        likeNumElement.innerText=likeNum;
-                    });
-
-            } else {
-                like.deleteLike(articleId)
-                    .then(() => {
-                        e.childNodes[1].classList.add("fa-heart-o");
-                        e.childNodes[1].classList.remove("fa-heart");
-                        e.dataset.liking= "false"
-                        const likeNumElement = e.closest(".article-card").querySelector(".like-num")
-                        const likeNum = parseInt(likeNumElement.innerText)-1;
-                        likeNumElement.innerText=likeNum;
-                    });
-            }
+            like.addLike(articleId, isLike)
+                .then(()=>{
+                    e.childNodes[1].classList.add("fa-heart");
+                    e.childNodes[1].classList.remove("fa-heart-o");
+                });
         };
 
         const parsingPage = (pageData) => {
             const article = pageData.article;
             const user = pageData.article.userInfoDto;
             const comments = parsingComments(pageData.comments);
-            if (user.profile === null) {
-                user.profile = "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
-            }
             return getArticleTemplate(
                 article.id,
                 user.id,
