@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.post.service;
 
+import com.wootecobook.turkey.commons.Good;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostGood;
 import com.wootecobook.turkey.post.domain.PostGoodRepository;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class PostGoodService {
+public class PostGoodService implements GoodService<PostGood, Post> {
 
     private final PostGoodRepository postGoodRepository;
 
@@ -20,7 +21,8 @@ public class PostGoodService {
         this.postGoodRepository = postGoodRepository;
     }
 
-    List<PostGood> good(Post post, User user) {
+    @Override
+    public List<PostGood> toggleGood(Post post, User user) {
         Optional<PostGood> maybeGood = postGoodRepository.findByPostAndUser(post, user);
 
         if (maybeGood.isPresent()) {
@@ -29,7 +31,7 @@ public class PostGoodService {
             approveGoodRequest(new PostGood(user, post));
         }
 
-        return findByPost(post);
+        return findBy(post);
     }
 
     private void approveGoodRequest(PostGood postGood) {
@@ -40,8 +42,8 @@ public class PostGoodService {
         postGoodRepository.delete(postGood);
     }
 
-    @Transactional(readOnly = true)
-    List<PostGood> findByPost(Post post) {
+    @Override
+    public List<PostGood> findBy(final Post post) {
         return postGoodRepository.findByPost(post);
     }
 }

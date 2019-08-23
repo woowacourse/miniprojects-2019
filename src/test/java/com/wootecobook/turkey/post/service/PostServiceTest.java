@@ -155,7 +155,7 @@ public class PostServiceTest {
     void post_수정_테스트() {
         //given
         when(postRepository.findById(savedPostId)).thenReturn(Optional.of(savedPost));
-        when(postGoodService.findByPost(any(Post.class))).thenReturn(new ArrayList<>());
+        when(postGoodService.findBy(any(Post.class))).thenReturn(new ArrayList<>());
         when(commentRepository.countByPost(any(Post.class))).thenReturn(0);
         //when
         PostResponse updateResult = postService.update(updatePostRequest, savedPostId, author.getId());
