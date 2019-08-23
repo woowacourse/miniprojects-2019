@@ -1,6 +1,5 @@
-(function () {
+(function() {
     const baseUrl = document.location.origin;
-    const api = new AjaxApi();
 
     function onLikeClick(event) {
         if (event.target.tagName !== "LI") {
@@ -9,7 +8,7 @@
         const postId = event.target.dataset.postid;
         const url = baseUrl + "/posts/" + postId + "/like";
 
-        api.put(url, {})
+        Api.put(url, {})
             .then(res => {
                 if (res.redirected) {
                     window.location.href = res.url;

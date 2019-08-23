@@ -10,6 +10,7 @@ import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
+import java.time.Duration;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -70,6 +71,7 @@ public abstract class AuthedWebTestClient extends BaseTest {
             bodyBuilder.part(keys.get(i), parameters[i]);
         }
         String cookie = loginCookie();
+        webTestClient = webTestClient.mutate().responseTimeout(Duration.ofSeconds(10)).build();
         return webTestClient.post().uri(uri)
                 .header("Cookie", cookie)
                 .syncBody(bodyBuilder.build());

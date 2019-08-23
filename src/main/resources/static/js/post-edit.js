@@ -3,8 +3,7 @@
         const baseUrl = document.location.origin;
         const contents = document.getElementById('post-edit-content');
         const url = baseUrl + "/posts/" + contents.dataset.postid;
-        const api = new AjaxApi();
-        api.put(url, { "contents": contents.value })
+        Api.put(url, { "contents": contents.value })
             .then(res => {
                 if (res.redirected) {
                     window.location.href = res.url;

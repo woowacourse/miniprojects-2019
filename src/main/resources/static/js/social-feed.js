@@ -1,9 +1,8 @@
 (function() {
-    function onAddPostClick() {
+    const onAddPostClick = () => {
         const contents = document.getElementById('post-content').value;
         const url = document.location.href;
-        const api = new AjaxApi();
-        api.post(`${url}/posts`, { contents })
+        Api.post(`${url}/posts`, { contents })
             .then(res => {
                 if (res.redirected) {
                     window.location.href = res.url
@@ -22,7 +21,7 @@
         preview.file = file;
 
         const reader = new FileReader();
-        reader.onload = (function(aImg) {
+        reader.onload = (aImg => {
             return function(e) {
                 aImg.src = e.target.result;
             };
@@ -37,8 +36,7 @@
 
     document.getElementById("feed-submit-btn").addEventListener("click", (e) => {
         e.preventDefault();
-        const form = document.getElementById("feed-add-form")
-        form.submit();
+        document.getElementById("feed-add-form").submit();
     });
 
     document.getElementById("feed-image").addEventListener("change", handleFiles);

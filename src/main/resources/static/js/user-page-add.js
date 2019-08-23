@@ -1,8 +1,7 @@
 (function() {
     function onAddPostClick() {
         const contents = document.getElementById('post-content').value;
-        const api = new AjaxApi();
-        api.post(`/posts`, { contents })
+        Api.post(`/posts`, { contents })
             .then(res => {
                 if (res.redirected) {
                     window.location.href = res.url

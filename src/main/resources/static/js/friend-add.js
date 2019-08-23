@@ -1,10 +1,9 @@
 (function() {
-    const sendFriendRequest = (event)=>{
+    const sendFriendRequest = (event) => {
         const requestFriendId = event.target.dataset.userId;
-        const api = new AjaxApi();
-        api.post("/friends", {requestFriendId})
+        Api.post("/friends", { requestFriendId })
             .then(res => {
-                if(res.redirected) {
+                if (res.redirected) {
                     window.location.href = res.url;
                 }
             });
