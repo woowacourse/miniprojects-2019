@@ -45,6 +45,8 @@ const Api = function () {
             method: method,
             headers: defaultHeader,
             body: body
+            body: body,
+            credentials: 'include'
         })
     }
 
@@ -52,6 +54,7 @@ const Api = function () {
         return fetch(url, {
             method: method,
             headers: defaultHeader,
+            credentials: 'include'
         })
     }
     
