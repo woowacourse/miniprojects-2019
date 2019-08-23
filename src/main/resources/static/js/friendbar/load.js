@@ -2,37 +2,27 @@ $(document).ready(function () {
     friendBarModule.init()
 })
 
-let friendBarModule = (function () {
-    function loadAllUser() {
-        let res = $.ajax({
-            url: "/api/users",
-            type: "GET",
-            async: false,
-            dataType: 'json'
-        })
-
-        let data = res.responseJSON
-        for (let i = 0; i < data.length; i++) {
-            createUserDOM(data[i])
-        }
-
-        addFriendsAskButtonClickListener()
+const friendBarModule = (function () {
+    async function loadAllUser() {
+        await api.GET("/api/users")
+            .then(res => res.json())
+            .then(data => {
+                for (let i = 0; i < data.length; i++) {
+                    createUserDOM(data[i])
+                }
+                addFriendsAskButtonClickListener()
+            })
     }
 
-    function loadFriends() {
-        let res = $.ajax({
-            url: "/api/friends",
-            type: "GET",
-            async: false,
-            dataType: 'json'
-        })
-
-        let data = res.responseJSON
-        for (let i = 0; i < data.length; i++) {
-            createFriendDOM(data[i])
-        }
-
-        addFriendsRemoveBtnClickListener()
+    async function loadFriends() {
+        await api.GET("/api/friends")
+            .then(res => res.json())
+            .then(data => {
+                for (let i = 0; i < data.length; i++) {
+                    createFriendDOM(data[i])
+                }
+                addFriendsRemoveBtnClickListener()
+            })
     }
 
     function createUserDOM(user) {
@@ -44,47 +34,36 @@ let friendBarModule = (function () {
     }
 
     function addFriendsAskButtonClickListener() {
-        let btns = document.getElementsByClassName('FriendAsk')
+        const btns = document.getElementsByClassName('FriendAsk')
         for (let i = 0; i < btns.length; i++) {
-            btns[i].addEventListener('click', function () {
-                let data = {"receiverId": btns[i].parentNode.parentNode.getAttribute("data-id")}
-
-                let res = $.ajax({
-                    url: "/api/friends/asks",
-                    type: "POST",
-                    async: false,
-                    headers: header,
-                    dataType: 'json',
-                    data: JSON.stringify(data)
-                })
+            btns[i].addEventListener('click', async function (event) {
+                const data = {"receiverId": event.target.parentNode.parentNode.getAttribute("data-id")}
+                const res = await api.POST("/api/friends/asks", data)
 
 	            if(res.status == 201) {
 	                alert('친구 요청을 보냈습니다.')
 	            } else if(res.status == 400) {
-    	            alert(res.responseJSON.message)
+                    const error = await res.json()
+    	            alert(error.message)
 	            }
 			})
 		}
 	}
 
-	function addFriendsRemoveBtnClickListener() {
-		let btns = document.getElementsByClassName('FriendRemove')
+	async function addFriendsRemoveBtnClickListener() {
+		const btns = document.getElementsByClassName('FriendRemove')
 		for(let i = 0; i < btns.length; i++) {
-			btns[i].addEventListener('click', function() {
-			    const friendId = btns[i].parentNode.parentNode.getAttribute("data-id")
-
-	            let res = $.ajax({
-	                url:"/api/friends/" + friendId,
-	                type:"DELETE",
-	                async:false
-	            })
+			btns[i].addEventListener('click', async function(event) {
+                const friendId = event.target.parentNode.parentNode.getAttribute("data-id")
+                const res = await api.DELETE("/api/friends/" + friendId)
 
 	            if(res.status == 204) {
 	                alert('친구가 삭제되었습니다.')
-                    let grandParent = btns[i].parentNode.parentNode
+                    const grandParent = event.target.parentNode.parentNode
                     grandParent.parentNode.removeChild(grandParent)
 	            } else if(res.status == 400) {
-    	            alert(res.responseJSON.message)
+                    const error = await res.json()
+    	            alert(error.message)
 	            }
 			})
 		}
@@ -110,9 +89,9 @@ let friendBarModule = (function () {
     }
 
     return {
-        init: function () {
-            loadAllUser()
-            loadFriends()
+        init: async function () {
+            await loadAllUser()
+            await loadFriends()
             preventDropdownHide()
         }
     }

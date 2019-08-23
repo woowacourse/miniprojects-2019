@@ -92,14 +92,14 @@ public class CommentService {
         Comment comment = findById(id);
         User user = userService.findById(userId);
 
-        return GoodResponse.of(commentGoodService.good(comment, user), user);
+        return GoodResponse.of(commentGoodService.toggleGood(comment, user), user);
     }
 
     public GoodResponse countGoodResponseByComment(final Long commentId, final Long userId) {
         Comment comment = findById(commentId);
         User user = userService.findById(userId);
 
-        return GoodResponse.of(commentGoodService.findByComment(comment), user);
+        return GoodResponse.of(commentGoodService.findBy(comment), user);
     }
 
 }

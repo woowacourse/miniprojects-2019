@@ -14,16 +14,13 @@ writeBtn.addEventListener('click', (event) => {
     const contents = writeArea.value
     formData.append('contents', contents)
 
-    const fileForm = document.getElementById('attach-files')
+    const fileForm = event.target.closest('ul').querySelector('input[name="filename[]"]')
     const files = fileForm.files
 
     const len = files.length;
     for (let i = 0; i < len; i++) {
         formData.append('files', files[i]);
     }
-
-    fileForm.value = ''
-    writeArea.value = ''
 
     formDataApi.POST(POST_URL, formData)
         .then(res => {
@@ -32,7 +29,15 @@ writeBtn.addEventListener('click', (event) => {
             }
             throw res
         })
-        .then(post => posts.prepend(createPostDOM(post)))
+        .then(post => {
+            posts.prepend(createPostDOM(post))
+
+            const postWriteContainer = writeArea.closest('.card');
+            const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
+            filesPreviewContainer.innerHTML = ''
+            fileForm.value = ''
+            writeArea.value = ''
+        })
         .catch(error => {
             error.json().then(errorMessage =>
                 console.log(errorMessage.message))
@@ -132,7 +137,7 @@ const postOperateButton = (function () {
         const PostService = function () {
             const toggleUpdate = function (event) {
                 const buttonContainer = event.target.closest("a")
-                if (buttonContainer == null) {
+                if (buttonContainer == null || !buttonContainer.hasClass) {
                     return
                 }
                 if (buttonContainer.classList.contains('toggle-post-update')) {
@@ -417,15 +422,14 @@ const postOperateButton = (function () {
 )();
 
 const fileAttach = (function () {
-    const fileAttachButtons = document.getElementsByClassName('file-attach');
+    const postsContainer = document.getElementById('posts');
 
     const FileAttachController = function () {
         const fileAttachService = new FileAttachService();
 
         const showFileAttach = function () {
-            for (let i = 0; i < fileAttachButtons.length; i++) {
-                fileAttachButtons[i].addEventListener('click', fileAttachService.showFileAttach)
-            }
+            postsContainer.addEventListener('click', fileAttachService.showFileAttachForm)
+            postsContainer.addEventListener('change', fileAttachService.previewFileAttach)
         }
 
         const init = function () {
@@ -438,13 +442,37 @@ const fileAttach = (function () {
     }
 
     const FileAttachService = function () {
-        const showFileAttach = function (event) {
+        const showFileAttachForm = function (event) {
             const fileAttachContainer = event.target.closest('li');
-            fileAttachContainer.firstElementChild.click();
+            if (fileAttachContainer && fileAttachContainer.classList.contains('file-attach')) {
+                const fileInput = fileAttachContainer.firstElementChild;
+                fileInput.click();
+            }
         };
 
+        const previewFileAttach = function (event) {
+            const fileAttachContainer = event.target.closest('li');
+            if (fileAttachContainer && fileAttachContainer.classList.contains('file-attach')) {
+                const postWriteContainer = fileAttachContainer.closest('.card');
+                const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
+                filesPreviewContainer.innerHTML = ''
+
+                const files = fileAttachContainer.firstElementChild.files;
+                const filesSrc = [];
+                const len = files.length;
+                for (let i = 0; i < len; i++) {
+                    filesSrc.push(URL.createObjectURL(files[i]));
+                }
+
+                const div = document.createElement('div');
+                div.innerHTML = previewTemplate(filesSrc)
+                filesPreviewContainer.innerHTML = div.innerHTML
+            }
+        }
+
         return {
-            showFileAttach: showFileAttach
+            showFileAttachForm: showFileAttachForm,
+            previewFileAttach: previewFileAttach
         }
     }
 

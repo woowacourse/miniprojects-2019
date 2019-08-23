@@ -75,7 +75,7 @@ public class PostService {
 
         return postRepository.findAll(pageable)
                 .map(post -> {
-                    GoodResponse goodResponse = GoodResponse.of(postGoodService.findByPost(post), user);
+                    GoodResponse goodResponse = GoodResponse.of(postGoodService.findBy(post), user);
                     int totalComment = commentRepository.countByPost(post);
                     return PostResponse.from(post, goodResponse, totalComment);
                 });
@@ -92,7 +92,7 @@ public class PostService {
                     .build();
 
             post.update(updatePost);
-            GoodResponse goodResponse = GoodResponse.of(postGoodService.findByPost(post), user);
+            GoodResponse goodResponse = GoodResponse.of(postGoodService.findBy(post), user);
             int totalComment = commentRepository.countByPost(post);
 
             return PostResponse.from(post, goodResponse, totalComment);
@@ -115,7 +115,7 @@ public class PostService {
         Post post = findById(postId);
         User user = userService.findById(userId);
 
-        return GoodResponse.of(postGoodService.good(post, user), user);
+        return GoodResponse.of(postGoodService.toggleGood(post, user), user);
     }
 
     @Transactional(readOnly = true)
@@ -123,6 +123,6 @@ public class PostService {
         Post post = findById(postId);
         User user = userService.findById(userId);
 
-        return GoodResponse.of(postGoodService.findByPost(post), user);
+        return GoodResponse.of(postGoodService.findBy(post), user);
     }
 }

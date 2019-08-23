@@ -3,14 +3,17 @@ package com.wootecobook.turkey.comment.service;
 import com.wootecobook.turkey.comment.domain.Comment;
 import com.wootecobook.turkey.comment.domain.CommentGood;
 import com.wootecobook.turkey.comment.domain.CommentGoodRepository;
+import com.wootecobook.turkey.commons.GoodService;
 import com.wootecobook.turkey.user.domain.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CommentGoodService {
+@Transactional
+public class CommentGoodService implements GoodService<CommentGood, Comment> {
 
     private final CommentGoodRepository commentGoodRepository;
 
@@ -18,7 +21,8 @@ public class CommentGoodService {
         this.commentGoodRepository = commentGoodRepository;
     }
 
-    List<CommentGood> good(final Comment comment, final User user) {
+    @Override
+    public List<CommentGood> toggleGood(final Comment comment, final User user) {
         Optional<CommentGood> maybeCommentGood = commentGoodRepository.findByCommentAndUser(comment, user);
 
         if (maybeCommentGood.isPresent()) {
@@ -27,7 +31,7 @@ public class CommentGoodService {
             approveGoodRequest(new CommentGood(user, comment));
         }
 
-        return findByComment(comment);
+        return findBy(comment);
     }
 
     private void approveGoodRequest(CommentGood commentGood) {
@@ -38,7 +42,8 @@ public class CommentGoodService {
         commentGoodRepository.delete(commentGood);
     }
 
-    List<CommentGood> findByComment(Comment comment) {
+    @Override
+    public List<CommentGood> findBy(Comment comment) {
         return commentGoodRepository.findByComment(comment);
     }
 }

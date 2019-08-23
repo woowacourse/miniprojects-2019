@@ -199,12 +199,12 @@ class CommentServiceTest {
         // given
         when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
         when(userService.findById(USER_ID)).thenReturn(user);
-        when(commentGoodService.good(any(Comment.class), any(User.class))).thenReturn(Arrays.asList(new CommentGood(user, comment)));
+        when(commentGoodService.toggleGood(any(Comment.class), any(User.class))).thenReturn(Arrays.asList(new CommentGood(user, comment)));
 
         // when
         commentService.good(USER_ID, COMMENT_ID);
 
         // then
-        verify(commentGoodService).good(comment, user);
+        verify(commentGoodService).toggleGood(comment, user);
     }
 }

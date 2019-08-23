@@ -2,24 +2,20 @@ $(document).ready(function () {
     friendAskModule.init()
 })
 
-let friendAskModule = (function () {
-    function loadFriendsAsks() {
-        let res = $.ajax({
-            url: "/api/friends/asks",
-            type: "GET",
-            async: false,
-            dataType: 'json'
-        })
+const friendAskModule = (function () {
+    async function loadFriendsAsks() {
+        await api.GET("/api/friends/asks")
+            .then(res => res.json())
+            .then(data => {
+                for (let i = 0; i < data.length; i++) {
+                    console.log(data[i])
+                    createFriendAskDOM(data[i])
+                }
 
-        let data = res.responseJSON
-        for (let i = 0; i < data.length; i++) {
-            console.log(data[i])
-            createFriendAskDOM(data[i])
-        }
-
-	    addFriendAskAcceptEventListener()
-	    addFriendAskRejectEventListener()
-	    preventDropdownHide()
+                addFriendAskAcceptEventListener()
+                addFriendAskRejectEventListener()
+                preventDropdownHide()
+            })
 	}
 
     function createFriendAskDOM(friendAsk) {
@@ -27,55 +23,45 @@ let friendAskModule = (function () {
     }
 
 	function addFriendAskAcceptEventListener() {
-		let btns = document.getElementsByClassName('friend-ask-accept-btn')
+		const btns = document.getElementsByClassName('friend-ask-accept-btn')
 		for(let i = 0; i < btns.length; i++) {
-			btns[i].addEventListener('click', function() {
-			    let data = {"friendAskId" : btns[i].parentNode.getAttribute("data-id")}
+			btns[i].addEventListener('click', async function(event) {
+			    const data = {"friendAskId" : event.target.parentNode.getAttribute("data-id")}
 
-                let res = $.ajax({
-                    url: "/api/friends",
-                    type: "POST",
-                    async: false,
-                    headers: header,
-                    dataType: 'json',
-                    data: JSON.stringify(data)
-                })
+                const res = await api.POST("/api/friends", data)
 
 	            if(res.status == 201) {
 	                alert('친구가 되었습니다~')
-	                let parent = btns[i].parentNode
+	                const parent = event.target.parentNode
 	                parent.parentNode.removeChild(parent)
 	            } else if(res.status == 400) {
-    	            alert(res.responseJSON.message)
+                    const error = await res.json()
+    	            alert(error.message)
 	            }
 			})
 		}
 	}
 
 	function addFriendAskRejectEventListener() {
-    		let btns = document.getElementsByClassName('friend-ask-reject-btn')
-    		for(let i = 0; i < btns.length; i++) {
-    			btns[i].addEventListener('click', function() {
-    			    let friendAskId = btns[i].parentNode.getAttribute("data-id")
-    			    let deleteUrl = "/api/friends/asks/" + friendAskId
+		const btns = document.getElementsByClassName('friend-ask-reject-btn')
+		for(let i = 0; i < btns.length; i++) {
+			btns[i].addEventListener('click', async function(event) {
+			    const friendAskId = event.target.parentNode.getAttribute("data-id")
+			    const deleteUrl = "/api/friends/asks/" + friendAskId
 
-    	            let res = $.ajax({
-    	                url: deleteUrl,
-    	                type: "DELETE",
-    	                async: false,
-    	                headers: header
-    	            })
+                const res = await api.DELETE(deleteUrl)
 
-    	            if(res.status == 204) {
-    	                alert('친구 요청이 거절되었습니다.')
-    	                let parent = btns[i].parentNode
-    	                parent.parentNode.removeChild(parent)
-    	            } else if(res.status == 400) {
-        	            alert(res.responseJSON.message)
-    	            }
-    			})
-    		}
-    	}
+	            if(res.status == 204) {
+	                alert('친구 요청이 거절되었습니다.')
+	                const parent = event.target.parentNode
+	                parent.parentNode.removeChild(parent)
+	            } else if(res.status == 400) {
+                    const error = await res.json()
+    	            alert(error.message)
+	            }
+			})
+		}
+	}
 
     function preventDropdownHide() {
         $('div.btn-group.dropleft').on('click', function (event) {
