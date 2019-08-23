@@ -168,14 +168,14 @@ class CommentServiceTest {
         final Page page = mock(Page.class);
         final Pageable pageable = mock(Pageable.class);
 
-        when(commentRepository.findAllByPostIdAndParentIdIsNullAndIsDeletedIsFalse(POST_ID, pageable)).thenReturn(page);
+        when(commentRepository.findAllByPostIdAndParentIdIsNullAndDeletedIsFalse(POST_ID, pageable)).thenReturn(page);
         when(page.map(any())).thenReturn(page);
 
         // when
         commentService.findCommentResponsesByPostId(POST_ID, pageable);
 
         // then
-        verify(commentRepository).findAllByPostIdAndParentIdIsNullAndIsDeletedIsFalse(POST_ID, pageable);
+        verify(commentRepository).findAllByPostIdAndParentIdIsNullAndDeletedIsFalse(POST_ID, pageable);
     }
 
     @Test
@@ -184,14 +184,14 @@ class CommentServiceTest {
         final Page page = mock(Page.class);
         final Pageable pageable = mock(Pageable.class);
 
-        when(commentRepository.findAllByParentIdAndIsDeletedIsFalse(COMMENT_ID, pageable)).thenReturn(page);
+        when(commentRepository.findAllByParentIdAndDeletedIsFalse(COMMENT_ID, pageable)).thenReturn(page);
         when(page.map(any())).thenReturn(page);
 
         // when
         commentService.findCommentResponsesByParentId(COMMENT_ID, pageable);
 
         // then
-        verify(commentRepository).findAllByParentIdAndIsDeletedIsFalse(COMMENT_ID, pageable);
+        verify(commentRepository).findAllByParentIdAndDeletedIsFalse(COMMENT_ID, pageable);
     }
 
     @Test

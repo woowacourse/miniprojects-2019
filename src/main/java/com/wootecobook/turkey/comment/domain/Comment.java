@@ -29,7 +29,7 @@ public class Comment extends UpdatableEntity {
     private String contents;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean isDeleted;
+    private boolean deleted;
 
     @ManyToOne
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comment_to_user"), nullable = false)
@@ -55,7 +55,7 @@ public class Comment extends UpdatableEntity {
         this.user = user;
         this.post = post;
         this.parent = parent;
-        this.isDeleted = false;
+        this.deleted = false;
     }
 
     public boolean isWrittenBy(Long userId) {
@@ -75,12 +75,12 @@ public class Comment extends UpdatableEntity {
 
     public void delete() {
         validateDelete();
-        isDeleted = true;
+        deleted = true;
         contents = CONTENTS_DELETE_MESSAGE;
     }
 
     private void validateDelete() {
-        if (this.isDeleted) {
+        if (this.deleted) {
             throw new AlreadyDeleteException(this.getId());
         }
     }
