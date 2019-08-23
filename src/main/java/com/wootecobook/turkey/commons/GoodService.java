@@ -1,6 +1,5 @@
-package com.wootecobook.turkey.post.service;
+package com.wootecobook.turkey.commons;
 
-import com.wootecobook.turkey.commons.Good;
 import com.wootecobook.turkey.user.domain.User;
 import org.springframework.transaction.annotation.Transactional;
 

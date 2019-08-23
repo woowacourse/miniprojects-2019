@@ -1,6 +1,6 @@
 package com.wootecobook.turkey.post.service;
 
-import com.wootecobook.turkey.commons.Good;
+import com.wootecobook.turkey.commons.GoodService;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostGood;
 import com.wootecobook.turkey.post.domain.PostGoodRepository;

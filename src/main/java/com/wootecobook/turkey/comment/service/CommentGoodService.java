@@ -3,7 +3,7 @@ package com.wootecobook.turkey.comment.service;
 import com.wootecobook.turkey.comment.domain.Comment;
 import com.wootecobook.turkey.comment.domain.CommentGood;
 import com.wootecobook.turkey.comment.domain.CommentGoodRepository;
-import com.wootecobook.turkey.post.service.GoodService;
+import com.wootecobook.turkey.commons.GoodService;
 import com.wootecobook.turkey.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
