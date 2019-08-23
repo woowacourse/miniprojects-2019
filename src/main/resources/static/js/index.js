@@ -57,7 +57,6 @@ const IndexApp = (() => {
 
         const login = (event) => {
             event.preventDefault();
-            event.stopPropagation();
 
             const email = document.getElementById('login-email');
             const password = document.getElementById('login-password');
@@ -81,7 +80,6 @@ const IndexApp = (() => {
 
         const signUp = (event) => {
             event.preventDefault();
-            event.stopPropagation();
 
             if(AppStorage.check('sign-up-run')) return;
             AppStorage.set('sign-up-run', true);

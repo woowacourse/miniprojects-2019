@@ -41,7 +41,6 @@ const UsersApp = (() => {
 
         const update = (event) => {
             event.preventDefault();
-            event.stopPropagation();
 
             const storageKeyName = 'user-update-btn-run';
             if(AppStorage.check(storageKeyName)) return;
