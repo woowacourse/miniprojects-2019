@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Entity
 @Getter
 @NoArgsConstructor
+@Where(clause = "deleted = 0")
 public class Comment extends UpdatableEntity {
 
     protected static final String CONTENTS_DELETE_MESSAGE = "삭제된 글입니다.";
@@ -100,3 +102,4 @@ public class Comment extends UpdatableEntity {
         return Optional.of(parent.getId());
     }
 }
+
