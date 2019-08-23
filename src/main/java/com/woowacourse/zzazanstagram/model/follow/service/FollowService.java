@@ -26,13 +26,12 @@ public class FollowService {
     public boolean follow(FollowRequest followRequest) {
         Member followee = findMember(followRequest.getFolloweeId());
         Member follower = findMember(followRequest.getFollowerId());
-        Follow follow = new Follow(followee, follower);
         return followRepository.findByFolloweeAndFollower(followee, follower)
                 .map(x -> {
                     followRepository.delete(x);
                     return false;
                 }).orElseGet(() -> {
-                    followRepository.save(follow);
+                    followRepository.save(new Follow(followee, follower));
                     return true;
                 });
     }
