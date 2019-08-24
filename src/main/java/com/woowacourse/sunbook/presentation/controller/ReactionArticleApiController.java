@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/articles/{articleId}/good")
-public class ReactionApiController {
+public class ReactionArticleApiController {
     private ReactionArticleService reactionArticleService;
 
     @Autowired
-    public ReactionApiController(ReactionArticleService reactionArticleService) {
+    public ReactionArticleApiController(ReactionArticleService reactionArticleService) {
         this.reactionArticleService = reactionArticleService;
     }
 

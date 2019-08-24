@@ -1,16 +1,12 @@
 package com.woowacourse.sunbook.presentation.controller;
 
 import com.woowacourse.sunbook.application.dto.reaction.ReactionDto;
-import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
-import com.woowacourse.sunbook.domain.user.UserEmail;
-import com.woowacourse.sunbook.domain.user.UserName;
-import com.woowacourse.sunbook.domain.user.UserPassword;
 import com.woowacourse.sunbook.presentation.template.TestTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-public class ReactionApiControllerTest extends TestTemplate {
+public class ReactionArticleApiControllerTest extends TestTemplate {
     ReactionDto reactionDto = new ReactionDto(0L, false);
 
     @Test
