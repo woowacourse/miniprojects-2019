@@ -32,3 +32,12 @@ VALUES (1, '첫번째 댓글', 1, 1);
 
 INSERT INTO comment (id, contents, author_id, article_id)
 VALUES (2, '두번째 댓글', 1, 1);
+
+INSERT INTO comment (id, contents, author_id, article_id)
+VALUES (3, '세번째 댓글', 1, 1);
+
+INSERT INTO comment (id, contents, author_id, article_id)
+VALUES (4, '네번째 댓글', 1, 1);
+
+INSERT INTO comment (id, contents, author_id, article_id)
+VALUES (5, '다섯번째 댓글', 1, 1);
