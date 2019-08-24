@@ -299,3 +299,12 @@ header ul.nav-right li, header ul.nav-left li {
 .one-line {
     display: block;
 }
+
+.preview-file {
+    padding-right: 2%;
+}
+
+.carousel-item-video {
+    padding-left: 15%;
+    padding-right: 15%;
+}

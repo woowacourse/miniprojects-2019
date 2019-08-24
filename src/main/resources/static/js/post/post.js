@@ -24,7 +24,7 @@ writeBtn.addEventListener('click', (event) => {
 
     formDataApi.POST(POST_URL, formData)
         .then(res => {
-            if (res.ok) {
+            if (res.status == 201) {
                 return res.json();
             }
             throw res
@@ -137,7 +137,7 @@ const postOperateButton = (function () {
         const PostService = function () {
             const toggleUpdate = function (event) {
                 const buttonContainer = event.target.closest("a")
-                if (buttonContainer == null || !buttonContainer.hasClass) {
+                if (buttonContainer == null) {
                     return
                 }
                 if (buttonContainer.classList.contains('toggle-post-update')) {
@@ -458,16 +458,24 @@ const fileAttach = (function () {
                 filesPreviewContainer.innerHTML = ''
 
                 const files = fileAttachContainer.firstElementChild.files;
-                const filesSrc = [];
+                const fileInfos = [];
                 const len = files.length;
                 for (let i = 0; i < len; i++) {
-                    filesSrc.push(URL.createObjectURL(files[i]));
+                    const fileInfo = new FileInfo(files[i].type, URL.createObjectURL(files[i]))
+                    fileInfos.push(fileInfo);
                 }
 
-                const div = document.createElement('div');
-                div.innerHTML = previewTemplate(filesSrc)
-                filesPreviewContainer.innerHTML = div.innerHTML
+                try {
+                    filesPreviewContainer.innerHTML = previewTemplate(fileInfos)
+                } catch (err) {
+                    alert(err.message)
+                }
             }
+        }
+
+        const FileInfo = function (type, src) {
+            this.type = type
+            this.src = src
         }
 
         return {

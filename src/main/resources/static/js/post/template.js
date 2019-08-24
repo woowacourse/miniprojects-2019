@@ -57,10 +57,11 @@ const postTemplate = (post, loginUserId) => `
         </div>
         <div class="edit edit-form">
             <textarea class="resize-none form-control border bottom resize-none edit">${post.contents.contents}</textarea>
+            <div class="files-preview"></div>
             <ul class="composor-tools pdd-top-15">
                 <div>
                 <li class="bg-lightgray border-radius-round mrg-right-5">
-                    <input multiple name="filename[]" style="display:none" type="file"/>
+                    <input accept="video/*, image/*" multiple name="filename[]" style="display:none" type="file"/>
                     <div class="pdd-vertical-5 pdd-horizon-10 pointer file-attach">
                         <div class="inline-block icons photo-video"></div>
                         <span class="icon-name font-size-13 text-bold"> 사진/동영상</span>

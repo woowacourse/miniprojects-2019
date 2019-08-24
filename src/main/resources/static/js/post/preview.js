@@ -1,11 +1,16 @@
-const previewTemplate = (fileSrcs) => {
-    let previewTemplates = []
-    fileSrcs.forEach(function (src) {
-        previewTemplates.push(imageTemplate(src))
+const previewTemplate = (fileInfos) => {
+    const previewTemplates = []
+    const div = document.createElement('div')
+
+    fileInfos.forEach(function (fileInfo) {
+        div.innerHTML = getFileTemplate(fileInfo.type, fileInfo.src)
+
+        const fileHtml = div.firstElementChild
+        fileHtml.setAttribute('class', 'preview-file')
+        fileHtml.setAttribute('width', '20%')
+
+        previewTemplates.push(fileHtml.outerHTML)
     })
+
     return previewTemplates.join('')
 }
-
-const imageTemplate = (src) => `
-<img src="${src}" width="20%"">
-`
