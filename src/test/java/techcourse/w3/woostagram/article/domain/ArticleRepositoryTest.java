@@ -57,7 +57,7 @@ class ArticleRepositoryTest {
         testEntityManager.persist(article1);
         testEntityManager.persist(article2);
 
-        Page<Article> result = articleRepository.findByUserIn(Arrays.asList(persistUser1, persistUser2), new PageRequest(0,2));
+        Page<Article> result = articleRepository.findByUserIn(Arrays.asList(persistUser1, persistUser2), new PageRequest(0, 2));
         assertThat(result.getTotalElements()).isEqualTo(2);
         assertThat(result.getTotalPages()).isEqualTo(1);
     }
