@@ -2,6 +2,7 @@ package com.wootecobook.turkey.login.controller;
 
 import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
+import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
 import com.wootecobook.turkey.user.service.UserService;
 import org.junit.jupiter.api.AfterEach;
@@ -37,14 +38,21 @@ class LoginApiControllerTests extends BaseControllerTests {
                 .password(VALID_USER_PASSWORD)
                 .build();
 
-        //when & then
-        webTestClient.post()
+        //when
+        UserSession userSession = webTestClient.post()
                 .uri("/login")
                 .contentType(MEDIA_TYPE)
                 .accept(MEDIA_TYPE)
                 .body(Mono.just(loginRequest), LoginRequest.class)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isOk()
+                .expectBody(UserSession.class)
+                .returnResult()
+                .getResponseBody();
+
+        // then
+        assertThat(userSession.getName()).isEqualTo(VALID_USER_NAME);
+        assertThat(userSession.getEmail()).isEqualTo(VALID_USER_EMAIL);
     }
 
     @Test

@@ -1,3 +1,28 @@
+const commentEditDeleteDropdown = `
+<a class="pointer absolute top-0 right-0 view" data-toggle="dropdown" aria-expanded="false">
+    <span class="btn-icon text-dark">
+        <i class="ti-more font-size-16"></i>
+    </span>
+</a>
+<a class="toggle-comment-update pointer absolute top-0 right-0 edit"  aria-expanded="true">
+    <i class="ti-close pdd-right-10 text-dark"></i>
+</a>
+<ul class="dropdown-menu view">
+    <li>
+        <a class="pointer toggle-comment-update">
+            <i class="ti-pencil pdd-right-10 text-dark"></i>
+            <span class="">댓글 수정</span>
+        </a>
+    </li>
+    <li>
+        <a class="pointer comment-delete">
+            <i class="ti-trash pdd-right-10 text-dark"></i>
+            <span class="">댓글 삭제</span>
+        </a>
+    </li>
+</ul>
+`
+
 const commentTemplate = (comment) => `
     <li class="comment-item parent-comment" data-id="${comment.id}">
         <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
@@ -22,33 +47,49 @@ const commentTemplate = (comment) => `
                 <span>·</span>
                 <span class="pointer">${dateFormat(comment.updatedAt, isUpdated(comment.createdAt, comment.updatedAt))}</span>
             </div>
-            
-                
-            <a class="pointer absolute top-0 right-0 view" data-toggle="dropdown" aria-expanded="false">
-                <span class="btn-icon text-dark">
-                    <i class="ti-more font-size-16"></i>
-                </span>
-            </a>
-            <a class="toggle-comment-update pointer absolute top-0 right-0 edit"  aria-expanded="true">
-                <i class="ti-close pdd-right-10 text-dark"></i>
-            </a>
-            <ul class="dropdown-menu view">
-                <li>
-                    <a class="pointer toggle-comment-update">
-                        <i class="ti-pencil pdd-right-10 text-dark"></i>
-                        <span class="">댓글 수정</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer comment-delete">
-                        <i class="ti-trash pdd-right-10 text-dark"></i>
-                        <span class="">댓글 삭제</span>
-                    </a>
-                </li>   
-            </ul>
+            ${
+                (() => {
+                    if (comment.userResponse.id == localStorage.loginUserId) {
+                        return commentEditDeleteDropdown
+                    } else {
+                        return ""
+                    }
+                })()
+            }
+
         </div>
     </li>
 `;
+
+const childCommentEditDeleteDropdown = (comment) => `
+<a class="pointer absolute top-0 right-0 view width-30" data-toggle="dropdown" aria-expanded="false">
+    <span class="btn-icon text-dark">
+        <i class="ti-more font-size-16"></i>
+    </span>
+</a>
+
+<div class="edit edit-form">
+    <a class="toggle-comment-update pointer absolute top-0 right-100 edit"  aria-expanded="false">
+        <i class="ti-close pdd-right-10 text-dark"></i>
+    </a>
+    <textarea class="bg-lightgray border-radius-18 padding-10 max-width-100 edit">${comment.contents}</textarea>
+</div>
+
+<ul class="dropdown-menu view">
+    <li>
+        <a class="pointer toggle-comment-update">
+            <i class="ti-pencil pdd-right-10 text-dark"></i>
+            <span class="">댓글 수정</span>
+        </a>
+    </li>
+    <li>
+        <a class="pointer comment-delete">
+            <i class="ti-trash pdd-right-10 text-dark"></i>
+            <span class="">댓글 삭제</span>
+        </a>
+    </li>
+</ul>
+`
 
 
 const childCommentTemplate = (comment) => `
@@ -67,36 +108,15 @@ const childCommentTemplate = (comment) => `
                 <span>·</span>
                 <span class="pointer">${dateFormat(comment.updatedAt, isUpdated(comment.createdAt, comment.updatedAt))}</span>
             </div>
-            
-                
-            <a class="pointer absolute top-0 right-0 view width-30" data-toggle="dropdown" aria-expanded="false">
-                <span class="btn-icon text-dark">
-                    <i class="ti-more font-size-16"></i>
-                </span>
-            </a>
-            
-             <div class="edit edit-form">
-                 <a class="toggle-comment-update pointer absolute top-0 right-100 edit"  aria-expanded="false">
-                    <i class="ti-close pdd-right-10 text-dark"></i>
-                </a>
-                <textarea class="bg-lightgray border-radius-18 padding-10 max-width-100 edit">${comment.contents}</textarea>
-            </div>
-            
-            <ul class="dropdown-menu view">
-                <li>
-                    <a class="pointer toggle-comment-update">
-                        <i class="ti-pencil pdd-right-10 text-dark"></i>
-                        <span class="">댓글 수정</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer comment-delete">
-                        <i class="ti-trash pdd-right-10 text-dark"></i>
-                        <span class="">댓글 삭제</span>
-                    </a>
-                </li>   
-            </ul>
-            
+            ${
+                (() => {
+                    if (comment.userResponse.id == localStorage.loginUserId) {
+                        return childCommentEditDeleteDropdown(comment)
+                    } else {
+                        return ""
+                    }
+                })()
+            }
         </div>
     </li>
 `;

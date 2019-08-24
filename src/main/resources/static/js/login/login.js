@@ -1,17 +1,23 @@
-async function login() {
-	const header = {
-		"Content-Type": "application/json; charset=UTF-8"
-	}
+function login() {
+	const loginRequest = $("#login_form").serializeObject()
 
-	const form_data = $("#login_form").serializeObject()
-
-    const res = await api.POST("/login", form_data)
-
-    if (res.status == 200) {
-		alert('로그인되었습니다.')
-		window.location.href="/"
-    } else if (res.status == 400) {
-        const error = await res.json()
-    	alert(error.message)
-    }
+    api.POST("/login", loginRequest)
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw res
+            }
+        })
+        .then(loginUser => {
+            localStorage.loginUserId = loginUser.id
+            localStorage.loginUserName = loginUser.name
+            localStorage.loginUserEmail = loginUser.email
+            alert('로그인되었습니다.')
+            window.location.href="/"
+        })
+        .catch(error => {
+            error.json().then(errorMessage =>
+                alert(errorMessage.message))
+        })
 }

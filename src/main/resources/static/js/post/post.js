@@ -78,7 +78,7 @@ const infinityScroll = (event) => {
 
 const createPostDOM = (post) => {
     const div = document.createElement('div');
-    div.innerHTML = postTemplate(post)
+    div.innerHTML = postTemplate(post, localStorage.loginUserId)
     return div
 }
 

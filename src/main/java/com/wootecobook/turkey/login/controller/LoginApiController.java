@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.login.controller;
 
+import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.login.service.LoginService;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,10 @@ public class LoginApiController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpSession httpSession) {
+    public ResponseEntity<UserSession> login(@RequestBody LoginRequest loginRequest, HttpSession httpSession) {
+        UserSession userSession = loginService.login(loginRequest);
         httpSession.setAttribute(USER_SESSION_KEY, loginService.login(loginRequest));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(userSession);
     }
 
     @PostMapping("/logout")

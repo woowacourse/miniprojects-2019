@@ -1,6 +1,31 @@
 const MY_PAGE_URL = (userId) => `/users/${userId}`
 
-const postTemplate = (post) => `
+const postEditDeleteDropdown = `
+<a class="pointer absolute top-0 right-0 view" data-toggle="dropdown" aria-expanded="false">
+    <span class="btn-icon text-dark">
+        <i class="ti-more font-size-16"></i>
+    </span>
+</a>
+<a class="toggle-post-update pointer absolute top-0 right-0 edit"  aria-expanded="false">
+    <i class="ti-close pdd-right-10 text-dark"></i>
+</a>
+<ul class="dropdown-menu view">
+    <li>
+        <a class="pointer toggle-post-update">
+            <i class="ti-pencil pdd-right-10 text-dark"></i>
+            <span class="">게시글 수정</span>
+        </a>
+    </li>
+    <li>
+        <a class="pointer post-delete">
+            <i class="ti-trash pdd-right-10 text-dark"></i>
+            <span class="">게시글 삭제</span>
+        </a>
+    </li>
+</ul>
+`
+
+const postTemplate = (post, loginUserId) => `
 <div class="card widget-feed padding-15" data-id="${post.id}">
     <div class="feed-header">
         <ul class="list-unstyled list-info">
@@ -10,28 +35,15 @@ const postTemplate = (post) => `
                     <a href="${MY_PAGE_URL(post.author.id)}" class="title no-pdd-vertical text-semibold inline-block">${post.author.name}</a>
                     <span>님이 그룹에 링크를 공유했습니다.</span>
                     <span class="sub-title">${dateFormat(post.updatedAt, isUpdated(post.createdAt, post.updatedAt))}</span>
-                    <a class="pointer absolute top-0 right-0 view" data-toggle="dropdown" aria-expanded="false">
-                        <span class="btn-icon text-dark">
-                            <i class="ti-more font-size-16"></i>
-                        </span>
-                    </a>
-                    <a class="toggle-post-update pointer absolute top-0 right-0 edit"  aria-expanded="false">
-                        <i class="ti-close pdd-right-10 text-dark"></i>
-                    </a>
-                    <ul class="dropdown-menu view">
-                        <li>
-                            <a class="pointer toggle-post-update">
-                                <i class="ti-pencil pdd-right-10 text-dark"></i>
-                                <span class="">게시글 수정</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="pointer post-delete">
-                                <i class="ti-trash pdd-right-10 text-dark"></i>
-                                <span class="">게시글 삭제</span>
-                            </a>
-                        </li>   
-                    </ul>
+                    ${
+                        (() => {
+                            if (post.author.id == loginUserId) {
+                                return postEditDeleteDropdown
+                            } else {
+                                return ""
+                            }
+                        })()
+                    }
                 </div>
             </li>
         </ul>
