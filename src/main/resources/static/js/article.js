@@ -111,12 +111,9 @@ const ArticleApp = (() => {
             });
         };
 
-        const update = (event) => {
-            const target = event.target;
+        const update = () => {
             const updateArea = document.getElementById('article-update-contents');
-            const article = target.closest('div[data-object="article"]');
-            console.log(article);
-            const articleId = article.getAttribute('data-article-id');
+            const articleId = document.getElementById('current-article-id').value;
             const data = {
                 contents: updateArea.value,
                 imageUrl: "",
@@ -150,6 +147,8 @@ const ArticleApp = (() => {
                 updateArea.value = article.querySelector('span[data-object="article-contents"]').innerText;
 
                 const showModalBtn = document.getElementById('show-article-modal-btn');
+                const articleIdSpan = document.getElementById('current-article-id');
+                articleIdSpan.value = articleId;
                 showModalBtn.click();
             }
         };
