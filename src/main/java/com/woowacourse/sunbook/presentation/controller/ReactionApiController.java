@@ -19,8 +19,10 @@ public class ReactionApiController {
     }
 
     @GetMapping
-    public ResponseEntity<ReactionDto> showGood(@PathVariable Long articleId) {
-        ReactionDto reactionDto = reactionArticleService.showCount(articleId);
+    public ResponseEntity<ReactionDto> showGood(@PathVariable Long articleId,
+                                                LoginUser loginUser) {
+        ReactionDto reactionDto = reactionArticleService
+                .showCount(loginUser.getId(), articleId);
 
         return new ResponseEntity<>(reactionDto, HttpStatus.OK);
     }
@@ -29,7 +31,7 @@ public class ReactionApiController {
     public ResponseEntity<ReactionDto> clickGood(@PathVariable Long articleId,
                                                  LoginUser loginUser) {
         ReactionDto resultReactionDto = reactionArticleService.
-                clickGood(articleId, loginUser.getId());
+                clickGood(loginUser.getId(), articleId);
 
         return new ResponseEntity<>(resultReactionDto, HttpStatus.OK);
     }

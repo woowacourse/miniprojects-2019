@@ -11,22 +11,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 public class ReactionApiControllerTest extends TestTemplate {
-    private static final String USER_EMAIL = "ddu0422@naver.com";
-    private static final String USER_NAME = "mir";
-    private static final String USER_PASSWORD = "asdf1234!A";
-
-    private UserEmail userEmail = new UserEmail(USER_EMAIL);
-    private UserName userName = new UserName(USER_NAME);
-    private UserPassword userPassword = new UserPassword(USER_PASSWORD);
-
-    private UserRequestDto userLoginRequestDto = new UserRequestDto(userEmail, userName, userPassword);
-    ReactionDto reactionDto = new ReactionDto(0L);
+    ReactionDto reactionDto = new ReactionDto(0L, false);
 
     @Test
     void 좋아요_정상_동작() {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.POST, "/api/articles/1/good", reactionDto, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(1L)
+                .jsonPath("$.hasGood").isEqualTo(true)
                 ;
     }
 
@@ -36,6 +28,7 @@ public class ReactionApiControllerTest extends TestTemplate {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.GET, "/api/articles/2/good", reactionDto, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(0L)
+                .jsonPath("$.hasGood").isEqualTo(false)
                 ;
     }
 
@@ -45,12 +38,14 @@ public class ReactionApiControllerTest extends TestTemplate {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.POST, "/api/articles/5/good", reactionDto, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(1L)
-        ;
+                .jsonPath("$.hasGood").isEqualTo(true)
+                ;
 
         // 좋아요 조회
         respondApi(loginAndRequest(HttpMethod.GET, "/api/articles/5/good", reactionDto, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(1L)
-        ;
+                .jsonPath("$.hasGood").isEqualTo(true)
+                ;
     }
 
     @Test
@@ -58,9 +53,12 @@ public class ReactionApiControllerTest extends TestTemplate {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.POST, "/api/articles/4/good", reactionDto, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(1L)
+                .jsonPath("$.hasGood").isEqualTo(true)
                 ;
+
         respondApi(loginAndRequest(HttpMethod.POST, "/api/articles/4/good", reactionDto, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(0L)
+                .jsonPath("$.hasGood").isEqualTo(false)
                 ;
     }
 }

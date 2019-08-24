@@ -26,7 +26,7 @@ public class ReactionArticleService {
     }
 
     @Transactional
-    public ReactionDto clickGood(final Long articleId, final Long userId) {
+    public ReactionDto clickGood(final Long userId, final Long articleId) {
         User author = userService.findById(userId);
         Article article = articleService.findById(articleId);
 
@@ -41,11 +41,12 @@ public class ReactionArticleService {
         return new ReactionDto(getCount(article), reactionArticle.getHasGood());
     }
 
-    public ReactionDto showCount(final Long articleId) {
+    public ReactionDto showCount(final Long userId, final Long articleId) {
+        User author = userService.findById(userId);
         Article article = articleService.findById(articleId);
-        Long countOfGood = getCount(article);
 
-        return new ReactionDto(countOfGood);
+        return new ReactionDto(getCount(article),
+                isClickedGoodInArticleByLoginUser(author, article));
     }
 
     private Long getCount(final Article article) {
@@ -53,5 +54,14 @@ public class ReactionArticleService {
                 .filter(reactionArticle -> reactionArticle.getHasGood())
                 .count()
                 ;
+    }
+
+    private boolean isClickedGoodInArticleByLoginUser(User loginUser, Article article) {
+        if (reactionArticleRepository.existsByAuthorAndArticle(loginUser, article)) {
+            ReactionArticle reactionArticle = reactionArticleRepository
+                    .findByAuthorAndArticle(loginUser, article);
+            return reactionArticle.getHasGood();
+        }
+        return false;
     }
 }

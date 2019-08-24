@@ -33,14 +33,7 @@ const ReactionApp = (function() {
                         document.getElementById(`good-count-${articleId}`)
                             .innerText = data.numberOfGood;
                         console.log(data);
-
-                        if (data.hasGood) {
-                            document.getElementById(`good-btn-icon-${articleId}`)
-                                .setAttribute('class', 'fa fa-thumbs-up font-size-16');
-                        } else {
-                            document.getElementById(`good-btn-icon-${articleId}`)
-                                .setAttribute('class', 'fa fa-thumbs-o-up font-size-16');
-                        }
+                        showGoodBtn(articleId, data.hasGood);
                     });
             }
         };
@@ -51,7 +44,18 @@ const ReactionApp = (function() {
                 .then(data => {
                     document.getElementById(`good-count-${articleId}`)
                         .innerText = data.numberOfGood;
+                    showGoodBtn(articleId, data.hasGood);
                 });
+        };
+
+        const showGoodBtn = (articleId, hasGood) => {
+            if (hasGood) {
+                document.getElementById(`good-btn-icon-${articleId}`)
+                    .setAttribute('class', 'fa fa-thumbs-up text-info font-size-16');
+            } else {
+                document.getElementById(`good-btn-icon-${articleId}`)
+                    .setAttribute('class', 'fa fa-thumbs-o-up font-size-16');
+            }
         };
 
         return {

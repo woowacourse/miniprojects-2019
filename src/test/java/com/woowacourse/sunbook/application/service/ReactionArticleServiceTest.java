@@ -24,7 +24,7 @@ public class ReactionArticleServiceTest extends MockStorage {
         given(reactionArticleRepository.existsByAuthorAndArticle(author, article)).willReturn(false);
         given(reactionArticleRepository.findByAuthorAndArticle(author, article)).willReturn(reactionArticle);
 
-        injectReactionArticleService.clickGood(ARTICLE_ID, AUTHOR_ID);
+        injectReactionArticleService.clickGood(AUTHOR_ID, ARTICLE_ID);
 
         verify(reactionArticleRepository).save(any(ReactionArticle.class));
     }
@@ -36,16 +36,30 @@ public class ReactionArticleServiceTest extends MockStorage {
         given(reactionArticleRepository.existsByAuthorAndArticle(author, article)).willReturn(true);
         given(reactionArticleRepository.findByAuthorAndArticle(author, article)).willReturn(reactionArticle);
 
-        injectReactionArticleService.clickGood(ARTICLE_ID, AUTHOR_ID);
+        injectReactionArticleService.clickGood(AUTHOR_ID, ARTICLE_ID);
 
         verify(reactionArticleRepository, never()).save(any(ReactionArticle.class));
     }
 
     @Test
-    void 좋아요_정상_조회() {
+    void 좋아요가_눌린_게시글_정상_조회() {
+        given(userService.findById(AUTHOR_ID)).willReturn(author);
         given(articleService.findById(ARTICLE_ID)).willReturn(article);
+        given(reactionArticleRepository.existsByAuthorAndArticle(author, article)).willReturn(true);
+        given(reactionArticleRepository.findByAuthorAndArticle(author, article)).willReturn(reactionArticle);
 
-        injectReactionArticleService.showCount(ARTICLE_ID);
+        injectReactionArticleService.showCount(AUTHOR_ID, ARTICLE_ID);
+
+        verify(reactionArticleRepository).findAllByArticle(article);
+    }
+
+    @Test
+    void 좋아요가_눌리지_않은_게시글_정상_조회() {
+        given(userService.findById(AUTHOR_ID)).willReturn(author);
+        given(articleService.findById(ARTICLE_ID)).willReturn(article);
+        given(reactionArticleRepository.existsByAuthorAndArticle(author, article)).willReturn(false);
+
+        injectReactionArticleService.showCount(AUTHOR_ID, ARTICLE_ID);
 
         verify(reactionArticleRepository).findAllByArticle(article);
     }
