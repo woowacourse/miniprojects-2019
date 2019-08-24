@@ -30,9 +30,9 @@ public class ReactionArticleApiController {
     @PostMapping
     public ResponseEntity<ReactionDto> clickGood(@PathVariable Long articleId,
                                                  LoginUser loginUser) {
-        ReactionDto resultReactionDto = reactionArticleService.
+        ReactionDto reactionDto = reactionArticleService.
                 clickGood(loginUser.getId(), articleId);
 
-        return new ResponseEntity<>(resultReactionDto, HttpStatus.OK);
+        return new ResponseEntity<>(reactionDto, HttpStatus.OK);
     }
 }
