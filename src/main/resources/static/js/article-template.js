@@ -41,7 +41,7 @@ const template = (function () {
                     <ul class="feed-action pdd-btm-5 border bottom">
                         <li>
                             <i class="fa fa-thumbs-o-up text-info font-size-16 mrg-left-5"></i>
-                            <span id="good-count-{{id}}" class="font-size-14 lh-2-1">{{numberOfGood}}</span>
+                            <span id="article-good-count-{{id}}" class="font-size-14 lh-2-1">{{numberOfGood}}</span>
                         </li>
                         <li class="float-right">
                             <span class="font-size-13">공유 78회</span>
@@ -51,9 +51,9 @@ const template = (function () {
                         </li>
                     </ul>
                     <ul class="feed-action border bottom d-flex">
-                        <li class="text-center flex-grow-1" data-btn="reaction-good-btn">
+                        <li class="text-center flex-grow-1" data-btn="article-reaction-good-btn">
                             <button class="btn btn-default no-border pdd-vertical-0 no-mrg width-100">
-                                <i id="good-btn-icon-{{id}}" class="fa fa-thumbs-o-up font-size-16"></i>
+                                <i id="article-good-btn-icon-{{id}}" class="fa fa-thumbs-o-up font-size-16"></i>
                                 <span class="font-size-13">좋아요</span>
                             </button>
                         </li>
@@ -109,11 +109,13 @@ const template = (function () {
                                 </li>
                             </ul>
                             <div class="font-size-12 pdd-left-10 pdd-top-5">
-                                <span class="pointer text-link-color">좋아요</span>
+                                <span class="pointer text-link-color" data-btn="comment-reaction-good-btn">좋아요</span>
                                 <span>·</span>
                                 <span class="pointer text-link-color">답글 달기</span>
                                 <span>·</span>
                                 <span class="pointer">{{updatedTime}}</span>
+                                <i id="comment-good-btn-icon-{{id}}" class="fa fa-thumbs-o-up text-info font-size-16 mrg-left-5"></i>
+                                <span id="comment-good-count-{{id}}" class="font-size-14 lh-2-1">{{numberOfGood}}</span>
                             </div>
                         </div>
                     </li>`;

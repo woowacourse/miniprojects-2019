@@ -67,7 +67,7 @@ const ArticleApp = (() => {
                             "article-imageUrl": article.articleFeature.imageUrl,
                             "authorName": article.authorName.name,
                         }));
-                        ReactionApp.service().showGoodCount(article.id);
+                        ReactionApp.service().showGoodCount('article', article.id);
                         checkBlank();
                     })
                 })
@@ -95,7 +95,7 @@ const ArticleApp = (() => {
                                 "article-imageUrl": article.articleFeature.imageUrl,
                                 "authorName": article.authorName.name,
                             }));
-                        ReactionApp.service().showGoodCount(article.id);
+                        ReactionApp.service().showGoodCount('article', article.id);
                         const videoTag = document.querySelector('video[data-object="article-video"]');
                         const imageTag = document.querySelector('img[data-object="article-image"]');
                         if (videoTag.getAttribute('src') === "") {

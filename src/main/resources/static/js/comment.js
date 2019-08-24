@@ -70,6 +70,7 @@ const CommentApp = (() => {
                                     "comment-contents": comment.commentFeature.contents,
                                     "updatedTime": comment.updatedTime,
                                 }));
+                            ReactionApp.service().showGoodCount('comment', comment.id);
                         })
                     })
                     .catch(error => console.log("error: " + error));
@@ -108,6 +109,7 @@ const CommentApp = (() => {
                                                 "comment-contents": comment.commentFeature.contents,
                                                 "updatedTime": comment.updatedTime,
                                             }));
+                                        ReactionApp.service().showGoodCount('comment', comment.id);
                                     })
                                 })
                                 .catch(error => console.log("error: " + error));
