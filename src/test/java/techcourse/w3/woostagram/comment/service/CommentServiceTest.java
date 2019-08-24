@@ -29,10 +29,13 @@ class CommentServiceTest {
 
     @InjectMocks
     private CommentService commentService;
+
     @Mock
     private UserService userService;
+
     @Mock
     private ArticleService articleService;
+
     @Mock
     private CommentRepository commentRepository;
 
@@ -83,8 +86,6 @@ class CommentServiceTest {
                 CommentDto.from(commentDto1.toEntity(user, article), USER_ID),
                 CommentDto.from(commentDto2.toEntity(user, article), USER_ID)
         ));
-
-
     }
 
     @Test
