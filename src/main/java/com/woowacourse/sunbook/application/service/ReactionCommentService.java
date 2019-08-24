@@ -50,7 +50,7 @@ public class ReactionCommentService {
     }
 
     private Long getCount(final Comment comment) {
-        return reactionCommentRepository.findAllByArticle(comment).stream()
+        return reactionCommentRepository.findAllByComment(comment).stream()
                 .filter(reactionComment -> reactionComment.getHasGood())
                 .count()
                 ;
