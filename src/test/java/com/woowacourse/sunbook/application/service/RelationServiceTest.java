@@ -1,8 +1,8 @@
 package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.MockStorage;
-import com.woowacourse.sunbook.domain.friends.Relation;
-import com.woowacourse.sunbook.domain.friends.Relationship;
+import com.woowacourse.sunbook.domain.relation.Relation;
+import com.woowacourse.sunbook.domain.relation.Relationship;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserEmail;
 import com.woowacourse.sunbook.domain.user.UserName;

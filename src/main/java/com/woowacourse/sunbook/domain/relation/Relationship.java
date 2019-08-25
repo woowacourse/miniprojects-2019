@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.domain.friends;
+package com.woowacourse.sunbook.domain.relation;
 
 import lombok.Getter;
 import lombok.ToString;

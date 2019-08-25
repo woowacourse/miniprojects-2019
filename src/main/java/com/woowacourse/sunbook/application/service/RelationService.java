@@ -1,9 +1,9 @@
 package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
-import com.woowacourse.sunbook.domain.friends.Relation;
-import com.woowacourse.sunbook.domain.friends.RelationRepository;
-import com.woowacourse.sunbook.domain.friends.Relationship;
+import com.woowacourse.sunbook.domain.relation.Relation;
+import com.woowacourse.sunbook.domain.relation.RelationRepository;
+import com.woowacourse.sunbook.domain.relation.Relationship;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.validation.exception.RelationException;
 import org.modelmapper.ModelMapper;

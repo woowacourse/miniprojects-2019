@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.domain.friends;
+package com.woowacourse.sunbook.domain.relation;
 
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserEmail;
