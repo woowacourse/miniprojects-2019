@@ -1,21 +1,21 @@
 const Index = (function () {
 
     const pageSize = 10;
+    let loggedinUserData ;
 
     const IndexController = function () {
         const indexService = new IndexService();
         const articleList = document.querySelector('.article-card-con');
 
         const loadInit = function () {
-            indexService.getPageData(0);
-            document.querySelector("i").addEventListener("click", function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
+            indexService.getLoggedInData().then((data)=>{
+                loggedinUserData = data;
+                indexService.getPageData(0);
+            })
         };
 
         const likeButton = () => {
-            articleList.addEventListener('click', function (event) {
+            articleList.addEventListener('click', (event) =>{
                 if (event.target.classList.contains('like-btn')) {
                     const articleId = event.target.closest('.article-card').dataset.articleId;
                     const isLike = event.target.dataset.liking;
@@ -30,8 +30,20 @@ const Index = (function () {
                     const articleId = event.target.closest('.article-card').dataset.articleId;
                     const commentsArea = event.target.closest('.add-comment').querySelector('textarea')
                     const comments = commentsArea.value;
-                    indexService.createComment(articleId, comments);
+                    indexService.createComment(articleId, comments, event.target);
                     commentsArea.value = "";
+                }
+            })
+        }
+
+        const commentSubmitKey =() =>{
+            articleList.addEventListener('keydown',(event)=>{
+                if(event.target.classList.contains("comment-textarea") && event.keyCode == 13){
+                    event.preventDefault();
+                    const articleId = event.target.closest('.article-card').dataset.articleId;
+                    const comments = event.target.value;
+                    indexService.createComment(articleId, comments, event.target);
+                    event.target.value = "";
                 }
             })
         }
@@ -40,6 +52,7 @@ const Index = (function () {
             loadInit()
             likeButton()
             commentSubmitButton()
+            commentSubmitKey()
         };
 
         return {
@@ -51,6 +64,7 @@ const Index = (function () {
     const IndexService = function () {
         const indexRequest = new Request("/api/main");
         const commentRequest = new Request("/api/articles/");
+        const userRequest = new Request("/api/users")
         const like = new Like();
         const getPageData = (pageNum) => {
             indexRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
@@ -63,6 +77,12 @@ const Index = (function () {
                     container.insertAdjacentHTML('beforeend', pagesHtml);
                 })
         };
+
+        const getLoggedInData = () =>{
+             return userRequest.get("/loggedin",(status,data)=>{
+                return data;
+            })
+        }
 
         const eventLike = (articleId, isLike, e) => {
             if (isLike == 'false') {
@@ -121,16 +141,19 @@ const Index = (function () {
             return commentsHtml;
         };
 
-        const createComment = (articleId, value) => {
-            commentRequest.post(`${articleId}/comments`, {contents: value}, ()=>{
-
+        const createComment = (articleId, value, target) => {
+            commentRequest.post(`${articleId}/comments`, {contents: value}, (status,data)=>{
+                const commentList = target.closest('.comment').querySelector('.comment-list')
+                const commentHTML =getCommentTemplate(data.id,data.userInfoDto.userContentsDto.userName,data.contents)
+                commentList.insertAdjacentHTML('beforeend', commentHTML)
             })
         }
 
         return {
             getPageData: getPageData,
             eventLike: eventLike,
-            createComment:createComment
+            createComment:createComment,
+            getLoggedInData:getLoggedInData
         }
     };
 
