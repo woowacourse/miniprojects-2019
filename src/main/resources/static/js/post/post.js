@@ -3,46 +3,8 @@ const ENTER = 13
 
 const posts = document.getElementById('contents')
 
-const writeBtn = document.getElementById('write-btn')
-const writeArea = document.getElementById('write-area')
-
 let totalPage;
 let currentPageNumber = 1;
-writeBtn.addEventListener('click', (event) => {
-    const formData = new FormData();
-
-    const contents = writeArea.value
-    formData.append('contents', contents)
-
-    const fileForm = event.target.closest('ul').querySelector('input[name="filename[]"]')
-    const files = fileForm.files
-
-    const len = files.length;
-    for (let i = 0; i < len; i++) {
-        formData.append('files', files[i]);
-    }
-
-    formDataApi.POST(POST_URL, formData)
-        .then(res => {
-            if (res.status == 201) {
-                return res.json();
-            }
-            throw res
-        })
-        .then(post => {
-            posts.prepend(createPostDOM(post))
-
-            const postWriteContainer = writeArea.closest('.card');
-            const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
-            filesPreviewContainer.innerHTML = ''
-            fileForm.value = ''
-            writeArea.value = ''
-        })
-        .catch(error => {
-            error.json().then(errorMessage =>
-                console.log(errorMessage.message))
-        })
-})
 
 const initLoad = async () => {
     await api.GET(POST_URL)
@@ -54,6 +16,49 @@ const initLoad = async () => {
             })
         })
         .catch(error => console.error(error))
+
+    const writeBtn = document.getElementById('write-btn')
+    const writeArea = document.getElementById('write-area')
+    writeBtn.addEventListener('click', (event) => {
+        const formData = new FormData();
+
+        const contents = writeArea.value
+        formData.append('contents', contents)
+
+        const receiver = writeArea.dataset.id
+        if (receiver !== undefined && receiver !== localStorage.loginUserId) {
+            formData.append('receiver', receiver)
+        }
+
+        const fileForm = event.target.closest('ul').querySelector('input[name="filename[]"]')
+        const files = fileForm.files
+
+        const len = files.length;
+        for (let i = 0; i < len; i++) {
+            formData.append('files', files[i]);
+        }
+
+        formDataApi.POST(POST_URL, formData)
+            .then(res => {
+                if (res.status == 201) {
+                    return res.json();
+                }
+                throw res
+            })
+            .then(post => {
+                posts.prepend(createPostDOM(post))
+
+                const postWriteContainer = writeArea.closest('.card');
+                const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
+                filesPreviewContainer.innerHTML = ''
+                fileForm.value = ''
+                writeArea.value = ''
+            })
+            .catch(error => {
+                error.json().then(errorMessage =>
+                    alert(errorMessage.message))
+            })
+    })
 }
 
 const infinityScroll = (event) => {
@@ -179,7 +184,7 @@ const postOperateButton = (function () {
                         .catch(errorResponse =>
                             errorResponse.json()
                                 .then(errorMessage =>
-                                    console.log(errorMessage.message)
+                                    alert(errorMessage.message)
                                 )
                         )
                 }

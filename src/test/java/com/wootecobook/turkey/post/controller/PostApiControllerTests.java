@@ -30,18 +30,22 @@ class PostApiControllerTests extends BaseControllerTests {
     @Autowired
     private WebTestClient webTestClient;
 
-    private Long userId;
-    private String jSessionId;
+    private Long authorId;
+    private String authorJSessionId;
+    private Long otherId;
+    private String otherJSessionId;
     private ByteArrayResource testFile;
 
     @BeforeEach
     void setUp() {
-        userId = addUser("olaf", VALID_USER_EMAIL, VALID_USER_PASSWORD);
-        jSessionId = logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD);
+        authorId = addUser("olaf", VALID_USER_EMAIL, VALID_USER_PASSWORD);
+        otherId = addUser("chulsea", "chulsea@mail.com", VALID_USER_PASSWORD);
+        authorJSessionId = logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD);
+        otherJSessionId = logIn("chulsea@mail.com", VALID_USER_PASSWORD);
         testFile = new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
             @Override
             public String getFilename() {
-                return "test_file.mp4";
+                return "test_file.jpg";
             }
         };
     }
@@ -56,7 +60,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         //when
         PostResponse postResponse = webTestClient.post().uri(POST_URL)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
                 .syncBody(bodyBuilder.build())
                 .exchange()
                 .expectStatus().isCreated()
@@ -77,7 +81,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         //when
         PostResponse postResponse = webTestClient.post().uri(POST_URL)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
                 .syncBody(bodyBuilder.build())
                 .exchange()
                 .expectStatus().isCreated()
@@ -98,7 +102,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         //when
         ErrorMessage errorMessage = webTestClient.post().uri(POST_URL)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
                 .syncBody(bodyBuilder.build())
                 .exchange()
                 .expectStatus().isBadRequest()
@@ -114,7 +118,7 @@ class PostApiControllerTests extends BaseControllerTests {
     void 페이지_조회_정상_로직_테스트() {
         //when & then
         webTestClient.get().uri(POST_URL)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -128,7 +132,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         //when
         PostResponse postResponse = webTestClient.put().uri(POST_URL + "/{postId}", postId)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
                 .contentType(MEDIA_TYPE)
                 .body(Mono.just(postUpdateRequest), PostRequest.class)
                 .exchange()
@@ -150,7 +154,23 @@ class PostApiControllerTests extends BaseControllerTests {
 
         //when & then
         webTestClient.put().uri(POST_URL + "/{postId}", postId)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
+                .contentType(MEDIA_TYPE)
+                .body(Mono.just(postUpdateRequest), PostRequest.class)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void 게시글_수정_권한없는_유저인_경우_예외_테스트() {
+        //given
+        Long postId = addPost("olaf");
+
+        PostRequest postUpdateRequest = PostRequest.builder().contents("chelsea").build();
+
+        //when
+        webTestClient.put().uri(POST_URL + "/{postId}", postId)
+                .cookie(JSESSIONID, otherJSessionId)
                 .contentType(MEDIA_TYPE)
                 .body(Mono.just(postUpdateRequest), PostRequest.class)
                 .exchange()
@@ -164,7 +184,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         //when & then
         webTestClient.delete().uri(POST_URL + "/{postId}", postId)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
                 .exchange()
                 .expectStatus().isNoContent();
     }
@@ -173,7 +193,19 @@ class PostApiControllerTests extends BaseControllerTests {
     void 게시글_삭제_존재하지_않는_게시글_예외_테스트() {
         //when & then
         webTestClient.delete().uri(POST_URL + "/{postId}", Long.MAX_VALUE)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void 게시글_삭제_권한없는_유저인_경우_예외_테스트() {
+        //given
+        Long postId = addPost("olaf");
+
+        //when & then
+        webTestClient.delete().uri(POST_URL + "/{postId}", postId)
+                .cookie(JSESSIONID, otherJSessionId)
                 .exchange()
                 .expectStatus().isBadRequest();
     }
@@ -185,7 +217,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         // when
         GoodResponse goodResponse = webTestClient.get().uri(POST_URL + "/{postId}/good", postId)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(GoodResponse.class)
@@ -197,7 +229,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         // when
         GoodResponse postGoodCancelResponse = webTestClient.get().uri(POST_URL + "/{postId}/good", postId)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(GoodResponse.class)
@@ -215,7 +247,7 @@ class PostApiControllerTests extends BaseControllerTests {
         bodyBuilder.part("contents", contents);
 
         PostResponse postResponse = webTestClient.post().uri(POST_URL)
-                .cookie(JSESSIONID, jSessionId)
+                .cookie(JSESSIONID, authorJSessionId)
                 .syncBody(bodyBuilder.build())
                 .exchange()
                 .expectStatus().isCreated()
@@ -228,6 +260,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
     @AfterEach
     void tearDown() {
-        deleteUser(userId, VALID_USER_EMAIL, VALID_USER_PASSWORD);
+        deleteUser(authorId, VALID_USER_EMAIL, VALID_USER_PASSWORD);
+        deleteUser(otherId, "chulsea@mail.com", VALID_USER_PASSWORD);
     }
 }

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -22,8 +23,12 @@ public class Post extends UpdatableEntity {
     private Contents contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_post_to_user"))
+    @JoinColumn(name = "author_id", nullable = false, foreignKey = @ForeignKey(name = "fk_post_to_author_user"), updatable = false)
     private User author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id", foreignKey = @ForeignKey(name = "fk_post_to_receiver_user"), updatable = false)
+    private User receiver;
 
     @OneToMany
     @JoinTable(name = "post_file",
@@ -32,14 +37,16 @@ public class Post extends UpdatableEntity {
     private List<UploadFile> uploadFiles = new ArrayList<>();
 
     @Builder
-    private Post(final Long id, final Contents contents, final User author, List<UploadFile> uploadFiles) {
+    private Post(final Long id, final User author, final User receiver,
+                 final Contents contents, final List<UploadFile> uploadFiles) {
         if (id == null) {
             validateAuthor(author);
         }
         validateContents(contents);
 
-        this.contents = contents;
         this.author = author;
+        this.receiver = receiver;
+        this.contents = contents;
         this.uploadFiles = uploadFiles;
     }
 
@@ -67,5 +74,9 @@ public class Post extends UpdatableEntity {
 
     public boolean isWrittenBy(final Long userId) {
         return author.matchId(userId);
+    }
+
+    public Optional<User> getReceiver() {
+        return Optional.ofNullable(receiver);
     }
 }

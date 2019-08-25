@@ -21,6 +21,7 @@ public class PostResponse {
 
     private Long id;
     private UserResponse author;
+    private UserResponse receiver;
     private Contents contents;
     private List<FileResponse> files;
     private LocalDateTime createdAt;
@@ -29,11 +30,12 @@ public class PostResponse {
     private GoodResponse goodResponse;
 
     @Builder
-    public PostResponse(final Long id, final UserResponse author, final Contents contents,
+    public PostResponse(final Long id, final UserResponse author, final UserResponse receiver, final Contents contents,
                         final List<FileResponse> fileResponses, final LocalDateTime createdAt, final LocalDateTime updatedAt,
                         final Integer totalComment, final GoodResponse goodResponse) {
         this.id = id;
         this.author = author;
+        this.receiver = receiver;
         this.contents = contents;
         this.files = fileResponses;
         this.createdAt = createdAt;
@@ -47,9 +49,14 @@ public class PostResponse {
                 .map(FileResponse::from)
                 .collect(Collectors.toList());
 
+        UserResponse receiverResponse = post.getReceiver()
+                .map(UserResponse::from)
+                .orElse(null);
+
         return PostResponse.builder()
                 .id(post.getId())
                 .author(UserResponse.from(post.getAuthor()))
+                .receiver(receiverResponse)
                 .contents(post.getContents())
                 .fileResponses(fileResponses)
                 .createdAt(post.getCreatedAt())

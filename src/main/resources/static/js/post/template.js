@@ -33,15 +33,21 @@ const postTemplate = (post, loginUserId) => `
                 <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
                 <div class="info">
                     <a href="${MY_PAGE_URL(post.author.id)}" class="title no-pdd-vertical text-semibold inline-block">${post.author.name}</a>
-                    <span>님이 그룹에 링크를 공유했습니다.</span>
+                    ${
+                        (() => {
+                            if (post.receiver !== null) {
+                                return receiverFormat(post.receiver)
+                            }
+                            return ""
+                        })()
+                    }                
                     <span class="sub-title">${dateFormat(post.updatedAt, isUpdated(post.createdAt, post.updatedAt))}</span>
                     ${
                         (() => {
                             if (post.author.id == loginUserId) {
                                 return postEditDeleteDropdown
-                            } else {
-                                return ""
                             }
+                            return ""
                         })()
                     }
                 </div>
@@ -60,7 +66,7 @@ const postTemplate = (post, loginUserId) => `
             <div class="files-preview"></div>
             <ul class="composor-tools pdd-top-15">
                 <div>
-                <li class="bg-lightgray border-radius-round mrg-right-5">
+                <li class="bg-lightgray border-radius-round mrg-right-5 file-attach">
                     <input accept="video/*, image/*" multiple name="filename[]" style="display:none" type="file"/>
                     <div class="pdd-vertical-5 pdd-horizon-10 pointer file-attach">
                         <div class="inline-block icons photo-video"></div>
@@ -134,12 +140,6 @@ const postTemplate = (post, loginUserId) => `
 </div>
 `
 
-const textTemplate = (text) => `
-<span class="one-line">
-    ${text}
-</span>
-`
-
 const isUpdated = (createdAt, updatedAt) => {
     const createdDate = new Date(createdAt)
     const updatedDate = new Date(updatedAt)
@@ -159,6 +159,12 @@ const dateFormat = (date, updated) => {
 }
 
 const textFormat = contentStr => {
-    const result = contentStr.split('\n').map(content => textTemplate(content))
-    return result.join('')
+    const div = document.createElement('div');
+    div.innerText = contentStr
+    return div.outerHTML
 }
+
+const receiverFormat = (receiver) => `
+<i class="ti-angle-right"></i>
+<a href="${MY_PAGE_URL(receiver.id)}" class="title no-pdd-vertical text-semibold inline-block">${receiver.name}</a> 
+`

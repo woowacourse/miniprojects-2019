@@ -1,10 +1,11 @@
 const POST_GOOD_URL = (postId) => `/api/posts/${postId}/good`
 
 const postGood = (event) => {
+    const goodButtonContainer = event.target.closest('button')
     const targetPost = event.target.closest('.card')
     const targetPostId = targetPost.dataset.id;
     const showPostGood = targetPost.querySelector('ul.feed-action li span.show-post-good')
-    if (event.target.classList.contains('good')) {
+    if (goodButtonContainer != null && goodButtonContainer.classList.contains('good')) {
         api.GET(POST_GOOD_URL(targetPostId))
             .then(res => res.json())
             .then(good => {

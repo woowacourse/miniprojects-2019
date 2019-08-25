@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 @Transactional
 public class PostService {
 
+    public static final String POST_DIRECTORY_NAME = "post";
     private static final String NOT_FOUND_MESSAGE = "존재하지 않는 게시글입니다.";
     private static final int INIT_COMMENT_COUNT = 0;
-
     private final PostRepository postRepository;
     private final PostGoodService postGoodService;
     private final UserService userService;
@@ -47,11 +47,16 @@ public class PostService {
 
     public PostResponse save(final PostRequest postRequest, final Long userId) {
         User user = userService.findById(userId);
+        User receiver = findReceiverIfExist(postRequest.getReceiver());
         List<UploadFile> savedFiles = saveAttachments(postRequest.getFiles(), user);
 
-        Post savedPost = postRepository.save(postRequest.toEntity(user, savedFiles));
+        Post savedPost = postRepository.save(postRequest.toEntity(user, receiver, savedFiles));
 
         return PostResponse.from(savedPost, GoodResponse.init(), INIT_COMMENT_COUNT);
+    }
+
+    private User findReceiverIfExist(final Long receiverId) {
+        return receiverId == null ? null : userService.findById(receiverId);
     }
 
     private List<UploadFile> saveAttachments(List<MultipartFile> attachments, User owner) {
@@ -59,7 +64,7 @@ public class PostService {
             return new ArrayList<>();
         }
         return attachments.stream()
-                .map(file -> uploadFileService.save(file, "dir", owner))
+                .map(file -> uploadFileService.save(file, POST_DIRECTORY_NAME, owner))
                 .collect(Collectors.toList());
     }
 

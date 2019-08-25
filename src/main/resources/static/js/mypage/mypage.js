@@ -9,6 +9,7 @@ const feedInitLoad = () => {
         .then(res => res.json())
         .then(user => {
             profile.style.backgroundImage = `url(${user.profile})`
+            loadWriteForm(user)
             return user
         })
         .then(user => {
@@ -19,6 +20,11 @@ const feedInitLoad = () => {
             })
         })
         .catch(error => console.error(error))
+}
+
+const loadWriteForm = (receiver) => {
+    const writeContainer = document.getElementById("write-post")
+    writeContainer.innerHTML = writeFormTemplate(receiver)
 }
 
 feedInitLoad()
