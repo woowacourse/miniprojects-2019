@@ -33,6 +33,12 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute(LOGGED_IN_USER_SESSION_KEY);
+        return "redirect:/users/login/form";
+    }
+
     @GetMapping("signup/form")
     public String createForm() {
         return "signup";
@@ -59,8 +65,9 @@ public class UserController {
     }
 
     @PutMapping
-    public String update(UserUpdateDto userUpdateDto, @LoggedInUser String email) {
+    public String update(UserUpdateDto userUpdateDto, @LoggedInUser String email, HttpSession httpSession) {
         userService.update(userUpdateDto, email);
+        httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, userService.findByEmail(email));
         return "redirect:/users/mypage";
     }
 

@@ -23,8 +23,8 @@
                             <ul class="user-name feed-action pdd-horizon-15 pdd-top-5">
                                 <li><h2 th:text="${userPageInfo.userInfoDto.userContentsDto.userName}">dlwlrma</h2></li>
                                 <li th:if="${userPageInfo.mine}">
-                                    <a href="/users/mypage-edit/form" class="btn-mypage-edit">
-                                    <i class="fa fa-cog" aria-hidden="true"></i>
+                                    <a class="user-modal-btn">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
                                     </a>
                                 </li>
                                 <li th:unless="${userPageInfo.mine}">
@@ -83,8 +83,9 @@
     const mine = [[${userPageInfo.mine}]];
     const following = [[${userPageInfo.following}]];
     const targetId = [[${userPageInfo.userInfoDto.id}]];
-
 </script>
+<script src="/js/template.js"></script>
+<script src="/js/modal.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/util.js"></script>
 <script src="/js/mypage.js"></script>
