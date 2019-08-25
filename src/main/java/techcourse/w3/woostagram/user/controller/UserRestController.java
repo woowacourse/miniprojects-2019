@@ -17,8 +17,8 @@ public class UserRestController {
     }
 
     @GetMapping("/loggedin")
-    public ResponseEntity<String> readLoginInformation(@LoggedInUser String email){
-        return ResponseEntity.ok(email);
+    public ResponseEntity<UserInfoDto> readLoginInformation(@LoggedInUser String email){
+        return ResponseEntity.ok(userService.findByEmail(email));
     }
 
     @PostMapping
