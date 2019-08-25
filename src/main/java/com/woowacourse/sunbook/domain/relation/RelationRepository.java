@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RelationRepository extends JpaRepository<Relation, Long> {
-	List<Relation> findByFromAndRelationship(User user, Relationship relationship);
-	
 	Optional<Relation> findByFromAndTo(User from, User to);
+
+	List<Relation> findAllByFromAndRelationship(User from, Relationship relationship);
 }
