@@ -1,16 +1,16 @@
 package com.woowacourse.sunbook.application.service;
 
-import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
+import com.woowacourse.sunbook.application.dto.relation.RelationResponseDto;
 import com.woowacourse.sunbook.domain.relation.Relation;
 import com.woowacourse.sunbook.domain.relation.RelationRepository;
 import com.woowacourse.sunbook.domain.relation.Relationship;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.validation.exception.RelationException;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,13 +18,11 @@ import java.util.stream.Collectors;
 public class RelationService {
 	private final RelationRepository relationRepository;
 	private final UserService userService;
-	private final ModelMapper modelMapper;
 
 	@Autowired
-	public RelationService(final RelationRepository relationRepository, final UserService userService, final ModelMapper modelMapper) {
+	public RelationService(final RelationRepository relationRepository, final UserService userService) {
 		this.relationRepository = relationRepository;
 		this.userService = userService;
-		this.modelMapper = modelMapper;
 	}
 
 	@Transactional
@@ -66,7 +64,7 @@ public class RelationService {
 	public Relationship delete(final Long fromId, final Long toId) {
 		User from = userService.findById(fromId);
 		User to = userService.findById(toId);
-		
+
 		Relation fromRelation = relationRepository.findByFromAndTo(from, to)
 				.orElseThrow(() -> new RelationException(""));
 		Relation toRelation = relationRepository.findByFromAndTo(to, from)
@@ -78,7 +76,7 @@ public class RelationService {
 		return toRelation.getRelationship();
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public Relationship getRelationShip(final Long fromId, final Long toId) {
 		User from = userService.findById(fromId);
 		User to = userService.findById(toId);
@@ -88,33 +86,33 @@ public class RelationService {
 				.getRelationship();
 	}
 
-	@Transactional
-	public List<UserResponseDto> getRequestedFriendsById(final Long UserId) {
-		User from = userService.findById(UserId);
-		return getRequestedFriends(from).stream()
-				.map(user -> modelMapper.map(user, UserResponseDto.class))
-				.collect(Collectors.toList());
+	@Transactional(readOnly = true)
+	public List<RelationResponseDto> getFriends(Long userId) {
+		User user = userService.findById(userId);
+
+		return Collections.unmodifiableList(
+				getFriendsRelation(user).stream()
+						.map(RelationResponseDto::new)
+						.collect(Collectors.toList())
+		);
 	}
 
-	@Transactional
-	public List<UserResponseDto> getFriendsById(final Long UserId) {
-		User from = userService.findById(UserId);
-		return getFriends(from).stream()
-				.map(user -> modelMapper.map(user, UserResponseDto.class))
-				.collect(Collectors.toList());
+	private List<Relation> getFriendsRelation(User user) {
+		return relationRepository.findAllByFromAndRelationship(user, Relationship.FRIEND);
 	}
 
-	protected List<User> getRequestedFriends(final User user) {
-		return getFriendsByRelation(user, Relationship.REQUESTED);
+	@Transactional(readOnly = true)
+	public List<RelationResponseDto> getRequestedFriends(Long userId) {
+		User user = userService.findById(userId);
+
+		return Collections.unmodifiableList(
+				getRequestedFriendsRelation(user).stream()
+						.map(RelationResponseDto::new)
+						.collect(Collectors.toList())
+		);
 	}
 
-	protected List<User> getFriends(final User user) {
-		return getFriendsByRelation(user, Relationship.FRIEND);
-	}
-
-	private List<User> getFriendsByRelation(final User user, final Relationship relationship) {
-		return relationRepository.findByFromAndRelationship(user, relationship).stream()
-				.map(Relation::getTo)
-				.collect(Collectors.toList());
+	private List<Relation> getRequestedFriendsRelation(User user) {
+		return relationRepository.findAllByFromAndRelationship(user, Relationship.REQUESTED);
 	}
 }

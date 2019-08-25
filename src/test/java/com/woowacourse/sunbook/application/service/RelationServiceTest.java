@@ -1,6 +1,7 @@
 package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.MockStorage;
+import com.woowacourse.sunbook.application.dto.relation.RelationResponseDto;
 import com.woowacourse.sunbook.domain.relation.Relation;
 import com.woowacourse.sunbook.domain.relation.Relationship;
 import com.woowacourse.sunbook.domain.user.User;
@@ -79,16 +80,19 @@ class RelationServiceTest extends MockStorage {
 	}
 
 	@Test
-	void 친구_신청_유저들_불러오기() {
-		given(relationRepository.findByFromAndRelationship(to, Relationship.REQUESTED)).willReturn(Arrays.asList(toRelation));
+	void 친구들_불러오기() {
+		given(userService.findById(1L)).willReturn(from);
+		given(relationRepository.findAllByFromAndRelationship(from, Relationship.FRIEND)).willReturn(Arrays.asList(toRelation));
 
-		assertThat(relationService.getRequestedFriends(to)).isEqualTo(Arrays.asList(from));
+		assertThat(relationService.getFriends(1L)).isEqualTo(Arrays.asList(new RelationResponseDto(toRelation)));
 	}
 
 	@Test
-	void 친구들_불러오기() {
-		given(relationRepository.findByFromAndRelationship(to, Relationship.FRIEND)).willReturn(Arrays.asList(toRelation));
+	void 친구_신청_유저들_불러오기() {
+		given(userService.findById(1L)).willReturn(from);
+		given(relationRepository.findAllByFromAndRelationship(from, Relationship.REQUESTED)).willReturn(Arrays.asList(toRelation));
 
-		assertThat(relationService.getFriends(to)).isEqualTo(Arrays.asList(from));
+		assertThat(relationService.getRequestedFriends(1L)).isEqualTo(Arrays.asList(new RelationResponseDto(toRelation)));
 	}
+
 }
