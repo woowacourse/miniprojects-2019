@@ -1,10 +1,13 @@
 package techcourse.w3.woostagram.user.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import techcourse.w3.woostagram.common.support.LoggedInUser;
 import techcourse.w3.woostagram.user.dto.UserProfileImageDto;
 import techcourse.w3.woostagram.user.service.UserService;
-import techcourse.w3.woostagram.common.support.LoggedInUser;
 
 @RestController
 @RequestMapping("/api/users")

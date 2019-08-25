@@ -1,0 +1,22 @@
+.profile{
+    flex:9;
+    display:flex;
+}
+
+.profile-area{
+    width: 30%;
+    height: auto;
+}
+
+.user-img {
+    width: 80%;
+    height: auto;
+}
+
+.mypage-contents {
+    width: 70%;
+}
+
+.mypage-contents .user-activity li {
+    width: 20%;
+}
