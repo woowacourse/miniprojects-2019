@@ -21,7 +21,8 @@ public class Relation extends BaseEntity {
 	@JoinColumn(name = "target_id", foreignKey = @ForeignKey(name = "target_id"))
 	private User to;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 20)
+	@Enumerated(EnumType.STRING)
 	private Relationship relationship;
 
 	public Relation(User from, User to) {
