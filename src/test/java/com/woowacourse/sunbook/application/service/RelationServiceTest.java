@@ -20,79 +20,79 @@ import static org.mockito.BDDMockito.given;
 
 class RelationServiceTest extends MockStorage {
 
-	@InjectMocks
-	RelationService relationService;
+    @InjectMocks
+    RelationService injectRelationService;
 
-	Relation toRelation;
+    Relation toRelation;
 
-	User to;
+    User to;
 
-	@BeforeEach
-	void setUp() {
-		to = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르"));
+    @BeforeEach
+    void setUp() {
+        to = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르"));
 
-		toRelation = new Relation(to, from);
-	}
+        toRelation = new Relation(to, from);
+    }
 
-	@Test
-	void 친구_신청() {
-		given(userService.findById(1L)).willReturn(from);
-		given(userService.findById(2L)).willReturn(to);
-		given(relationRepository.findByFromAndTo(from, to)).willReturn(Optional.of(fromRelation));
-		given(relationRepository.findByFromAndTo(to, from)).willReturn(Optional.of(toRelation));
-		given(relationRepository.save(fromRelation)).willReturn(fromRelation);
-		given(relationRepository.save(toRelation)).willReturn(toRelation);
+    @Test
+    void 친구_신청() {
+        given(userService.findById(1L)).willReturn(from);
+        given(userService.findById(2L)).willReturn(to);
+        given(relationRepository.findByFromAndTo(from, to)).willReturn(Optional.of(fromRelation));
+        given(relationRepository.findByFromAndTo(to, from)).willReturn(Optional.of(toRelation));
+        given(relationRepository.save(fromRelation)).willReturn(fromRelation);
+        given(relationRepository.save(toRelation)).willReturn(toRelation);
 
-		assertThat(relationService.addFriend(1L, 2L).getRelationship()).isEqualTo(Relationship.REQUESTED);
-	}
+        assertThat(injectRelationService.addFriend(1L, 2L).getRelationship()).isEqualTo(Relationship.REQUESTED);
+    }
 
-	@Test
-	void 친구_수락() {
-		given(userService.findById(1L)).willReturn(from);
-		given(userService.findById(2L)).willReturn(to);
-		given(relationRepository.findByFromAndTo(from, to)).willReturn(Optional.of(fromRelation));
-		given(relationRepository.findByFromAndTo(to, from)).willReturn(Optional.of(toRelation));
+    @Test
+    void 친구_수락() {
+        given(userService.findById(1L)).willReturn(from);
+        given(userService.findById(2L)).willReturn(to);
+        given(relationRepository.findByFromAndTo(from, to)).willReturn(Optional.of(fromRelation));
+        given(relationRepository.findByFromAndTo(to, from)).willReturn(Optional.of(toRelation));
 
-		toRelation.requestedFriend();
+        toRelation.requestedFriend();
 
-		assertThat(relationService.beFriend(1L, 2L).getRelationship()).isEqualTo(Relationship.FRIEND);
-	}
+        assertThat(injectRelationService.beFriend(1L, 2L).getRelationship()).isEqualTo(Relationship.FRIEND);
+    }
 
-	@Test
-	void 관계_끊기() {
-		given(userService.findById(1L)).willReturn(from);
-		given(userService.findById(2L)).willReturn(to);
-		given(relationRepository.findByFromAndTo(from, to)).willReturn(Optional.of(fromRelation));
-		given(relationRepository.findByFromAndTo(to, from)).willReturn(Optional.of(toRelation));
+    @Test
+    void 관계_끊기() {
+        given(userService.findById(1L)).willReturn(from);
+        given(userService.findById(2L)).willReturn(to);
+        given(relationRepository.findByFromAndTo(from, to)).willReturn(Optional.of(fromRelation));
+        given(relationRepository.findByFromAndTo(to, from)).willReturn(Optional.of(toRelation));
 
-		toRelation.requestedFriend();
+        toRelation.requestedFriend();
 
-		assertThat(relationService.delete(1L, 2L).getRelationship()).isEqualTo(Relationship.NONE);
-	}
+        assertThat(injectRelationService.delete(1L, 2L).getRelationship()).isEqualTo(Relationship.NONE);
+    }
 
-	@Test
-	void 두_유저_관계() {
-		given(userService.findById(1L)).willReturn(from);
-		given(userService.findById(2L)).willReturn(to);
-		given(relationRepository.findByFromAndTo(from, to)).willReturn(Optional.of(toRelation));
+    @Test
+    void 두_유저_관계() {
+        given(userService.findById(1L)).willReturn(from);
+        given(userService.findById(2L)).willReturn(to);
+        given(relationRepository.findByFromAndTo(from, to)).willReturn(Optional.of(toRelation));
 
-		assertThat(relationService.getRelationShip(1L, 2L).getRelationship()).isEqualTo(Relationship.NONE);
-	}
+        assertThat(injectRelationService.getRelationShip(1L, 2L).getRelationship()).isEqualTo(Relationship.NONE);
+    }
 
-	@Test
-	void 친구들_불러오기() {
-		given(userService.findById(1L)).willReturn(from);
-		given(relationRepository.findAllByFromAndRelationship(from, Relationship.FRIEND)).willReturn(Arrays.asList(toRelation));
+    @Test
+    void 친구들_불러오기() {
+        given(userService.findById(1L)).willReturn(from);
+        given(relationRepository.findAllByFromAndRelationship(from, Relationship.FRIEND)).willReturn(Arrays.asList(toRelation));
 
-		assertThat(relationService.getFriends(1L)).isEqualTo(Arrays.asList(new RelationResponseDto(toRelation)));
-	}
+        assertThat(injectRelationService.getFriends(1L)).isEqualTo(Arrays.asList(new RelationResponseDto(toRelation)));
+    }
 
-	@Test
-	void 친구_신청_유저들_불러오기() {
-		given(userService.findById(1L)).willReturn(from);
-		given(relationRepository.findAllByFromAndRelationship(from, Relationship.REQUESTED)).willReturn(Arrays.asList(toRelation));
+    @Test
+    void 친구_신청_유저들_불러오기() {
+        given(userService.findById(1L)).willReturn(from);
+        given(relationRepository.findAllByFromAndRelationship(from, Relationship.REQUESTED)).willReturn(Arrays.asList(toRelation));
 
-		assertThat(relationService.getRequestedFriends(1L)).isEqualTo(Arrays.asList(new RelationResponseDto(toRelation)));
-	}
+        assertThat(injectRelationService.getRequestedFriends(1L)).isEqualTo(Arrays.asList(new RelationResponseDto(toRelation)));
+    }
 
 }
