@@ -50,13 +50,6 @@ public class UserController {
         return "redirect:/users/login/form";
     }
 
-    @GetMapping("mypage")
-    public String show(Model model, @LoggedInUser String email) {
-        UserInfoDto userInfoDto = userService.findByEmail(email);
-        model.addAttribute("userInfo", userInfoDto);
-        return "mypage";
-    }
-
     @GetMapping("mypage-edit/form")
     public String updateForm(Model model, @LoggedInUser String email) {
         UserInfoDto userInfoDto = userService.findByEmail(email);
