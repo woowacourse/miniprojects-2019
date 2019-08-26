@@ -1,5 +1,6 @@
 package com.woowacourse.edd.application.converter;
 
+import com.nhncorp.lucy.security.xss.XssPreventer;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.response.VideoPreviewResponse;
 import com.woowacourse.edd.application.response.VideoResponse;
@@ -12,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 public class VideoConverter {
 
     public static Video toEntity(VideoSaveRequestDto requestDto, User creator) {
-        return new Video(requestDto.getYoutubeId(), requestDto.getTitle(), requestDto.getContents(), creator);
+        return new Video(XssPreventer.escape(requestDto.getYoutubeId()), XssPreventer.escape(requestDto.getTitle()), XssPreventer.escape(requestDto.getContents()), creator);
     }
 
     public static VideoResponse toResponse(Video video) {
