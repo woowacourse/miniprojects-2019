@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.article.exception.FileSaveFailException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
 import techcourse.w3.woostagram.common.support.AwsS3Properties;
+import techcourse.w3.woostagram.common.support.ImageResizeUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,17 +38,20 @@ public class AwsS3Service implements StorageService {
         String fileExtension = validateFileExtension(multipartFile.getOriginalFilename());
         String fileName = String.join(PATH_DELIMITER, UUID.randomUUID().toString(), fileExtension);
         File file = new File(fileName);
+        File resizedFile = new File(fileName + "_resized");
         try {
             file.createNewFile();
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(multipartFile.getBytes());
-            s3.putObject(BUCKET_NAME, fileName, file);
+            ImageResizeUtils.imageResize(fileExtension, file, resizedFile);
+            s3.putObject(BUCKET_NAME, fileName, resizedFile);
         } catch (AmazonServiceException e) {
             System.err.println(e.getErrorMessage());
         } catch (IOException e) {
             throw new FileSaveFailException();
         } finally {
             file.delete();
+            resizedFile.delete();
         }
         return String.join("/", AWS_S3_URL, fileName);
     }
