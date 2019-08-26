@@ -20,3 +20,30 @@
 .mypage-contents .user-activity li {
     width: 20%;
 }
+
+.article-row-card {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.article-row-card > div {
+    width: 33%;
+    overflow: hidden;
+    max-height: 250px;
+}
+
+.article-row-card a{
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.article-row-card > div img{
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+}
+
+.user-contents {
+    padding: 20px;
+}

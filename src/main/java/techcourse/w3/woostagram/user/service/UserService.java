@@ -53,8 +53,11 @@ public class UserService {
     }
 
     public UserInfoDto findByUserName(String userName) {
-        return userRepository.findByUserContents_UserName(userName)
-                .map(UserInfoDto::from).orElseThrow(UserNotFoundException::new);
+        return UserInfoDto.from(findUserByUserName(userName));
+    }
+
+    public User findUserByUserName(String userName) {
+        return userRepository.findByUserContents_UserName(userName).orElseThrow(UserNotFoundException::new);
     }
 
     public User findUserByEmail(String email) {

@@ -11,7 +11,7 @@
 
     <div class="page-container mrg-top-120">
         <div class="main-content">
-            <div class="container-fluid max-width-80 mx-auto">
+            <div class="container-fluid max-width-60 mx-auto">
                 <div>
                     <div class="profile">
                         <div class="profile-area">
@@ -26,8 +26,8 @@
                         </div>
 
                         <div class="widget-feed mypage-contents">
-                            <ul class="user-name feed-action pdd-horizon-15 pdd-top-5">
-                                <li><h2 th:text="${userPageInfo.userInfoDto.userContentsDto.userName}">dlwlrma</h2></li>
+                            <ul class="feed-action pdd-horizon-15 pdd-top-5">
+                                <li><h2 class="user-name" th:text="${userPageInfo.userInfoDto.userContentsDto.userName}">dlwlrma</h2></li>
                                 <li th:if="${userPageInfo.mine}">
                                     <a class="user-modal-btn">
                                         <i class="fa fa-cog" aria-hidden="true"></i>
@@ -40,7 +40,7 @@
                             <ul class="user-activity feed-action pdd-horizon-15 pdd-top-5">
                                 <li>
                                     <span>게시물</span>
-                                    <span></span>
+                                    <span class="article-num"></span>
                                 </li>
                                 <li>
                                     <span>팔로워</span>
@@ -51,7 +51,9 @@
                                     <span class="followings"></span>
                                 </li>
                             </ul>
-                            <div class="user-contents"></div>
+                            <div class="user-contents">
+                                <span th:text="${userPageInfo.userInfoDto.userContentsDto.contents}"></span>
+                            </div>
                         </div>
                     </div>
 
@@ -64,12 +66,11 @@
                                 <a href="#tab-centered-2" class="nav-link" role="tab" data-toggle="tab">태그됨</a>
                             </li>
                         </ul>
-                        <div>
 
-                            <div class="article-card">
+                        <div class="article-card">
 
-                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>

@@ -1518,6 +1518,7 @@ button.disabled,button:disabled{opacity:.5;cursor:not-allowed}
 .width-400 {width: 400px !important;}
 
 .max-width-80 {max-width: 80%; !important;}
+.max-width-60 {max-width: 60%; !important;}
 
 .min-width-480px {min-width: 480px !important;}
 .min-width-992px {min-width: 992px !important;}
