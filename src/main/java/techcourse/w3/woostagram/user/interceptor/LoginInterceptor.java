@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import techcourse.w3.woostagram.user.dto.UserInfoDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Optional<String> userSession = Optional.ofNullable((String) request.getSession().getAttribute(LOGGED_IN_USER_SESSION_KEY));
+        Optional<UserInfoDto> userSession = Optional.ofNullable((UserInfoDto) request.getSession().getAttribute(LOGGED_IN_USER_SESSION_KEY));
         log.debug("PATH : {}", request.getRequestURI());
         log.debug("METHOD : {}", request.getMethod());
         log.debug("LOGIN : {}", userSession.isPresent());

@@ -58,19 +58,19 @@ class UserServiceTest {
     }
 
     @Test
-    void create_correct_success() {
+    void create_correct_isOk() {
         when(userRepository.save(userDto.toEntity())).thenReturn(userDto.toEntity());
         assertThat(userService.save(userDto)).isEqualTo(UserInfoDto.from(userDto.toEntity()));
     }
 
     @Test
-    void create_empty_fail() {
+    void create_empty_isFail() {
         when(userRepository.save(userDto.toEntity())).thenThrow(RuntimeException.class);
         assertThrows(UserCreateException.class, () -> userService.save(userDto));
     }
 
     @Test
-    void update_correct_success() {
+    void update_correct_isOk() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
         when(storageService.saveMultipartFile(multipartFile)).thenReturn(IMAGE_FILE_URL);
         userService.update(userUpdateDto, userDto.getEmail());
@@ -78,14 +78,14 @@ class UserServiceTest {
     }
 
     @Test
-    void update_empty_fail() {
+    void update_empty_isFail() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.update(userUpdateDto, userDto.getEmail()));
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
     }
 
     @Test
-    void delete_correct_success() {
+    void delete_correct_isOk() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
         userService.deleteByEmail(userDto.getEmail());
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
@@ -93,7 +93,7 @@ class UserServiceTest {
     }
 
     @Test
-    void delete_empty_fail() {
+    void delete_empty_isFail() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.deleteByEmail(userDto.getEmail()));
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
@@ -101,38 +101,47 @@ class UserServiceTest {
     }
 
     @Test
-    void findByEmail_correct_success() {
+    void findByEmail_correct_isOk() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
         assertThat(userService.findByEmail(userDto.getEmail())).isEqualTo(UserInfoDto.from(userDto.toEntity()));
     }
 
     @Test
-    void findByEmail_empty_fail() {
+    void findByEmail_empty_isFail() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.findByEmail(userDto.getEmail()));
     }
 
     @Test
-    void findEntityByEmail_correct_success() {
+    void findEntityByEmail_correct_isOk() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
         assertThat(userService.findUserByEmail(userDto.getEmail())).isEqualTo(userDto.toEntity());
     }
 
     @Test
-    void findEntityByEmail_empty_fail() {
+    void findEntityByEmail_empty_isFail() {
         when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.findByEmail(userDto.getEmail()));
     }
 
     @Test
-    void authUser_correct_success() {
+    void authUser_correct_isOk() {
         when(userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.of(userDto.toEntity()));
         assertThat(userService.authUser(userDto)).isEqualTo(userDto.getEmail());
     }
 
     @Test
-    void authUser_empty_fail() {
+    void authUser_empty_isFail() {
         when(userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.empty());
         assertThrows(LoginException.class, () -> userService.authUser(userDto));
+    }
+
+    @Test
+    void deleteProfileImage_correct_isOk() {
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.ofNullable(userDto.toEntity()));
+
+        userService.deleteProfileImage(userDto.getEmail());
+
+        verify(userRepository, times(1)).findByEmail(userDto.getEmail());
     }
 }

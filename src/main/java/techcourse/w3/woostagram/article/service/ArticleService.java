@@ -61,8 +61,8 @@ public class ArticleService {
         return articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new);
     }
 
-    public Page<Article> findPageByUsers(List<User> followingUsers, Pageable pageable) {
-        return articleRepository.findByUserIn(followingUsers, pageable);
+    public Page<Article> findPageByUsers(List<User> users, Pageable pageable) {
+        return articleRepository.findByUserIn(users, pageable);
     }
 
     private void validateUser(Article article, String email) {

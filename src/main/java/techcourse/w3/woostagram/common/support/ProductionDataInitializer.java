@@ -37,11 +37,11 @@ public class ProductionDataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        User gd = saveUser("gyudong@woowahan.com", "Aa1234!!", "규동");
-        User mm = saveUser("moomin@woowahan.com", "Aa1234!!", "무민");
-        User iv = saveUser("iva@woowahan.com", "Aa1234!!", "이바");
-        User hr = saveUser("harry-potter@woowahan.com", "Aa1234!!", "해리");
-        User uni = saveUser("uni@woowahan.com", "Aa1234!!", "유니");
+        User gd = saveUser("gyudong@woowahan.com", "Aa1234!!", "gyudong");
+        User mm = saveUser("moomin@woowahan.com", "Aa1234!!", "moomin");
+        User iv = saveUser("iva@woowahan.com", "Aa1234!!", "iva");
+        User hr = saveUser("harry-potter@woowahan.com", "Aa1234!!", "harry");
+        User uni = saveUser("uni@woowahan.com", "Aa1234!!", "uni");
 
         Article gdArticle1 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
         Article mmArticle1 = saveArticle(mm, "moomin is moomin", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/mm.png");

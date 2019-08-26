@@ -2,9 +2,9 @@ package techcourse.w3.woostagram.follow.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import techcourse.w3.woostagram.common.support.LoggedInUser;
 import techcourse.w3.woostagram.follow.service.FollowService;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
-import techcourse.w3.woostagram.common.support.LoggedInUser;
 
 import java.util.List;
 

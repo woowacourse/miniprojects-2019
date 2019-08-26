@@ -32,9 +32,10 @@ public class UserService {
         }
     }
 
-    public String authUser(UserDto userDto) {
+    public UserInfoDto authUser(UserDto userDto) {
         return userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())
-                .orElseThrow(LoginException::new).getEmail();
+                .map(UserInfoDto::from)
+                .orElseThrow(LoginException::new);
     }
 
     @Transactional
@@ -49,6 +50,11 @@ public class UserService {
 
     public UserInfoDto findByEmail(String email) {
         return UserInfoDto.from(findUserByEmail(email));
+    }
+
+    public UserInfoDto findByUserName(String userName) {
+        return userRepository.findByUserContents_UserName(userName)
+                .map(UserInfoDto::from).orElseThrow(UserNotFoundException::new);
     }
 
     public User findUserByEmail(String email) {
