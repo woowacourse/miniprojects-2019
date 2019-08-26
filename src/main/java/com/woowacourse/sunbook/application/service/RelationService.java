@@ -98,7 +98,7 @@ public class RelationService {
 		);
 	}
 
-	private List<Relation> getFriendsRelation(User user) {
+	protected List<Relation> getFriendsRelation(User user) {
 		return relationRepository.findAllByFromAndRelationship(user, Relationship.FRIEND);
 	}
 
