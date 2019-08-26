@@ -1,23 +1,17 @@
 package com.woowacourse.zzinbros.user.domain;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
+import com.woowacourse.zzinbros.common.domain.BaseEntity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
 
 @Table(
         uniqueConstraints = @UniqueConstraint(columnNames = {"from_id", "to_id"})
 )
 @Entity
-public class Friend implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Friend extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_Id", foreignKey = @ForeignKey(name = "FRIEND_TO_OTHER"), updatable = false, nullable = false)
