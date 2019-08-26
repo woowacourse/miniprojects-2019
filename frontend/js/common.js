@@ -85,6 +85,14 @@ const Api = function () {
         return request(`${baseUrl}/v1/users`, 'POST', dataBody)
     }
 
+    const isLogin = () => {
+        return requestWithoutBody(`${baseUrl}/v1/login/users`, 'GET')
+    }
+
+    const requestSubcribed = (userId) => {
+        return requestWithoutBody(`${baseUrl}/v1/users/${userId}/subscribed`, 'GET')
+    }
+
     return {
         requestVideos,
         requestVideo,
@@ -92,7 +100,9 @@ const Api = function () {
         updateVideo,
         deleteVideo,
         postLogin,
-        signup
+        signup,
+        isLogin,
+        requestSubcribed
     }
 
 }
