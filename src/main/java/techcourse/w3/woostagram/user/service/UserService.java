@@ -16,9 +16,6 @@ import techcourse.w3.woostagram.user.exception.UserNotFoundException;
 
 @Service
 public class UserService {
-//    private static final String DEFAULT_PROFILE_IMAGE =
-//            "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
-
     private final UserRepository userRepository;
     private final StorageService storageService;
 
@@ -35,9 +32,10 @@ public class UserService {
         }
     }
 
-    public String authUser(UserDto userDto) {
+    public UserInfoDto authUser(UserDto userDto) {
         return userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())
-                .orElseThrow(LoginException::new).getEmail();
+                .map(UserInfoDto::from)
+                .orElseThrow(LoginException::new);
     }
 
     @Transactional
@@ -54,6 +52,11 @@ public class UserService {
         return UserInfoDto.from(findUserByEmail(email));
     }
 
+    public UserInfoDto findByUserName(String userName) {
+        return userRepository.findByUserContents_UserName(userName)
+                .map(UserInfoDto::from).orElseThrow(UserNotFoundException::new);
+    }
+
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
@@ -61,18 +64,6 @@ public class UserService {
     public User findById(long targetId) {
         return userRepository.findById(targetId).orElseThrow(UserNotFoundException::new);
     }
-
-//    @Transactional
-//    public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
-//        User user = findUserByEmail(email);
-//        String fileUrl = userProfileImageDto.getOriginalImageFile();
-//        deleteFile(fileUrl);
-//        if (!userProfileImageDto.getImageFile().isEmpty()) {
-//            fileUrl = storageService.saveMultipartFile(userProfileImageDto.getImageFile());
-//        }
-//        user.updateProfile(fileUrl);
-//        return fileUrl;
-//    }
 
     @Transactional
     public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
@@ -92,7 +83,7 @@ public class UserService {
         user.updateProfile(null);
     }
 
-    private void deleteFile(String fileUrl) {
+    protected void deleteFile(String fileUrl) {
         if (!StringUtils.isEmpty(fileUrl)) {
             storageService.deleteFile(fileUrl);
         }

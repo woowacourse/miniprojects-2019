@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
 @ToString
-@Table(uniqueConstraints={
+@Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"article", "user"})
 })
 public class Likes extends BaseEntity {
@@ -24,12 +24,12 @@ public class Likes extends BaseEntity {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="article")
+    @JoinColumn(name = "article")
     private Article article;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="user")
+    @JoinColumn(name = "user")
     private User user;
 
     @Builder

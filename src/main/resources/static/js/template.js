@@ -63,7 +63,7 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                             </ul>
                             <div class="feedback-status-container pdd-horizon-15">
                                 <p class="no-mrg pdd-left-5 d-inline-block">
-                                    <span class="text-bold">${likeNum} Likes<span class="text-bold">
+                                    <span class="text-bold"><span class ="like-num">${likeNum}</span> Likes<span class="text-bold">
                                 </p>
                             </div>
                             <div class="feed-footer">
@@ -82,10 +82,10 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                      </li>
                                     </ul>
                                     <div class="add-comment relative">
-                                        <textarea rows="1" class="form-control text-dark padding-15"
+                                        <textarea rows="1" class="comment-textarea form-control text-dark padding-15"
                                                   placeholder="댓글 달기..."></textarea>
                                         <div class="absolute top-5 right-0">
-                                            <button class="btn btn-default no-border text-gray">게시</button>
+                                            <button class="comment-btn btn btn-default no-border text-gray">게시</button>
                                         </div>
                                     </div>
                                 </div>

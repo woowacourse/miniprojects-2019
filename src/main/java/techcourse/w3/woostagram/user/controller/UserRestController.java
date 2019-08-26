@@ -1,10 +1,11 @@
 package techcourse.w3.woostagram.user.controller;
 
 import org.springframework.http.ResponseEntity;
+import techcourse.w3.woostagram.common.support.LoggedInUser;
 import org.springframework.web.bind.annotation.*;
+import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.dto.UserProfileImageDto;
 import techcourse.w3.woostagram.user.service.UserService;
-import techcourse.w3.woostagram.common.support.LoggedInUser;
 
 @RestController
 @RequestMapping("/api/users")
@@ -13,6 +14,11 @@ public class UserRestController {
 
     public UserRestController(final UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/loggedin")
+    public ResponseEntity<UserInfoDto> readLoginInformation(@LoggedInUser String email){
+        return ResponseEntity.ok(userService.findByEmail(email));
     }
 
     @PostMapping

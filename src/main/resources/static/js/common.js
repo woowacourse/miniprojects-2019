@@ -1,14 +1,31 @@
 class Follow {
-    constructor(loginId) {
-        this.loginId = loginId;
-        this.request = new Request('/api/follows');
+    constructor(status, targetId) {
+        this.status = status;
+        this.request = new Request(`/api/users/${targetId}/follows`);
     }
 
-    addFollow = (targetId) => {
-        this.request.post('/' + targetId)
+    getStatus = () => {
+        return this.status;
     };
-    deleteFollow = (targetId) => {
-        this.request.delete('/' + targetId)
+
+    toggleStatus = () => {
+        this.status = !this.status;
+    };
+
+    addFollow = () => {
+        return this.request.post('/')
+    };
+
+    deleteFollow = () => {
+        return this.request.delete('/')
+    }
+
+    followersNum = (callback) => {
+        return this.request.get('/followers/num', callback)
+    }
+
+    followingsNum = (callback) => {
+        return this.request.get('/followings/num', callback)
     }
 }
 
@@ -17,19 +34,11 @@ class Like {
         this.request = new Request('api/articles');
     }
 
-    addLike = (articleId, liking) => {
-        if (liking == "false") {
-            return this.request.post('/' + articleId + '/likes', null)
-        }
-        return false
+    addLike = (articleId) => {
+        return this.request.post('/' + articleId + '/likes', null)
+
     };
-    deleteLike = (articleId, liking) => {
-        if (liking == "true") {
-            this.request.delete('/' + articleId + '/likes',
-                () => {
-                    return true;
-                })
-        }
-        return false
+    deleteLike = (articleId) => {
+        return this.request.delete('/' + articleId + '/likes')
     }
 }

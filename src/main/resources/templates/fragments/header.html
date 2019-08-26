@@ -40,12 +40,12 @@
                 </a>
             </li>
             <li>
-                <a class="pointer">
+                <a  href = "/likes" class="pointer">
                     <i class="ti-heart"></i>
                 </a>
             </li>
             <li>
-                <a href = "/users/login/form" class="pointer">
+                <a th:href="@{'/' + ${session.loggedInUser.userContentsDto.userName}}" class="pointer">
                     <i class="ti-user"></i>
                 </a>
             </li>

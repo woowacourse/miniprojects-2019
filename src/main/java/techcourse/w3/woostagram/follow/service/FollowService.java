@@ -11,6 +11,7 @@ import techcourse.w3.woostagram.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,9 +55,18 @@ public class FollowService {
     }
 
     public void delete(String email, Long targetId) {
-        User user = userService.findUserByEmail(email);
-        User targetUser = userService.findById(targetId);
-        Follow following = followRepository.findByFromAndTo(user, targetUser).orElseThrow(FollowNotFoundException::new);
+        Follow following = getFollow(email, targetId).orElseThrow(FollowNotFoundException::new);
         followRepository.delete(following);
     }
+
+    public boolean checkFollowing(String loginEmail, Long targetId) {
+        return getFollow(loginEmail, targetId).isPresent();
+    }
+
+    private Optional<Follow> getFollow(String email, Long targetId) {
+        User user = userService.findUserByEmail(email);
+        User targetUser = userService.findById(targetId);
+        return followRepository.findByFromAndTo(user, targetUser);
+    }
+
 }

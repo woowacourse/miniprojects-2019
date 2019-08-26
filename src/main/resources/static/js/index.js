@@ -1,21 +1,21 @@
 const Index = (function () {
 
     const pageSize = 10;
+    let loggedinUserData ;
 
     const IndexController = function () {
         const indexService = new IndexService();
         const articleList = document.querySelector('.article-card-con');
 
         const loadInit = function () {
-            indexService.getPageData(0);
-            document.querySelector("i").addEventListener("click", function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
+            indexService.getLoggedInData().then((data)=>{
+                loggedinUserData = data;
+                indexService.getPageData(0);
+            })
         };
 
         const likeButton = () => {
-            articleList.addEventListener('click', function (event) {
+            articleList.addEventListener('click', (event) =>{
                 if (event.target.classList.contains('like-btn')) {
                     const articleId = event.target.closest('.article-card').dataset.articleId;
                     const isLike = event.target.dataset.liking;
@@ -24,9 +24,35 @@ const Index = (function () {
             })
         };
 
+        const commentSubmitButton = () => {
+            articleList.addEventListener('click', (event) => {
+                if (event.target.classList.contains('comment-btn')) {
+                    const articleId = event.target.closest('.article-card').dataset.articleId;
+                    const commentsArea = event.target.closest('.add-comment').querySelector('textarea')
+                    const comments = commentsArea.value;
+                    indexService.createComment(articleId, comments, event.target);
+                    commentsArea.value = "";
+                }
+            })
+        }
+
+        const commentSubmitKey =() =>{
+            articleList.addEventListener('keydown',(event)=>{
+                if(event.target.classList.contains("comment-textarea") && event.keyCode == 13){
+                    event.preventDefault();
+                    const articleId = event.target.closest('.article-card').dataset.articleId;
+                    const comments = event.target.value;
+                    indexService.createComment(articleId, comments, event.target);
+                    event.target.value = "";
+                }
+            })
+        }
+
         const init = function () {
-            loadInit();
+            loadInit()
             likeButton()
+            commentSubmitButton()
+            commentSubmitKey()
         };
 
         return {
@@ -37,6 +63,8 @@ const Index = (function () {
 
     const IndexService = function () {
         const indexRequest = new Request("/api/main");
+        const commentRequest = new Request("/api/articles/");
+        const userRequest = new Request("/api/users")
         const like = new Like();
         const getPageData = (pageNum) => {
             indexRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
@@ -50,19 +78,42 @@ const Index = (function () {
                 })
         };
 
+        const getLoggedInData = () =>{
+             return userRequest.get("/loggedin",(status,data)=>{
+                return data;
+            })
+        }
+
         const eventLike = (articleId, isLike, e) => {
-            like.addLike(articleId, isLike)
-                .then(()=>{
-                    e.childNodes[1].classList.add("fa-heart");
-                    e.childNodes[1].classList.remove("fa-heart-o");
-                });
+            if (isLike == 'false') {
+                like.addLike(articleId)
+                    .then(() => {
+                        e.childNodes[1].classList.add("fa-heart");
+                        e.childNodes[1].classList.remove("fa-heart-o");
+                        e.dataset.liking = "true";
+                        const likeNumElement = e.closest(".article-card").querySelector(".like-num")
+                        const likeNum = parseInt(likeNumElement.innerText) + 1;
+                        likeNumElement.innerText = likeNum;
+                    });
+
+            } else {
+                like.deleteLike(articleId)
+                    .then(() => {
+                        e.childNodes[1].classList.add("fa-heart-o");
+                        e.childNodes[1].classList.remove("fa-heart");
+                        e.dataset.liking = "false"
+                        const likeNumElement = e.closest(".article-card").querySelector(".like-num")
+                        const likeNum = parseInt(likeNumElement.innerText) - 1;
+                        likeNumElement.innerText = likeNum;
+                    });
+            }
         };
 
         const parsingPage = (pageData) => {
             const article = pageData.article;
             const user = pageData.article.userInfoDto;
             const comments = parsingComments(pageData.comments);
-            if(user.profile===null){
+            if (user.profile === null) {
                 user.profile = "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
             }
             return getArticleTemplate(
@@ -90,9 +141,19 @@ const Index = (function () {
             return commentsHtml;
         };
 
+        const createComment = (articleId, value, target) => {
+            commentRequest.post(`${articleId}/comments`, {contents: value}, (status,data)=>{
+                const commentList = target.closest('.comment').querySelector('.comment-list')
+                const commentHTML =getCommentTemplate(data.id,data.userInfoDto.userContentsDto.userName,data.contents)
+                commentList.insertAdjacentHTML('beforeend', commentHTML)
+            })
+        }
+
         return {
             getPageData: getPageData,
-            eventLike: eventLike
+            eventLike: eventLike,
+            createComment:createComment,
+            getLoggedInData:getLoggedInData
         }
     };
 
