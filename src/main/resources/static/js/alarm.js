@@ -1,8 +1,10 @@
 // Get the logged in user info
-axios.get('/user?ID=12345')
+axios.get('/api/users/loggedin')
     .then(function (response) {
         // handle success
-        console.log(response);
+        // console.log(response.data.id);
+        const userId = response.data.id;
+        openSocket(userId);
     })
     .catch(function (error) {
         // handle error
@@ -12,14 +14,18 @@ axios.get('/user?ID=12345')
         // always executed
     });
 
-// Open Web Socket and subscribe alarm
-let socket = new SockJS("http://127.0.0.1:8080/portfolio");
-let stompClient = Stomp.over(socket);
+function openSocket(userId) {
+    let socket = new SockJS("http://127.0.0.1:8080/portfolio");
+    let stompClient = Stomp.over(socket);
 
-let connectCallback = () => {
-    stompClient.subscribe("/topic/alarm/3", function (message) {
-        console.log(message);
-    })
-};
+    let connectCallback = () => {
+        stompClient.subscribe("/topic/alarm/likes/" + userId, function (message) {
+            let json = JSON.parse(message.body);
+            const messages = document.querySelector('.dropdown-con>.dropdown-menu');
+            messages.insertAdjacentHTML('afterbegin', `<a class="dropdown-item" href="/articles/${json.articleId}">${json.message}</a>`)
+            // console.log(message);
+        })
+    };
 
-stompClient.connect({}, connectCallback);
+    stompClient.connect({}, connectCallback);
+}
