@@ -127,7 +127,7 @@ class UserServiceTest {
     @Test
     void authUser_correct_isOk() {
         when(userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.of(userDto.toEntity()));
-        assertThat(userService.authUser(userDto)).isEqualTo(userDto.getEmail());
+        assertThat(userService.authUser(userDto).getEmail()).isEqualTo(userDto.getEmail());
     }
 
     @Test
