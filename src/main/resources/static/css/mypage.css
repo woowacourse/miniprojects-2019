@@ -6,11 +6,13 @@
 .profile-area{
     width: 30%;
     height: auto;
+    position: relative;
 }
 
 .user-img {
     width: 80%;
     height: auto;
+    position: absolute;
 }
 
 .mypage-contents {

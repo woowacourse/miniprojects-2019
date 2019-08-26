@@ -85,6 +85,7 @@ public class UserService {
         return fileUrl;
     }
 
+    @Transactional
     public String deleteProfileImage(String email) {
         User user = findUserByEmail(email);
         deleteUserProfileImage(user);

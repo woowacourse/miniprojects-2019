@@ -15,10 +15,10 @@
                 <div>
                     <div class="profile">
                         <div class="profile-area">
-                            <button id="profile-image-btn" width="117">
+                            <div id="profile-image-btn" width="117">
                                 <img id="profile-image" class="img-circle user-img" width="117" alt="프로필 사진 바꾸기"
                                      th:src="${userPageInfo.userInfoDto.profile}">
-                            </button>
+                            </div>
                             <form id="image-form" enctype="multipart/form-data" method="post" role="presentation">
                                 <input class="d-none" name="imageFile" multiple id="img-upload" type="file"
                                        accept="image/jpeg, image/png, image/jpg">
