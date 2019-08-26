@@ -2,12 +2,12 @@ package techcourse.w3.woostagram.user.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserRepository;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
-import techcourse.w3.woostagram.user.dto.UserProfileImageDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
@@ -66,17 +66,17 @@ public class UserService {
     }
 
     @Transactional
-    public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
-        if (userProfileImageDto.getImageFile().isEmpty()) {
+    public String uploadProfileImage(MultipartFile profileImage, String email) {
+        if (profileImage.isEmpty()) {
             throw new UserProfileException();
         }
         User user = findUserByEmail(email);
         deleteUserProfileImage(user);
-        return uploadFile(userProfileImageDto, user);
+        return uploadFile(profileImage, user);
     }
 
-    private String uploadFile(UserProfileImageDto userProfileImageDto, User user) {
-        String fileUrl = storageService.saveMultipartFile(userProfileImageDto.getImageFile());
+    private String uploadFile(MultipartFile profileImage, User user) {
+        String fileUrl = storageService.saveMultipartFile(profileImage);
         user.updateProfile(fileUrl);
 
         return fileUrl;

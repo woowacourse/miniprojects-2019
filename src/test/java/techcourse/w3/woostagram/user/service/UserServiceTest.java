@@ -10,6 +10,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.common.service.StorageService;
+import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserRepository;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
@@ -17,6 +18,7 @@ import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
 import techcourse.w3.woostagram.user.exception.UserNotFoundException;
+import techcourse.w3.woostagram.user.exception.UserProfileException;
 
 import java.util.Optional;
 
@@ -39,6 +41,7 @@ class UserServiceTest {
 
     private UserDto userDto;
     private UserUpdateDto userUpdateDto;
+    private User user;
     private MultipartFile multipartFile;
 
     @BeforeEach
@@ -54,6 +57,12 @@ class UserServiceTest {
         userUpdateDto = UserUpdateDto.builder()
                 .userName("woowacrews")
                 .contents("woostagram")
+                .build();
+
+        user = User.builder()
+                .email(userDto.getEmail())
+                .password(userDto.getPassword())
+                .profile("profileUrl")
                 .build();
     }
 
@@ -125,9 +134,34 @@ class UserServiceTest {
     }
 
     @Test
+    void findByUserName_correctName_isOk() {
+        when(userRepository.findByUserContents_UserName(anyString())).thenReturn(Optional.of(userDto.toEntity()));
+        assertThat(userService.findByUserName(anyString()).getEmail()).isEqualTo(userDto.getEmail());
+
+    }
+
+    @Test
+    void findByUserName_wrongName_isFail() {
+        when(userRepository.findByUserContents_UserName(anyString())).thenReturn(Optional.empty());
+        assertThrows(UserNotFoundException.class, () -> userService.findByUserName(anyString()));
+    }
+
+    @Test
+    void findById_correctId_isOk() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(userDto.toEntity()));
+        assertThat(userService.findById(anyLong()).getEmail()).isEqualTo(userDto.getEmail());
+    }
+
+    @Test
+    void findById_wrongId_isFail() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(UserNotFoundException.class, () -> userService.findById(anyLong()));
+    }
+
+    @Test
     void authUser_correct_isOk() {
         when(userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.of(userDto.toEntity()));
-        assertThat(userService.authUser(userDto)).isEqualTo(userDto.getEmail());
+        assertThat(userService.authUser(userDto).getEmail()).isEqualTo(userDto.getEmail());
     }
 
     @Test
@@ -137,11 +171,28 @@ class UserServiceTest {
     }
 
     @Test
+    void uploadProfileImage_correctFileImageAndEmail_isOk() {
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(storageService.saveMultipartFile(multipartFile)).thenReturn(IMAGE_FILE_URL);
+        doNothing().when(storageService).deleteFile(anyString());
+        assertThat(userService.uploadProfileImage(multipartFile, anyString())).isEqualTo(IMAGE_FILE_URL);
+    }
+
+    @Test
+    void uploadProfileImage_wrongFileImage_isFail() {
+        MultipartFile wrongMultipartFile = new MockMultipartFile(
+                "testImage", "", MediaType.IMAGE_JPEG_VALUE, new byte[0]);
+
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        assertThrows(UserProfileException.class, () -> userService.uploadProfileImage(wrongMultipartFile, userDto.getEmail()));
+    }
+
+    @Test
     void deleteProfileImage_correct_isOk() {
-        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.ofNullable(userDto.toEntity()));
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(user));
+        doNothing().when(storageService).deleteFile(anyString());
 
         userService.deleteProfileImage(userDto.getEmail());
-
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
     }
 }
