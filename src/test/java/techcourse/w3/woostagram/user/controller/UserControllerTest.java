@@ -59,6 +59,13 @@ class UserControllerTest extends AbstractControllerTests {
     }
 
     @Test
+    void logout_empty_isRedirect() {
+        assertThat(getRequest("/users/logout")
+                .getStatus()
+                .is3xxRedirection()).isTrue();
+    }
+
+    @Test
     void createForm_empty_isOk() {
         clearCookie();
         assertThat(getRequest("/users/signup/form")
@@ -139,6 +146,7 @@ class UserControllerTest extends AbstractControllerTests {
         params.put(EMAIL, TestDataInitializer.deleteUser.getEmail());
         params.put(PASSWORD, TestDataInitializer.deleteUser.getPassword());
         postFormRequest("/users/signup", params);
+        clearCookie();
         loginRequest(TestDataInitializer.deleteUser.getEmail(), TestDataInitializer.deleteUser.getPassword());
 
         assertThat(deleteRequest("/users")

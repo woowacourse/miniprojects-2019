@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       lang="ko">
 <head>
-
     <th:block th:replace="fragments/common-head :: common-head"></th:block>
     <link rel="stylesheet" href="/css/mypage.css">
 </head>
@@ -16,7 +15,14 @@
                 <div>
                     <div class="profile">
                         <div class="profile-area">
-                            <img id="#profile-image" class="img-circle user-img" src="/images/default/eastjun_profile.jpg">
+                            <button id="profile-image-btn" width="117">
+                                <img id="profile-image" class="img-circle user-img" width="117" alt="프로필 사진 바꾸기"
+                                     th:src="${userPageInfo.userInfoDto.profile}">
+                            </button>
+                            <form id="image-form" enctype="multipart/form-data" method="post" role="presentation">
+                                <input class="d-none" name="imageFile" multiple id="img-upload" type="file"
+                                       accept="image/jpeg, image/png, image/jpg">
+                            </form>
                         </div>
 
                         <div class="widget-feed mypage-contents">
@@ -90,6 +96,6 @@
 <script src="/js/common.js"></script>
 <script src="/js/util.js"></script>
 <script src="/js/mypage.js"></script>
-
+<script src="/js/user.js"></script>
 </body>
 </html>

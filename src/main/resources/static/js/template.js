@@ -1,5 +1,5 @@
-const getModalTemplate = (buttons) => {
-    return `<div class="modal inactive modal-animation">
+const getModalTemplate = (buttons, num) => {
+    return `<div class="modal inactive modal-animation modal-num-${num}">
         <div class="modal-dialog-inner">
             <div class="modal-dialog-custom common-flex">
                ${buttons}

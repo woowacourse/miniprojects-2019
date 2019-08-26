@@ -1,13 +1,3 @@
-// const defaultProfileImage = "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/default_profile_image.jpg";
-// const profileImage = document.querySelector('#profile-image');
-// const originalImage = document.querySelector('#original-image');
-// profileImage.setAttribute("src", profileUrl);
-//
-// if (profileUrl === null) {
-//     profileImage.setAttribute("src", defaultProfileImage);
-//     originalImage.setAttribute("value", defaultProfileImage);
-// }
-
 const mypage = (function () {
     const modalButton =
         `<button class="create-modify-btn" tabindex="0"  onclick="location.href='/users/mypage-edit/form'">프로필 수정</button>
@@ -36,7 +26,7 @@ const mypage = (function () {
                 const button = document.querySelector('.following');
                 button.addEventListener('click', mypageService.sendFollow);
             }
-        }
+        };
 
         const init = function () {
             followButton();
@@ -47,7 +37,7 @@ const mypage = (function () {
         return {
             init : init
         }
-    }
+    };
 
     const MypageService = function () {
         const pageSize = 12;
@@ -58,7 +48,7 @@ const mypage = (function () {
 
         const getProfile = () => {
 
-        }
+        };
 
         const getPageData = (pageNum) => {
             const container = document.querySelector('.article-card');
@@ -107,7 +97,7 @@ const mypage = (function () {
                 });
                 follow.toggleStatus();
             }
-        }
+        };
 
         const getFollowers = () => {
             follow.followersNum((status, data) => {
@@ -115,7 +105,7 @@ const mypage = (function () {
                 followers.innerHTML = "";
                 followers.insertAdjacentHTML('beforeend', `<strong>${data}</strong>`);
             })
-        }
+        };
 
         const getFollowings = () => {
             follow.followingsNum((status, data) => {
