@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import techcourse.w3.woostagram.alarm.service.AlarmService;
 import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.article.service.ArticleService;
 import techcourse.w3.woostagram.like.domain.Likes;
@@ -33,6 +34,9 @@ class LikesServiceTest {
 
     @Mock
     private ArticleService articleService;
+
+    @Mock
+    private AlarmService alarmService;
 
     private User user;
     private Article article;
