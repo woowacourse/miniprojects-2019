@@ -1,6 +1,7 @@
 package techcourse.w3.woostagram.follow.service;
 
 import org.springframework.stereotype.Service;
+import techcourse.w3.woostagram.alarm.service.AlarmService;
 import techcourse.w3.woostagram.follow.domain.Follow;
 import techcourse.w3.woostagram.follow.domain.FollowRepository;
 import techcourse.w3.woostagram.follow.exception.FollowNotFoundException;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 public class FollowService {
     private final FollowRepository followRepository;
     private final UserService userService;
+    private final AlarmService alarmService;
 
-    public FollowService(final UserService userService, final FollowRepository followRepository) {
+    public FollowService(final UserService userService, final FollowRepository followRepository, AlarmService alarmService) {
         this.userService = userService;
         this.followRepository = followRepository;
+        this.alarmService = alarmService;
     }
 
     @Transactional

@@ -29,3 +29,12 @@
     width:30px;
 
 }
+
+.dropdown-con{
+    position:relative;
+}
+
+.dropdown-menu{
+    position: absolute !important;
+    top: 50px;
+}
