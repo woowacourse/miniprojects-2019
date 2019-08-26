@@ -45,7 +45,7 @@
                 </a>
             </li>
             <li>
-                <a href = "/users/mypage" class="pointer">
+                <a th:href="@{'/' + ${session.loggedInUser.userContentsDto.userName}}" class="pointer">
                     <i class="ti-user"></i>
                 </a>
             </li>
