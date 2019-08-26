@@ -1,25 +1,25 @@
 const User = (function () {
-    const modalButton =
-        `<button class="create-modify-btn" tabindex="0">사진 선택</button>
-        <button class="contents-remove-btn delete-btn font-cap" type="button" tabindex="0">기본 사진</button>`;
-    const modal = new Modal(modalButton);
-    modal.init();
+    const profileImageModalButton =
+        `<button id="select-image" class="create-modify-btn" tabindex="0">사진 선택</button>
+        <button id="select-default-image" class="contents-remove-btn delete-btn font-cap" type="button" tabindex="0">기본 사진</button>`;
+    const profileImageModal = new Modal(profileImageModalButton,1);
+    profileImageModal.init();
 
     const UserController = function () {
         const userService = new UserService();
 
-        const modalButton = () => {
-            const button = document.querySelector('.modal-btn');
+        const profileImageModalButton = () => {
+            const button = document.querySelector('#profile-image-btn');
             button.addEventListener('click', userService.modalActive);
         };
 
         const imageButton = () => {
-            const button = document.querySelector('.create-modify-btn');
+            const button = document.querySelector('#select-image');
             button.addEventListener('click', userService.chooseImage);
         };
 
         const defaultImageButton = () => {
-            const button = document.querySelector('.contents-remove-btn');
+            const button = document.querySelector('#select-default-image');
             button.addEventListener('click', userService.defaultImage);
         };
 
@@ -29,7 +29,7 @@ const User = (function () {
         };
 
         const init = function () {
-            modalButton();
+            profileImageModalButton();
             imageButton();
             defaultImageButton();
             imageUpload();
@@ -44,7 +44,7 @@ const User = (function () {
         const request = new Request("/api/users");
 
         const modalActive = () => {
-            modal.active()
+            profileImageModal.active()
         };
 
         const imageResize = (img) => {
