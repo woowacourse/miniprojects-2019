@@ -20,26 +20,26 @@ const mypage = (function () {
                 const button = document.querySelector('.following');
                 button.addEventListener('click', mypageService.sendFollow);
             }
-        }
+        };
 
         const init = function () {
             followButton();
             modalButton();
             mypageService.getFollowers();
             mypageService.getFollowings();
-        }
+        };
         
         return {
             init : init
         }
-    }
+    };
 
     const MypageService = function () {
-        const follow = new Follow(following, targetId)
+        const follow = new Follow(following, targetId);
 
         const getProfile = () => {
 
-        }
+        };
 
         const modalActive = () => {
             modal.active()
@@ -61,7 +61,7 @@ const mypage = (function () {
                 });
                 follow.toggleStatus();
             }
-        }
+        };
 
         const getFollowers = () => {
             follow.followersNum((status, data) => {
@@ -69,7 +69,7 @@ const mypage = (function () {
                 followers.innerHTML = "";
                 followers.insertAdjacentHTML('beforeend', `<strong>${data}</strong>`);
             })
-        }
+        };
 
         const getFollowings = () => {
             follow.followingsNum((status, data) => {
