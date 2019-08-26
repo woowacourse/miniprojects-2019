@@ -22,9 +22,14 @@ function openSocket(userId) {
         stompClient.subscribe("/topic/alarm/likes/" + userId, function (message) {
             let json = JSON.parse(message.body);
             const messages = document.querySelector('.dropdown-con>.dropdown-menu');
-            messages.insertAdjacentHTML('afterbegin', `<a class="dropdown-item" href="/articles/${json.articleId}">${json.message}</a>`)
-            // console.log(message);
-        })
+            messages.insertAdjacentHTML('afterbegin', `<a class="dropdown-item" href="/articles/${json.articleId}">${json.message}</a>`);
+        });
+
+        stompClient.subscribe("/topic/alarm/follows/" + userId, function(message) {
+            let json = JSON.parse(message.body);
+            const messages = document.querySelector('.dropdown-con>.dropdown-menu');
+            messages.insertAdjacentHTML('afterbegin', `<a class="dropdown-item" href="/${json.targetName}">${json.message}</a>`);
+        });
     };
 
     stompClient.connect({}, connectCallback);

@@ -39,6 +39,7 @@ public class FollowService {
                 .to(targetUser)
                 .build();
         followRepository.save(follow);
+        alarmService.pushFollows(user, targetUser);
     }
 
     public List<UserInfoDto> findAllByTo(Long id) {

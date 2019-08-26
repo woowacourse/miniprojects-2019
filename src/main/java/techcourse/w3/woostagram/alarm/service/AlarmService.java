@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import techcourse.w3.woostagram.alarm.dto.FollowsAlarmDto;
 import techcourse.w3.woostagram.alarm.dto.LikesAlarmDto;
 import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.user.domain.User;
@@ -23,5 +24,13 @@ public class AlarmService {
                 .message(user.getUserContents().getUserName() + " likes your article!")
                 .articleId(target.getId()));
         template.convertAndSend("/topic/alarm/likes/" + target.getUser().getId(), message);
+    }
+
+    public void pushFollows(User follower, User target) {
+        Gson gson = new Gson();
+        String message = gson.toJson(FollowsAlarmDto.builder()
+                .message(follower.getUserContents().getUserName() + " follows you!")
+                .targetName(follower.getUserContents().getUserName()));
+        template.convertAndSend("/topic/alarm/follows/" + target.getId(), message);
     }
 }
