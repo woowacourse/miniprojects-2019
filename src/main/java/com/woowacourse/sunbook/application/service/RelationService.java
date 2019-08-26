@@ -26,7 +26,7 @@ public class RelationService {
 	}
 
 	@Transactional
-	public Relationship addFriend(final Long fromId, final Long toId) {
+	public RelationResponseDto addFriend(final Long fromId, final Long toId) {
 		User from = userService.findById(fromId);
 		User to = userService.findById(toId);
 
@@ -41,11 +41,11 @@ public class RelationService {
 		relationRepository.save(fromRelation);
 		relationRepository.save(toRelation);
 
-		return toRelation.getRelationship();
+		return new RelationResponseDto(toRelation);
 	}
 
 	@Transactional
-	public Relationship beFriend(final Long fromId, final Long toId) {
+	public RelationResponseDto beFriend(final Long fromId, final Long toId) {
 		User from = userService.findById(fromId);
 		User to = userService.findById(toId);
 
@@ -57,11 +57,11 @@ public class RelationService {
 		fromRelation.beFriend();
 		toRelation.beFriend();
 
-		return toRelation.getRelationship();
+		return new RelationResponseDto(toRelation);
 	}
 
 	@Transactional
-	public Relationship delete(final Long fromId, final Long toId) {
+	public RelationResponseDto delete(final Long fromId, final Long toId) {
 		User from = userService.findById(fromId);
 		User to = userService.findById(toId);
 
@@ -73,17 +73,18 @@ public class RelationService {
 		fromRelation.removeRelationShip();
 		toRelation.removeRelationShip();
 
-		return toRelation.getRelationship();
+		return new RelationResponseDto(toRelation);
 	}
 
 	@Transactional(readOnly = true)
-	public Relationship getRelationShip(final Long fromId, final Long toId) {
+	public RelationResponseDto getRelationShip(final Long fromId, final Long toId) {
 		User from = userService.findById(fromId);
 		User to = userService.findById(toId);
 
-		return relationRepository.findByFromAndTo(from, to)
+		return new RelationResponseDto(
+				relationRepository.findByFromAndTo(from, to)
 				.orElse(new Relation(from, to))
-				.getRelationship();
+		);
 	}
 
 	@Transactional(readOnly = true)
