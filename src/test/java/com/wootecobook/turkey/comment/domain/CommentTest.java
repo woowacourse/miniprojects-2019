@@ -32,7 +32,7 @@ class CommentTest {
                 .contents("contents")
                 .parent(null)
                 .post(post)
-                .user(user)
+                .author(user)
                 .build();
     }
 

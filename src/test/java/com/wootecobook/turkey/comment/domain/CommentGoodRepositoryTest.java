@@ -42,7 +42,7 @@ public class CommentGoodRepositoryTest {
         comment = testEntityManager.persist(Comment.builder()
                 .contents("안녕 세계!")
                 .post(post)
-                .user(user)
+                .author(user)
                 .build());
 
         commentGood = commentGoodRepository.save(new CommentGood(user, comment));

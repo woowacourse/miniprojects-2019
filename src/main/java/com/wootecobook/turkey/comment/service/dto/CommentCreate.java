@@ -25,7 +25,7 @@ public class CommentCreate {
     public Comment toEntity(final User user, final Post post, final Comment parent) {
         return Comment.builder()
                 .contents(contents)
-                .user(user)
+                .author(user)
                 .post(post)
                 .parent(parent)
                 .build();
