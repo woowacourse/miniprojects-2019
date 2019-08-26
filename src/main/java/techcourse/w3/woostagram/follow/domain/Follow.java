@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
 @ToString
-@Table(uniqueConstraints={
+@Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"from_id", "to_id"})
 })
 public class Follow extends BaseEntity {
@@ -23,12 +23,12 @@ public class Follow extends BaseEntity {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="from_id")
+    @JoinColumn(name = "from_id")
     private User from;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="to_id")
+    @JoinColumn(name = "to_id")
     private User to;
 
     @Builder
