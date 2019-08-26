@@ -19,6 +19,6 @@ public class MypageController {
     @GetMapping("/{userName}")
     public String showUserPage(Model model, @LoggedInUser String email, @PathVariable String userName) {
         model.addAttribute("userPageInfo", mypageService.findUserPageDto(email, userName));
-        return "mypage-re";
+        return "mypage";
     }
 }
