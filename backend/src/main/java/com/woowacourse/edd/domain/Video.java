@@ -85,6 +85,10 @@ public class Video {
         this.contents = contents;
     }
 
+    public void increaseViewCount() {
+        viewCount++;
+    }
+
     public Long getId() {
         return id;
     }

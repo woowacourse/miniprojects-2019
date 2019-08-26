@@ -90,7 +90,6 @@ public class VideoControllerTests extends BasicControllerTests {
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, title, DEFAULT_VIDEO_CONTENTS);
 
         assertFailBadRequest(saveVideo(videoSaveRequestDto, getDefaultLoginSessionId()), "제목은 한 글자 이상이어야합니다");
-
     }
 
     @Test
@@ -119,7 +118,6 @@ public class VideoControllerTests extends BasicControllerTests {
             .valueMatches("location", VIDEOS_URI + "/" + id)
             .expectBody()
             .jsonPath("$.id").isEqualTo(id);
-
     }
 
     @Test
@@ -129,6 +127,27 @@ public class VideoControllerTests extends BasicControllerTests {
         VideoUpdateRequestDto videoUpdateRequestDto = new VideoUpdateRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
         assertFailNotFound(updateVideo(id, videoUpdateRequestDto, getDefaultLoginSessionId()), "그런 비디오는 존재하지 않아!");
+    }
+
+    @Test
+    void update_view_count() {
+        String sid = getDefaultLoginSessionId();
+        String location = saveVideo(new VideoSaveRequestDto("abcdefg", "videos", "good video"), sid)
+            .isCreated()
+            .expectBody().returnResult().getResponseHeaders().getLocation().toASCIIString();
+
+        webTestClient.get().uri(location)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .jsonPath("$.viewCount").isEqualTo(0)
+            .returnResult();
+
+        webTestClient.get().uri(location)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .jsonPath("$.viewCount").isEqualTo(1);
     }
 
     @Test
