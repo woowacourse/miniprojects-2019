@@ -28,8 +28,8 @@
 
 .article-row-card > div {
     width: 33%;
-    height: 300px;
     overflow: hidden;
+    max-height: 250px;
 }
 
 .article-row-card a{

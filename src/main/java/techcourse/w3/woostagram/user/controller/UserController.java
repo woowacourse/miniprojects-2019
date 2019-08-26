@@ -67,8 +67,9 @@ public class UserController {
     @PutMapping
     public String update(UserUpdateDto userUpdateDto, @LoggedInUser String email, HttpSession httpSession) {
         userService.update(userUpdateDto, email);
+        UserInfoDto userInfoDto = userService.findByEmail(email);
         httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, userService.findByEmail(email));
-        return "redirect:/users/mypage";
+        return "redirect:/" + userInfoDto.getUserContentsDto().getUserName();
     }
 
     @DeleteMapping
