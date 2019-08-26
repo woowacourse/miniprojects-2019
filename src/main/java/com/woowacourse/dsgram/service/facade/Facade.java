@@ -6,6 +6,7 @@ import com.woowacourse.dsgram.service.ArticleService;
 import com.woowacourse.dsgram.service.FollowService;
 import com.woowacourse.dsgram.service.UserService;
 import com.woowacourse.dsgram.service.dto.FeedInfo;
+import com.woowacourse.dsgram.service.dto.FollowInfo;
 import com.woowacourse.dsgram.service.dto.FollowRelation;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +52,18 @@ public class Facade {
         User guest = userService.findByNickName(fromNickName);
         User feedOwner = userService.findByNickName(toNickName);
         followService.delete(guest,feedOwner);
+    }
+
+    public List<FollowInfo>
+    getFollowers(String nickName) {
+        User user = userService.findByNickName(nickName);
+
+        return followService.findFollowers(user);
+    }
+
+    public List<FollowInfo> getFollowings(String nickName) {
+        User user = userService.findByNickName(nickName);
+
+        return followService.findFollowers(user);
     }
 }

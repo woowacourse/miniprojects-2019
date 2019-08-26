@@ -8,13 +8,11 @@ const FETCH_APP = (() => {
         const DELETE = 'DELETE';
 
         const fetchTemplate = (requestUrl, method, header, body, ifSucceed) => {
-            console.log(body);
             fetch(requestUrl, {
                 method: method,
                 headers: header,
                 body: body
             }).then(response => {
-                console.log(response);
                 if (response.status === 200) {
                     return ifSucceed(response);
                 }
@@ -31,14 +29,16 @@ const FETCH_APP = (() => {
                     'Content-Type': 'application/json; charset=UTF-8',
                     'Accept': 'application/json'
                 }
-            }).then(response => {
-                if (response.status === 200) {
-                    return ifSucceed(response);
+            }).then(response=>{
+                if(response.status===200){
+                    return response.json();
                 }
-                if (response.status === 400) {
+                if(response.status===400){
                     errorHandler(response);
                 }
-            });
+            }).then(res=>{
+                ifSucceed(res);
+                })
         };
 
         const errorHandler = error => {

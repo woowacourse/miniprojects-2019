@@ -4,8 +4,9 @@ const FOLLOW_APP = (() => {
         const followService = new FollowService();
 
         const follow = () => {
-            const followButton = document.getElementById('follow');
+            const followButton = document.getElementById ('follow');
             followButton ? followButton.addEventListener('click', followService.follow) : undefined;
+
         }
 
         const unfollow = () => {
@@ -13,9 +14,16 @@ const FOLLOW_APP = (() => {
             followButton ? followButton.addEventListener('click', followService.unfollow) : undefined;
         };
 
+        const followers = () => {
+            const followButton = document.getElementById('followers');
+            followButton ? followButton.addEventListener('click', followService.followers) : undefined;
+        };
+
         const init = () => {
             follow();
             unfollow();
+            followers();
+
         };
 
         return {
@@ -51,9 +59,31 @@ const FOLLOW_APP = (() => {
             connector.fetchTemplate('/unfollow', connector.DELETE,header,JSON.stringify(formData),ifSucceed)
         }
 
+        const followers = event => {
+            event.preventDefault();
+            const ifSucceed = (response) => {
+                const modalHead = document.getElementById('modal-head');
+                const body = document.getElementsByClassName('modal-body');
+                for(let i=0; i<body.length; i++) {
+                    body[i].innerHTML="";
+                }
+                let followerList = '<div id="follower-info" class="modal-body">팔로워 정보'
+                for(let i = 0; i<response.length; i++) {
+                    followerList = followerList + `<li><div id="nickName-${i}"> ${response[i].nickName}</div>
+                                                       <div id="userName-${i}"> ${response[i].userName}</div></li>`
+                }
+                followerList = followerList + '</div>';
+                modalHead.insertAdjacentHTML('afterend', followerList);
+            }
+            document.getElementById('followers')
+            const nickName = document.querySelector('#feedOwner').innerHTML;
+            connector.fetchTemplateWithoutBody('/followers/' + nickName, connector.GET, ifSucceed);
+        }
+
         return {
             follow: follow,
             unfollow: unfollow,
+            followers:followers,
         }
     };
 

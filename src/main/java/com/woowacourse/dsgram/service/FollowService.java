@@ -3,12 +3,15 @@ package com.woowacourse.dsgram.service;
 import com.woowacourse.dsgram.domain.Follow;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.domain.repository.FollowRepository;
+import com.woowacourse.dsgram.service.assembler.UserAssembler;
+import com.woowacourse.dsgram.service.dto.FollowInfo;
 import com.woowacourse.dsgram.service.dto.FollowRelation;
 import com.woowacourse.dsgram.service.exception.InvalidFollowException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FollowService {
@@ -23,11 +26,22 @@ public class FollowService {
         return FollowRelation.getRelation(follow, guest, feedOwner);
     }
 
-    public List<Follow> findFollowers(User user) {
-        return followRepository.findAllByTo(user);
+    public List<FollowInfo> findFollowers(User user) {
+        List<FollowInfo> followers = followRepository.findAllByTo(user)
+                .stream().map(Follow::getFrom)
+                .map(UserAssembler::toFollowInfo)
+                .collect(Collectors.toList());
+
+        return followers;
     }
-    public List<Follow> findFollowings(User user) {
-        return followRepository.findAllByFrom(user);
+
+    public List<FollowInfo> findFollowings(User user) {
+        List<FollowInfo> followings = followRepository.findAllByFrom(user)
+                .stream().map(Follow::getTo)
+                .map(UserAssembler::toFollowInfo)
+                .collect(Collectors.toList());
+
+        return followings;
     }
 
     public long getCountOfFollowers(User user) {
