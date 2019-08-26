@@ -8,11 +8,13 @@ const FETCH_APP = (() => {
         const DELETE = 'DELETE';
 
         const fetchTemplate = (requestUrl, method, header, body, ifSucceed) => {
+            console.log(body);
             fetch(requestUrl, {
                 method: method,
                 headers: header,
                 body: body
             }).then(response => {
+                console.log(response);
                 if (response.status === 200) {
                     return ifSucceed(response);
                 }
