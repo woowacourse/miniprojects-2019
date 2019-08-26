@@ -24,7 +24,7 @@ public class UserRestController {
 
     @DeleteMapping
     public ResponseEntity deleteProfileImage(@LoggedInUser String email) {
-        userService.deleteProfileImage(email);
-        return ResponseEntity.ok().build();
+        String imageUrl = userService.deleteProfileImage(email);
+        return ResponseEntity.ok(imageUrl);
     }
 }

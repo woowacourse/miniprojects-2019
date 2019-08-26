@@ -2,7 +2,6 @@ package techcourse.w3.woostagram.user.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.util.StringUtils;
 import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserRepository;
@@ -13,6 +12,7 @@ import techcourse.w3.woostagram.user.dto.UserUpdateDto;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
 import techcourse.w3.woostagram.user.exception.UserNotFoundException;
+import techcourse.w3.woostagram.user.exception.UserProfileException;
 
 @Service
 public class UserService {
@@ -61,25 +61,30 @@ public class UserService {
 
     @Transactional
     public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
-        User user = findUserByEmail(email);
-        String fileUrl = user.getProfile();
-        deleteFile(fileUrl);
-        if (!userProfileImageDto.getImageFile().isEmpty()) {
-            fileUrl = storageService.saveMultipartFile(userProfileImageDto.getImageFile());
-            user.updateProfile(fileUrl);
+        if (userProfileImageDto.getImageFile().isEmpty()) {
+            throw new UserProfileException();
         }
+        User user = findUserByEmail(email);
+        deleteUserProfileImage(user);
+        return uploadFile(userProfileImageDto, user);
+    }
+
+    private String uploadFile(UserProfileImageDto userProfileImageDto, User user) {
+        String fileUrl = storageService.saveMultipartFile(userProfileImageDto.getImageFile());
+        user.updateProfile(fileUrl);
+
         return fileUrl;
     }
 
-    public void deleteProfileImage(String email) {
+    public String deleteProfileImage(String email) {
         User user = findUserByEmail(email);
-        deleteFile(user.getProfile());
-        user.updateProfile(null);
+        deleteUserProfileImage(user);
+        return user.makeProfileDefault();
     }
 
-    private void deleteFile(String fileUrl) {
-        if (!StringUtils.isEmpty(fileUrl)) {
-            storageService.deleteFile(fileUrl);
+    private void deleteUserProfileImage(User user) {
+        if (!user.hasDefaultImage()) {
+            storageService.deleteFile(user.getProfile());
         }
     }
 }

@@ -63,30 +63,22 @@ const User = (function () {
         };
 
         const defaultImage = () => {
-            // const image = document.querySelector('#original-image');
-            // const profileImage = image.value;
-            // const data ={'profileImage':profileImage};
             request.delete("/",
-                () => {
+                (status, data) => {
                     const profileImage = document.querySelector("#profile-image");
-                    profileImage.setAttribute("src", defaultProfileImage);
+                    profileImage.setAttribute("src", data);
                 });
         };
 
         const uploadImageFile = () => {
             const formData = new FormData();
-
             const imageFile = document.querySelector("#img-upload").files[0];
-            const originalImageFile = document.querySelector("#original-image").value;
             formData.append("imageFile", imageFile);
-            formData.append("originalImageFile", originalImageFile);
 
             request.post("/", formData,
                 (status, data) => {
                     const profileImage = document.querySelector("#profile-image");
                     profileImage.setAttribute("src", data);
-                    const originalImage = document.querySelector('#original-image');
-                    originalImage.setAttribute("value", data);
                 });
         };
 

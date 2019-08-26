@@ -73,14 +73,12 @@
                         <div class="col-md-6">
                             <div>
                                 <button class="modal-btn" width="117">
-                                    <img id="profile-image" width="117" alt="프로필 사진 바꾸기">
+                                    <img id="profile-image" width="117" alt="프로필 사진 바꾸기" th:src="${userInfo.profile}">
                                 </button>
                             </div>
                             <form id="image-form" enctype="multipart/form-data" method="post" role="presentation">
                                 <input class="d-none" name="imageFile" multiple id="img-upload" type="file"
                                        accept="image/jpeg, image/png, image/jpg">
-                                <input type="hidden" name="originalImageFile" id="original-image"
-                                       th:value="${userInfo.profile}">
                             </form>
                         </div>
                     </div>
@@ -112,10 +110,6 @@
 <script src="/js/modal.js"></script>
 <script src="/js/util.js"></script>
 <script src="/js/user.js"></script>
-<script th:inline="javascript">
-    const profileUrl = [[ ${userInfo.profile} ]];
-</script>
-<script src="/js/mypage.js"></script>
 </body>
 
 </html>
