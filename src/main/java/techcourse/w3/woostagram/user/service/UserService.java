@@ -83,7 +83,7 @@ public class UserService {
         user.updateProfile(null);
     }
 
-    private void deleteFile(String fileUrl) {
+    protected void deleteFile(String fileUrl) {
         if (!StringUtils.isEmpty(fileUrl)) {
             storageService.deleteFile(fileUrl);
         }

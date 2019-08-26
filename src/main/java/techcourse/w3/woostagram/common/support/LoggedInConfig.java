@@ -21,5 +21,4 @@ public class LoggedInConfig implements WebMvcConfigurer {
                 .addPathPatterns("/users/login")
                 .addPathPatterns("/users/login/form");
     }
-
 }

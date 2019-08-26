@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 @SpringBootApplication
 public class WoostagramApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(WoostagramApplication.class, args);
     }
