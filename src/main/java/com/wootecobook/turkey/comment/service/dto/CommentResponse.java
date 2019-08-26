@@ -43,7 +43,7 @@ public class CommentResponse {
                 .countOfChildren(comment.getCountOfChildren())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
-                .userResponse(UserResponse.from(comment.getUser()))
+                .userResponse(UserResponse.from(comment.getAuthor()))
                 .build();
     }
 }

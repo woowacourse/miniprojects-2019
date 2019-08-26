@@ -26,7 +26,7 @@ public class FriendApiController {
     }
 
     @GetMapping("/asks")
-    public ResponseEntity<List<FriendAskResponse>> showAsk(@LoginUser UserSession userSession) {
+    public ResponseEntity<List<FriendAskResponse>> listAsk(@LoginUser UserSession userSession) {
         return ResponseEntity.ok(friendAskService.findAllByReceiverId(userSession.getId()));
     }
 
@@ -45,7 +45,7 @@ public class FriendApiController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FriendResponse>> show(@LoginUser UserSession userSession) {
+    public ResponseEntity<List<FriendResponse>> list(@LoginUser UserSession userSession) {
         return ResponseEntity.ok(friendService.findAllFriendResponseByRelatingUserId(userSession.getId()));
     }
 

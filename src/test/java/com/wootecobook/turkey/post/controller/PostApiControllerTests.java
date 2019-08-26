@@ -216,7 +216,7 @@ class PostApiControllerTests extends BaseControllerTests {
         Long postId = addPost("olaf");
 
         // when
-        GoodResponse goodResponse = webTestClient.get().uri(POST_URL + "/{postId}/good", postId)
+        GoodResponse goodResponse = webTestClient.get().uri(POST_URL + "/{postId}/toggleGood", postId)
                 .cookie(JSESSIONID, authorJSessionId)
                 .exchange()
                 .expectStatus().isOk()
@@ -228,7 +228,7 @@ class PostApiControllerTests extends BaseControllerTests {
         assertThat(goodResponse.getTotalGood()).isEqualTo(1);
 
         // when
-        GoodResponse postGoodCancelResponse = webTestClient.get().uri(POST_URL + "/{postId}/good", postId)
+        GoodResponse postGoodCancelResponse = webTestClient.get().uri(POST_URL + "/{postId}/toggleGood", postId)
                 .cookie(JSESSIONID, authorJSessionId)
                 .exchange()
                 .expectStatus().isOk()

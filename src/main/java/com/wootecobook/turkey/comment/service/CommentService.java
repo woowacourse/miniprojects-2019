@@ -88,7 +88,7 @@ public class CommentService {
         return commentRepository.countByPost(post);
     }
 
-    public GoodResponse good(final Long id, final Long userId) {
+    public GoodResponse toggleGood(final Long id, final Long userId) {
         Comment comment = findById(id);
         User user = userService.findById(userId);
 

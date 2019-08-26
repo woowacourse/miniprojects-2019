@@ -186,7 +186,7 @@ class CommentApiControllerTests extends BaseControllerTests {
     @Test
     void 댓글_좋아요_및_좋아요_취소_정상_로직() {
         // given & when
-        GoodResponse goodResponse = webTestClient.get().uri(uri + "/{id}/good", commentId)
+        GoodResponse goodResponse = webTestClient.get().uri(uri + "/{id}/toggleGood", commentId)
                 .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isOk()
@@ -198,7 +198,7 @@ class CommentApiControllerTests extends BaseControllerTests {
         assertThat(goodResponse.getTotalGood()).isEqualTo(1);
 
         // given & when
-        GoodResponse goodCencelResponse = webTestClient.get().uri(uri + "/{id}/good", commentId)
+        GoodResponse goodCencelResponse = webTestClient.get().uri(uri + "/{id}/toggleGood", commentId)
                 .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isOk()

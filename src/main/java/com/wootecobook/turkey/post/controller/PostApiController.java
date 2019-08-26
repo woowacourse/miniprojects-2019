@@ -32,8 +32,7 @@ public class PostApiController {
     public ResponseEntity<PostResponse> create(@Valid PostRequest postRequest,
                                                @LoginUser UserSession userSession) {
         PostResponse postResponse = postService.save(postRequest, userSession.getId());
-        final URI uri = linkTo(PostApiController.class).toUri();
-        return ResponseEntity.created(uri).body(postResponse);
+        return ResponseEntity.created(null).body(postResponse);
     }
 
     @GetMapping
@@ -59,8 +58,8 @@ public class PostApiController {
     }
 
     @GetMapping("/{id}/good")
-    public ResponseEntity good(@PathVariable Long id, @LoginUser UserSession userSession) {
-        GoodResponse goodResponse = postService.good(id, userSession.getId());
+    public ResponseEntity toggleGood(@PathVariable Long id, @LoginUser UserSession userSession) {
+        GoodResponse goodResponse = postService.toggleGood(id, userSession.getId());
         return ResponseEntity.ok(goodResponse);
     }
 

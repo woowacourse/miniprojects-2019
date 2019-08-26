@@ -30,6 +30,7 @@ public class PostService {
     public static final String POST_DIRECTORY_NAME = "post";
     private static final String NOT_FOUND_MESSAGE = "존재하지 않는 게시글입니다.";
     private static final int INIT_COMMENT_COUNT = 0;
+
     private final PostRepository postRepository;
     private final PostGoodService postGoodService;
     private final UserService userService;
@@ -116,7 +117,7 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    public GoodResponse good(final Long postId, final Long userId) {
+    public GoodResponse toggleGood(final Long postId, final Long userId) {
         Post post = findById(postId);
         User user = userService.findById(userId);
 

@@ -202,7 +202,7 @@ class CommentServiceTest {
         when(commentGoodService.toggleGood(any(Comment.class), any(User.class))).thenReturn(Arrays.asList(new CommentGood(user, comment)));
 
         // when
-        commentService.good(USER_ID, COMMENT_ID);
+        commentService.toggleGood(USER_ID, COMMENT_ID);
 
         // then
         verify(commentGoodService).toggleGood(comment, user);

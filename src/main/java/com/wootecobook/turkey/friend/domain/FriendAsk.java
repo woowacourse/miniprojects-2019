@@ -25,7 +25,7 @@ public class FriendAsk extends BaseEntity {
     private Long receiverId;
 
     @Builder
-    public FriendAsk(Long senderId, Long receiverId) {
+    private FriendAsk(Long senderId, Long receiverId) {
         validateNotNull(senderId);
         validateNotNull(receiverId);
         this.senderId = senderId;

@@ -17,7 +17,7 @@ public class CommentApiControllerAdvice {
 
     @ExceptionHandler({ContextNotEmptyException.class, CommentSaveException.class, InvalidCommentException.class,
             AlreadyDeleteException.class, NotCommentOwnerException.class, CommentUpdateFailException.class})
-    private ResponseEntity<ErrorMessage> handleException(Exception exception) {
+    protected ResponseEntity<ErrorMessage> handleException(Exception exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
         return ResponseEntity.badRequest().body(errorMessage);
     }

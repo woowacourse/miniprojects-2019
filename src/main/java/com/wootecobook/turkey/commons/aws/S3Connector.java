@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.utils;
+package com.wootecobook.turkey.commons.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -24,6 +24,7 @@ public class S3Connector {
         this.bucket = bucket;
     }
 
+    //directoryName을 따로 받지 않고 fileName과 합쳐서 외부에서 전달하기
     public String upload(final MultipartFile multipartFile, final String directoryName, final String fileName) throws IOException {
         File uploadFile = convert(multipartFile, fileName);
         String filePath = joinDirectoryAndFileName(directoryName, fileName);

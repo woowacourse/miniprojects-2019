@@ -13,14 +13,14 @@ import javax.persistence.EntityNotFoundException;
 public class PostApiControllerAdvice {
 
     @ExceptionHandler({EntityNotFoundException.class, NotPostOwnerException.class})
-    public ResponseEntity<ErrorMessage> handleException(RuntimeException exception) {
+    protected ResponseEntity<ErrorMessage> handleException(RuntimeException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
 
         return ResponseEntity.badRequest().body(errorMessage);
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ErrorMessage> handleBindException(BindException bindException) {
+    protected ResponseEntity<ErrorMessage> handleBindException(BindException bindException) {
         ErrorMessage errorMessage = new ErrorMessage(bindException.getFieldError().getDefaultMessage());
 
         return ResponseEntity.badRequest().body(errorMessage);

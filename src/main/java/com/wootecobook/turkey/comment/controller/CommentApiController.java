@@ -73,8 +73,8 @@ public class CommentApiController {
     }
 
     @GetMapping("/{id}/good")
-    public ResponseEntity<GoodResponse> good(@PathVariable Long id, @LoginUser UserSession userSession) {
-        GoodResponse goodResponse = commentService.good(id, userSession.getId());
+    public ResponseEntity<GoodResponse> toggleGood(@PathVariable Long id, @LoginUser UserSession userSession) {
+        GoodResponse goodResponse = commentService.toggleGood(id, userSession.getId());
 
         return ResponseEntity.ok(goodResponse);
     }
