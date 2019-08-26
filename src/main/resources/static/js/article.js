@@ -113,14 +113,14 @@ const ArticleApp = (() => {
 
         const update = () => {
             const updateArea = document.getElementById('article-update-contents');
-            const articleId = document.getElementById('current-article-id').value;
+            const articleId = document.getElementById('current-article-id');
             const data = {
                 contents: updateArea.value,
                 imageUrl: "",
                 videoUrl: "",
             };
 
-            articleApi.update(data, articleId)
+            articleApi.update(data, articleId.value)
                 .then(() => {
                     read();
                 });
