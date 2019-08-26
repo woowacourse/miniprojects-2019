@@ -61,16 +61,16 @@ const mypage = (function () {
             if(follow.getStatus()) {
                 follow.deleteFollow().then(()=>{
                     followingButton.innerHTML = "팔로우";
+                    getFollowers();
                 });
                 follow.toggleStatus();
             } else {
                 follow.addFollow().then(()=>{
                     followingButton.innerHTML = "팔로우 취소";
+                    getFollowers();
                 });
                 follow.toggleStatus();
             }
-
-            getFollowers();
         }
 
         const getFollowers = () => {
@@ -90,9 +90,9 @@ const mypage = (function () {
         }
 
         return {
+            getProfile : getProfile,
             sendFollow : sendFollow,
             modalActive: modalActive,
-            getProfile : getProfile,
             getFollowers : getFollowers,
             getFollowings : getFollowings
         }
