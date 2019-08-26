@@ -18,6 +18,12 @@ const mypage = (function () {
     const MypageController = function () {
         const mypageService = new MypageService();
 
+        const loadInit = function () {
+            mypageService.getFollowers();
+            mypageService.getFollowings();
+            mypageService.getPageData(0);
+        };
+
         const modalButton = () => {
             if (mine) {
                 const button = document.querySelector('.user-modal-btn');
@@ -35,21 +41,51 @@ const mypage = (function () {
         const init = function () {
             followButton();
             modalButton();
-            mypageService.getFollowers();
-            mypageService.getFollowings();
+            loadInit();
         }
-        
+
         return {
             init : init
         }
     }
 
     const MypageService = function () {
+        const pageSize = 12;
+
+        const userName = document.querySelector('.user-name').innerHTML;
+        const mypageRequest = new Request(`/api/mypage/users/${userName}`);
         const follow = new Follow(following, targetId)
 
         const getProfile = () => {
 
         }
+
+        const getPageData = (pageNum) => {
+            const container = document.querySelector('.article-card');
+            const articleTemplate = function(articleId, imgUrl) {
+                return`
+                <div>
+                    <a href="/articles/${articleId}">
+                    <img src=${imgUrl}>
+                    </a>
+                </div>`
+            }
+
+            mypageRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
+                , (status, data) => {
+                    document.querySelector('.article-num').innerHTML = `<strong>${data.totalElements}</strong>`;
+
+                    let rowDiv = (pages)=> {return `<div class="article-row-card">${pages}</div>`};
+                    let rowNum = parseInt(data.content.length/3);
+                    for (let i = 0; i <= rowNum; i++) {
+                        let row = "";
+                        for(let j = 0; j <3; j++){
+                            row += articleTemplate(data.content[i*3 + j].article.id, data.content[i*3 + j].article.imageUrl);
+                        }
+                        container.insertAdjacentHTML('beforeend',rowDiv(row));
+                    }
+                })
+        };
 
         const modalActive = () => {
             modal.active()
@@ -90,6 +126,7 @@ const mypage = (function () {
         }
 
         return {
+            getPageData : getPageData,
             getProfile : getProfile,
             sendFollow : sendFollow,
             modalActive: modalActive,

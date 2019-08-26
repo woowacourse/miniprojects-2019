@@ -44,6 +44,20 @@ public class ProductionDataInitializer implements ApplicationRunner {
         User uni = saveUser("uni@woowahan.com", "Aa1234!!", "uni");
 
         Article gdArticle1 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle2 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle3 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle4 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle5 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle6 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle7 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle8 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle9 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle10 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle11 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle12 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle13 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+        Article gdArticle14 = saveArticle(gd, "gyudong's awesome design artwork", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/gd.png");
+
         Article mmArticle1 = saveArticle(mm, "moomin is moomin", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/mm.png");
         Article ivArticle1 = saveArticle(iv, "hello world", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/harry_moomin_gd.png");
         Article hrArticle1 = saveArticle(hr, "", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/harry.jpeg");

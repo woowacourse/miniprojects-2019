@@ -1,4 +1,4 @@
-package techcourse.w3.woostagram.main.dto;
+package techcourse.w3.woostagram.mypage.dto;
 
 import lombok.*;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;

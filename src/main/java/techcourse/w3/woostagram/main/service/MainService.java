@@ -8,7 +8,6 @@ import techcourse.w3.woostagram.comment.service.CommentService;
 import techcourse.w3.woostagram.follow.service.FollowService;
 import techcourse.w3.woostagram.like.service.LikesService;
 import techcourse.w3.woostagram.main.dto.MainArticleDto;
-import techcourse.w3.woostagram.main.dto.UserPageDto;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -51,13 +50,5 @@ public class MainService {
                 .collect(Collectors.toList());
         followingUsers.add(user);
         return followingUsers;
-    }
-
-    public UserPageDto findUserPageDto(String loginEmail, String userName) {
-        UserInfoDto pageUser = userService.findByUserName(userName);
-        return UserPageDto.from(pageUser,
-                userService.findByEmail(loginEmail),
-                followService.checkFollowing(loginEmail, pageUser.getId())
-        );
     }
 }
