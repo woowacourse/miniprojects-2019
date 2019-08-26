@@ -1,21 +1,20 @@
 const Index = (function () {
 
     const pageSize = 10;
-    let loggedinUserData ;
+    let loggedinUserData;
 
     const IndexController = function () {
         const indexService = new IndexService();
         const articleList = document.querySelector('.article-card-con');
-
         const loadInit = function () {
-            indexService.getLoggedInData().then((data)=>{
+            indexService.getLoggedInData().then((data) => {
                 loggedinUserData = data;
-                indexService.getPageData(0);
+                indexService.getPageData(0)
             })
         };
 
         const likeButton = () => {
-            articleList.addEventListener('click', (event) =>{
+            articleList.addEventListener('click', (event) => {
                 if (event.target.classList.contains('like-btn')) {
                     const articleId = event.target.closest('.article-card').dataset.articleId;
                     const isLike = event.target.dataset.liking;
@@ -28,17 +27,17 @@ const Index = (function () {
             articleList.addEventListener('click', (event) => {
                 if (event.target.classList.contains('comment-btn')) {
                     const articleId = event.target.closest('.article-card').dataset.articleId;
-                    const commentsArea = event.target.closest('.add-comment').querySelector('textarea')
+                    const commentsArea = event.target.closest('.add-comment').querySelector('textarea');
                     const comments = commentsArea.value;
                     indexService.createComment(articleId, comments, event.target);
                     commentsArea.value = "";
                 }
             })
-        }
+        };
 
-        const commentSubmitKey =() =>{
-            articleList.addEventListener('keydown',(event)=>{
-                if(event.target.classList.contains("comment-textarea") && event.keyCode == 13){
+        const commentSubmitKey = () => {
+            articleList.addEventListener('keydown', (event) => {
+                if (event.target.classList.contains("comment-textarea") && event.keyCode == 13) {
                     event.preventDefault();
                     const articleId = event.target.closest('.article-card').dataset.articleId;
                     const comments = event.target.value;
@@ -46,12 +45,12 @@ const Index = (function () {
                     event.target.value = "";
                 }
             })
-        }
+        };
 
         const init = function () {
-            loadInit()
-            likeButton()
-            commentSubmitButton()
+            loadInit();
+            likeButton();
+            commentSubmitButton();
             commentSubmitKey()
         };
 
@@ -64,10 +63,10 @@ const Index = (function () {
     const IndexService = function () {
         const indexRequest = new Request("/api/main");
         const commentRequest = new Request("/api/articles/");
-        const userRequest = new Request("/api/users")
+        const userRequest = new Request("/api/users");
         const like = new Like();
         const getPageData = (pageNum) => {
-            indexRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
+            return indexRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
                 , (status, data) => {
                     let pagesHtml = "";
                     for (let i = 0; i < data.content.length; i++) {
@@ -75,14 +74,33 @@ const Index = (function () {
                     }
                     const container = document.querySelector(".article-card-con");
                     container.insertAdjacentHTML('beforeend', pagesHtml);
-                })
+                    return data.last;
+                }).then((last) => {
+                if (last === false) {
+                    const cardList = document.querySelectorAll('.article-card');
+                    const target = cardList[cardList.length - 1];
+                    lazyLoad(target, pageNum);
+                }
+            });
         };
 
-        const getLoggedInData = () =>{
-             return userRequest.get("/loggedin",(status,data)=>{
+        const lazyLoad = (target, pageNum) => {
+            const io = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        getPageData(pageNum + 1);
+                        observer.disconnect();
+                    }
+                })
+            });
+            io.observe(target)
+        };
+
+        const getLoggedInData = () => {
+            return userRequest.get("/loggedin", (status, data) => {
                 return data;
             })
-        }
+        };
 
         const eventLike = (articleId, isLike, e) => {
             if (isLike == 'false') {
@@ -91,7 +109,7 @@ const Index = (function () {
                         e.childNodes[1].classList.add("fa-heart");
                         e.childNodes[1].classList.remove("fa-heart-o");
                         e.dataset.liking = "true";
-                        const likeNumElement = e.closest(".article-card").querySelector(".like-num")
+                        const likeNumElement = e.closest(".article-card").querySelector(".like-num");
                         const likeNum = parseInt(likeNumElement.innerText) + 1;
                         likeNumElement.innerText = likeNum;
                     });
@@ -101,8 +119,8 @@ const Index = (function () {
                     .then(() => {
                         e.childNodes[1].classList.add("fa-heart-o");
                         e.childNodes[1].classList.remove("fa-heart");
-                        e.dataset.liking = "false"
-                        const likeNumElement = e.closest(".article-card").querySelector(".like-num")
+                        e.dataset.liking = "false";
+                        const likeNumElement = e.closest(".article-card").querySelector(".like-num");
                         const likeNum = parseInt(likeNumElement.innerText) - 1;
                         likeNumElement.innerText = likeNum;
                     });
@@ -142,18 +160,18 @@ const Index = (function () {
         };
 
         const createComment = (articleId, value, target) => {
-            commentRequest.post(`${articleId}/comments`, {contents: value}, (status,data)=>{
-                const commentList = target.closest('.comment').querySelector('.comment-list')
-                const commentHTML =getCommentTemplate(data.id,data.userInfoDto.userContentsDto.userName,data.contents)
+            commentRequest.post(`${articleId}/comments`, {contents: value}, (status, data) => {
+                const commentList = target.closest('.comment').querySelector('.comment-list');
+                const commentHTML = getCommentTemplate(data.id, data.userInfoDto.userContentsDto.userName, data.contents);
                 commentList.insertAdjacentHTML('beforeend', commentHTML)
             })
-        }
+        };
 
         return {
             getPageData: getPageData,
             eventLike: eventLike,
-            createComment:createComment,
-            getLoggedInData:getLoggedInData
+            createComment: createComment,
+            getLoggedInData: getLoggedInData
         }
     };
 
