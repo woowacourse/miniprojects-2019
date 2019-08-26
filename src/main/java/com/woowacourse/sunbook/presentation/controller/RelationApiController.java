@@ -1,8 +1,8 @@
 package com.woowacourse.sunbook.presentation.controller;
 
 import com.woowacourse.sunbook.application.dto.relation.RelationResponseDto;
-import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.service.RelationService;
+import com.woowacourse.sunbook.presentation.support.LoginUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +19,9 @@ public class RelationApiController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RelationResponseDto>> show(@SessionAttribute("loginUser") final UserResponseDto userResponseDto) {
-        List<RelationResponseDto> friends = relationService.getFriends(userResponseDto.getId());
-        List<RelationResponseDto> requestedFriends = relationService.getRequestedFriends(userResponseDto.getId());
+    public ResponseEntity<List<RelationResponseDto>> show(LoginUser loginUser) {
+        List<RelationResponseDto> friends = relationService.getFriends(loginUser.getId());
+        List<RelationResponseDto> requestedFriends = relationService.getRequestedFriends(loginUser.getId());
 
         //error 남 Collections.unmodifiableList() 때문
         friends.addAll(requestedFriends);
@@ -30,26 +30,26 @@ public class RelationApiController {
     }
 
     @GetMapping("/{toId}")
-    public ResponseEntity<RelationResponseDto> getRelationship(@SessionAttribute("loginUser") final UserResponseDto userResponseDto,
+    public ResponseEntity<RelationResponseDto> getRelationship(LoginUser loginUser,
                                         @PathVariable final Long toId) {
-        return new ResponseEntity<>(relationService.getRelationShip(userResponseDto.getId(), toId), HttpStatus.OK);
+        return new ResponseEntity<>(relationService.getRelationShip(loginUser.getId(), toId), HttpStatus.OK);
     }
 
     @PostMapping("/{toId}")
-    public ResponseEntity<RelationResponseDto> addFriend(@SessionAttribute("loginUser") final UserResponseDto userResponseDto,
+    public ResponseEntity<RelationResponseDto> addFriend(LoginUser loginUser,
                                   @PathVariable final Long toId) {
-        return new ResponseEntity<>(relationService.addFriend(userResponseDto.getId(), toId), HttpStatus.OK);
+        return new ResponseEntity<>(relationService.addFriend(loginUser.getId(), toId), HttpStatus.OK);
     }
 
     @PutMapping("/{toId}")
-    public ResponseEntity<RelationResponseDto> beFriend(@SessionAttribute("loginUser") final UserResponseDto userResponseDto,
+    public ResponseEntity<RelationResponseDto> beFriend(LoginUser loginUser,
                                  @PathVariable final Long toId) {
-        return new ResponseEntity<>(relationService.beFriend(userResponseDto.getId(), toId), HttpStatus.OK);
+        return new ResponseEntity<>(relationService.beFriend(loginUser.getId(), toId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{toId}")
-    public ResponseEntity<RelationResponseDto> deleteRelation(@SessionAttribute("loginUser") final UserResponseDto userResponseDto,
+    public ResponseEntity<RelationResponseDto> deleteRelation(LoginUser loginUser,
                                        @PathVariable final Long toId) {
-        return new ResponseEntity<>(relationService.delete(userResponseDto.getId(), toId), HttpStatus.OK);
+        return new ResponseEntity<>(relationService.delete(loginUser.getId(), toId), HttpStatus.OK);
     }
 }
