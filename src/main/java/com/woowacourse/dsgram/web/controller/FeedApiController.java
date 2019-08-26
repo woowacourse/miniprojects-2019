@@ -1,10 +1,11 @@
-package com.woowacourse.dsgram.web;
+package com.woowacourse.dsgram.web.controller;
 
 import com.woowacourse.dsgram.service.dto.FollowRequest;
 import com.woowacourse.dsgram.service.facade.Facade;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -19,6 +20,12 @@ public class FeedApiController {
     @PostMapping("/follow")
     public ResponseEntity follow(@RequestBody FollowRequest followRequest) {
         facade.follow(followRequest.getFromNickName(), followRequest.getToNickName());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/unfollow")
+    public ResponseEntity unfollow(@RequestBody FollowRequest followRequest) {
+        facade.unfollow(followRequest.getFromNickName(), followRequest.getToNickName());
         return new ResponseEntity(HttpStatus.OK);
     }
 }

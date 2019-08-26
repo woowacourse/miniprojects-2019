@@ -47,4 +47,9 @@ public class Facade {
     }
 
 
+    public void unfollow(String fromNickName, String toNickName) {
+        User guest = userService.findByNickName(fromNickName);
+        User feedOwner = userService.findByNickName(toNickName);
+        followService.delete(guest,feedOwner);
+    }
 }
