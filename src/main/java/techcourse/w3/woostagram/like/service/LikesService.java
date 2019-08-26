@@ -45,7 +45,9 @@ public class LikesService {
                 .build();
 
         likesRepository.save(likes);
-        alarmService.pushLikes(user, article);
+        if (!article.isAuthor(user.getId())) {
+            alarmService.pushLikes(user, article);
+        }
     }
 
     public List<UserInfoDto> findLikedUserByArticleId(Long articleId) {
