@@ -5,6 +5,7 @@ import techcourse.w3.woostagram.alarm.service.AlarmService;
 import techcourse.w3.woostagram.follow.domain.Follow;
 import techcourse.w3.woostagram.follow.domain.FollowRepository;
 import techcourse.w3.woostagram.follow.exception.FollowNotFoundException;
+import techcourse.w3.woostagram.follow.exception.SelfFollowNotAllowedException;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -30,6 +31,9 @@ public class FollowService {
     public void save(String email, Long targetId) {
         User user = userService.findUserByEmail(email);
         User targetUser = userService.findById(targetId);
+        if (user.equals(targetUser)) {
+            throw new SelfFollowNotAllowedException();
+        }
         Follow follow = Follow.builder()
                 .from(user)
                 .to(targetUser)
