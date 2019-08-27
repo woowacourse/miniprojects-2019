@@ -21,7 +21,7 @@ public class MypageArticleDto {
         this.commentNum = commentNum;
     }
 
-    public static MypageArticleDto from(Article article, Long likes, Long commentNum){
+    public static MypageArticleDto from(Article article, Long likes, Long commentNum) {
         return MypageArticleDto.builder()
                 .article(ArticleDto.from(article))
                 .likes(likes)

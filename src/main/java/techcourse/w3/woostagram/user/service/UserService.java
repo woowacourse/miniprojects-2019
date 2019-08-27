@@ -14,6 +14,9 @@ import techcourse.w3.woostagram.user.exception.UserCreateException;
 import techcourse.w3.woostagram.user.exception.UserNotFoundException;
 import techcourse.w3.woostagram.user.exception.UserProfileException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -95,5 +98,11 @@ public class UserService {
         if (!user.hasDefaultImage()) {
             storageService.deleteFile(user.getProfile());
         }
+    }
+
+    public List<UserInfoDto> findByUsernameContaining(String query) {
+        return userRepository.findTop10ByUserContents_UserNameContainingIgnoreCaseOrderByUserContents_UserName(query).stream()
+                .map(UserInfoDto::from)
+                .collect(Collectors.toList());
     }
 }
