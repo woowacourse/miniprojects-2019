@@ -13,6 +13,8 @@ import com.woowacourse.sunbook.domain.article.ArticleRepository;
 import com.woowacourse.sunbook.domain.comment.Comment;
 import com.woowacourse.sunbook.domain.comment.CommentFeature;
 import com.woowacourse.sunbook.domain.comment.CommentRepository;
+import com.woowacourse.sunbook.domain.relation.Relation;
+import com.woowacourse.sunbook.domain.relation.RelationRepository;
 import com.woowacourse.sunbook.domain.reaction.ReactionArticle;
 import com.woowacourse.sunbook.domain.reaction.ReactionArticleRepository;
 import com.woowacourse.sunbook.domain.reaction.ReactionComment;
@@ -112,4 +114,13 @@ public class MockStorage {
 
     @Mock
     protected ReactionComment reactionComment;
+
+    @Mock
+    protected RelationRepository relationRepository;
+
+    @Mock
+    protected User from;
+
+    @Mock
+    protected Relation fromRelation;
 }
