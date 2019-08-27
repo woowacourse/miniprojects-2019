@@ -62,7 +62,6 @@ public class ProductionDataInitializer implements ApplicationRunner {
         Article uniArticle3 = saveArticle(uni, "", "https://woowahan-crews.s3.ap-northeast-2.amazonaws.com/uni.png");
 
 
-
         Comment mmComment = saveComment(gdArticle1, "대박대박", mm);
         Comment ivComment = saveComment(gdArticle1, "역규(역시 규동이라는 뜻)", iv);
         Comment ivComment2 = saveComment(hrArticle1, "역해(역시 해리라는 뜻)", iv);

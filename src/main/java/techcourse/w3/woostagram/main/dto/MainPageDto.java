@@ -9,9 +9,9 @@ import techcourse.w3.woostagram.user.dto.UserInfoDto;
 
 import java.util.List;
 
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 public class MainPageDto {
     private UserInfoDto loggedInUser;
     private List<ArticleDto> articles;
