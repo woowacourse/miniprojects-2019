@@ -65,7 +65,7 @@ const addSideNavi = function (sideNaviElement) {
     api.isLogin()
     .then(response => {
         if (response.status !== 200) {
-            return false
+            return
         }
         return response.json()
     })
@@ -73,8 +73,11 @@ const addSideNavi = function (sideNaviElement) {
 }
 
 const addLoginArea = function(response) {
+    // addSubcribe(response.id) // REAL
+    console.log('in addLoginArea')
     addSubscribe(response.id)
     changeHref(response.id)
+    // addSubcribeTemplates(testData) // ONLY LOCAL TEST
 }
 
 const addSubscribe = function (id) {
