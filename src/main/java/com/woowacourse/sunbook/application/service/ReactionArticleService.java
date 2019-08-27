@@ -30,12 +30,9 @@ public class ReactionArticleService {
         User author = userService.findById(userId);
         Article article = articleService.findById(articleId);
 
-        if (!reactionArticleRepository.existsByAuthorAndArticle(author, article)) {
-            reactionArticleRepository.save(new ReactionArticle(author, article));
-        }
-
         ReactionArticle reactionArticle = reactionArticleRepository
-                .findByAuthorAndArticle(author, article);
+                .findByAuthorAndArticle(author, article)
+                .orElse(reactionArticleRepository.save(new ReactionArticle(author, article)));
         reactionArticle.toggleGood();
 
         return new ReactionDto(getCount(article), reactionArticle.getHasGood());
@@ -50,18 +47,18 @@ public class ReactionArticleService {
     }
 
     private Long getCount(final Article article) {
-        return reactionArticleRepository.findAllByArticle(article).stream()
-                .filter(reactionArticle -> reactionArticle.getHasGood())
+        return reactionArticleRepository.findAllByArticle(article)
+                .stream()
+                .filter(ReactionArticle::getHasGood)
                 .count()
                 ;
     }
 
     private boolean isClickedGoodInArticleByLoginUser(final User loginUser, final Article article) {
-        if (reactionArticleRepository.existsByAuthorAndArticle(loginUser, article)) {
-            ReactionArticle reactionArticle = reactionArticleRepository
-                    .findByAuthorAndArticle(loginUser, article);
-            return reactionArticle.getHasGood();
-        }
-        return false;
+        return reactionArticleRepository
+                .findByAuthorAndArticle(loginUser, article)
+                .map(ReactionArticle::getHasGood)
+                .orElse(false)
+                ;
     }
 }

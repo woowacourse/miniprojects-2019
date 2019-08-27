@@ -30,12 +30,9 @@ public class ReactionCommentService {
         User author = userService.findById(userId);
         Comment comment = commentService.findById(commentId);
 
-        if (!reactionCommentRepository.existsByAuthorAndComment(author, comment)) {
-            reactionCommentRepository.save(new ReactionComment(author, comment));
-        }
-
         ReactionComment reactionComment = reactionCommentRepository
-                .findByAuthorAndComment(author, comment);
+                .findByAuthorAndComment(author, comment)
+                .orElse(reactionCommentRepository.save(new ReactionComment(author, comment)));
         reactionComment.toggleGood();
 
         return new ReactionDto(getCount(comment), reactionComment.getHasGood());
@@ -50,18 +47,18 @@ public class ReactionCommentService {
     }
 
     private Long getCount(final Comment comment) {
-        return reactionCommentRepository.findAllByComment(comment).stream()
-                .filter(reactionComment -> reactionComment.getHasGood())
+        return reactionCommentRepository.findAllByComment(comment)
+                .stream()
+                .filter(ReactionComment::getHasGood)
                 .count()
                 ;
     }
 
     private boolean isClickedGoodInCommentByLoginUser(final User loginUser, final Comment comment) {
-        if (reactionCommentRepository.existsByAuthorAndComment(loginUser, comment)) {
-            ReactionComment reactionComment = reactionCommentRepository
-                    .findByAuthorAndComment(loginUser, comment);
-            return reactionComment.getHasGood();
-        }
-        return false;
+        return reactionCommentRepository
+                .findByAuthorAndComment(loginUser, comment)
+                .map(ReactionComment::getHasGood)
+                .orElse(false)
+                ;
     }
 }

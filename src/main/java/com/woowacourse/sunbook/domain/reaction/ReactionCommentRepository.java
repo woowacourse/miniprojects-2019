@@ -5,11 +5,10 @@ import com.woowacourse.sunbook.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReactionCommentRepository extends JpaRepository<ReactionComment, Long> {
-    boolean existsByAuthorAndComment(User author, Comment comment);
-
-    ReactionComment findByAuthorAndComment(User author, Comment comment);
+    Optional<ReactionComment> findByAuthorAndComment(User author, Comment comment);
 
     List<ReactionComment> findAllByComment(Comment comment);
 }
