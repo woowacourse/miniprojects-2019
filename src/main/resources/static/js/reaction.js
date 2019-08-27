@@ -31,7 +31,7 @@ const ReactionApp = (function() {
         };
 
         const clickArticleGood = (target) => {
-            const article = target.closest('div[data-object="article"]');
+            const article = target.closest('div[data-objectName="article"]');
             const articleId = article.getAttribute('data-article-id');
             const data = document.getElementById(`article-good-count-${articleId}`).innerText;
 
@@ -46,7 +46,7 @@ const ReactionApp = (function() {
         };
 
         const clickCommentGood = (target) => {
-            const comment = target.closest('li[data-object="comment"]');
+            const comment = target.closest('li[data-objectName="comment"]');
             const commentId = comment.getAttribute('data-comment-id');
             const data = document.getElementById(`comment-good-count-${commentId}`).innerText;
 
@@ -59,27 +59,27 @@ const ReactionApp = (function() {
                 })
         };
 
-        const showGoodCount = (object, objectId) => {
-            reactionApi.showGoodCount(`${object}s`, objectId)
+        const showGoodCount = (objectName, objectId) => {
+            reactionApi.showGoodCount(`${objectName}s`, objectId)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById(`${object}-good-count-${objectId}`)
+                    document.getElementById(`${objectName}-good-count-${objectId}`)
                         .innerText = data.numberOfGood;
-                    showGoodBtn(object, objectId, data.hasGood);
+                    showGoodBtn(objectName, objectId, data.hasGood);
                 });
         };
 
-        const showGoodBtn = (object, objectId, hasGood) => {
+        const showGoodBtn = (objectName, objectId, hasGood) => {
             if (hasGood) {
-                document.getElementById(`${object}-good-btn-icon-${objectId}`)
+                document.getElementById(`${objectName}-good-btn-icon-${objectId}`)
                     .setAttribute('class', 'fa fa-thumbs-up text-info font-size-16');
             } else {
-                if (object === 'article') {
-                    document.getElementById(`${object}-good-btn-icon-${objectId}`)
+                if (objectName === 'article') {
+                    document.getElementById(`${objectName}-good-btn-icon-${objectId}`)
                         .setAttribute('class', 'fa fa-thumbs-o-up font-size-16');
                 }
-                else if(object === 'comment') {
-                    document.getElementById(`${object}-good-btn-icon-${objectId}`)
+                else if(objectName === 'comment') {
+                    document.getElementById(`${objectName}-good-btn-icon-${objectId}`)
                         .setAttribute('class', 'fa fa-thumbs-o-up text-info font-size-16');
                 }
             }
@@ -92,12 +92,12 @@ const ReactionApp = (function() {
     };
 
     const ReactionApi = function() {
-        const clickGood = (data, object, objectId) => {
-            return Api.post(`/api/${object}/${objectId}/good`, data)
+        const clickGood = (data, objectName, objectId) => {
+            return Api.post(`/api/${objectName}/${objectId}/good`, data)
         };
 
-        const showGoodCount = (object, objectId) => {
-            return Api.get(`/api/${object}/${objectId}/good`);
+        const showGoodCount = (objectName, objectId) => {
+            return Api.get(`/api/${objectName}/${objectId}/good`);
         };
 
         return {
