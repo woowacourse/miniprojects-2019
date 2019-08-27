@@ -11,10 +11,8 @@ import techcourse.w3.woostagram.tag.domain.HashTagRepository;
 import techcourse.w3.woostagram.tag.domain.Tag;
 
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 import static org.mockito.Mockito.*;
-import static techcourse.w3.woostagram.tag.service.HashTagService.HASH_PATTERN;
 
 @ExtendWith(MockitoExtension.class)
 class HashTagServiceTest {
