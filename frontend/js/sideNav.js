@@ -66,15 +66,13 @@ const addSideNavi = function (sideNaviElement) {
     .then(response => {
         if (response.status !== 200) {
             console.log(`first then : ${response}`)
-            throw new Error(response.json())
+            return response.json().then(err => {throw err})
         }
         return response.json()
     })
     .then(response => addLoginArea(response))
-    .catch(response => {
-        response.then(res => {
-            console.log(`in catch : ${res.message}`)
-        })
+    .catch(err => {
+        console.log(err.message)
     })
 }
 
