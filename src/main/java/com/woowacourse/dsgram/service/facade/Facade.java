@@ -73,7 +73,8 @@ public class Facade {
                 .collect(Collectors.toList());
 
         return articleService.findAll()
-                .stream().filter(article ->  followings.contains(article.getAuthor()))
+                .stream().filter(article -> followings.contains(article.getAuthor()))
+                .sorted()
                 .collect(Collectors.toList());
     }
 }
