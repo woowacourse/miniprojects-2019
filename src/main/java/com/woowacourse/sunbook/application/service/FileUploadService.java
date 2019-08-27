@@ -10,6 +10,7 @@ import com.woowacourse.sunbook.domain.fileurl.FileNamingStrategy;
 import com.woowacourse.sunbook.domain.fileurl.FileUrl;
 import com.woowacourse.sunbook.domain.fileurl.RandomNamingStrategy;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +30,7 @@ public class FileUploadService {
 
     private static final FileNamingStrategy fileNamingStrategy = new RandomNamingStrategy();
 
+    @Autowired
     public FileUploadService(AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
     }
@@ -70,8 +72,10 @@ public class FileUploadService {
             if (convertFile.createNewFile()) {
                 FileOutputStream fos = new FileOutputStream(convertFile);
                 fos.write(file.getBytes());
+
                 return Optional.of(convertFile);
             }
+
             return Optional.empty();
         } catch (IOException e) {
             throw new FileSaveException();
