@@ -6,12 +6,11 @@ const FOLLOW_APP = (() => {
         const follow = () => {
             const followButton = document.getElementById('follow');
             followButton ? followButton.addEventListener('click', followService.follow) : undefined;
-
         };
 
         const unfollow = () => {
             const followButton = document.getElementById('unfollow');
-            followButton ? followButton.addEventListener('click', followService.unfollow) : undefined;
+            followButton ? followButton.addEventListener('click', followService.follow) : undefined;
         };
 
         const followers = () => {
@@ -29,7 +28,6 @@ const FOLLOW_APP = (() => {
             unfollow();
             followers();
             followings();
-
         };
 
         return {
@@ -54,13 +52,6 @@ const FOLLOW_APP = (() => {
             const ifSucceed = () => window.location.href = '/user/' + document.getElementById('feedOwner').innerText;
 
             connector.fetchTemplate('/follow', connector.POST, header, JSON.stringify(formData), ifSucceed)
-        };
-
-        const unfollow = event => {
-            event.preventDefault();
-            const ifSucceed = () => window.location.href = '/user/' + document.getElementById('feedOwner').innerText;
-
-            connector.fetchTemplate('/unfollow', connector.DELETE, header, JSON.stringify(formData), ifSucceed)
         };
 
         const followers = event => {
@@ -110,7 +101,6 @@ const FOLLOW_APP = (() => {
 
         return {
             follow: follow,
-            unfollow: unfollow,
             followers: followers,
             followings: followings,
         }

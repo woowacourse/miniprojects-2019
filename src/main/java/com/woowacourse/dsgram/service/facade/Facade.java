@@ -44,13 +44,11 @@ public class Facade {
     public void follow(String fromNickName, String toNickName) {
         User guest = userService.findByNickName(fromNickName);
         User feedOwner = userService.findByNickName(toNickName);
-        followService.save(guest,feedOwner);
-    }
 
-
-    public void unfollow(String fromNickName, String toNickName) {
-        User guest = userService.findByNickName(fromNickName);
-        User feedOwner = userService.findByNickName(toNickName);
+        if(!followService.existRelation(guest,feedOwner)) {
+            followService.save(guest,feedOwner);
+            return;
+        }
         followService.delete(guest,feedOwner);
     }
 

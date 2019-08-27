@@ -23,12 +23,6 @@ public class FeedApiController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @DeleteMapping("/unfollow")
-    public ResponseEntity unfollow(@RequestBody FollowRequest followRequest) {
-        facade.unfollow(followRequest.getFromNickName(), followRequest.getToNickName());
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
     @GetMapping("/followers/{nickName}")
     public ResponseEntity<List<FollowInfo>> getFollowers(@PathVariable String nickName) {
         List<FollowInfo> followers = facade.getFollowers(nickName);
