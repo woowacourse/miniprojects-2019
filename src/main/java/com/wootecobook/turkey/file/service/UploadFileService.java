@@ -1,10 +1,10 @@
 package com.wootecobook.turkey.file.service;
 
+import com.wootecobook.turkey.commons.aws.S3Connector;
 import com.wootecobook.turkey.file.domain.FileFeature;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.domain.UploadFileRepository;
 import com.wootecobook.turkey.user.domain.User;
-import com.wootecobook.turkey.commons.aws.S3Connector;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

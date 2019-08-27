@@ -1,19 +1,17 @@
-package com.wootecobook.turkey.comment.service;
+package com.wootecobook.turkey.good.service;
 
 import com.wootecobook.turkey.comment.domain.Comment;
-import com.wootecobook.turkey.comment.domain.CommentGood;
-import com.wootecobook.turkey.comment.domain.CommentGoodRepository;
-import com.wootecobook.turkey.commons.GoodService;
+import com.wootecobook.turkey.good.domain.comment.CommentGood;
+import com.wootecobook.turkey.good.domain.comment.CommentGoodRepository;
 import com.wootecobook.turkey.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class CommentGoodService implements GoodService<CommentGood, Comment> {
+public class CommentGoodService implements GoodService<Comment> {
 
     private final CommentGoodRepository commentGoodRepository;
 
@@ -22,7 +20,7 @@ public class CommentGoodService implements GoodService<CommentGood, Comment> {
     }
 
     @Override
-    public List<CommentGood> toggleGood(final Comment comment, final User user) {
+    public int toggleGood(final Comment comment, final User user) {
         Optional<CommentGood> maybeCommentGood = commentGoodRepository.findByCommentAndUser(comment, user);
 
         if (maybeCommentGood.isPresent()) {
@@ -31,7 +29,7 @@ public class CommentGoodService implements GoodService<CommentGood, Comment> {
             approveGoodRequest(new CommentGood(user, comment));
         }
 
-        return findBy(comment);
+        return countBy(comment);
     }
 
     private void approveGoodRequest(CommentGood commentGood) {
@@ -43,7 +41,12 @@ public class CommentGoodService implements GoodService<CommentGood, Comment> {
     }
 
     @Override
-    public List<CommentGood> findBy(Comment comment) {
-        return commentGoodRepository.findByComment(comment);
+    public int countBy(Comment comment) {
+        return commentGoodRepository.countByComment(comment);
+    }
+
+    @Override
+    public boolean existsByPostAndUser(final Comment comment, final User user) {
+        return commentGoodRepository.existsByCommentAndUser(comment, user);
     }
 }

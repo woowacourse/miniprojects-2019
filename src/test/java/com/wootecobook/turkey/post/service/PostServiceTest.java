@@ -4,6 +4,7 @@ import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.file.domain.FileFeature;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.service.UploadFileService;
+import com.wootecobook.turkey.good.service.PostGoodService;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostRepository;
@@ -155,7 +156,7 @@ public class PostServiceTest {
     void post_수정_테스트() {
         //given
         when(postRepository.findById(savedPostId)).thenReturn(Optional.of(savedPost));
-        when(postGoodService.findBy(any(Post.class))).thenReturn(new ArrayList<>());
+        when(postGoodService.countBy(any(Post.class))).thenReturn(0);
         when(commentRepository.countByPost(any(Post.class))).thenReturn(0);
         //when
         PostResponse updateResult = postService.update(updatePostRequest, savedPostId, author.getId());

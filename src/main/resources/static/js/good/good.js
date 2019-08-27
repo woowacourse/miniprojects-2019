@@ -6,12 +6,12 @@ const postGood = (event) => {
     const targetPostId = targetPost.dataset.id;
     const showPostGood = targetPost.querySelector('ul.feed-action li span.show-post-good')
     if (goodButtonContainer != null && goodButtonContainer.classList.contains('good')) {
-        api.GET(POST_GOOD_URL(targetPostId))
+        api.POST(POST_GOOD_URL(targetPostId))
             .then(res => res.json())
             .then(good => {
                 const { totalGood } = good
                 showPostGood.innerText = totalGood
-                return good.good
+                return good.gooded
             })
             .then(isGood => {
                 if (isGood) {

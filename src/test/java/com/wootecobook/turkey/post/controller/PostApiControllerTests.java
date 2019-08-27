@@ -2,8 +2,8 @@ package com.wootecobook.turkey.post.controller;
 
 import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
-import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.config.AwsMockConfig;
+import com.wootecobook.turkey.good.service.dto.GoodResponse;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
@@ -216,7 +216,7 @@ class PostApiControllerTests extends BaseControllerTests {
         Long postId = addPost("olaf");
 
         // when
-        GoodResponse goodResponse = webTestClient.get().uri(POST_URL + "/{postId}/good", postId)
+        GoodResponse goodResponse = webTestClient.post().uri(POST_URL + "/{postId}/good", postId)
                 .cookie(JSESSIONID, authorJSessionId)
                 .exchange()
                 .expectStatus().isOk()
@@ -228,7 +228,7 @@ class PostApiControllerTests extends BaseControllerTests {
         assertThat(goodResponse.getTotalGood()).isEqualTo(1);
 
         // when
-        GoodResponse postGoodCancelResponse = webTestClient.get().uri(POST_URL + "/{postId}/good", postId)
+        GoodResponse postGoodCancelResponse = webTestClient.post().uri(POST_URL + "/{postId}/good", postId)
                 .cookie(JSESSIONID, authorJSessionId)
                 .exchange()
                 .expectStatus().isOk()

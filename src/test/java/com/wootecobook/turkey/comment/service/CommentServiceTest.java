@@ -1,12 +1,12 @@
 package com.wootecobook.turkey.comment.service;
 
 import com.wootecobook.turkey.comment.domain.Comment;
-import com.wootecobook.turkey.comment.domain.CommentGood;
 import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
+import com.wootecobook.turkey.good.service.CommentGoodService;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.service.PostService;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -199,7 +198,7 @@ class CommentServiceTest {
         // given
         when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
         when(userService.findById(USER_ID)).thenReturn(user);
-        when(commentGoodService.toggleGood(any(Comment.class), any(User.class))).thenReturn(Arrays.asList(new CommentGood(user, comment)));
+        when(commentGoodService.toggleGood(any(Comment.class), any(User.class))).thenReturn(1);
 
         // when
         commentService.toggleGood(USER_ID, COMMENT_ID);

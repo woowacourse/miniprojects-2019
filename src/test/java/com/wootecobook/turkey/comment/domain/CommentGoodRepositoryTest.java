@@ -1,5 +1,7 @@
 package com.wootecobook.turkey.comment.domain;
 
+import com.wootecobook.turkey.good.domain.comment.CommentGood;
+import com.wootecobook.turkey.good.domain.comment.CommentGoodRepository;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;

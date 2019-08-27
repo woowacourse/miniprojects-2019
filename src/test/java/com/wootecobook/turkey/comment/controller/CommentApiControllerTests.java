@@ -1,13 +1,13 @@
 package com.wootecobook.turkey.comment.controller;
 
+import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.comment.domain.exception.NotCommentOwnerException;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
-import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
-import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.config.AwsMockConfig;
+import com.wootecobook.turkey.good.service.dto.GoodResponse;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -186,7 +186,7 @@ class CommentApiControllerTests extends BaseControllerTests {
     @Test
     void 댓글_좋아요_및_좋아요_취소_정상_로직() {
         // given & when
-        GoodResponse goodResponse = webTestClient.get().uri(uri + "/{id}/good", commentId)
+        GoodResponse goodResponse = webTestClient.post().uri(uri + "/{id}/good", commentId)
                 .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isOk()
@@ -198,7 +198,7 @@ class CommentApiControllerTests extends BaseControllerTests {
         assertThat(goodResponse.getTotalGood()).isEqualTo(1);
 
         // given & when
-        GoodResponse goodCencelResponse = webTestClient.get().uri(uri + "/{id}/good", commentId)
+        GoodResponse goodCencelResponse = webTestClient.post().uri(uri + "/{id}/good", commentId)
                 .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isOk()

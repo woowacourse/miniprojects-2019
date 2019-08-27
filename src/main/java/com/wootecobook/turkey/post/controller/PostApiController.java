@@ -1,8 +1,8 @@
 package com.wootecobook.turkey.post.controller;
 
-import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.commons.resolver.LoginUser;
 import com.wootecobook.turkey.commons.resolver.UserSession;
+import com.wootecobook.turkey.good.service.dto.GoodResponse;
 import com.wootecobook.turkey.post.service.PostService;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
@@ -14,9 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -57,7 +54,7 @@ public class PostApiController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/good")
+    @PostMapping("/{id}/good")
     public ResponseEntity toggleGood(@PathVariable Long id, @LoginUser UserSession userSession) {
         GoodResponse goodResponse = postService.toggleGood(id, userSession.getId());
         return ResponseEntity.ok(goodResponse);

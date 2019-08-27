@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.commons;
+package com.wootecobook.turkey.good.domain;
 
 import com.wootecobook.turkey.commons.domain.BaseEntity;
 import com.wootecobook.turkey.user.domain.User;
@@ -21,9 +21,5 @@ public abstract class Good extends BaseEntity {
 
     protected Good(final User user) {
         this.user = user;
-    }
-
-    public boolean isGood(User user) {
-        return this.user.equals(user);
     }
 }

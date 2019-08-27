@@ -1,19 +1,17 @@
-package com.wootecobook.turkey.post.service;
+package com.wootecobook.turkey.good.service;
 
-import com.wootecobook.turkey.commons.GoodService;
+import com.wootecobook.turkey.good.domain.post.PostGood;
+import com.wootecobook.turkey.good.domain.post.PostGoodRepository;
 import com.wootecobook.turkey.post.domain.Post;
-import com.wootecobook.turkey.post.domain.PostGood;
-import com.wootecobook.turkey.post.domain.PostGoodRepository;
 import com.wootecobook.turkey.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class PostGoodService implements GoodService<PostGood, Post> {
+public class PostGoodService implements GoodService<Post> {
 
     private final PostGoodRepository postGoodRepository;
 
@@ -22,7 +20,7 @@ public class PostGoodService implements GoodService<PostGood, Post> {
     }
 
     @Override
-    public List<PostGood> toggleGood(Post post, User user) {
+    public int toggleGood(Post post, User user) {
         Optional<PostGood> maybeGood = postGoodRepository.findByPostAndUser(post, user);
 
         if (maybeGood.isPresent()) {
@@ -31,7 +29,7 @@ public class PostGoodService implements GoodService<PostGood, Post> {
             approveGoodRequest(new PostGood(user, post));
         }
 
-        return findBy(post);
+        return countBy(post);
     }
 
     private void approveGoodRequest(PostGood postGood) {
@@ -43,7 +41,12 @@ public class PostGoodService implements GoodService<PostGood, Post> {
     }
 
     @Override
-    public List<PostGood> findBy(final Post post) {
-        return postGoodRepository.findByPost(post);
+    public int countBy(final Post post) {
+        return postGoodRepository.countByPost(post);
+    }
+
+    @Override
+    public boolean existsByPostAndUser(final Post post, final User user) {
+        return postGoodRepository.existsByPostAndUser(post, user);
     }
 }

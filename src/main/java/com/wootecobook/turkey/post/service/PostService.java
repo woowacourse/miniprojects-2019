@@ -1,9 +1,10 @@
 package com.wootecobook.turkey.post.service;
 
 import com.wootecobook.turkey.comment.domain.CommentRepository;
-import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.service.UploadFileService;
+import com.wootecobook.turkey.good.service.PostGoodService;
+import com.wootecobook.turkey.good.service.dto.GoodResponse;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostRepository;
@@ -29,7 +30,6 @@ public class PostService {
 
     public static final String POST_DIRECTORY_NAME = "post";
     private static final String NOT_FOUND_MESSAGE = "존재하지 않는 게시글입니다.";
-    private static final int INIT_COMMENT_COUNT = 0;
 
     private final PostRepository postRepository;
     private final PostGoodService postGoodService;
@@ -53,7 +53,7 @@ public class PostService {
 
         Post savedPost = postRepository.save(postRequest.toEntity(user, receiver, savedFiles));
 
-        return PostResponse.from(savedPost, GoodResponse.init(), INIT_COMMENT_COUNT);
+        return PostResponse.getPostResponse(savedPost);
     }
 
     private User findReceiverIfExist(final Long receiverId) {
@@ -81,7 +81,8 @@ public class PostService {
 
         return postRepository.findAll(pageable)
                 .map(post -> {
-                    GoodResponse goodResponse = GoodResponse.of(postGoodService.findBy(post), user);
+                    GoodResponse goodResponse = GoodResponse.of(postGoodService.countBy(post),
+                            postGoodService.existsByPostAndUser(post, user));
                     int totalComment = commentRepository.countByPost(post);
                     return PostResponse.from(post, goodResponse, totalComment);
                 });
@@ -98,7 +99,9 @@ public class PostService {
                     .build();
 
             post.update(updatePost);
-            GoodResponse goodResponse = GoodResponse.of(postGoodService.findBy(post), user);
+            GoodResponse goodResponse = GoodResponse.of(
+                    postGoodService.countBy(post),
+                    postGoodService.existsByPostAndUser(post, user));
             int totalComment = commentRepository.countByPost(post);
 
             return PostResponse.from(post, goodResponse, totalComment);
@@ -121,7 +124,9 @@ public class PostService {
         Post post = findById(postId);
         User user = userService.findById(userId);
 
-        return GoodResponse.of(postGoodService.toggleGood(post, user), user);
+        return GoodResponse.of(
+                postGoodService.toggleGood(post, user),
+                postGoodService.existsByPostAndUser(post, user));
     }
 
     @Transactional(readOnly = true)
@@ -129,6 +134,8 @@ public class PostService {
         Post post = findById(postId);
         User user = userService.findById(userId);
 
-        return GoodResponse.of(postGoodService.findBy(post), user);
+        return GoodResponse.of(
+                postGoodService.countBy(post),
+                postGoodService.existsByPostAndUser(post, user));
     }
 }

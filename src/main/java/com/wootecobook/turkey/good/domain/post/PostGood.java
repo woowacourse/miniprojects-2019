@@ -1,6 +1,7 @@
-package com.wootecobook.turkey.post.domain;
+package com.wootecobook.turkey.good.domain.post;
 
-import com.wootecobook.turkey.commons.Good;
+import com.wootecobook.turkey.good.domain.Good;
+import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
