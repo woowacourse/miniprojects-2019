@@ -15,7 +15,7 @@ import techcourse.w3.woostagram.user.exception.UserProfileException;
 @Slf4j
 @ResponseBody
 @ControllerAdvice
-@ResponseStatus(HttpStatus.BAD_REQUEST)
+@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 public class UserRestExceptionHandler {
     @ExceptionHandler(UserProfileException.class)
     public UserErrorDto handleUserProfileException(UserProfileException error) {

@@ -1,11 +1,12 @@
 package techcourse.w3.woostagram.user.domain;
 
 import lombok.*;
+import org.thymeleaf.util.StringUtils;
+import techcourse.w3.woostagram.user.exception.InvalidUserContentsException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Lob;
-import javax.validation.constraints.NotBlank;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -13,19 +14,48 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode
 @ToString
 public class UserContents {
-    @NotBlank(message = "빈칸을 허용하지 않는 항목입니다.")
-    @Column(nullable = false, unique = true)
-    private String userName;
+    private static final String USER_NAME_REGEX = "[A-Za-z0-9_.]{30}";
+    public static final String BLANK_ERROR_MESSAGE = "userName은 빈칸을 허용하지 않는 항목입니다.";
+    public static final String PATTERN_ERROR_MESSAGE = "사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다.";
+    public static final String LENGTH_ERROR_MESSAGE = "이름을 30자 미만으로 입력하세요.";
 
     private String name;
+
+    @Column(nullable = false, unique = true)
+    private String userName;
 
     @Lob
     private String contents;
 
     @Builder
     public UserContents(String userName, String name, String contents) {
-        this.userName = userName;
+        this.userName = validateUserName(userName);
         this.name = name;
         this.contents = contents;
+    }
+
+    private String validateUserName(String userName) {
+        checkBlank(userName);
+        //checkPattern(userName);
+        checkLength(userName);
+        return userName;
+    }
+
+    private void checkBlank(String userName) {
+        if (StringUtils.isEmpty(userName)) {
+            throw new InvalidUserContentsException(BLANK_ERROR_MESSAGE);
+        }
+    }
+
+    private void checkPattern(String userName) {
+        if (!userName.matches(USER_NAME_REGEX)) {
+            throw new InvalidUserContentsException(PATTERN_ERROR_MESSAGE);
+        }
+    }
+
+    private void checkLength(String userName) {
+        if (userName.length() >= 30 || userName.length() < 1) {
+            throw new InvalidUserContentsException(LENGTH_ERROR_MESSAGE);
+        }
     }
 }
