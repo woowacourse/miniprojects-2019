@@ -6,6 +6,7 @@ import com.woowacourse.edd.utils.Utils;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.StatusAssertions;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
@@ -41,12 +42,13 @@ public class VideoControllerTests extends BasicControllerTests {
     @Test
     void find_videos_by_date() {
         String jsessionid = getDefaultLoginSessionId();
-        saveVideo(new VideoSaveRequestDto("111", "tilte1", "contents1"), jsessionid);
-        saveVideo(new VideoSaveRequestDto("222", "tilte2", "contents2"), jsessionid);
-        saveVideo(new VideoSaveRequestDto("333", "tilte3", "contents3"), jsessionid);
-        saveVideo(new VideoSaveRequestDto("444", "tilte4", "contents4"), jsessionid);
-        saveVideo(new VideoSaveRequestDto("555", "tilte5", "contents5"), jsessionid);
-        saveVideo(new VideoSaveRequestDto("666", "tilte6", "contents6"), jsessionid);
+
+        saveNextVideo(new VideoSaveRequestDto("111", "title1", "contents1"), jsessionid)
+            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("222", "title2", "contents2"), jsessionid))
+            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("333", "title3", "contents3"), jsessionid))
+            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("444", "title4", "contents4"), jsessionid))
+            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("555", "title5", "contents5"), jsessionid))
+            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("666", "title6", "contents6"), jsessionid));
 
         findVideos(0, 6, "createDate", "DESC").isOk().expectBody()
             .jsonPath("$.content.length()").isEqualTo(6)
@@ -54,6 +56,10 @@ public class VideoControllerTests extends BasicControllerTests {
             .jsonPath("$.content[3].youtubeId").isEqualTo("333")
             .jsonPath("$.content[5].youtubeId").isEqualTo("111")
             .jsonPath("$.content[5].creator.id").isEqualTo(DEFAULT_LOGIN_ID);
+    }
+
+    WebTestClient.BodyContentSpec saveNextVideo(VideoSaveRequestDto video, String sid) {
+        return saveVideo(video, sid).isCreated().expectBody();
     }
 
     @Test
