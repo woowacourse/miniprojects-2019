@@ -56,10 +56,12 @@
                                         <span class="text-bold mrg-right-20"
                                               th:text="${feedInfo.articles.size()}"></span>
                                         <span>팔로워</span>
-                                        <span id="followers" class="text-bold mrg-right-20" th:text="${feedInfo.followers}" data-toggle="modal" data-target="#exampleModal"></span>
+                                        <span id="followers" class="text-bold mrg-right-20" th:text="${feedInfo.followers}"
+                                              data-toggle="modal" data-target="#follow-list"></span>
 
                                         <span>팔로우</span>
-                                        <span id="followings" class="text-bold mrg-right-20" th:text="${feedInfo.followings}"></span>
+                                        <span id="followings" class="text-bold mrg-right-20" th:text="${feedInfo.followings}"
+                                              data-toggle="modal" data-target="#follow-list"></span>
                                     </div>
                                     <br/><br/>
                                     <div>
@@ -97,12 +99,12 @@
         </div>
     </div>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="follow-list" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div id="modal-head" class="modal-header">
-                    <h5 class="modal-title text-center text-bold" id="exampleModalLabel">팔로워</h5>
+                    <h5 class="modal-title text-center text-bold" id="follow-relation"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

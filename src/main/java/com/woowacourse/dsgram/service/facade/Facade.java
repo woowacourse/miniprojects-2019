@@ -64,6 +64,6 @@ public class Facade {
     public List<FollowInfo> getFollowings(String nickName) {
         User user = userService.findByNickName(nickName);
 
-        return followService.findFollowers(user);
+        return followService.findFollowings(user);
     }
 }
