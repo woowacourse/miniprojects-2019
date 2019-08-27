@@ -25,12 +25,15 @@ public class HashTagService {
     @Transactional
     public void save(Article article, String contents) {
         List<Tag> tags = tagService.parse(contents, HASH_PATTERN);
-
         tags.forEach(tag ->
                 hashTagRepository.save(HashTag.builder()
                         .article(article)
                         .tag(tag)
                         .build())
         );
+    }
+
+    public List<HashTag> findByNameContaining(String query) {
+        return hashTagRepository.findTop10ByTag_NameContainingIgnoreCaseOrderByTag_Name(query);
     }
 }

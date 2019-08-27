@@ -10,10 +10,10 @@ import techcourse.w3.woostagram.search.service.FullSearchService;
 
 @RestController
 @RequestMapping("/api/search/{searchQuery}")
-public class SearchController {
+public class SearchRestController {
     private final FullSearchService fullSearchService;
 
-    public SearchController(FullSearchService fullSearchService) {
+    public SearchRestController(FullSearchService fullSearchService) {
         this.fullSearchService = fullSearchService;
     }
 

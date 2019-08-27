@@ -26,17 +26,14 @@ public class TagService {
 
     @Transactional
     public List<Tag> saveAll(List<Tag> tags) {
-        List<Tag> persistTags = new ArrayList<>();
+        return tags.stream().map(this::getOrCreate).collect(Collectors.toList());
+    }
 
-        tags.forEach(tag -> {
-            if (tagRepository.existsByName(tag.getName())) {
-                persistTags.add(tagRepository.findByName(tag.getName()).orElseThrow(IllegalAccessError::new));
-            } else {
-                persistTags.add(tagRepository.save(tag));
-            }
-        });
-
-        return persistTags;
+    private Tag getOrCreate(Tag tag) {
+        if (tagRepository.existsByName(tag.getName())) {
+            return tagRepository.findByName(tag.getName()).orElseThrow(IllegalAccessError::new);
+        }
+        return tagRepository.save(tag);
     }
 
     public List<Tag> parse(String contents, Pattern pattern) {
