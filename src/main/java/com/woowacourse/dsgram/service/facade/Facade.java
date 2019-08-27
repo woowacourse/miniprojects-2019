@@ -30,7 +30,9 @@ public class Facade {
         User feedOwner = userService.findByNickName(toNickName);
         long followers =  followService.getCountOfFollowers(feedOwner);
         long followings =  followService.getCountOfFollowings(feedOwner);
-        List<Article> articles = articleService.findArticlesByAuthorNickName(toNickName);
+        List<Article> articles = articleService.findArticlesByAuthorNickName(toNickName)
+                .stream().sorted()
+                .collect(Collectors.toList());
         FollowRelation followRelation = followService.isFollowed(guest,feedOwner);
 
         return FeedInfo.builder()
