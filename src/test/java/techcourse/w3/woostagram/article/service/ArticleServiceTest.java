@@ -16,6 +16,7 @@ import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
 import techcourse.w3.woostagram.common.exception.UnAuthorizedException;
 import techcourse.w3.woostagram.common.service.StorageService;
+import techcourse.w3.woostagram.tag.service.HashTagService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserContents;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -29,14 +30,22 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
     private static final String USER_EMAIL = "moomin@naver.com";
+
     @InjectMocks
     private ArticleService articleService;
+
     @Mock
     private ArticleRepository articleRepository;
+
     @Mock
     private UserService userService;
+
     @Mock
     private StorageService storageService;
+
+    @Mock
+    private HashTagService hashTagService;
+
     private Article article;
     private User user;
 
