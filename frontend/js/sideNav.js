@@ -65,23 +65,19 @@ const addSideNavi = function (sideNaviElement) {
     api.isLogin()
     .then(response => {
         if (response.status !== 200) {
-            console.log(`first then : ${response}`)
-            return response.json().then(err => {throw new Error(err)})
+            response.json().then(err => {
+                console.log(err.message)
+            })
+        } else {
+            return response.json()
         }
-        return response.json()
     })
     .then(response => addLoginArea(response))
-    .catch(err => {
-        console.log(`in err : ${err}, ${err.message}`)
-    })
 }
 
 const addLoginArea = function(response) {
-    // addSubcribe(response.id) // REAL
-    console.log(`in addLoginArea : ${response}`)
     addSubscribe(response.id)
     changeHref(response.id)
-    // addSubcribeTemplates(testData) // ONLY LOCAL TEST
 }
 
 const addSubscribe = function (id) {
