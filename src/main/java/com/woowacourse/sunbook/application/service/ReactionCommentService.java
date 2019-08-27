@@ -32,7 +32,8 @@ public class ReactionCommentService {
 
         ReactionComment reactionComment = reactionCommentRepository
                 .findByAuthorAndComment(author, comment)
-                .orElse(reactionCommentRepository.save(new ReactionComment(author, comment)));
+                .orElseGet(() ->
+                        reactionCommentRepository.save(new ReactionComment(author, comment)));
         reactionComment.toggleGood();
 
         return new ReactionDto(getCount(comment), reactionComment.getHasGood());

@@ -32,7 +32,8 @@ public class ReactionArticleService {
 
         ReactionArticle reactionArticle = reactionArticleRepository
                 .findByAuthorAndArticle(author, article)
-                .orElse(reactionArticleRepository.save(new ReactionArticle(author, article)));
+                .orElseGet(() ->
+                        reactionArticleRepository.save(new ReactionArticle(author, article)));
         reactionArticle.toggleGood();
 
         return new ReactionDto(getCount(article), reactionArticle.getHasGood());
