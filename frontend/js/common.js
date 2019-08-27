@@ -89,7 +89,7 @@ const Api = function () {
         return requestWithoutBody(`${baseUrl}/v1/login/users`, 'GET')
     }
 
-    const requestSubcribed = (userId) => {
+    const requestSubscribed = (userId) => {
         return requestWithoutBody(`${baseUrl}/v1/users/${userId}/subscribed`, 'GET')
     }
 
@@ -102,7 +102,7 @@ const Api = function () {
         postLogin,
         signup,
         isLogin,
-        requestSubcribed
+        requestSubscribed: requestSubscribed
     }
 
 }
