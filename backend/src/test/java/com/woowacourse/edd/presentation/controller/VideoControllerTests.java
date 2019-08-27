@@ -141,13 +141,13 @@ public class VideoControllerTests extends BasicControllerTests {
             .expectStatus().isOk()
             .expectBody()
             .jsonPath("$.viewCount").isEqualTo(0)
-            .returnResult();
-
-        webTestClient.get().uri(location)
-            .exchange()
-            .expectStatus().isOk()
-            .expectBody()
-            .jsonPath("$.viewCount").isEqualTo(1);
+            .consumeWith(res -> {
+                webTestClient.get().uri(location)
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .jsonPath("$.viewCount").isEqualTo(1);
+            });
     }
 
     @Test
