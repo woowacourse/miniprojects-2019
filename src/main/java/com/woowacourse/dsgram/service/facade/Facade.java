@@ -11,6 +11,7 @@ import com.woowacourse.dsgram.service.dto.FollowRelation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class Facade {
@@ -63,5 +64,16 @@ public class Facade {
         User user = userService.findByNickName(nickName);
 
         return followService.findFollowings(user);
+    }
+
+    public List<Article> getArticlesByFollowings(String nickName) {
+        User user = userService.findByNickName(nickName);
+        List<User> followings = followService.findFollowings(user)
+                .stream().map(followInfo -> userService.findByNickName(followInfo.getNickName()))
+                .collect(Collectors.toList());
+
+        return articleService.findAll()
+                .stream().filter(article ->  followings.contains(article.getAuthor()))
+                .collect(Collectors.toList());
     }
 }

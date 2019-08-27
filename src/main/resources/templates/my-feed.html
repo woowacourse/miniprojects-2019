@@ -23,7 +23,6 @@
                                     <div>
                                         <input id="guest" type="hidden" th:value="${session.sessionUser.nickName}">
                                         <span id="feedOwner" class="user-id mrg-right-10" th:text="${feedInfo.user.nickName}"></span>
-                                        <!--                                                // TODO 프로필 편집 두군데..? 일단 아래로 설정? -->
                                         <form th:if="${feedInfo.followRelation.name() == 'FOLLOW'}">
                                             <button id="unfollow" class="btn btn-default">언팔로우</button>
                                         </form>
