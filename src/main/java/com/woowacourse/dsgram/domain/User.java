@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode(of = {"id"})
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Email

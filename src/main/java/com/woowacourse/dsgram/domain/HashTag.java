@@ -13,7 +13,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(of = "id")
 public class HashTag {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
