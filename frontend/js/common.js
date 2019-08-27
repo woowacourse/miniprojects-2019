@@ -65,6 +65,10 @@ const Api = function () {
         return requestWithoutBody(`${baseUrl}/v1/videos?page=${page}&size=${size}&sort=${sort},DESC`,'GET')
     }
 
+    const requestMyChannelVideos = (userId) => {
+        return requestWithoutBody(`${baseUrl}/v1/users/${userId}/videos`,'GET')
+    }
+
     const requestVideo = (videoId) => {
         return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}`,'GET')
     }
@@ -117,6 +121,7 @@ const Api = function () {
         updateUser,
         retrieveLoginInfo,
         deleteUser,
+        requestMyChannelVideos
     }
 }
 

@@ -4,12 +4,13 @@ const channelCtx = {
     }
 }
 
-const loadVideoCards = function (page, size, sort) {
-    api.requestVideos(page, size, sort)
+const loadVideoCards = function (userId) {
+    api.requestMyChannelVideos(userId)
         .then(response => response.json())
         .then(json => addVideoCardTemplates(json.content, 'dateVideoCard'))
 }
-loadVideoCards(0, wootubeCtx.constants.videoChannelPageSize, 'createDate')
+const userId = wootubeCtx.util.getUrlParams('id')
+loadVideoCards(userId)
 
 document.querySelector('#btn-update').addEventListener('click', () => {
     channelCtx.flags.isInUpdate = changeUpdateState(channelCtx.flags.isInUpdate)
@@ -73,6 +74,7 @@ const changeUpdateState = function (flags) {
         emailElm.classList.add('d-none')
         nameInput.classList.remove('d-none')
         emailInput.classList.remove('d-none')
+        alertElm.classList.add('d-none')
 
         document.querySelector('#btn-submit').classList.remove('d-none')
         document.querySelector('#btn-update').innerHTML = '<i class="ti-close"></i>'
