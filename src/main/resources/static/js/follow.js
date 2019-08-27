@@ -4,10 +4,10 @@ const FOLLOW_APP = (() => {
         const followService = new FollowService();
 
         const follow = () => {
-            const followButton = document.getElementById ('follow');
+            const followButton = document.getElementById('follow');
             followButton ? followButton.addEventListener('click', followService.follow) : undefined;
 
-        }
+        };
 
         const unfollow = () => {
             const followButton = document.getElementById('unfollow');
@@ -45,45 +45,51 @@ const FOLLOW_APP = (() => {
             toNickName: document.getElementById('feedOwner').innerText,
         };
 
-        const follow = event =>{
+        const follow = event => {
             event.preventDefault();
-            const ifSucceed = () => window.location.href = '/user/'+document.getElementById('feedOwner').innerText;
+            const ifSucceed = () => window.location.href = '/user/' + document.getElementById('feedOwner').innerText;
 
-            connector.fetchTemplate('/follow', connector.POST,header,JSON.stringify(formData),ifSucceed)
-        }
+            connector.fetchTemplate('/follow', connector.POST, header, JSON.stringify(formData), ifSucceed)
+        };
 
-        const unfollow = event =>{
+        const unfollow = event => {
             event.preventDefault();
-            const ifSucceed = () => window.location.href = '/user/'+document.getElementById('feedOwner').innerText;
+            const ifSucceed = () => window.location.href = '/user/' + document.getElementById('feedOwner').innerText;
 
-            connector.fetchTemplate('/unfollow', connector.DELETE,header,JSON.stringify(formData),ifSucceed)
-        }
+            connector.fetchTemplate('/unfollow', connector.DELETE, header, JSON.stringify(formData), ifSucceed)
+        };
 
         const followers = event => {
             event.preventDefault();
-            const ifSucceed = (response) => {
-                const modalHead = document.getElementById('modal-head');
-                const body = document.getElementsByClassName('modal-body');
-                for(let i=0; i<body.length; i++) {
-                    body[i].innerHTML="";
-                }
-                let followerList = '<div id="follower-info" class="modal-body">팔로워 정보'
-                for(let i = 0; i<response.length; i++) {
-                    followerList = followerList + `<li><div id="nickName-${i}"> ${response[i].nickName}</div>
-                                                       <div id="userName-${i}"> ${response[i].userName}</div></li>`
-                }
-                followerList = followerList + '</div>';
-                modalHead.insertAdjacentHTML('afterend', followerList);
-            }
-            document.getElementById('followers')
+            const ifSucceed = response => {
+                response.json().then((res) => {
+                    const modalBody = document.getElementById('follower-info');
+                    modalBody.innerHTML = "";
+
+                    let followerList = '';
+                    for (let i = 0; i < res.length; i++) {
+                        followerList = followerList + `<div class="content">  
+                                                        <div style="float: left; width: 13%;">
+                                                          <img class="img-circle height-40px width-40px" src="/images/default/default_profile.png">
+                                                        </div>
+                                                        <div>
+                                                          <div id="nickName-${i}" class="text-bold" style="font-size: medium">${res[i].nickName}</div>  
+                                                          <div id="userName-${i}" style="font-size: small"> ${res[i].userName}</div>
+                                                        </div>
+                                                   </div>`
+                    }
+                    modalBody.insertAdjacentHTML('beforeend', followerList);
+                })
+            };
+            document.getElementById('followers');
             const nickName = document.querySelector('#feedOwner').innerHTML;
             connector.fetchTemplateWithoutBody('/followers/' + nickName, connector.GET, ifSucceed);
-        }
+        };
 
         return {
             follow: follow,
             unfollow: unfollow,
-            followers:followers,
+            followers: followers,
         }
     };
 
