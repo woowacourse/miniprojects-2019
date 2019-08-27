@@ -171,7 +171,7 @@ class CommentServiceTest {
         when(page.map(any())).thenReturn(page);
 
         // when
-        commentService.findCommentResponsesByPostId(POST_ID, pageable);
+        commentService.findCommentResponsesByPostId(POST_ID, pageable, user.getId());
 
         // then
         verify(commentRepository).findAllByPostIdAndParentIdIsNull(POST_ID, pageable);
@@ -187,7 +187,7 @@ class CommentServiceTest {
         when(page.map(any())).thenReturn(page);
 
         // when
-        commentService.findCommentResponsesByParentId(COMMENT_ID, pageable);
+        commentService.findCommentResponsesByParentId(COMMENT_ID, pageable, user.getId());
 
         // then
         verify(commentRepository).findAllByParentId(COMMENT_ID, pageable);

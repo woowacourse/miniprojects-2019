@@ -198,7 +198,7 @@ class CommentApiControllerTests extends BaseControllerTests {
         assertThat(goodResponse.getTotalGood()).isEqualTo(1);
 
         // given & when
-        GoodResponse goodCencelResponse = webTestClient.post().uri(uri + "/{id}/good", commentId)
+        GoodResponse goodCancelResponse = webTestClient.post().uri(uri + "/{id}/good", commentId)
                 .cookie(JSESSIONID, jSessionId)
                 .exchange()
                 .expectStatus().isOk()
@@ -207,7 +207,7 @@ class CommentApiControllerTests extends BaseControllerTests {
                 .getResponseBody();
 
         // then
-        assertThat(goodCencelResponse.getTotalGood()).isEqualTo(0);
+        assertThat(goodCancelResponse.getTotalGood()).isEqualTo(0);
     }
 
     private Long addComment(CommentCreate commentCreate) {

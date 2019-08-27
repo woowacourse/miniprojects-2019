@@ -44,15 +44,27 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CommentResponse> findCommentResponsesByPostId(final Long postId, final Pageable pageable) {
+    public Page<CommentResponse> findCommentResponsesByPostId(final Long postId, final Pageable pageable, final Long userId) {
+        final User user = userService.findById(userId);
+
         return commentRepository.findAllByPostIdAndParentIdIsNull(postId, pageable)
-                .map(CommentResponse::from);
+                .map(comment -> {
+                    GoodResponse goodResponse = GoodResponse.of(commentGoodService.countBy(comment),
+                            commentGoodService.existsByPostAndUser(comment, user));
+                    return CommentResponse.from(comment, goodResponse);
+                });
     }
 
     @Transactional(readOnly = true)
-    public Page<CommentResponse> findCommentResponsesByParentId(final Long parentId, final Pageable pageable) {
+    public Page<CommentResponse> findCommentResponsesByParentId(final Long parentId, final Pageable pageable, final Long userId) {
+        final User user = userService.findById(userId);
+
         return commentRepository.findAllByParentId(parentId, pageable)
-                .map(CommentResponse::from);
+                .map(comment -> {
+                    GoodResponse goodResponse = GoodResponse.of(commentGoodService.countBy(comment),
+                            commentGoodService.existsByPostAndUser(comment, user));
+                    return CommentResponse.from(comment, goodResponse);
+                });
     }
 
     public CommentResponse save(final CommentCreate commentCreate, final Long userId, final Long postId) {

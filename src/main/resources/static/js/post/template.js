@@ -104,12 +104,12 @@ const postTemplate = (post, loginUserId) => `
             <span  class="font-size-13">공유 0회</span>
         </li>
         <li class="float-right mrg-right-15">
-            <span class="font-size-13">댓글 ${post.totalComment}개</span>
+            댓글<span class="font-size-13 totalComment"> ${post.totalComment}</span>개
         </li>
     </ul>
     <ul class="feed-action border bottom d-flex">
         <li class="text-center flex-grow-1">
-            <button class="good btn btn-default no-border pdd-vertical-0 no-mrg width-100">
+            <button class="good btn btn-default no-border pdd-vertical-0 no-mrg width-100 ${post.goodResponse.gooded ? 'good-active':''}">
                 <i class="fa fa-thumbs-o-up font-size-16"></i>
                 <span class="font-size-13">좋아요</span>
             </button>
