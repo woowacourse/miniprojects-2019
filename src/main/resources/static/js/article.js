@@ -62,9 +62,9 @@ const ArticleApp = (() => {
                         articleList.insertAdjacentHTML('afterbegin', articleTemplate({
                             "id": article.id,
                             "updatedTime": article.updatedTime,
-                            "article-contents": article.articleFeature.contents,
-                            "article-videoUrl": article.articleFeature.videoUrl,
-                            "article-imageUrl": article.articleFeature.imageUrl,
+                            "article-contents": article.articleFeature.contents.contents,
+                            "article-videoUrl": article.articleFeature.videoUrl.fileUrl,
+                            "article-imageUrl": article.articleFeature.imageUrl.fileUrl,
                             "authorName": article.authorName.name,
                         }));
                         ReactionApp.service().showGoodCount('article', article.id);
@@ -90,9 +90,9 @@ const ArticleApp = (() => {
                             .insertAdjacentHTML('afterbegin', articleTemplate({
                                 "id": article.id,
                                 "updatedTime": article.updatedTime,
-                                "article-contents": article.articleFeature.contents,
-                                "article-videoUrl": article.articleFeature.videoUrl,
-                                "article-imageUrl": article.articleFeature.imageUrl,
+                                "article-contents": article.articleFeature.contents.contents,
+                                "article-videoUrl": article.articleFeature.videoUrl.fileUrl,
+                                "article-imageUrl": article.articleFeature.imageUrl.fileUrl,
                                 "authorName": article.authorName.name,
                             }));
                         ReactionApp.service().showGoodCount('article', article.id);
@@ -114,10 +114,13 @@ const ArticleApp = (() => {
         const update = () => {
             const updateArea = document.getElementById('article-update-contents');
             const articleId = updateArea.getAttribute('data-update-article-id');
+            const article = document.querySelector(`div[data-article-id="${articleId}"]`);
+            const imageUrl = article.querySelector('img[data-object="article-image"]');
+            const videoUrl = article.querySelector('video[data-object="article-video"]');
             const data = {
                 contents: updateArea.value,
-                imageUrl: "",
-                videoUrl: "",
+                imageUrl: imageUrl.src.includes("newsfeed") ? "" : imageUrl.src,
+                videoUrl: videoUrl.src.includes("newsfeed") ? "" : videoUrl.src,
             };
 
             articleApi.update(data, articleId)
@@ -205,12 +208,13 @@ const ArticleApp = (() => {
                 data: formData,
                 processData: false,
                 contentType: false
-            }).then(res => {
+            }).then(fileUrl => {
                 let imgExtension = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
                 let videoExtension = /(\.mov|\.mp4)$/i;
                 let data;
                 files.value = null;
 
+                const res = fileUrl.fileUrl;
                 if (imgExtension.exec(res)) {
                     data = {
                         contents: contents.value,
