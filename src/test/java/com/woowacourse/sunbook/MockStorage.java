@@ -1,6 +1,7 @@
 package com.woowacourse.sunbook;
 
 import com.woowacourse.sunbook.application.dto.article.ArticleResponseDto;
+import com.woowacourse.sunbook.application.dto.comment.CommentResponseDto;
 import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.dto.user.UserUpdateRequestDto;
@@ -57,6 +58,9 @@ public class MockStorage {
 
     @Mock
     protected Comment comment;
+
+    @Mock
+    protected CommentResponseDto commentResponseDto;
 
     @Mock
     protected UserRepository userRepository;

@@ -26,11 +26,12 @@ public class CommentApiController {
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> save(@PathVariable final Long articleId,
+                                                   @PathVariable(required = false) final Long commentId,
                                                    @SessionAttribute("loginUser") final UserResponseDto userResponseDto,
                                                    @RequestBody final CommentFeature commentFeature) {
-        CommentResponseDto commentResponseDto = commentService.save(commentFeature, articleId, userResponseDto.getId());
+        CommentResponseDto commentResponseDto = commentService.save(commentFeature, articleId, userResponseDto.getId(), commentId);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }

@@ -37,10 +37,12 @@ public class CommentService {
     @Transactional
     public CommentResponseDto save(final CommentFeature commentFeature,
                                    final Long articleId,
-                                   final Long userId) {
+                                   final Long userId,
+                                   final Long commentId) {
         User user = userService.findById(userId);
         Article article = articleService.findById(articleId);
-        Comment comment = commentRepository.save(new Comment(commentFeature, user, article));
+        Comment parent = findById(commentId);
+        Comment comment = commentRepository.save(new Comment(commentFeature, user, article, parent));
 
         return modelMapper.map(comment, CommentResponseDto.class);
     }
@@ -89,5 +91,10 @@ public class CommentService {
         commentRepository.delete(comment);
 
         return true;
+    }
+
+    @Transactional(readOnly = true)
+    protected Comment findById(final Long commentId) {
+        return commentRepository.findById(commentId).orElse(null);
     }
 }

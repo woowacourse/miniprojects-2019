@@ -11,6 +11,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
@@ -34,10 +36,18 @@ public class Comment extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Article article;
 
-    public Comment(final CommentFeature commentFeature, final User author, final Article article) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_comment_to_comment"))
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Comment> children = new ArrayList<>();
+
+    public Comment(final CommentFeature commentFeature, final User author, final Article article, final Comment parent) {
         this.commentFeature = commentFeature;
         this.author = author;
         this.article = article;
+        this.parent = parent;
     }
 
     public Comment modify(final CommentFeature commentFeature, final User user, final Article article) {

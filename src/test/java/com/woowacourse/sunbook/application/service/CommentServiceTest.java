@@ -33,7 +33,19 @@ class CommentServiceTest extends MockStorage {
         given(commentRepository.save(any(Comment.class))).willReturn(comment);
         given(modelMapper.map(mock(Comment.class), CommentResponseDto.class)).willReturn(mock(CommentResponseDto.class));
 
-        injectCommentService.save(mock(CommentFeature.class), ID, ID);
+        injectCommentService.save(mock(CommentFeature.class), ID, ID, null);
+
+        verify(commentRepository).save(any(Comment.class));
+    }
+
+    @Test
+    void 대댓글_작성() {
+        given(userService.findById(ID)).willReturn(user);
+        given(articleService.findById(ID)).willReturn(article);
+        given(commentRepository.save(any(Comment.class))).willReturn(comment);
+        given(modelMapper.map(comment, CommentResponseDto.class)).willReturn(commentResponseDto);
+
+        injectCommentService.save(commentFeature, ID, ID, ID);
 
         verify(commentRepository).save(any(Comment.class));
     }

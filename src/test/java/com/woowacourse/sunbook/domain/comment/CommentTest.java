@@ -19,7 +19,7 @@ class CommentTest extends MockStorage {
 
     @Test
     void 댓글_생성() {
-        assertDoesNotThrow(() -> new Comment(commentFeature, writer, article));
+        assertDoesNotThrow(() -> new Comment(commentFeature, writer, article, null));
     }
 
     @Test
