@@ -115,21 +115,25 @@
                                 </div>
                                 <div role="tabpanel" class="tab-pane fade" id="tab-danger-2">
                                     <div class="pdd-horizon-15 pdd-vertical-20">
-                                        <p>
-                                            <button id="btn-update" type="button" class="btn btn-default"> 
-                                                    <i class="ti-pencil"></i>
-                                            </button>
-                                            <button id="btn-submit" type="button" class="d-none btn btn-default"> 
-                                                    <i class="ti-check"></i>
-                                            </button>
-                                            <br>
-                                            이름 : <span id="user-name">로비</span>
-                                            <input type="text" name="name" id="update-name" class="d-none">
-                                            <br>
-                                            이메일 : <span id="user-email">aaa@mail.com</span>
-                                            <input type="text" name="email" id="update-email" class="d-none">
-                                        </p>
+                                        <button id="btn-update" type="button" class="btn btn-default btn-icon btn-rounded d-none">
+                                                <i class="ti-pencil"></i>
+                                        </button>
+                                        <button id="btn-submit" type="button" class="btn btn-deafult btn-icon btn-rounded d-none">
+                                                <i class="ti-check"></i>
+                                        </button>
+                                        <div>
+                                            <strong class="d-block">이름</strong>
+                                            <p id="user-name">로비</p>
+                                            <input type="text" name="name" id="update-name" class="form-control d-none">
+                                        </div>
+                                        <div>
+                                            <strong class="d-block">이메일</strong>
+                                            <p id="user-email">aa@bb.com</p>
+                                            <input type="text" name="email" id="update-email" class="form-control d-none">
+                                        </div>
                                     </div>
+                                    <div class="alert alert-danger d-none"></div>
+                                    <button type="button" id="btn-leave" class="btn btn-outline-danger d-none">회원 탈퇴</button>
                                 </div>
                             </div>
                         </div>

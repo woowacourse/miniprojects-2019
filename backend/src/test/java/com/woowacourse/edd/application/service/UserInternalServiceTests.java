@@ -1,6 +1,7 @@
 package com.woowacourse.edd.application.service;
 
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
+import com.woowacourse.edd.application.dto.UserUpdateRequestDto;
 import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.exceptions.UnauthorizedAccessException;
 import com.woowacourse.edd.exceptions.UserNotFoundException;
@@ -38,21 +39,21 @@ class UserInternalServiceTests {
 
     @Test
     void update() {
-        UserRequestDto userRequestDto = new UserRequestDto("robby", "kangmin@gmail.com", "p@ssW0rd");
+        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("robby", "kangmin@gmail.com");
 
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
-        User updatedUser = userInternalService.update(1L, 1L, userRequestDto);
+        User updatedUser = userInternalService.update(1L, 1L, userUpdateRequestDto);
 
-        assertThat(updatedUser.getEmail()).isEqualTo(userRequestDto.getEmail());
-        assertThat(updatedUser.getName()).isEqualTo(userRequestDto.getName());
+        assertThat(updatedUser.getEmail()).isEqualTo(userUpdateRequestDto.getEmail());
+        assertThat(updatedUser.getName()).isEqualTo(userUpdateRequestDto.getName());
     }
 
     @Test
     void update_fail_unauthorized() {
-        UserRequestDto userRequestDto = new UserRequestDto("robby", "kangmin@gmail.com", "p@ssW0rd");
+        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("robby", "kangmin@gmail.com");
 
         assertThrows(UnauthorizedAccessException.class,
-            () -> userInternalService.update(1L, 5L, userRequestDto));
+            () -> userInternalService.update(1L, 5L, userUpdateRequestDto));
     }
 
     @Test

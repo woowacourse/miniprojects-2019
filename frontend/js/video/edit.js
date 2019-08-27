@@ -1,6 +1,5 @@
 const editView = function() {
-    params = wootubeCtx.util.getUrlParams();
-    const videoId = params.id;
+    const videoId = wootubeCtx.util.getUrlParams('id');
     api.requestVideo(videoId)
     .then(response => response.json())
     .then(json => editVideo(json));
@@ -53,7 +52,7 @@ const videoApp = (function () {
             body.contents = document.getElementById('contents').value;
             const dataBody = JSON.stringify(body);
         
-            api.updateVideo(dataBody, wootubeCtx.util.getUrlParams().id)
+            api.updateVideo(dataBody, wootubeCtx.util.getUrlParams('id'))
             .then(response => response.json())
             .then(data => updateVidoe(data))
         }

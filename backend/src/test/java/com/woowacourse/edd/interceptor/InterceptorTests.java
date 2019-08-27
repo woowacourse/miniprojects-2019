@@ -1,7 +1,7 @@
 package com.woowacourse.edd.interceptor;
 
 import com.woowacourse.edd.application.dto.LoginRequestDto;
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import com.woowacourse.edd.presentation.controller.BasicControllerTests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,9 +25,9 @@ public class InterceptorTests extends BasicControllerTests {
 
     @Test
     void post_user() {
-        UserRequestDto signUpUserDto = new UserRequestDto("conas91", "conas91@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto signUpUserDto = new UserSaveRequestDto("conas91", "conas91@gmail.com", "p@ssW0rd");
         StatusAssertions statusAssertions = executePost(USER_URL).cookie(COOKIE_JSESSIONID, sessionId)
-            .body(Mono.just(signUpUserDto), UserRequestDto.class)
+            .body(Mono.just(signUpUserDto), UserSaveRequestDto.class)
             .exchange()
             .expectStatus();
         assertFailBadRequest(statusAssertions, INVALID_ACCESS_MESSAGE);

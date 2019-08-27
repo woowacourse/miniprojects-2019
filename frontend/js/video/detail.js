@@ -1,7 +1,5 @@
 const detailView = function() {
-    params = wootubeCtx.util.getUrlParams();
-
-    const videoId = params.id;
+    const videoId = wootubeCtx.util.getUrlParams('id');
     api.requestVideo(videoId)
     .then(response => response.json())
     .then(data => detailVideo(data))
@@ -19,11 +17,11 @@ const detailVideo = function(data) {
 detailView();
 
 document.querySelector('#btn-edit').addEventListener('click', function(event) {
-    location.href = `/video-edit.html?id=${wootubeCtx.util.getUrlParams().id}`
+    location.href = `/video-edit.html?id=${wootubeCtx.util.getUrlParams('id')}`
 })
 
 document.querySelector('#btn-delete').addEventListener('click', function(event) {
-    api.deleteVideo(wootubeCtx.util.getUrlParams().id)
+    api.deleteVideo(wootubeCtx.util.getUrlParams('id'))
         .then(response => deleteVideo(response))
 });
 

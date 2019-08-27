@@ -1,9 +1,13 @@
 const wootubeCtx = {
     util: {
-        getUrlParams: function () {
-            const params = {};
-            window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (str, key, value) { params[key] = value; });
-            return params;
+        getUrlParams: function (name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
         },
         calculateDate: function (responseDate) {
             const localResponseDate = moment.utc(responseDate,'YYYYMMDDHH').local().format('YYYYMMDDHH')
@@ -85,6 +89,22 @@ const Api = function () {
         return request(`${baseUrl}/v1/users`, 'POST', dataBody)
     }
 
+    const requestUser = (id) => {
+        return request(`${baseUrl}/v1/users/${id}`, 'GET');
+    }
+
+    const updateUser = (id, body) => {
+        return request(`${baseUrl}/v1/users/${id}`, 'PUT', body)
+    }
+
+    const deleteUser = (id) => {
+        return requestWithoutBody(`${baseUrl}/v1/users/${id}`, 'DELETE')
+    }
+
+    const retrieveLoginInfo = () => {
+        return requestWithoutBody(`${baseUrl}/v1/login/users`, 'GET')
+    }
+
     return {
         requestVideos,
         requestVideo,
@@ -92,8 +112,12 @@ const Api = function () {
         updateVideo,
         deleteVideo,
         postLogin,
-        signup
+        signup,
+        requestUser,
+        updateUser,
+        retrieveLoginInfo,
+        deleteUser,
     }
-
 }
+
 const api = new Api()

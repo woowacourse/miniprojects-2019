@@ -1,6 +1,7 @@
 package com.woowacourse.edd.application.service;
 
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
+import com.woowacourse.edd.application.dto.UserUpdateRequestDto;
 import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.exceptions.UnauthorizedAccessException;
 import com.woowacourse.edd.exceptions.UserNotFoundException;
@@ -30,10 +31,10 @@ class UserInternalService {
             .orElseThrow(UserNotFoundException::new);
     }
 
-    public User update(Long id, Long loggedInId, UserRequestDto userRequestDto) {
+    public User update(Long id, Long loggedInId, UserUpdateRequestDto userUpdateRequestDto) {
         checkAuthorization(id, loggedInId);
         User user = findById(id);
-        user.update(userRequestDto.getName(), userRequestDto.getEmail(), userRequestDto.getPassword());
+        user.update(userUpdateRequestDto.getName(), userUpdateRequestDto.getEmail());
         return user;
     }
 
