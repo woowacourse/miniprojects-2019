@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woowacourse.sunbook.application.dto.article.ArticleRequestDto;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.domain.article.OpenRange;
+import com.woowacourse.sunbook.domain.comment.CommentFeature;
+import com.woowacourse.sunbook.domain.fileurl.FileUrl;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -31,10 +33,10 @@ public class ArticleArgumentResolver implements HandlerMethodArgumentResolver {
             throws Exception {
         String jsonBody = getRequestBody(webRequest);
         JsonNode jsonNode = objectMapper.readTree(jsonBody);
-        ArticleFeature articleFeature = new ArticleFeature(
-                jsonNode.path("contents").asText(),
-                jsonNode.path("imageUrl").asText(),
-                jsonNode.path("videoUrl").asText());
+        CommentFeature contents = new CommentFeature(jsonNode.path("contents").asText());
+        FileUrl imageUrl = new FileUrl(jsonNode.path("imageUrl").asText());
+        FileUrl videoUrl = new FileUrl(jsonNode.path("videoUrl").asText());
+        ArticleFeature articleFeature = new ArticleFeature(contents, imageUrl, videoUrl);
 
         return new ArticleRequestDto(articleFeature,
                 OpenRange.of(Integer.parseInt(jsonNode.path("openRange").asText())));
