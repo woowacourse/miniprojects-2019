@@ -52,7 +52,7 @@ public class ReactionArticleApiControllerTest extends TestTemplate {
                 .jsonPath("$.hasGood").isEqualTo(true)
                 ;
 
-        respondApi(loginAndRequest(HttpMethod.POST, "/api/articles/4/good", reactionDto, HttpStatus.OK, sessionId))
+        respondApi(loginAndRequest(HttpMethod.DELETE, "/api/articles/4/good", reactionDto, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(0L)
                 .jsonPath("$.hasGood").isEqualTo(false)
                 ;

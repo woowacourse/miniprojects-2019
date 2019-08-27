@@ -1,12 +1,14 @@
 package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.MockStorage;
+import com.woowacourse.sunbook.application.exception.NotFoundReactionException;
 import com.woowacourse.sunbook.domain.reaction.ReactionArticle;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -24,11 +26,9 @@ public class ReactionArticleServiceTest extends MockStorage {
         given(userService.findById(AUTHOR_ID)).willReturn(author);
         given(articleService.findById(ARTICLE_ID)).willReturn(article);
         given(reactionArticleRepository.findByAuthorAndArticle(author, article))
-                .willReturn(Optional.of(reactionArticle));
+                .willReturn(Optional.ofNullable(reactionArticle));
 
-        injectReactionArticleService.clickGood(AUTHOR_ID, ARTICLE_ID);
-
-        verify(reactionArticleRepository).save(any(ReactionArticle.class));
+        injectReactionArticleService.save(AUTHOR_ID, ARTICLE_ID);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class ReactionArticleServiceTest extends MockStorage {
         given(reactionArticleRepository.findByAuthorAndArticle(author, article))
                 .willReturn(Optional.of(reactionArticle));
 
-        injectReactionArticleService.clickGood(AUTHOR_ID, ARTICLE_ID);
+        injectReactionArticleService.remove(AUTHOR_ID, ARTICLE_ID);
 
         verify(reactionArticleRepository, never()).save(any(ReactionArticle.class));
     }
@@ -63,5 +63,16 @@ public class ReactionArticleServiceTest extends MockStorage {
         injectReactionArticleService.showCount(AUTHOR_ID, ARTICLE_ID);
 
         verify(reactionArticleRepository).findAllByArticle(article);
+    }
+
+    @Test
+    void 존재하지_않는_좋아요_취소_오류() {
+        given(userService.findById(AUTHOR_ID)).willReturn(author);
+        given(articleService.findById(ARTICLE_ID)).willReturn(article);
+        given(reactionArticleRepository.findByAuthorAndArticle(author, article))
+                .willReturn(Optional.empty());
+
+        assertThrows(NotFoundReactionException.class,
+                () -> injectReactionArticleService.remove(AUTHOR_ID, ARTICLE_ID));
     }
 }

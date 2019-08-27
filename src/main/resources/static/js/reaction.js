@@ -1,6 +1,6 @@
-const ReactionApp = (function() {
+const ReactionApp = (function () {
 
-    const ReactionController = function() {
+    const ReactionController = function () {
         const reactionService = new ReactionService();
 
         const clickGood = () => {
@@ -17,36 +17,43 @@ const ReactionApp = (function() {
         }
     };
 
-    const ReactionService = function() {
+    const ReactionService = function () {
         const reactionApi = new ReactionApi();
 
         const clickGood = (event) => {
             const target = event.target;
             if (target.closest('li[data-btn="article-reaction-good-btn"]')) {
                 clickArticleGood(target);
-            }
-            else if (target.closest('span[data-btn="comment-reaction-good-btn"]')) {
+            } else if (target.closest('span[data-btn="comment-reaction-good-btn"]')) {
                 clickCommentGood(target);
             }
         };
 
         const clickArticleGood = (target) => {
-            const article = target.closest('div[data-objectName="article"]');
+            const article = target.closest('div[data-object="article"]');
             const articleId = article.getAttribute('data-article-id');
             const data = document.getElementById(`article-good-count-${articleId}`).innerText;
+            const goodBtn = document.getElementById(`article-good-btn-icon-${articleId}`);
 
-            reactionApi.clickGood(Number(data), 'articles', articleId)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById(`article-good-count-${articleId}`)
-                        .innerText = data.numberOfGood;
-                    console.log(data);
-                    showGoodBtn('article', articleId, data.hasGood);
-                });
+            if (goodBtn.className === 'fa fa-thumbs-o-up font-size-16') {
+                reactionApi.addGood(Number(data), 'articles', articleId)
+                    .then(response => response.json())
+                    .then(data => saveGoodData(articleId, data));
+            } else if (goodBtn.className === 'fa fa-thumbs-up text-info font-size-16') {
+                reactionApi.deleteGood('articles', articleId)
+                    .then(response => response.json())
+                    .then(data => saveGoodData(articleId, data));
+            }
+        };
+
+        const saveGoodData = (articleId, good) => {
+            document.getElementById(`article-good-count-${articleId}`)
+                .innerText = good.numberOfGood;
+            showGoodBtn('article', articleId, good.hasGood);
         };
 
         const clickCommentGood = (target) => {
-            const comment = target.closest('li[data-objectName="comment"]');
+            const comment = target.closest('li[data-object="comment"]');
             const commentId = comment.getAttribute('data-comment-id');
             const data = document.getElementById(`comment-good-count-${commentId}`).innerText;
 
@@ -77,8 +84,7 @@ const ReactionApp = (function() {
                 if (objectName === 'article') {
                     document.getElementById(`${objectName}-good-btn-icon-${objectId}`)
                         .setAttribute('class', 'fa fa-thumbs-o-up font-size-16');
-                }
-                else if(objectName === 'comment') {
+                } else if (objectName === 'comment') {
                     document.getElementById(`${objectName}-good-btn-icon-${objectId}`)
                         .setAttribute('class', 'fa fa-thumbs-o-up text-info font-size-16');
                 }
@@ -91,10 +97,18 @@ const ReactionApp = (function() {
         }
     };
 
-    const ReactionApi = function() {
+    const ReactionApi = function () {
         const clickGood = (data, objectName, objectId) => {
             return Api.post(`/api/${objectName}/${objectId}/good`, data)
         };
+
+        const addGood = (data, objectName, objectId) => {
+            return Api.post(`/api/${objectName}/${objectId}/good`, data)
+        };
+
+        const deleteGood = (objectName, objectId) => {
+            return Api.delete(`/api/${objectName}/${objectId}/good`);
+        }
 
         const showGoodCount = (objectName, objectId) => {
             return Api.get(`/api/${objectName}/${objectId}/good`);
@@ -102,6 +116,8 @@ const ReactionApp = (function() {
 
         return {
             clickGood: clickGood,
+            addGood: addGood,
+            deleteGood: deleteGood,
             showGoodCount: showGoodCount,
         }
     };
