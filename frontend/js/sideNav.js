@@ -73,24 +73,24 @@ const addSideNavi = function (sideNaviElement) {
 }
 
 const addLoginArea = function(response) {
-    addSubcribe(response.id)
+    addSubscribe(response.id)
     changeHref(response.id)
 }
 
-const addSubcribe = function (id) {
-    api.requestSubcribed(id)
+const addSubscribe = function (id) {
+    api.requestSubscribed(id)
     .then(response => {
         if (response.status !== 200) {
             return false
         }
         return response.json()
     })
-    .then(response => addSubcribeTemplates(response))
+    .then(response => addSubscribeTemplates(response))
 }
 
-const addSubcribeTemplates = function (data) {
+const addSubscribeTemplates = function (data) {
     const addSubscribeTemplate = function (data) {
-        const subcribeTemplate =
+        const subscribeTemplate =
             `<li class="nav-item">
                 <a class="" href="/video-channel.html?id=${data.id}">
                     <span class="icon-holder">
@@ -100,8 +100,8 @@ const addSubcribeTemplates = function (data) {
                 </a>
             </li>`
     
-        const subcribeNextElem = document.querySelector('#navi-subcribe').nextElementSibling
-        subcribeNextElem.insertAdjacentHTML('beforebegin', subcribeTemplate)
+        const subscribeNextElem = document.querySelector('#navi-subcribe').nextElementSibling
+        subscribeNextElem.insertAdjacentHTML('beforebegin', subscribeTemplate)
     }
     
     for (let i = 0; i < data.length; i++) {
