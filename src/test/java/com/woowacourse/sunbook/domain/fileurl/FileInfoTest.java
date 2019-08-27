@@ -17,7 +17,6 @@ class FileInfoTest {
         FileNamingStrategy fileNamingStrategy = new LocalNamingStrategy();
 
         FileInfo fileInfo = new FileInfo(file, DIR_NAME, fileNamingStrategy);
-        System.out.println(file.getName());
         assertThat(fileInfo.getFileName()).isEqualTo(DIR_NAME + "/" + FILE_NAME);
     }
 
