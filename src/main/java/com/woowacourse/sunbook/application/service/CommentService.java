@@ -90,4 +90,10 @@ public class CommentService {
 
         return true;
     }
+
+    // TODO: CommentService 안에서 findById()를 사용하는 부분을 이 메서드로 변경하기
+    protected Comment findById(final Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(NotFoundCommentException::new);
+    }
 }
