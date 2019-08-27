@@ -194,6 +194,7 @@ const ArticleApp = (() => {
                         contents: contents.value,
                         imageUrl: "",
                         videoUrl: "",
+                        openRange: "0",
                     });
                 });
             }
@@ -215,18 +216,21 @@ const ArticleApp = (() => {
                         contents: contents.value,
                         imageUrl: res,
                         videoUrl: "",
+                        openRange: "0",
                     };
                 } else if (videoExtension.exec(res)) {
                     data = {
                         contents: contents.value,
                         imageUrl: "",
                         videoUrl: res,
+                        openRange: "0",
                     };
                 } else {
                     data = {
                         contents: contents.value,
                         imageUrl: "",
                         videoUrl: "",
+                        openRange: "0",
                     };
                 }
                 return data;

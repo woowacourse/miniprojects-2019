@@ -1,5 +1,6 @@
 package com.woowacourse.sunbook.presentation.controller;
 
+import com.woowacourse.sunbook.application.dto.article.ArticleRequestDto;
 import com.woowacourse.sunbook.application.dto.article.ArticleResponseDto;
 import com.woowacourse.sunbook.application.service.ArticleService;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
@@ -29,8 +30,8 @@ public class ArticleApiController {
     }
 
     @PostMapping
-    public ResponseEntity<ArticleResponseDto> save(@RequestBody ArticleFeature articleFeature, LoginUser loginUser) {
-        ArticleResponseDto articleResponseDto = articleService.save(articleFeature, loginUser.getId());
+    public ResponseEntity<ArticleResponseDto> save(ArticleRequestDto articleRequestDto, LoginUser loginUser) {
+        ArticleResponseDto articleResponseDto = articleService.save(articleRequestDto.getArticleFeature(), loginUser.getId());
 
         return new ResponseEntity<>(articleResponseDto, HttpStatus.OK);
     }
