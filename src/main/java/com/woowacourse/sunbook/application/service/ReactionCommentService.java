@@ -12,9 +12,9 @@ import javax.transaction.Transactional;
 
 @Service
 public class ReactionCommentService {
-    private ReactionCommentRepository reactionCommentRepository;
-    private CommentService commentService;
-    private UserService userService;
+    private final ReactionCommentRepository reactionCommentRepository;
+    private final CommentService commentService;
+    private final UserService userService;
 
     @Autowired
     public ReactionCommentService(final ReactionCommentRepository reactionCommentRepository,
@@ -56,7 +56,7 @@ public class ReactionCommentService {
                 ;
     }
 
-    private boolean isClickedGoodInCommentByLoginUser(User loginUser, Comment comment) {
+    private boolean isClickedGoodInCommentByLoginUser(final User loginUser, final Comment comment) {
         if (reactionCommentRepository.existsByAuthorAndComment(loginUser, comment)) {
             ReactionComment reactionComment = reactionCommentRepository
                     .findByAuthorAndComment(loginUser, comment);

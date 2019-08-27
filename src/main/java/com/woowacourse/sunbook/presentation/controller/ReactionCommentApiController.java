@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/comments/{commentId}/good")
 public class ReactionCommentApiController {
-    private ReactionCommentService reactionCommentService;
+    private final ReactionCommentService reactionCommentService;
 
     @Autowired
     public ReactionCommentApiController(ReactionCommentService reactionCommentService) {

@@ -12,9 +12,9 @@ import javax.transaction.Transactional;
 
 @Service
 public class ReactionArticleService {
-    private ReactionArticleRepository reactionArticleRepository;
-    private ArticleService articleService;
-    private UserService userService;
+    private final ReactionArticleRepository reactionArticleRepository;
+    private final ArticleService articleService;
+    private final UserService userService;
 
     @Autowired
     public ReactionArticleService(final ReactionArticleRepository reactionArticleRepository,
@@ -56,7 +56,7 @@ public class ReactionArticleService {
                 ;
     }
 
-    private boolean isClickedGoodInArticleByLoginUser(User loginUser, Article article) {
+    private boolean isClickedGoodInArticleByLoginUser(final User loginUser, final Article article) {
         if (reactionArticleRepository.existsByAuthorAndArticle(loginUser, article)) {
             ReactionArticle reactionArticle = reactionArticleRepository
                     .findByAuthorAndArticle(loginUser, article);
