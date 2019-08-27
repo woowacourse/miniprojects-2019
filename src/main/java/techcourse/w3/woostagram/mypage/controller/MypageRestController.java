@@ -20,7 +20,7 @@ public class MypageRestController {
     }
 
     @GetMapping("/{userName}")
-    public ResponseEntity<Page<MypageArticleDto>> read(Pageable pageable,  @PathVariable String userName){
+    public ResponseEntity<Page<MypageArticleDto>> read(Pageable pageable, @PathVariable String userName) {
         return ResponseEntity.ok(mypageService.getMypageArticles(userName, pageable));
     }
 }

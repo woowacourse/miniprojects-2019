@@ -1,9 +1,9 @@
 package techcourse.w3.woostagram.user.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
-import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.service.UserService;
 
@@ -17,7 +17,7 @@ public class UserRestController {
     }
 
     @GetMapping("/loggedin")
-    public ResponseEntity<UserInfoDto> readLoginInformation(@LoggedInUser String email){
+    public ResponseEntity<UserInfoDto> readLoginInformation(@LoggedInUser String email) {
         return ResponseEntity.ok(userService.findByEmail(email));
     }
 
