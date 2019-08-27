@@ -62,7 +62,7 @@ const addSideNavi = function (sideNaviElement) {
 
     sideNaviElement.insertAdjacentHTML('beforeEnd', sideNaviTemplate)
 
-    api.isLogin()
+    api.retrieveLoginInfo()
     .then(response => {
         if (response.status !== 200) {
             response.json().then(err => {
