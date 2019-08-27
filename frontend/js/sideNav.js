@@ -72,7 +72,9 @@ const addSideNavi = function (sideNaviElement) {
     })
     .then(response => addLoginArea(response))
     .catch(response => {
-        console.log(`in catch : ${response.message}`)
+        response.then(res => {
+            console.log(`in catch : ${res.message}`)
+        })
     })
 }
 
