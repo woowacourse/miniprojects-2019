@@ -1,5 +1,8 @@
 package com.woowacourse.sunbook.domain.article;
 
+import com.woowacourse.sunbook.domain.comment.CommentFeature;
+import com.woowacourse.sunbook.domain.fileurl.FileUrl;
+import com.woowacourse.sunbook.domain.fileurl.exception.InvalidUrlException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,19 +15,25 @@ class ArticleFeatureTest {
     private static final String WRONG_VIDEO_URL = "ABCDEFG";
     private static final String EMPTY = "";
 
+    private static final CommentFeature commentFeature = new CommentFeature(CONTENTS);
+    private static final FileUrl imageUrl = new FileUrl(IMAGE_URL);
+    private static final FileUrl videoUrl = new FileUrl(VIDEO_URL);
+    private static final CommentFeature emptyContents = new CommentFeature(EMPTY);
+    private static final FileUrl emptyUrl = new FileUrl(EMPTY);
+
     @Test
     void ArticleFeature_정상_생성() {
-        ArticleFeature articleFeature = new ArticleFeature(CONTENTS, IMAGE_URL, VIDEO_URL);
-        assertThat(articleFeature).isEqualTo(new ArticleFeature(CONTENTS, IMAGE_URL, VIDEO_URL));
+        ArticleFeature articleFeature = new ArticleFeature(commentFeature, imageUrl, videoUrl);
+        assertThat(articleFeature).isEqualTo(new ArticleFeature(commentFeature, imageUrl, videoUrl));
     }
 
     @Test
     void Url_비정상_생성() {
-        assertThrows(IllegalArgumentException.class, () -> new ArticleFeature(CONTENTS, IMAGE_URL, WRONG_VIDEO_URL));
+        assertThrows(InvalidUrlException.class, () -> new ArticleFeature(commentFeature, imageUrl, new FileUrl(WRONG_VIDEO_URL)));
     }
 
     @Test
     void ArticleFeature_비정상_생성() {
-        assertThrows(IllegalArgumentException.class, () -> new ArticleFeature(EMPTY, EMPTY, EMPTY));
+        assertThrows(IllegalArgumentException.class, () -> new ArticleFeature(emptyContents, emptyUrl, emptyUrl));
     }
 }
