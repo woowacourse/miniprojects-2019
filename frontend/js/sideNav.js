@@ -66,7 +66,7 @@ const addSideNavi = function (sideNaviElement) {
     .then(response => {
         if (response.status !== 200) {
             response.json().then(err => {
-                console.log(err.message)
+                // console.log(err.message)
             })
         } else {
             return response.json()
