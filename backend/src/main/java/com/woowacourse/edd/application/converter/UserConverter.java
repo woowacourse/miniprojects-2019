@@ -1,6 +1,6 @@
 package com.woowacourse.edd.application.converter;
 
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import com.woowacourse.edd.application.response.LoginUserResponse;
 import com.woowacourse.edd.application.response.SessionUser;
 import com.woowacourse.edd.application.response.UserResponse;
@@ -8,7 +8,7 @@ import com.woowacourse.edd.domain.User;
 
 public class UserConverter {
 
-    public static User toSaveEntity(UserRequestDto userSaveRequestDto) {
+    public static User toSaveEntity(UserSaveRequestDto userSaveRequestDto) {
         return new User(userSaveRequestDto.getName(), userSaveRequestDto.getEmail(), userSaveRequestDto.getPassword());
     }
 

@@ -1,6 +1,7 @@
 package com.woowacourse.edd.presentation.controller;
 
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
+import com.woowacourse.edd.application.dto.UserUpdateRequestDto;
 import com.woowacourse.edd.application.response.SessionUser;
 import com.woowacourse.edd.application.response.UserResponse;
 import com.woowacourse.edd.application.service.UserService;
@@ -40,21 +41,22 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity saveUser(@Valid @RequestBody UserRequestDto userSaveRequestDto) {
+    public ResponseEntity saveUser(@Valid @RequestBody UserSaveRequestDto userSaveRequestDto) {
         return ResponseEntity.created(URI.create(USER_URL + "/" + userService.save(userSaveRequestDto))).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, HttpSession session,
-                                                   @Valid @RequestBody UserRequestDto userRequestDto) {
+                                                   @Valid @RequestBody UserUpdateRequestDto userSaveRequestDto) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        return ResponseEntity.ok(userService.update(id, sessionUser.getId(), userRequestDto));
+        return ResponseEntity.ok(userService.update(id, sessionUser.getId(), userSaveRequestDto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
         userService.delete(id, sessionUser.getId());
+        session.invalidate();
         return ResponseEntity.noContent().build();
     }
 }

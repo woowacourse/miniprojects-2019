@@ -1,7 +1,8 @@
 package com.woowacourse.edd.application.service;
 
 import com.woowacourse.edd.application.converter.UserConverter;
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
+import com.woowacourse.edd.application.dto.UserUpdateRequestDto;
 import com.woowacourse.edd.application.response.UserResponse;
 import com.woowacourse.edd.domain.User;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class UserService {
         this.userInternalService = userInternalService;
     }
 
-    public Long save(UserRequestDto userSaveRequestDto) {
+    public Long save(UserSaveRequestDto userSaveRequestDto) {
         User user = userInternalService.save(UserConverter.toSaveEntity(userSaveRequestDto));
         return user.getId();
     }
@@ -27,8 +28,8 @@ public class UserService {
         return UserConverter.toResponse(user);
     }
 
-    public UserResponse update(Long id, Long loggedInId, UserRequestDto userRequestDto) {
-        User user = userInternalService.update(id, loggedInId, userRequestDto);
+    public UserResponse update(Long id, Long loggedInId, UserUpdateRequestDto userUpdateRequestDto) {
+        User user = userInternalService.update(id, loggedInId, userUpdateRequestDto);
         return UserConverter.toResponse(user);
     }
 

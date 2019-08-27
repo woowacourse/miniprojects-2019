@@ -3,14 +3,14 @@ const addHeader = function (headerElement){
     const signedInHeaderTemplate = 
     `<header id="header" class="header navbar shadow-sm">
         <div class="header-container">
-            <ul class="nav-left mrg-left-0 padding-8">
+            <ul class="nav-left mrg-left-0">
                 <li>
                     <a class="side-nav-toggle" href="javascript:void(0);">
                         <i class="material-icons">menu</i>
                     </a>
                 </li>
                 <li>
-                    <a href="/"><img class="logo" src="./images/logo/youtube-logo.png"></a>
+                    <a href="/" class="d-flex flex-row align-items-center"><img class="logo" src="./images/logo/youtube-logo.png"></a>
                 </li>
             </ul>
             <ul class="nav-right padding-8">
@@ -42,14 +42,14 @@ const addHeader = function (headerElement){
     const notSignedInHeaderTemplate = 
     `<header id="header" class="header navbar shadow-sm">
         <div class="header-container">
-            <ul class="nav-left mrg-left-0 padding-8">
+            <ul class="nav-left mrg-left-0">
                 <li>
                     <a class="side-nav-toggle" href="javascript:void(0);">
                         <i class="material-icons">menu</i>
                     </a>
                 </li>
                 <li>
-                    <a href="/"><img class="logo" src="./images/logo/youtube-logo.png"></a>
+                <a href="/" class="d-flex flex-row align-items-center"><img class="logo" src="./images/logo/youtube-logo.png"></a>
                 </li>
             </ul>
             <ul class="nav-right padding-8">

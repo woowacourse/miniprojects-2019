@@ -1,41 +1,42 @@
 package com.woowacourse.edd.presentation.controller;
 
 import com.woowacourse.edd.application.dto.LoginRequestDto;
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
+import com.woowacourse.edd.application.dto.UserUpdateRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.StatusAssertions;
 import reactor.core.publisher.Mono;
 
-import static com.woowacourse.edd.application.dto.UserRequestDto.INVALID_EMAIL_MESSAGE;
-import static com.woowacourse.edd.application.dto.UserRequestDto.INVALID_NAME_MESSAGE;
-import static com.woowacourse.edd.application.dto.UserRequestDto.INVALID_PASSWORD_MESSAGE;
+import static com.woowacourse.edd.application.dto.UserSaveRequestDto.INVALID_EMAIL_MESSAGE;
+import static com.woowacourse.edd.application.dto.UserSaveRequestDto.INVALID_NAME_MESSAGE;
+import static com.woowacourse.edd.application.dto.UserSaveRequestDto.INVALID_PASSWORD_MESSAGE;
 import static com.woowacourse.edd.presentation.controller.UserController.USER_URL;
 
 public class UserControllerTests extends BasicControllerTests {
 
     @Test
     void email_validation() {
-        UserRequestDto userRequestDto = new UserRequestDto("robby", "asdadasdasd", "P@ssW0rd");
-        assertFailBadRequest(assertRequestValidation(userRequestDto), INVALID_EMAIL_MESSAGE);
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("robby", "asdadasdasd", "P@ssW0rd");
+        assertFailBadRequest(assertRequestValidation(userSaveRequestDto), INVALID_EMAIL_MESSAGE);
     }
 
     @Test
     void name_validation() {
-        UserRequestDto userRequestDto = new UserRequestDto("r", "als5610@naver.com", "P@ssW0rd");
-        assertFailBadRequest(assertRequestValidation(userRequestDto), INVALID_NAME_MESSAGE);
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("r", "als5610@naver.com", "P@ssW0rd");
+        assertFailBadRequest(assertRequestValidation(userSaveRequestDto), INVALID_NAME_MESSAGE);
     }
 
     @Test
     void password_validation() {
-        UserRequestDto userRequestDto = new UserRequestDto("robby", "als5610@naver.com", "Passw0rd");
-        assertFailBadRequest(assertRequestValidation(userRequestDto), INVALID_PASSWORD_MESSAGE);
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("robby", "als5610@naver.com", "Passw0rd");
+        assertFailBadRequest(assertRequestValidation(userSaveRequestDto), INVALID_PASSWORD_MESSAGE);
     }
 
     @Test
     void user_save() {
-        UserRequestDto userSaveRequestDto = new UserRequestDto("robby", "shit@email.com", "P@ssW0rd");
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("robby", "shit@email.com", "P@ssW0rd");
 
         findUser(getUrl(signUp(userSaveRequestDto)))
             .isOk()
@@ -46,26 +47,26 @@ public class UserControllerTests extends BasicControllerTests {
 
     @Test
     void user_update() {
-        UserRequestDto userSaveRequestDto = new UserRequestDto("robby", "shit123@email.com", "P@ssW0rd");
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("robby", "shit123@email.com", "P@ssW0rd");
         LoginRequestDto loginRequestDto = new LoginRequestDto("shit123@email.com", "P@ssW0rd");
 
         String url = getUrl(signUp(userSaveRequestDto));
         String sid = getLoginCookie(loginRequestDto);
-        UserRequestDto userRequestDto = new UserRequestDto("jm", "hansome@gmail.com", "P!ssW0rd");
+        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("jm", "hansome@gmail.com");
 
-        updateUser(userRequestDto, url, sid)
+        updateUser(userUpdateRequestDto, url, sid)
             .isOk()
             .expectBody()
-            .jsonPath("$.name").isEqualTo(userRequestDto.getName())
-            .jsonPath("$.email").isEqualTo(userRequestDto.getEmail());
+            .jsonPath("$.name").isEqualTo(userUpdateRequestDto.getName())
+            .jsonPath("$.email").isEqualTo(userUpdateRequestDto.getEmail());
     }
 
     @Test
     @DisplayName("가입된 유저가 다른 유저의 수정을 시도할 때")
     void unauthorized_user_update() {
-        UserRequestDto authorizedUser = new UserRequestDto("Jmm", "jm@naver.com", "p@ssW0rd");
-        UserRequestDto unauthorizedUser = new UserRequestDto("conas", "conas@naver.com", "p@ssW0rd");
-        UserRequestDto unauthorizedUpdateRequest = new UserRequestDto("pobi", "conas@naver.com", "p@ssW0rd");
+        UserSaveRequestDto authorizedUser = new UserSaveRequestDto("Jmm", "jm@naver.com", "p@ssW0rd");
+        UserSaveRequestDto unauthorizedUser = new UserSaveRequestDto("conas", "conas@naver.com", "p@ssW0rd");
+        UserUpdateRequestDto unauthorizedUpdateRequest = new UserUpdateRequestDto("pobi", "conas@naver.com");
 
         String url = getUrl(signUp(authorizedUser));
         signUp(unauthorizedUser);
@@ -92,9 +93,9 @@ public class UserControllerTests extends BasicControllerTests {
     @Test
     @DisplayName("가입된 유저가 자신의 유저 삭제를 시도할 때")
     void authorized_user_delete_no_content() {
-        UserRequestDto userRequestDto = new UserRequestDto("robby", "shit222@email.com", "P@ssW0rd");
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("robby", "shit222@email.com", "P@ssW0rd");
         LoginRequestDto loginRequestDto = new LoginRequestDto("shit222@email.com", "P@ssW0rd");
-        String url = getUrl(signUp(userRequestDto));
+        String url = getUrl(signUp(userSaveRequestDto));
         String sid = getLoginCookie(loginRequestDto);
         deleteUser(url, sid)
             .isNoContent();
@@ -103,8 +104,8 @@ public class UserControllerTests extends BasicControllerTests {
     @Test
     @DisplayName("가입된 유저가 다른 유저의 삭제를 시도할 때")
     void unauthorized_user_delete() {
-        UserRequestDto authorizedUserDto = new UserRequestDto("normal", "normalUser@gmail.com", "p@ssW0rd");
-        UserRequestDto unauthorizedUserDto = new UserRequestDto("conas", "conas@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto authorizedUserDto = new UserSaveRequestDto("normal", "normalUser@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto unauthorizedUserDto = new UserSaveRequestDto("conas", "conas@gmail.com", "p@ssW0rd");
         LoginRequestDto loginRequestDto = new LoginRequestDto("conas@gmail.com", "p@ssW0rd");
         String authorizedUserUrl = getUrl(signUp(authorizedUserDto));
         signUp(unauthorizedUserDto);
@@ -124,9 +125,9 @@ public class UserControllerTests extends BasicControllerTests {
         findUser(USER_URL + "/1").isOk();
     }
 
-    private StatusAssertions assertRequestValidation(UserRequestDto userRequestDto) {
+    private StatusAssertions assertRequestValidation(UserSaveRequestDto userSaveRequestDto) {
         return executePost(USER_URL)
-            .body(Mono.just(userRequestDto), UserRequestDto.class)
+            .body(Mono.just(userSaveRequestDto), UserSaveRequestDto.class)
             .exchange()
             .expectStatus();
     }
@@ -146,11 +147,11 @@ public class UserControllerTests extends BasicControllerTests {
             .expectStatus();
     }
 
-    private StatusAssertions updateUser(UserRequestDto userRequestDto, String uri, String sid) {
+    private StatusAssertions updateUser(UserUpdateRequestDto userUpdateRequestDto, String uri, String sid) {
         return webTestClient.put()
             .uri(uri)
             .cookie(COOKIE_JSESSIONID, sid)
-            .body(Mono.just(userRequestDto), UserRequestDto.class)
+            .body(Mono.just(userUpdateRequestDto), UserUpdateRequestDto.class)
             .exchange()
             .expectStatus();
     }

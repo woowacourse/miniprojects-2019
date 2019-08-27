@@ -1,7 +1,7 @@
 package com.woowacourse.edd.presentation.controller;
 
 import com.woowacourse.edd.application.dto.LoginRequestDto;
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.StatusAssertions;
@@ -37,8 +37,8 @@ public class LoginControllerTests extends BasicControllerTests {
         String testEmail = "edan@gmail.com";
         String testPassword = "p@ssW0rd";
 
-        UserRequestDto userRequestDto = new UserRequestDto("edan", testEmail, testPassword);
-        String url = signUp(userRequestDto).getResponseHeaders().getLocation().toASCIIString();
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("edan", testEmail, testPassword);
+        String url = signUp(userSaveRequestDto).getResponseHeaders().getLocation().toASCIIString();
 
         String sid = getLoginCookie(new LoginRequestDto("edan@gmail.com", "p@ssW0rd"));
 

@@ -49,10 +49,9 @@ public class User {
         this.isDeleted = false;
     }
 
-    public void update(String name, String email, String password) {
+    public void update(String name, String email) {
         this.name = name;
         this.email = email;
-        this.password = password;
     }
 
     public void delete() {

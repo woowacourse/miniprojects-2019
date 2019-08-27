@@ -1,7 +1,7 @@
 package com.woowacourse.edd.presentation.controller;
 
 import com.woowacourse.edd.application.dto.LoginRequestDto;
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -77,10 +77,10 @@ public class BasicControllerTests {
         return webTestClient.delete().uri(uri);
     }
 
-    protected EntityExchangeResult<byte[]> signUp(UserRequestDto userSaveRequestDto) {
+    protected EntityExchangeResult<byte[]> signUp(UserSaveRequestDto userSaveRequestDto) {
         return webTestClient.post()
             .uri(USER_URL)
-            .body(Mono.just(userSaveRequestDto), UserRequestDto.class)
+            .body(Mono.just(userSaveRequestDto), UserSaveRequestDto.class)
             .exchange()
             .expectStatus()
             .isCreated()

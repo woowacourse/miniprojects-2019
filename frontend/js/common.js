@@ -1,9 +1,13 @@
 const wootubeCtx = {
     util: {
-        getUrlParams: function () {
-            const params = {};
-            window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (str, key, value) { params[key] = value; });
-            return params;
+        getUrlParams: function (name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
         },
         calculateDate: function (responseDate) {
             const localResponseDate = moment.utc(responseDate,'YYYYMMDDHH').local().format('YYYYMMDDHH')
@@ -61,6 +65,10 @@ const Api = function () {
         return requestWithoutBody(`${baseUrl}/v1/videos?page=${page}&size=${size}&sort=${sort},DESC`,'GET')
     }
 
+    const requestMyChannelVideos = (userId) => {
+        return requestWithoutBody(`${baseUrl}/v1/users/${userId}/videos`,'GET')
+    }
+
     const requestVideo = (videoId) => {
         return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}`,'GET')
     }
@@ -85,7 +93,19 @@ const Api = function () {
         return request(`${baseUrl}/v1/users`, 'POST', dataBody)
     }
 
-    const isLogin = () => {
+    const requestUser = (id) => {
+        return request(`${baseUrl}/v1/users/${id}`, 'GET');
+    }
+
+    const updateUser = (id, body) => {
+        return request(`${baseUrl}/v1/users/${id}`, 'PUT', body)
+    }
+
+    const deleteUser = (id) => {
+        return requestWithoutBody(`${baseUrl}/v1/users/${id}`, 'DELETE')
+    }
+
+    const retrieveLoginInfo = () => {
         return requestWithoutBody(`${baseUrl}/v1/login/users`, 'GET')
     }
 
@@ -101,9 +121,13 @@ const Api = function () {
         deleteVideo,
         postLogin,
         signup,
-        isLogin,
-        requestSubscribed: requestSubscribed
+        requestUser,
+        updateUser,
+        retrieveLoginInfo,
+        deleteUser,
+        requestMyChannelVideos,
+        requestSubscribed
     }
-
 }
+
 const api = new Api()
