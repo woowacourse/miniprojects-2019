@@ -1,5 +1,10 @@
 function login() {
-	const loginRequest = $("#login_form").serializeObject()
+    const enter = 13;
+    const click = 1;
+
+    if(!(event.keyCode === enter || event.which === click)) return
+
+    const loginRequest = $("#login_form").serializeObject()
 
     api.POST("/login", loginRequest)
         .then(res => {
@@ -21,3 +26,6 @@ function login() {
                 alert(errorMessage.message))
         })
 }
+
+document.getElementById('pass').addEventListener('keyup', login)
+document.getElementById('email').addEventListener('keyup', login)

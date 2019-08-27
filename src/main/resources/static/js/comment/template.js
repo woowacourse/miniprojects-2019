@@ -41,15 +41,19 @@ const commentTemplate = (comment) => `
             </div>
             
             <div class="font-size-12 pdd-left-10 pdd-top-5">
-                <span class="pointer text-link-color">좋아요</span>
+                <span class="pointer text-link-color comment-good ${comment.goodResponse.gooded ? 'comment-good-active': ''}">좋아요</span>
                 <span>·</span>
                 <span class="pointer text-link-color toggle-child">답글 달기</span>
                 <span>·</span>
                 <span class="pointer">${dateFormat(comment.updatedAt, isUpdated(comment.createdAt, comment.updatedAt))}</span>
+                <span>
+                    <i class="fa fa-thumbs-o-up text-info font-size-16 mrg-left-5"></i>
+                    <span class="comment-total-good font-size-14 lh-2-1">${comment.goodResponse.totalGood}</span> 
+                </span>
             </div>
             ${
                 (() => {
-                    if (comment.userResponse.id == localStorage.loginUserId) {
+                    if (comment.userResponse.id === localStorage.loginUserId) {
                         return commentEditDeleteDropdown
                     } else {
                         return ""
@@ -102,15 +106,19 @@ const childCommentTemplate = (comment) => `
                 <span>${textFormat(comment.contents)}</span>
             </div>
             <div class="font-size-12 pdd-left-10 pdd-top-5">
-                <span class="pointer text-link-color">좋아요</span>
+                <span class="pointer text-link-color comment-good  comment-${comment.goodResponse.gooded} ">좋아요</span>
                 <span>·</span>
                 <span class="pointer text-link-color toggle-child">답글 달기</span>
                 <span>·</span>
                 <span class="pointer">${dateFormat(comment.updatedAt, isUpdated(comment.createdAt, comment.updatedAt))}</span>
+                <span>
+                    <i class="fa fa-thumbs-o-up text-info font-size-16 mrg-left-5"></i>
+                    <span class="comment-total-good font-size-14 lh-2-1">${comment.goodResponse.totalGood}</span> 
+                </span>
             </div>
             ${
                 (() => {
-                    if (comment.userResponse.id == localStorage.loginUserId) {
+                    if (comment.userResponse.id === localStorage.loginUserId) {
                         return childCommentEditDeleteDropdown(comment)
                     } else {
                         return ""

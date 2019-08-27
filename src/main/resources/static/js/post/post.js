@@ -10,6 +10,7 @@ const initLoad = async () => {
     await api.GET(POST_URL)
         .then(res => res.json())
         .then(postPage => {
+            console.log(postPage)
             totalPage = postPage.totalPages;
             postPage.content.forEach(post => {
                 posts.appendChild(createPostDOM(post))
@@ -165,7 +166,7 @@ const postOperateButton = (function () {
                     const contents = updatePostContainer.querySelector("textArea").value;
 
                     const postRequest = {
-                        contents : contents
+                        contents: contents
                     }
 
                     api.PUT(getTargetPostUrl(postId), postRequest)
@@ -192,7 +193,7 @@ const postOperateButton = (function () {
 
             const remove = (event) => {
                 const buttonContainer = event.target.closest("a")
-                if (buttonContainer == null ) {
+                if (buttonContainer == null) {
                     return
                 }
                 if (buttonContainer.classList.contains('post-delete')) {
@@ -273,8 +274,9 @@ const postOperateButton = (function () {
                     return
                 }
 
-                const postId = contentsArea.closest(".card").dataset.id
-                const commentsContainer = contentsArea.closest('.card').querySelector('.comment-list')
+                const postCard = contentsArea.closest(".card");
+                const postId = postCard.dataset.id
+                const commentsContainer = postCard.querySelector('.comment-list')
                 const parentComment = event.target.closest('.parent-comment');
                 const parentId = parentComment === null ? null : parentComment.dataset.id
 
@@ -297,6 +299,11 @@ const postOperateButton = (function () {
                             div.innerHTML = childCommentTemplate(comment)
                             parentComment.appendChild(div)
                         }
+
+                        const totalCountContainer = postCard.querySelector('.totalComment')
+                        const totalCount = parseInt(totalCountContainer.innerHTML)+1
+                        totalCountContainer.innerHTML = totalCount
+
                     })
                     .catch(error => console.error(error))
             }
@@ -304,7 +311,7 @@ const postOperateButton = (function () {
             const toggleCommentUpdate = (event) => {
                 const buttonContainer = event.target.closest("a")
 
-                if (buttonContainer === null){
+                if (buttonContainer === null) {
                     return
                 }
 
@@ -348,14 +355,16 @@ const postOperateButton = (function () {
             const deleteComment = (event) => {
                 const commentDeleteBtn = event.target.closest('a');
 
-                if(commentDeleteBtn === null){
+                if (commentDeleteBtn === null) {
                     return
                 }
 
                 if (commentDeleteBtn.classList.contains('comment-delete')) {
                     const buttonContainer = event.target.closest("ul").closest("li")
-                    const postId = buttonContainer.closest('.card').dataset.id;
+                    const postCard = buttonContainer.closest('.card');
+                    const postId = postCard.dataset.id;
                     const commentId = buttonContainer.dataset.id;
+
                     api.DELETE(`/api/posts/${postId}/comments/${commentId}`)
                         .then(res => {
                             if (res.status !== 204) {
@@ -363,6 +372,10 @@ const postOperateButton = (function () {
                             }
                             const commentCard = buttonContainer.parentNode
                             commentCard.removeChild(buttonContainer);
+
+                            const totalCountContainer = postCard.querySelector('.totalComment')
+                            const totalCount = parseInt(totalCountContainer.innerHTML)-1
+                            totalCountContainer.innerHTML = totalCount
                         })
                         .catch(error => console.error(error))
                 }
@@ -371,7 +384,7 @@ const postOperateButton = (function () {
             const toggleChildCommentForm = (event) => {
                 const commentsContainer = event.target.closest('li')
                 const commentItem = event.target.closest('.comment-item');
-                if(commentItem === null) return
+                if (commentItem === null) return
                 const form = commentItem.querySelector('.add-comment')
 
                 if (event.target.classList.contains('toggle-child') && form === null) {

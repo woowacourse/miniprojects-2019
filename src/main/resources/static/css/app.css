@@ -1260,7 +1260,7 @@ blockquote:before{font-family:themify;content:"\E67F";position:absolute;left:0;c
 .widget-feed .shared-item .item-content{flex:6;width:70%;padding:30px}
 .widget-feed iframe{border:0;width:100%;min-height:300px}
 .child-comment {position: relative; left: 40px;}
-
+.comment-good-active{color: blue !important;}
 
 button{box-shadow:none;cursor:pointer}
 button,button:focus{outline:none}

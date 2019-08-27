@@ -32,8 +32,8 @@ public class PostResponse {
 
     @Builder
     private PostResponse(final Long id, final UserResponse author, final UserResponse receiver, final Contents contents,
-                        final List<FileResponse> fileResponses, final LocalDateTime createdAt, final LocalDateTime updatedAt,
-                        final Integer totalComment, final GoodResponse goodResponse) {
+                         final List<FileResponse> fileResponses, final LocalDateTime createdAt, final LocalDateTime updatedAt,
+                         final Integer totalComment, final GoodResponse goodResponse) {
         this.id = id;
         this.author = author;
         this.receiver = receiver;

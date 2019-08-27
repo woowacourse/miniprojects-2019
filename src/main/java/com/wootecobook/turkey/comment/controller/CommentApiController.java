@@ -29,17 +29,19 @@ public class CommentApiController {
 
     @GetMapping
     public ResponseEntity<Page<CommentResponse>> list(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
-                                                      @PathVariable Long postId) {
+                                                      @PathVariable Long postId,
+                                                      @LoginUser UserSession userSession) {
 
-        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByPostId(postId, pageable);
+        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByPostId(postId, pageable, userSession.getId());
         return ResponseEntity.ok(commentResponses);
     }
 
     @GetMapping("/{id}/children")
     public ResponseEntity<Page<CommentResponse>> childCommentList(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
-                                                                  @PathVariable Long id) {
+                                                                  @PathVariable Long id,
+                                                                  @LoginUser UserSession userSession) {
 
-        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByParentId(id, pageable);
+        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByParentId(id, pageable, userSession.getId());
         return ResponseEntity.ok(commentResponses);
     }
 
