@@ -38,32 +38,35 @@ const ReactionApp = (function () {
             if (goodBtn.className === 'fa fa-thumbs-o-up font-size-16') {
                 reactionApi.addGood(Number(data), 'articles', articleId)
                     .then(response => response.json())
-                    .then(data => saveGoodData(articleId, data));
+                    .then(data => saveGoodData('article', articleId, data));
             } else if (goodBtn.className === 'fa fa-thumbs-up text-info font-size-16') {
                 reactionApi.deleteGood('articles', articleId)
                     .then(response => response.json())
-                    .then(data => saveGoodData(articleId, data));
+                    .then(data => saveGoodData('article', articleId, data));
             }
-        };
-
-        const saveGoodData = (articleId, good) => {
-            document.getElementById(`article-good-count-${articleId}`)
-                .innerText = good.numberOfGood;
-            showGoodBtn('article', articleId, good.hasGood);
         };
 
         const clickCommentGood = (target) => {
             const comment = target.closest('li[data-object="comment"]');
             const commentId = comment.getAttribute('data-comment-id');
             const data = document.getElementById(`comment-good-count-${commentId}`).innerText;
+            const goodIcon = document.getElementById(`comment-good-btn-icon-${commentId}`);
 
-            reactionApi.clickGood(Number(data), 'comments', commentId)
-                .then(response => response.json())
-                .then(reactionComment => {
-                    document.getElementById(`comment-good-count-${commentId}`)
-                        .innerText = reactionComment.numberOfGood;
-                    showGoodBtn('comment', commentId, reactionComment.hasGood);
-                })
+            if (goodIcon.className === 'fa fa-thumbs-o-up text-info font-size-16') {
+                reactionApi.addGood(Number(data), 'comments', commentId)
+                    .then(response => response.json())
+                    .then(data => saveGoodData('comment', commentId, data));
+            } else if (goodIcon.className === 'fa fa-thumbs-up text-info font-size-16') {
+                reactionApi.deleteGood('comments', commentId)
+                    .then(response => response.json())
+                    .then(data => saveGoodData('comment', commentId, data));
+            }
+        };
+
+        const saveGoodData = (objectName, objectId, good) => {
+            document.getElementById(`${objectName}-good-count-${objectId}`)
+                .innerText = good.numberOfGood;
+            showGoodBtn(objectName, objectId, good.hasGood);
         };
 
         const showGoodCount = (objectName, objectId) => {

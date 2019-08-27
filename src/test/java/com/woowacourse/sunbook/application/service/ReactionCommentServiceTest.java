@@ -1,12 +1,14 @@
 package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.MockStorage;
+import com.woowacourse.sunbook.application.exception.NotFoundReactionException;
 import com.woowacourse.sunbook.domain.reaction.ReactionComment;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -27,8 +29,6 @@ public class ReactionCommentServiceTest extends MockStorage {
                 .willReturn(Optional.of(reactionComment));
 
         injectReactionCommentService.clickGood(AUTHOR_ID, COMMENT_ID);
-
-        verify(reactionCommentRepository).save(any(ReactionComment.class));
     }
 
     @Test
@@ -63,5 +63,16 @@ public class ReactionCommentServiceTest extends MockStorage {
         injectReactionCommentService.showCount(AUTHOR_ID, COMMENT_ID);
 
         verify(reactionCommentRepository).findAllByComment(comment);
+    }
+
+    @Test
+    void 존재하지_않는_좋아요_취소_오류() {
+        given(userService.findById(AUTHOR_ID)).willReturn(author);
+        given(articleService.findById(COMMENT_ID)).willReturn(article);
+        given(reactionCommentRepository.findByAuthorAndComment(author, comment))
+                .willReturn(Optional.empty());
+
+        assertThrows(NotFoundReactionException.class,
+                () -> injectReactionCommentService.remove(AUTHOR_ID, COMMENT_ID));
     }
 }

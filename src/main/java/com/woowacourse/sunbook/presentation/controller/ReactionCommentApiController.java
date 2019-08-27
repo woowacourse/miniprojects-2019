@@ -19,7 +19,7 @@ public class ReactionCommentApiController {
     }
 
     @GetMapping
-    public ResponseEntity<ReactionDto> showGood(@PathVariable Long commentId,
+    public ResponseEntity<ReactionDto> show(@PathVariable Long commentId,
                                                 LoginUser loginUser) {
         ReactionDto reactionDto = reactionCommentService
                 .showCount(loginUser.getId(), commentId);
@@ -28,10 +28,17 @@ public class ReactionCommentApiController {
     }
 
     @PostMapping
-    public ResponseEntity<ReactionDto> clickGood(@PathVariable Long commentId,
-                                                 LoginUser loginUser) {
-        ReactionDto reactionDto = reactionCommentService.
-                clickGood(loginUser.getId(), commentId);
+    public ResponseEntity<ReactionDto> save(@PathVariable Long commentId,
+                                            LoginUser loginUser) {
+        ReactionDto reactionDto = reactionCommentService.save(loginUser.getId(), commentId);
+
+        return new ResponseEntity<>(reactionDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ReactionDto> remove(@PathVariable Long commentId,
+                                              LoginUser loginUser) {
+        ReactionDto reactionDto = reactionCommentService.remove(loginUser.getId(), commentId);
 
         return new ResponseEntity<>(reactionDto, HttpStatus.OK);
     }

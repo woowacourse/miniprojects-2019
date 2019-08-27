@@ -114,7 +114,7 @@ const template = (function () {
                                 <span class="pointer text-link-color">답글 달기</span>
                                 <span>·</span>
                                 <span class="pointer">{{updatedTime}}</span>
-                                <i id="comment-good-btn-icon-{{id}}" class="fa fa-thumbs-o-up text-info font-size-16 mrg-left-5"></i>
+                                <i id="comment-good-btn-icon-{{id}}" class="fa fa-thumbs-o-up text-info font-size-16"></i>
                                 <span id="comment-good-count-{{id}}" class="font-size-14 lh-2-1">{{numberOfGood}}</span>
                             </div>
                         </div>

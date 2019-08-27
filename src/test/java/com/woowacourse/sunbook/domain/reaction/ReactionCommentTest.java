@@ -35,15 +35,28 @@ public class ReactionCommentTest {
     @Test
     void 좋아요_한번_정상_누르기() {
         ReactionComment reactionComment = new ReactionComment(author, comment);
-        reactionComment.toggleGood();
+        reactionComment.addGood();
         assertTrue(reactionComment.getHasGood());
     }
 
     @Test
     void 좋아요_한번_정상_취소() {
         ReactionComment reactionComment = new ReactionComment(author, comment);
-        reactionComment.toggleGood();
-        reactionComment.toggleGood();
+        reactionComment.addGood();
+        reactionComment.removeGood();
         assertFalse(reactionComment.getHasGood());
+    }
+
+    @Test
+    void 좋아요_상태에서_좋아요_요청하는_오류() {
+        ReactionComment reactionComment = new ReactionComment(author, comment);
+        reactionComment.addGood();
+        assertThrows(IllegalReactionException.class, () -> reactionComment.addGood());
+    }
+
+    @Test
+    void 싫어요_상태에서_싫어요_요청하는_오류() {
+        ReactionComment reactionComment = new ReactionComment(author, comment);
+        assertThrows(IllegalReactionException.class, () -> reactionComment.removeGood());
     }
 }

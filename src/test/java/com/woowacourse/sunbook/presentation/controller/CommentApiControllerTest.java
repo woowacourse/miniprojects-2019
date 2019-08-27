@@ -13,7 +13,7 @@ class CommentApiControllerTest extends TestTemplate {
     void 댓글_등록() {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.POST, "/api/articles/1/comments", new CommentFeature("abc"), HttpStatus.OK, sessionId))
-                .jsonPath("$..id").isEqualTo(6)
+                .jsonPath("$..id").isEqualTo(7)
                 .jsonPath("$..contents").isEqualTo("abc")
                 .jsonPath("$..authorName").isEqualTo("mir")
                 ;

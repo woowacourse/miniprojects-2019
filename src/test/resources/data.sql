@@ -41,3 +41,6 @@ VALUES (4, '네번째 댓글', 1, 1);
 
 INSERT INTO comment (id, contents, author_id, article_id)
 VALUES (5, '다섯번째 댓글', 1, 1);
+
+INSERT INTO comment (id, contents, author_id, article_id)
+VALUES (6, '여섯번째 댓글', 1, 1);

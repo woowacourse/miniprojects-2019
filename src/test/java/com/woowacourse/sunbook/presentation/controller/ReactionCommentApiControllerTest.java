@@ -18,12 +18,11 @@ public class ReactionCommentApiControllerTest extends TestTemplate {
         ;
     }
 
-    // TODO: 전체 테스트 실행하면 해당 제이슨 경로를 찾지 못한다는 에러 발생
     @Test
     void 초기_좋아요_개수_정상_조회() {
         // 좋아요 조회
         String sessionId = loginSessionId(userRequestDto);
-        respondApi(loginAndRequest(HttpMethod.GET, "/api/comments/2/good", Void.class, HttpStatus.OK, sessionId))
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/comments/6/good", Void.class, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(0L)
                 .jsonPath("$.hasGood").isEqualTo(false)
         ;
@@ -53,7 +52,7 @@ public class ReactionCommentApiControllerTest extends TestTemplate {
                 .jsonPath("$.hasGood").isEqualTo(true)
         ;
 
-        respondApi(loginAndRequest(HttpMethod.POST, "/api/comments/4/good", reactionDto, HttpStatus.OK, sessionId))
+        respondApi(loginAndRequest(HttpMethod.DELETE, "/api/comments/4/good", reactionDto, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(0L)
                 .jsonPath("$.hasGood").isEqualTo(false)
         ;
