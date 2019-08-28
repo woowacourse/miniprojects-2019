@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserRepository;
+import techcourse.w3.woostagram.user.dto.UserCreateDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
@@ -40,19 +41,27 @@ class UserServiceTest {
     private StorageService storageService;
 
     private UserDto userDto;
+    private UserCreateDto userCreateDto;
     private UserUpdateDto userUpdateDto;
     private User user;
     private MultipartFile multipartFile;
 
     @BeforeEach
     void setUp() {
+        multipartFile = new MockMultipartFile(
+                "testImage", "testImage.jpg", MediaType.IMAGE_JPEG_VALUE, "<<jpg data>>".getBytes());
+
         userDto = UserDto.builder()
                 .email("a@naver.com")
                 .password("Aa1234!!")
                 .build();
 
-        multipartFile = new MockMultipartFile(
-                "testImage", "testImage.jpg", MediaType.IMAGE_JPEG_VALUE, "<<jpg data>>".getBytes());
+        userCreateDto = UserCreateDto.builder()
+                .email("a@naver.com")
+                .userName("user")
+                .name("name")
+                .password("Aa1234!!")
+                .build();
 
         userUpdateDto = UserUpdateDto.builder()
                 .userName("woowacrews")
@@ -68,19 +77,19 @@ class UserServiceTest {
 
     @Test
     void create_correct_isOk() {
-        when(userRepository.save(userDto.toEntity())).thenReturn(userDto.toEntity());
-        assertThat(userService.save(userDto)).isEqualTo(UserInfoDto.from(userDto.toEntity()));
+        when(userRepository.save(userCreateDto.toEntity())).thenReturn(userCreateDto.toEntity());
+        assertThat(userService.save(userCreateDto)).isEqualTo(UserInfoDto.from(userCreateDto.toEntity()));
     }
 
     @Test
     void create_empty_isFail() {
-        when(userRepository.save(userDto.toEntity())).thenThrow(RuntimeException.class);
-        assertThrows(UserCreateException.class, () -> userService.save(userDto));
+        when(userRepository.save(userCreateDto.toEntity())).thenThrow(RuntimeException.class);
+        assertThrows(UserCreateException.class, () -> userService.save(userCreateDto));
     }
 
     @Test
     void update_correct_isOk() {
-        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userCreateDto.toEntity()));
         when(storageService.saveMultipartFile(multipartFile)).thenReturn(IMAGE_FILE_URL);
         userService.update(userUpdateDto, userDto.getEmail());
         verify(userRepository, times(1)).findByEmail(userDto.getEmail());
@@ -95,24 +104,24 @@ class UserServiceTest {
 
     @Test
     void delete_correct_isOk() {
-        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
-        userService.deleteByEmail(userDto.getEmail());
-        verify(userRepository, times(1)).findByEmail(userDto.getEmail());
-        verify(userRepository, times(1)).delete(userDto.toEntity());
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userCreateDto.toEntity()));
+        userService.deleteByEmail(userCreateDto.getEmail());
+        verify(userRepository, times(1)).findByEmail(userCreateDto.getEmail());
+        verify(userRepository, times(1)).delete(userCreateDto.toEntity());
     }
 
     @Test
     void delete_empty_isFail() {
-        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundException.class, () -> userService.deleteByEmail(userDto.getEmail()));
-        verify(userRepository, times(1)).findByEmail(userDto.getEmail());
-        verify(userRepository, times(0)).delete(userDto.toEntity());
+        when(userRepository.findByEmail(userCreateDto.getEmail())).thenReturn(Optional.empty());
+        assertThrows(UserNotFoundException.class, () -> userService.deleteByEmail(userCreateDto.getEmail()));
+        verify(userRepository, times(1)).findByEmail(userCreateDto.getEmail());
+        verify(userRepository, times(0)).delete(userCreateDto.toEntity());
     }
 
     @Test
     void findByEmail_correct_isOk() {
-        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
-        assertThat(userService.findByEmail(userDto.getEmail())).isEqualTo(UserInfoDto.from(userDto.toEntity()));
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userCreateDto.toEntity()));
+        assertThat(userService.findByEmail(userDto.getEmail())).isEqualTo(UserInfoDto.from(userCreateDto.toEntity()));
     }
 
     @Test
@@ -123,8 +132,8 @@ class UserServiceTest {
 
     @Test
     void findEntityByEmail_correct_isOk() {
-        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userDto.toEntity()));
-        assertThat(userService.findUserByEmail(userDto.getEmail())).isEqualTo(userDto.toEntity());
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(userCreateDto.toEntity()));
+        assertThat(userService.findUserByEmail(userDto.getEmail())).isEqualTo(userCreateDto.toEntity());
     }
 
     @Test
@@ -135,8 +144,8 @@ class UserServiceTest {
 
     @Test
     void findByUserName_correctName_isOk() {
-        when(userRepository.findByUserContents_UserName(anyString())).thenReturn(Optional.of(userDto.toEntity()));
-        assertThat(userService.findByUserName(anyString()).getEmail()).isEqualTo(userDto.getEmail());
+        when(userRepository.findByUserContents_UserName(anyString())).thenReturn(Optional.of(userCreateDto.toEntity()));
+        assertThat(userService.findByUserName(anyString()).getEmail()).isEqualTo(userCreateDto.getEmail());
 
     }
 
@@ -148,8 +157,8 @@ class UserServiceTest {
 
     @Test
     void findById_correctId_isOk() {
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(userDto.toEntity()));
-        assertThat(userService.findById(anyLong()).getEmail()).isEqualTo(userDto.getEmail());
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(userCreateDto.toEntity()));
+        assertThat(userService.findById(anyLong()).getEmail()).isEqualTo(userCreateDto.getEmail());
     }
 
     @Test
@@ -160,7 +169,7 @@ class UserServiceTest {
 
     @Test
     void authUser_correct_isOk() {
-        when(userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.of(userDto.toEntity()));
+        when(userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())).thenReturn(Optional.of(userCreateDto.toEntity()));
         assertThat(userService.authUser(userDto).getEmail()).isEqualTo(userDto.getEmail());
     }
 
