@@ -77,7 +77,7 @@ const addSideNavi = function (sideNaviElement) {
 
 const addLoginArea = function(response) {
     addSubscribe(response.id)
-    changeHref(response.id)
+    changeLibraryUrl()
 }
 
 const addSubscribe = function (id) {
@@ -112,10 +112,10 @@ const addSubscribeTemplates = function (data) {
     }
 }
 
-const changeHref = function (userId) {
+const changeLibraryUrl = function () {
     const libraryElem = document.querySelector('#navi-library')
     const libAElem = libraryElem.querySelector('a')
-    libAElem.setAttribute('href', `/video-channel.html?id=${userId}`)
+    libAElem.setAttribute('href', `/video-channel.html`)
 }
 
 addSideNavi(document.querySelector('.side-nav-inner'))
