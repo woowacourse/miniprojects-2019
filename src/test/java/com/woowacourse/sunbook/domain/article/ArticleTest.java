@@ -1,6 +1,6 @@
 package com.woowacourse.sunbook.domain.article;
 
-import com.woowacourse.sunbook.domain.comment.CommentFeature;
+import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.fileurl.FileUrl;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserEmail;
@@ -33,10 +33,10 @@ class ArticleTest {
 
     private User user;
 
-    private static final CommentFeature commentFeature = new CommentFeature(CONTENTS);
+    private static final Content commentFeature = new Content(CONTENTS);
     private static final FileUrl imageUrl = new FileUrl(IMAGE_URL);
     private static final FileUrl videoUrl = new FileUrl(VIDEO_URL);
-    private static final CommentFeature emptyContents = new CommentFeature(EMPTY);
+    private static final Content emptyContents = new Content(EMPTY);
     private static final FileUrl emptyUrl = new FileUrl(EMPTY);
 
     @BeforeEach
@@ -58,7 +58,7 @@ class ArticleTest {
 
     @ParameterizedTest
     @MethodSource("articleParameters")
-    void 게시글_정상_생성_테스트_통합(CommentFeature contents, FileUrl imageUrl, FileUrl videoUrl) {
+    void 게시글_정상_생성_테스트_통합(Content contents, FileUrl imageUrl, FileUrl videoUrl) {
         assertDoesNotThrow(() -> new Article(new ArticleFeature(contents, imageUrl, videoUrl), user));
     }
 
@@ -71,7 +71,7 @@ class ArticleTest {
     void 게시글_정상_수정() {
         Article article = new Article(new ArticleFeature(commentFeature, imageUrl, videoUrl), user);
         ArticleFeature updatedArticleFeature = new ArticleFeature(
-                new CommentFeature(UPDATE_CONTENTS),
+                new Content(UPDATE_CONTENTS),
                 new FileUrl(UPDATE_IMAGE_URL),
                 new FileUrl(UPDATE_VIDEO_URL)
         );

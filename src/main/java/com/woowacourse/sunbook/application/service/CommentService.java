@@ -4,7 +4,7 @@ import com.woowacourse.sunbook.application.dto.comment.CommentResponseDto;
 import com.woowacourse.sunbook.application.exception.NotFoundCommentException;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.comment.Comment;
-import com.woowacourse.sunbook.domain.comment.CommentFeature;
+import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.comment.CommentRepository;
 import com.woowacourse.sunbook.domain.user.User;
 import org.modelmapper.ModelMapper;
@@ -35,12 +35,14 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto save(final CommentFeature commentFeature,
+    public CommentResponseDto save(final Content content,
                                    final Long articleId,
-                                   final Long userId) {
+                                   final Long userId,
+                                   final Long commentId) {
         User user = userService.findById(userId);
         Article article = articleService.findById(articleId);
-        Comment comment = commentRepository.save(new Comment(commentFeature, user, article));
+        Comment parent = findById(commentId);
+        Comment comment = commentRepository.save(new Comment(content, user, article, parent));
 
         return modelMapper.map(comment, CommentResponseDto.class);
     }
@@ -49,30 +51,41 @@ public class CommentService {
     public List<CommentResponseDto> findAll() {
         return Collections.unmodifiableList(
                 commentRepository.findAll().stream()
-                        .map(article -> modelMapper.map(article, CommentResponseDto.class))
+                        .map(comment -> modelMapper.map(comment, CommentResponseDto.class))
                         .collect(Collectors.toList())
         );
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> findByArticleId(final Long articleId) {
+    public List<CommentResponseDto> findComments(final Long articleId) {
         return Collections.unmodifiableList(
                 commentRepository.findByArticleId(articleId).stream()
-                        .map(article -> modelMapper.map(article, CommentResponseDto.class))
+                        .map(comment -> modelMapper.map(comment, CommentResponseDto.class))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponseDto> findByIdAndArticleId(final Long articleId, final Long commentId) {
+        Comment parent = findById(commentId);
+
+        return Collections.unmodifiableList(
+                commentRepository.findByParentAndArticleId(parent, articleId).stream()
+                        .map(comment -> modelMapper.map(comment, CommentResponseDto.class))
                         .collect(Collectors.toList())
         );
     }
 
     @Transactional
     public CommentResponseDto modify(final Long commentId,
-                                     final CommentFeature commentFeature,
+                                     final Content content,
                                      final Long articleId,
                                      final Long userId) {
         User user = userService.findById(userId);
         Article article = articleService.findById(articleId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(NotFoundCommentException::new);
-        comment.modify(commentFeature, user, article);
+        comment.modify(content, user, article);
 
         return modelMapper.map(comment, CommentResponseDto.class);
     }
@@ -91,9 +104,12 @@ public class CommentService {
         return true;
     }
 
-    // TODO: CommentService 안에서 findById()를 사용하는 부분을 이 메서드로 변경하기
+    @Transactional(readOnly = true)
     protected Comment findById(final Long commentId) {
-        return commentRepository.findById(commentId)
-                .orElseThrow(NotFoundCommentException::new);
+        if (commentId == null) {
+            return null;
+        }
+
+        return commentRepository.findById(commentId).orElseThrow(NotFoundCommentException::new);
     }
 }

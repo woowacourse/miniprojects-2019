@@ -1,6 +1,7 @@
 package com.woowacourse.sunbook;
 
 import com.woowacourse.sunbook.application.dto.article.ArticleResponseDto;
+import com.woowacourse.sunbook.application.dto.comment.CommentResponseDto;
 import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.dto.user.UserUpdateRequestDto;
@@ -11,7 +12,7 @@ import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.domain.article.ArticleRepository;
 import com.woowacourse.sunbook.domain.comment.Comment;
-import com.woowacourse.sunbook.domain.comment.CommentFeature;
+import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.comment.CommentRepository;
 import com.woowacourse.sunbook.domain.relation.Relation;
 import com.woowacourse.sunbook.domain.relation.RelationRepository;
@@ -62,6 +63,9 @@ public class MockStorage {
     protected Comment comment;
 
     @Mock
+    protected CommentResponseDto commentResponseDto;
+
+    @Mock
     protected UserRepository userRepository;
     
     @Mock
@@ -104,7 +108,7 @@ public class MockStorage {
     protected Article otherArticle;
 
     @Mock
-    protected CommentFeature commentFeature;
+    protected Content content;
 
     @Mock
     protected ReactionCommentRepository reactionCommentRepository;
