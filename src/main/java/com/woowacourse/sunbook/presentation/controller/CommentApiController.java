@@ -19,13 +19,6 @@ public class CommentApiController {
         this.commentService = commentService;
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<CommentResponseDto>> show(@PathVariable final Long articleId) {
-//        List<CommentResponseDto> commentResponseDto = commentService.findComments(articleId);
-//
-//        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
-//    }
-
     @GetMapping(value = {"", "/{commentId}"})
     public ResponseEntity<List<CommentResponseDto>> show(@PathVariable final Long articleId,
                                                        @PathVariable(required = false) final Long commentId) {
