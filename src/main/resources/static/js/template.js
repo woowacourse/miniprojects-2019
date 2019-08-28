@@ -102,3 +102,12 @@ const getCommentTemplate = (commentId, userName, contents) => {
     </div>
       `;
 };
+
+const getMypageArticleTemplate = function (articleId, imgUrl) {
+    return `
+    <div>
+        <a href="/articles/${articleId}">
+            <img src=${imgUrl}>
+        </a>
+    </div>`
+}
