@@ -18,11 +18,11 @@ class Follow {
 
     deleteFollow = () => {
         return this.request.delete('/')
-    }
+    };
 
     followersNum = (callback) => {
         return this.request.get('/followers/num', callback)
-    }
+    };
 
     followingsNum = (callback) => {
         return this.request.get('/followings/num', callback)

@@ -108,4 +108,4 @@ const getMypageArticleTemplate = function (articleId, imgUrl) {
             <img src=${imgUrl}>
         </a>
     </div>`
-}
+};

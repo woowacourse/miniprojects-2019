@@ -32,7 +32,7 @@ const mypage = (function () {
             followButton();
             modalButton();
             loadInit();
-        }
+        };
 
         return {
             init: init
@@ -65,7 +65,7 @@ const mypage = (function () {
                     for (let i = 0; i <= rowNum; i++) {
                         let row = "";
                         for (let j = 0; j < 3; j++) {
-                            if ( (i * 3 + j) < data.content.length) {
+                            if ((i * 3 + j) < data.content.length) {
                                 row += getMypageArticleTemplate(data.content[i * 3 + j].article.id, data.content[i * 3 + j].article.imageUrl);
                             }
                         }
@@ -131,7 +131,7 @@ const mypage = (function () {
                 followers.innerHTML = "";
                 followers.insertAdjacentHTML('beforeend', `<strong>${data}</strong>`);
             })
-        }
+        };
 
         return {
             getPageData: getPageData,
@@ -141,7 +141,7 @@ const mypage = (function () {
             getFollowers: getFollowers,
             getFollowings: getFollowings
         }
-    }
+    };
 
     const init = () => {
         const mypageController = new MypageController();

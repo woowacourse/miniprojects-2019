@@ -44,7 +44,7 @@ const User = (function () {
         const request = new Request("/api/users");
 
         const modalActive = () => {
-            if (loggedUserEmail === mypageUserEmail) {
+            if (loggedinUserEmail === mypageUserEmail) {
                 profileImageModal.active()
             }
         };

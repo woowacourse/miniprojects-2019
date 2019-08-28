@@ -27,7 +27,7 @@ const Comment = (function () {
         const request = new Request(`/api/articles/${articleId}/comments`);
 
         const commentTemplate =
-                `<div class="profile">
+            `<div class="profile">
                     <img src={{userInfoDto.profile}}>
                     <div class="profile-text">
                         <span class="profile-name"><a href="/{{userInfoDto.userContentsDto.userName}}">

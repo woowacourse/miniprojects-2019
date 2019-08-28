@@ -47,20 +47,20 @@ const Index = (function () {
             })
         };
 
-        const copyButton = () =>{
-            articleList.addEventListener('click',(event)=>{
-                if(event.target.classList.contains("copy-btn")) {
+        const copyButton = () => {
+            articleList.addEventListener('click', (event) => {
+                if (event.target.classList.contains("copy-btn")) {
                     const articleId = event.target.closest('.article-card').dataset.articleId;
                     indexService.copyArticleLink(articleId);
                 }
             })
-        }
+        };
 
         const init = function () {
             loadInit();
             likeButton();
             commentSubmitButton();
-            commentSubmitKey()
+            commentSubmitKey();
             copyButton();
         };
 
@@ -177,15 +177,15 @@ const Index = (function () {
             })
         };
 
-        const copyArticleLink = (articleId)=>{
+        const copyArticleLink = (articleId) => {
             const temp = document.createElement("textarea");
             document.body.appendChild(temp);
-            temp.value = window.location.host+ "/articles/"+articleId;
+            temp.value = window.location.host + "/articles/" + articleId;
             temp.select();
             document.execCommand('copy');
             document.body.removeChild(temp);
             alert("게시글 링크가 복사되었습니다!")
-        }
+        };
 
 
         return {
@@ -193,7 +193,7 @@ const Index = (function () {
             eventLike: eventLike,
             createComment: createComment,
             getLoggedInData: getLoggedInData,
-            copyArticleLink:copyArticleLink
+            copyArticleLink: copyArticleLink
         }
     };
 

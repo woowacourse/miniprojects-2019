@@ -14,7 +14,7 @@ searchRequest.get(`/${tagName}?page=${pageNum}&size=${pageSize}&sort=id,DESC`, (
     for (let i = 0; i <= rowNum; i++) {
         let row = "";
         for (let j = 0; j < 3; j++) {
-            if ( (i * 3 + j) < data.content.length) {
+            if ((i * 3 + j) < data.content.length) {
                 row += getMypageArticleTemplate(data.content[i * 3 + j].article.id, data.content[i * 3 + j].article.imageUrl);
             }
         }
