@@ -42,6 +42,7 @@ public class Video {
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
+    @Column(nullable = false)
     private int viewCount;
 
     public Video() {
