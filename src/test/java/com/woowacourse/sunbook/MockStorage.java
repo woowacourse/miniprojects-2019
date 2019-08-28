@@ -6,6 +6,7 @@ import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.dto.user.UserUpdateRequestDto;
 import com.woowacourse.sunbook.application.service.ArticleService;
+import com.woowacourse.sunbook.application.service.CommentService;
 import com.woowacourse.sunbook.application.service.UserService;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
@@ -17,6 +18,8 @@ import com.woowacourse.sunbook.domain.relation.Relation;
 import com.woowacourse.sunbook.domain.relation.RelationRepository;
 import com.woowacourse.sunbook.domain.reaction.ReactionArticle;
 import com.woowacourse.sunbook.domain.reaction.ReactionArticleRepository;
+import com.woowacourse.sunbook.domain.reaction.ReactionComment;
+import com.woowacourse.sunbook.domain.reaction.ReactionCommentRepository;
 import com.woowacourse.sunbook.domain.user.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -106,6 +109,15 @@ public class MockStorage {
 
     @Mock
     protected Content content;
+
+    @Mock
+    protected ReactionCommentRepository reactionCommentRepository;
+
+    @Mock
+    protected CommentService commentService;
+
+    @Mock
+    protected ReactionComment reactionComment;
 
     @Mock
     protected RelationRepository relationRepository;

@@ -1,6 +1,5 @@
 const CommentApp = (() => {
     const commentTemplate = Handlebars.compile(template.comment);
-    const subCommentTemplate = Handlebars.compile(template.subComment);
     const commentArea = Handlebars.compile(template.commentArea);
 
     const CommentController = function () {
@@ -156,6 +155,7 @@ const CommentApp = (() => {
                                                 "comment-contents": comment.content.contents,
                                                 "updatedTime": comment.updatedTime,
                                             }));
+                                        ReactionApp.service().showGoodCount('comment', comment.id);
                                     })
                                 })
                                 .catch(error => console.log("error: " + error));

@@ -1,7 +1,7 @@
 package com.woowacourse.sunbook.domain.reaction;
 
 import com.woowacourse.sunbook.domain.BaseEntity;
-import com.woowacourse.sunbook.domain.article.Article;
+import com.woowacourse.sunbook.domain.comment.Comment;
 import com.woowacourse.sunbook.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,11 +15,11 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Entity
-public class ReactionArticle extends BaseEntity {
+public class ReactionComment extends BaseEntity {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Article article;
+    private Comment comment;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -27,9 +27,9 @@ public class ReactionArticle extends BaseEntity {
 
     private Boolean hasGood;
 
-    public ReactionArticle(final User author, final Article article) {
+    public ReactionComment(final User author, final Comment comment) {
+        this.comment = comment;
         this.author = author;
-        this.article = article;
         this.hasGood = false;
     }
 
