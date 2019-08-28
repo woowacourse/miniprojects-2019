@@ -35,7 +35,7 @@ public class MypageService {
         User user = userService.findUserByUserName(userName);
         return articleService.findPageByUsers(Arrays.asList(user), pageable).map((article) -> MypageArticleDto.from(article,
                 (long) likesService.findLikedUserByArticleId(article.getId()).size(),
-                (long) commentService.findByArticleId(article.getId(), user.getEmail()).size()
+                (long) commentService.countByArticleId(article.getId())
         ));
     }
 

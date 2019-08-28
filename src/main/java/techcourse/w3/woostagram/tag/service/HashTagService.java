@@ -1,5 +1,7 @@
 package techcourse.w3.woostagram.tag.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import techcourse.w3.woostagram.article.domain.Article;
@@ -35,5 +37,9 @@ public class HashTagService {
 
     public List<HashTag> findByNameContaining(String query) {
         return hashTagRepository.findTop10ByTag_NameContainingIgnoreCaseOrderByTag_Name(query);
+    }
+
+    public Page<HashTag> findByName(String name, Pageable pageable) {
+        return hashTagRepository.findByTag_Name(name, pageable);
     }
 }
