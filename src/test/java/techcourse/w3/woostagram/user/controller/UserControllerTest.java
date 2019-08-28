@@ -99,13 +99,6 @@ class UserControllerTest extends AbstractControllerTests {
     }
 
     @Test
-    void show_correct_isOk() {
-        assertThat(getRequest("/users/mypage")
-                .getStatus()
-                .is2xxSuccessful()).isTrue();
-    }
-
-    @Test
     void updateForm_correct_isOk() {
         assertThat(getRequest("/users/mypage-edit/form")
                 .getStatus()

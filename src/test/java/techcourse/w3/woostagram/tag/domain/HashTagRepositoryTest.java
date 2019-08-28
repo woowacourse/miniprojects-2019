@@ -26,7 +26,7 @@ class HashTagRepositoryTest {
                 .email("ab@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
-                        .userName("a@naver.com")
+                        .userName("user1")
                         .build())
                 .build();
         User persistUser = testEntityManager.persist(user);

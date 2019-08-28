@@ -31,7 +31,7 @@ public class FollowRepositoryTest {
                 .email("ab@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
-                        .userName("a@naver.com")
+                        .userName("user1")
                         .build())
                 .build();
 
@@ -39,7 +39,7 @@ public class FollowRepositoryTest {
                 .email("abc@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
-                        .userName("ac@naver.com")
+                        .userName("user2")
                         .build())
                 .build();
 
@@ -47,7 +47,7 @@ public class FollowRepositoryTest {
                 .email("abcd@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
-                        .userName("ad@naver.com")
+                        .userName("user3")
                         .build())
                 .build();
 

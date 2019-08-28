@@ -6,4 +6,8 @@ public class UserUpdateException extends RuntimeException {
     public UserUpdateException() {
         super(ERROR_USER_CREATE);
     }
+
+    public UserUpdateException(String message) {
+        super(message);
+    }
 }

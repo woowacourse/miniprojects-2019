@@ -44,7 +44,7 @@ class LikesServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = User.builder().id(1L).email("a@naver.com").userContents(UserContents.builder().build()).build();
+        user = User.builder().id(1L).email("a@naver.com").userContents(UserContents.builder().userName("user").build()).build();
         article = Article.builder().user(user).build();
         likes = Likes.builder().article(article).user(user).build();
     }

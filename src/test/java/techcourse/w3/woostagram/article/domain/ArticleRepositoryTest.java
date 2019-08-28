@@ -27,7 +27,7 @@ class ArticleRepositoryTest {
                 .email("ab@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
-                        .userName("a@naver.com")
+                        .userName("user1")
                         .build())
                 .build();
 
@@ -35,7 +35,7 @@ class ArticleRepositoryTest {
                 .email("abc@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
-                        .userName("ac@naver.com")
+                        .userName("user2")
                         .build())
                 .build();
 
