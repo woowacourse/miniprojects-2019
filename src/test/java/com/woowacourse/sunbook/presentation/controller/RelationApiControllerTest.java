@@ -11,7 +11,7 @@ class RelationApiControllerTest extends TestTemplate {
     @Test
     void 상대방과_관계_확인() {
         String sessionId = loginSessionId(userRequestDto);
-        respondApi(loginAndRequest(HttpMethod.GET, "/api/friend/2", Relationship.NONE, HttpStatus.OK, sessionId))
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/friends/2", Relationship.NONE, HttpStatus.OK, sessionId))
                 .jsonPath("$..relationship").isEqualTo("NONE");
     }
 }

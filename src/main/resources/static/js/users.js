@@ -1,6 +1,16 @@
 const UsersApp = (() => {
+    const templateProfileUpdate = Handlebars.compile(template.friends.usersBtn.profileUpdate);
+    const templateNone = Handlebars.compile(template.friends.usersBtn.none);
+    const templateAdd = Handlebars.compile(template.friends.usersBtn.add);
+    const templateRequested = Handlebars.compile(template.friends.usersBtn.requested);
+    const templateFriend = Handlebars.compile(template.friends.usersBtn.friend);
+
     const UserController = function () {
         const userService = new UserService();
+
+        const render = () => {
+            userService.renderUserStatusBtn();
+        };
 
         const update = () => {
             const userUpdateBtn = document.getElementById('user-update-btn');
@@ -9,10 +19,11 @@ const UsersApp = (() => {
 
         const showUpdateModal = () => {
             const userUpdateModalBtn = document.getElementById('user-update-form-btn');
-            userUpdateModalBtn.addEventListener('click', userService.showUserUpdateModal);
+            !!userUpdateModalBtn && userUpdateModalBtn.addEventListener('click', userService.showUserUpdateModal);
         };
 
         const init = () => {
+            render();
             showUpdateModal();
             update();
         };
@@ -24,6 +35,138 @@ const UsersApp = (() => {
 
     const UserService = function () {
         const userApi = new UserApi();
+        const friendApi = FriendsApp.api;
+        const userBtn = document.getElementById('users-btn');
+        const userId = window.location.pathname.split("/")[2];
+
+        userApi.userInfo(userId)
+            .then(response => response.json())
+            .then(userInfo => {
+                const userPageName = document.getElementById("user-page-name");
+                userPageName.innerText = userInfo.userName.name;
+            });
+
+        const drawBtn = (relationship) => {
+            const userData = {'userId': userId};
+
+            if (relationship === 'NONE') {
+                userBtn.innerHTML = templateNone(userData);
+                const userFriendBtn = document.getElementById('friend-add-btn');
+                userFriendBtn.addEventListener('click', friendAdd);
+            } else if (relationship === 'ADD'){
+                userBtn.innerHTML = templateAdd(userData);
+                const userFriendBtn = document.getElementById('friend-requesting-btn');
+                userFriendBtn.addEventListener('click', friendRequesting);
+            } else if (relationship === 'REQUESTED') {
+                userBtn.innerHTML = templateRequested(userData);
+
+                const approveBtn = document.getElementById('friend-approve-btn');
+                approveBtn.addEventListener('click', friendApprove);
+                const rejectBtn = document.getElementById('friend-reject-btn');
+                rejectBtn.addEventListener('click', friendReject);
+            } else if (relationship === 'FRIEND') {
+                userBtn.innerHTML = templateFriend(userData);
+                const userFriendBtn = document.getElementById('friend-ing-btn');
+                userFriendBtn.addEventListener('click', friendRemove);
+            }
+        };
+
+        const renderUserStatusBtn = () => {
+
+            HeaderApp.loginUser()
+                .then(loginUser => {
+                    if (String(loginUser.id) === userId) {
+                        userBtn.innerHTML = templateProfileUpdate();
+                        const userUpdateModalBtn = document.getElementById('user-update-form-btn');
+                        userUpdateModalBtn.addEventListener('click', showUserUpdateModal);
+                    } else {
+                        friendApi.relation(userId).then(relation => {
+                            console.log('relation response :: ', relation);
+                            const relationship = relation.relationship;
+                            drawBtn(relationship);
+
+                        });
+                    }
+
+                })
+        };
+
+        const friendAdd = (event) => {
+            const target = event.target;
+            const toId = target.getAttribute('data-friend-id');
+            friendApi.add(toId)
+                .then(response => response.json())
+                .then(relation => {
+                    if (relation.hasOwnProperty('errorMessage')) {
+                        alert(relation.errorMessage);
+                    } else {
+                        drawBtn(relation.relationship);
+                    }
+                });
+        };
+
+        const friendApprove = (event) => {
+            const target = event.target;
+            const toId = target.getAttribute('data-friend-id');
+            friendApi.ok(toId)
+                .then(response => response.json())
+                .then(relation => {
+                    if (relation.hasOwnProperty('errorMessage')) {
+                        alert(relation.errorMessage);
+                    } else {
+                        drawBtn(relation.relationship);
+                    }
+                });
+        };
+
+        const friendReject = (event) => {
+            const target = event.target;
+            const toId = target.getAttribute('data-friend-id');
+            friendApi.no(toId)
+                .then(response => response.json())
+                .then(relation => {
+                    if (relation.hasOwnProperty('errorMessage')) {
+                        alert(relation.errorMessage);
+                    } else {
+                        drawBtn(relation.relationship);
+                    }
+                });
+        };
+
+        const friendRemove = (event) => {
+            const response = confirm('친구를 삭제 하시겠습니까?');
+            if (response === true) {
+                const target = event.target;
+                const toId = target.getAttribute('data-friend-id');
+                friendApi.remove(toId)
+                    .then(response => response.json())
+                    .then(relation => {
+                        console.log('relation response :: ', relation);
+                        if (relation.hasOwnProperty('errorMessage')) {
+                            alert(relation.errorMessage);
+                        } else {
+                            drawBtn(relation.relationship);
+                        }
+                    });
+            }
+        };
+
+        const friendRequesting = (event) => {
+            const response = confirm('친구 요청을 취소 하시겠습니까?');
+            if (response === true) {
+                const target = event.target;
+                const toId = target.getAttribute('data-friend-id');
+                friendApi.no(toId)
+                    .then(response => response.json())
+                    .then(relation => {
+                        if (relation.hasOwnProperty('errorMessage')) {
+                            alert(relation.errorMessage);
+                        } else {
+                            drawBtn(relation.relationship);
+                        }
+                    });
+            }
+        };
 
         const showUserUpdateModal = () => {
             const email = document.getElementById('user-update-email');
@@ -59,7 +202,6 @@ const UsersApp = (() => {
                 changePassword: changePassword.value
             };
 
-            console.log('회원 정보 수정 요청 ::', data);
             userApi.update(data)
                 .then(response => {
                     return response.json();
@@ -67,7 +209,6 @@ const UsersApp = (() => {
                     if (json.hasOwnProperty('errorMessage')) {
                         alert(json.errorMessage);
                     } else {
-                        console.log('회원 정보 수정 응답 ::', json);
                         nowPassword.value = "";
                         email.value = "";
                         lastName.value = "";
@@ -85,6 +226,7 @@ const UsersApp = (() => {
         return {
             showUserUpdateModal: showUserUpdateModal,
             update: update,
+            renderUserStatusBtn: renderUserStatusBtn,
         };
     };
 
@@ -93,9 +235,14 @@ const UsersApp = (() => {
             return Api.put('/api/users', data);
         };
 
+        const userInfo = (userId) => {
+            return Api.get('/api/users/' + userId);
+        };
+
         return {
             update: update,
-        }
+            userInfo: userInfo,
+        };
     };
 
     const init = () => {

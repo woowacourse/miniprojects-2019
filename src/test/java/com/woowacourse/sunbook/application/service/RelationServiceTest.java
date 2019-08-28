@@ -36,6 +36,8 @@ class RelationServiceTest extends MockStorage {
 
     @Test
     void 친구_신청() {
+        fromRelation = new Relation(from, to);
+
         given(userService.findById(1L)).willReturn(from);
         given(userService.findById(2L)).willReturn(to);
         given(relationRepository.findByFromAndTo(from, to)).willReturn(Optional.of(fromRelation));
@@ -43,7 +45,7 @@ class RelationServiceTest extends MockStorage {
         given(relationRepository.save(fromRelation)).willReturn(fromRelation);
         given(relationRepository.save(toRelation)).willReturn(toRelation);
 
-        assertThat(injectRelationService.addFriend(1L, 2L).getRelationship()).isEqualTo(Relationship.REQUESTED);
+        assertThat(injectRelationService.addFriend(1L, 2L).getRelationship()).isEqualTo(Relationship.ADD);
     }
 
     @Test

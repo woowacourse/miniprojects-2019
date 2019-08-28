@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/friend")
+@RequestMapping("/api/friends")
 public class RelationApiController {
     private final RelationService relationService;
 
@@ -18,15 +18,18 @@ public class RelationApiController {
         this.relationService = relationService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<RelationResponseDto>> show(LoginUser loginUser) {
+    @GetMapping("/friends")
+    public ResponseEntity<List<RelationResponseDto>> showFriends(LoginUser loginUser) {
         List<RelationResponseDto> friends = relationService.getFriends(loginUser.getId());
-        List<RelationResponseDto> requestedFriends = relationService.getRequestedFriends(loginUser.getId());
-
-        //error 남 Collections.unmodifiableList() 때문
-        friends.addAll(requestedFriends);
 
         return new ResponseEntity<>(friends, HttpStatus.OK);
+    }
+
+    @GetMapping("/friends/requested")
+    public ResponseEntity<List<RelationResponseDto>> showRequestedFriends(LoginUser loginUser) {
+        List<RelationResponseDto> requestedFriends = relationService.getRequestedFriends(loginUser.getId());
+
+        return new ResponseEntity<>(requestedFriends, HttpStatus.OK);
     }
 
     @GetMapping("/{toId}")

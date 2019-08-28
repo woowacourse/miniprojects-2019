@@ -69,6 +69,10 @@ public class UserService {
         return modelMapper.map(user, UserResponseDto.class);
     }
 
+    public UserResponseDto findUser(final Long id) {
+        return modelMapper.map(findById(id), UserResponseDto.class);
+    }
+
     protected User findById(final Long id) {
         return userRepository.findById(id).orElseThrow(NotFoundUserException::new);
     }

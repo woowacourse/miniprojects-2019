@@ -1,4 +1,4 @@
-package com.woowacourse.sunbook.domain.comment;
+package com.woowacourse.sunbook.domain;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -13,13 +13,13 @@ import javax.persistence.Lob;
 @Getter
 @EqualsAndHashCode(of = "contents")
 @Embeddable
-public class CommentFeature {
+public class Content {
 
     @Lob
     @Column(nullable = false)
     private String contents;
 
-   public CommentFeature(final String contents) {
+   public Content(final String contents) {
        this.contents = contents;
    }
 }

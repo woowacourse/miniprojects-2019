@@ -1,17 +1,13 @@
 package com.woowacourse.sunbook.domain.article;
 
-import com.woowacourse.sunbook.domain.comment.CommentFeature;
+import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.fileurl.FileUrl;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import javax.persistence.*;
 import java.util.regex.Pattern;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,7 +18,7 @@ public class ArticleFeature {
     private static final Pattern URL_PATTERN = Pattern.compile("^(https?):\\/\\/([^:\\/\\s]+)(:([^\\/]*))?((\\/[^\\s/\\/]+)*)?\\/?([^#\\s\\?]*)(\\?([^#\\s]*))?(#(\\w*))?$");
     private static final String EMPTY = "";
 
-    private CommentFeature contents;
+    private Content contents;
 
     @Embedded
     @AttributeOverrides({
@@ -36,7 +32,7 @@ public class ArticleFeature {
     })
     private FileUrl videoUrl;
 
-    public ArticleFeature(final CommentFeature contents, final FileUrl imageUrl, final FileUrl videoUrl) {
+    public ArticleFeature(final Content contents, final FileUrl imageUrl, final FileUrl videoUrl) {
         checkEmpty(contents.getContents(), imageUrl.getFileUrl(), videoUrl.getFileUrl());
         this.contents = contents;
         this.imageUrl = imageUrl;

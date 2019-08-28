@@ -1,6 +1,6 @@
 package com.woowacourse.sunbook.domain.article;
 
-import com.woowacourse.sunbook.domain.comment.CommentFeature;
+import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.fileurl.FileUrl;
 import com.woowacourse.sunbook.domain.fileurl.exception.InvalidUrlException;
 import org.junit.jupiter.api.Test;
@@ -15,10 +15,10 @@ class ArticleFeatureTest {
     private static final String WRONG_VIDEO_URL = "ABCDEFG";
     private static final String EMPTY = "";
 
-    private static final CommentFeature commentFeature = new CommentFeature(CONTENTS);
+    private static final Content commentFeature = new Content(CONTENTS);
     private static final FileUrl imageUrl = new FileUrl(IMAGE_URL);
     private static final FileUrl videoUrl = new FileUrl(VIDEO_URL);
-    private static final CommentFeature emptyContents = new CommentFeature(EMPTY);
+    private static final Content emptyContents = new Content(EMPTY);
     private static final FileUrl emptyUrl = new FileUrl(EMPTY);
 
     @Test
