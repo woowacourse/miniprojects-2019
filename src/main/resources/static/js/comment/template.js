@@ -53,7 +53,7 @@ const commentTemplate = (comment) => `
             </div>
             ${
                 (() => {
-                    if (comment.userResponse.id === localStorage.loginUserId) {
+                    if (comment.userResponse.id == localStorage.loginUserId) {
                         return commentEditDeleteDropdown
                     } else {
                         return ""
