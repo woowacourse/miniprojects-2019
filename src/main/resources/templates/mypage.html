@@ -10,7 +10,7 @@
     <div class="mypage-container container-fluid max-width-lg mx-auto" id="main-content">
         <header class="mypage-header">
             <div class="background pointer">
-                <span class="username">박경철</span>
+                <span class="username" th:text="${user.name}">박경철</span>
             </div>
             <div class="profile pointer" id="profile">
                 <input type="file" accept="image/*" name="profile">
