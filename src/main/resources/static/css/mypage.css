@@ -10,9 +10,7 @@
 }
 
 .user-img {
-    width: 80%;
-    height: auto;
-    position: absolute;
+    height: 100%;
 }
 
 .mypage-contents {
@@ -48,4 +46,9 @@
 
 .user-contents {
     padding: 20px;
+}
+
+.user-name {
+    display: inline;
+    font-weight: 600;
 }

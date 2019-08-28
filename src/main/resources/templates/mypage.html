@@ -15,8 +15,8 @@
                 <div>
                     <div class="profile">
                         <div class="profile-area">
-                            <div id="profile-image-btn" width="117">
-                                <img id="profile-image" class="img-circle user-img" width="117" alt="프로필 사진 바꾸기"
+                            <div id="profile-image-btn" class="img-circle">
+                                <img id="profile-image" class="user-img" alt="프로필 사진 바꾸기"
                                      th:src="${userPageInfo.userInfoDto.profile}">
                             </div>
                             <form id="image-form" enctype="multipart/form-data" method="post" role="presentation">
@@ -27,7 +27,7 @@
 
                         <div class="widget-feed mypage-contents">
                             <ul class="feed-action pdd-horizon-15 pdd-top-5">
-                                <li><h2 class="user-name" th:text="${userPageInfo.userInfoDto.userContentsDto.userName}">dlwlrma</h2></li>
+                                <li><h2 class="user-name" th:text="${userPageInfo.userInfoDto.userContentsDto.userName}"></h2></li>
                                 <li th:if="${userPageInfo.mine}">
                                     <a class="user-modal-btn">
                                         <i class="fa fa-cog" aria-hidden="true"></i>
@@ -52,6 +52,8 @@
                                 </li>
                             </ul>
                             <div class="user-contents">
+                                <h4 class="user-name" th:text="${userPageInfo.userInfoDto.userContentsDto.name}"></h4>
+                                <br>
                                 <span th:text="${userPageInfo.userInfoDto.userContentsDto.contents}"></span>
                             </div>
                         </div>
@@ -87,6 +89,8 @@
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script th:inline="javascript">
+    const mypageUserEmail = [[${userPageInfo.userInfoDto.email}]];
+    const loggedinUserEmail = [[${session.loggedInUser.email}]];
     const mine = [[${userPageInfo.mine}]];
     const following = [[${userPageInfo.following}]];
     const targetId = [[${userPageInfo.userInfoDto.id}]];

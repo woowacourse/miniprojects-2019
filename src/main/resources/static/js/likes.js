@@ -8,7 +8,7 @@ const Index = (function () {
 
         const loadInit = function () {
             indexService.getPageData(0);
-            document.querySelector("i").addEventListener("click", function(e) {
+            document.querySelector("i").addEventListener("click", function (e) {
                 e.stopPropagation();
                 e.preventDefault();
             });
@@ -52,7 +52,7 @@ const Index = (function () {
 
         const eventLike = (articleId, isLike, e) => {
             like.addLike(articleId, isLike)
-                .then(()=>{
+                .then(() => {
                     e.childNodes[1].classList.add("fa-heart");
                     e.childNodes[1].classList.remove("fa-heart-o");
                 });

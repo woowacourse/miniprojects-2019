@@ -15,18 +15,18 @@ axios.get('/api/users/loggedin')
     });
 
 function openSocket(userId) {
-    let socket = new SockJS("http://127.0.0.1:8080/portfolio");
-    let stompClient = Stomp.over(socket);
+    const socket = new SockJS("http://127.0.0.1:8080/portfolio");
+    const stompClient = Stomp.over(socket);
 
-    let connectCallback = () => {
+    const connectCallback = () => {
         stompClient.subscribe("/topic/alarm/likes/" + userId, function (message) {
-            let json = JSON.parse(message.body);
+            const json = JSON.parse(message.body);
             const messages = document.querySelector('.dropdown-con>.dropdown-menu');
             messages.insertAdjacentHTML('afterbegin', `<a class="dropdown-item" href="/articles/${json.articleId}">${json.message}</a>`);
         });
 
-        stompClient.subscribe("/topic/alarm/follows/" + userId, function(message) {
-            let json = JSON.parse(message.body);
+        stompClient.subscribe("/topic/alarm/follows/" + userId, function (message) {
+            const json = JSON.parse(message.body);
             const messages = document.querySelector('.dropdown-con>.dropdown-menu');
             messages.insertAdjacentHTML('afterbegin', `<a class="dropdown-item" href="/${json.targetName}">${json.message}</a>`);
         });
