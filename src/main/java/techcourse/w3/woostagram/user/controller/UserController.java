@@ -5,9 +5,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
+import techcourse.w3.woostagram.user.dto.UserCreateDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
+import techcourse.w3.woostagram.user.exception.UserCreateException;
 import techcourse.w3.woostagram.user.exception.UserUpdateException;
 import techcourse.w3.woostagram.user.service.UserService;
 
@@ -48,7 +50,10 @@ public class UserController {
     }
 
     @PostMapping("signup")
-    public String create(UserDto userDto) {
+    public String create(@Valid UserCreateDto userDto, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new UserCreateException(result.getFieldError().getDefaultMessage());
+        }
         userService.save(userDto);
         return "redirect:/users/login/form";
     }
