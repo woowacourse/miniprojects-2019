@@ -43,7 +43,7 @@ public class AwsS3Service implements StorageService {
             file.createNewFile();
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(multipartFile.getBytes());
-            ImageResizeUtils.imageResize(fileExtension, file, resizedFile);
+            ImageResizeUtils.resizeImage(fileExtension, file, resizedFile);
             s3.putObject(BUCKET_NAME, fileName, resizedFile);
         } catch (AmazonServiceException e) {
             System.err.println(e.getErrorMessage());
