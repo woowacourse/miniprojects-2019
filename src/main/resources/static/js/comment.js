@@ -27,16 +27,17 @@ const Comment = (function () {
         const request = new Request(`/api/articles/${articleId}/comments`);
 
         const commentTemplate =
-            `<div class="contents-inner">
-                <div class="profile">
+                `<div class="profile">
                     <img src={{userInfoDto.profile}}>
                     <div class="profile-text">
-                        <span class="profile-name">{{userInfoDto.userContentsDto.userName}}</span>
+                        <span class="profile-name"><a href="/{{userInfoDto.userContentsDto.userName}}">
+                            {{userInfoDto.userContentsDto.userName}}</a></span>
                         <span class="contents-para">{{contents}}</span>
                     </div>
-                    <button class="comment-delete" data-id={{id}}>삭제</button>
-                </div>
-            </div>`;
+                    <div class="comment-delete" data-id={{id}}>                
+                        <i class=" fa fa-times" aria-hidden="true"></i>
+                    </div>
+                </div>`;
 
         const commentItemTemplate = Handlebars.compile(commentTemplate);
 
@@ -67,6 +68,11 @@ const Comment = (function () {
         };
 
         const remove = (event) => {
+            console.log(event.target.classList.contains("comment-delete"));
+            if (!event.target.classList.contains("comment-delete")) {
+                return;
+            }
+
             const commentId = event.target.getAttribute("data-id");
 
             request.delete('/' + commentId, (status, data) => {
