@@ -14,7 +14,7 @@ import javax.persistence.Lob;
 @EqualsAndHashCode
 @ToString
 public class UserContents {
-    private static final String USER_NAME_REGEX = "[A-Za-z0-9_.]{30}";
+    private static final String USER_NAME_REGEX = "[A-Za-z0-9_.]+";
     public static final String BLANK_ERROR_MESSAGE = "userName은 빈칸을 허용하지 않는 항목입니다.";
     public static final String PATTERN_ERROR_MESSAGE = "사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다.";
     public static final String LENGTH_ERROR_MESSAGE = "이름을 30자 미만으로 입력하세요.";
@@ -36,7 +36,7 @@ public class UserContents {
 
     private String validateUserName(String userName) {
         checkBlank(userName);
-        //checkPattern(userName);
+        checkPattern(userName);
         checkLength(userName);
         return userName;
     }

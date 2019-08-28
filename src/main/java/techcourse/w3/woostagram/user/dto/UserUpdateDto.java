@@ -16,7 +16,7 @@ public class UserUpdateDto {
     private String name;
 
     @NotBlank(message = UserContents.BLANK_ERROR_MESSAGE)
-    @Pattern(regexp = "[A-Za-z0-9_.]", message = UserContents.PATTERN_ERROR_MESSAGE)
+    @Pattern(regexp = "[A-Za-z0-9_.]+", message = UserContents.PATTERN_ERROR_MESSAGE)
     @Size(min = 1, max = 29, message = UserContents.LENGTH_ERROR_MESSAGE)
     private String userName;
 

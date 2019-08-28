@@ -13,6 +13,8 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode
 @ToString
 public class UserDto {
+    private static final String DEFAULT_USER_NAME = "default";
+
     @Email(message = User.ERROR_EMAIL)
     private String email;
 
@@ -25,12 +27,21 @@ public class UserDto {
         this.password = password;
     }
 
+//    public User toEntity() {
+//        return User.builder()
+//                .email(email)
+//                .password(password)
+//                .userContents(UserContents.builder()
+//                        .userName(email).build())
+//                .build();
+//    }
+
     public User toEntity() {
         return User.builder()
                 .email(email)
                 .password(password)
                 .userContents(UserContents.builder()
-                        .userName(email).build())
+                        .userName(DEFAULT_USER_NAME).build())
                 .build();
     }
 }
