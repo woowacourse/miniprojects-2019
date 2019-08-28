@@ -90,6 +90,10 @@ public class Video {
         viewCount++;
     }
 
+    public boolean isNotMatch(Long videoId) {
+        return id != videoId;
+    }
+
     public Long getId() {
         return id;
     }

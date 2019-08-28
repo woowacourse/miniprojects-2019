@@ -73,4 +73,8 @@ public class User {
     public boolean isNotMatchPassword(String password) {
         return !this.password.equals(password);
     }
+
+    public boolean isNotMatch(Long userId) {
+        return id != userId;
+    }
 }

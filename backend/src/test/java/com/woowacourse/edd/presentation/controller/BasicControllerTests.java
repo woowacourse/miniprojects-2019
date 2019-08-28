@@ -32,25 +32,33 @@ public class BasicControllerTests {
         return getLoginCookie(new LoginRequestDto(DEFAULT_LOGIN_EMAIL, DEFAULT_LOGIN_PASSWORD));
     }
 
-    protected void assertFailBadRequest(StatusAssertions statusAssertions, String errorMessage) {
-        WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
-            .isBadRequest()
+    protected void assertFailBadRequest(WebTestClient.ResponseSpec responseSpec, String errorMessage) {
+        WebTestClient.BodyContentSpec bodyContentSpec = responseSpec
+            .expectStatus().isBadRequest()
             .expectBody();
 
         checkErrorResponse(bodyContentSpec, errorMessage);
     }
 
-    protected void assertFailNotFound(StatusAssertions statusAssertions, String errorMessage) {
-        WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
-            .isNotFound()
+    protected void assertFailNotFound(WebTestClient.ResponseSpec responseSpecs, String errorMessage) {
+        WebTestClient.BodyContentSpec bodyContentSpec = responseSpecs
+            .expectStatus().isNotFound()
             .expectBody();
 
         checkErrorResponse(bodyContentSpec, errorMessage);
     }
 
-    protected void assertFailUnauthorized(StatusAssertions statusAssertions, String errorMessage) {
-        WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
-            .isUnauthorized()
+    protected void assertFailForbidden(WebTestClient.ResponseSpec responseSpec, String errorMessage) {
+        WebTestClient.BodyContentSpec bodyContentSpec = responseSpec
+            .expectStatus().isForbidden()
+            .expectBody();
+
+        checkErrorResponse(bodyContentSpec, errorMessage);
+    }
+
+    protected void assertFailUnauthorized(WebTestClient.ResponseSpec responseSpec, String errorMessage) {
+        WebTestClient.BodyContentSpec bodyContentSpec = responseSpec
+            .expectStatus().isUnauthorized()
             .expectBody();
 
         checkErrorResponse(bodyContentSpec, errorMessage);
@@ -82,21 +90,19 @@ public class BasicControllerTests {
             .uri(USER_URL)
             .body(Mono.just(userSaveRequestDto), UserSaveRequestDto.class)
             .exchange()
-            .expectStatus()
-            .isCreated()
-            .expectHeader().valueMatches("Location", USER_URL + "/\\d")
+            .expectStatus().isCreated()
+            .expectHeader().valueMatches("Location", USER_URL + "/\\d+")
             .expectBody()
             .returnResult();
     }
 
-    protected StatusAssertions requestLogin(LoginRequestDto loginRequestDto) {
+    protected WebTestClient.ResponseSpec requestLogin(LoginRequestDto loginRequestDto) {
         return executePost(LOGIN_URL).body(Mono.just(loginRequestDto), LoginRequestDto.class)
-            .exchange()
-            .expectStatus();
+            .exchange();
     }
 
     protected String getLoginCookie(LoginRequestDto loginRequestDto) {
-        return requestLogin(loginRequestDto).isOk()
+        return requestLogin(loginRequestDto).expectStatus().isOk()
             .expectBody()
             .returnResult()
             .getResponseCookies()

@@ -5,6 +5,7 @@ import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.StatusAssertions;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static com.woowacourse.edd.exceptions.PasswordNotMatchException.PASSWORD_NOT_MATCH_MESSAGE;
 import static com.woowacourse.edd.exceptions.UnauthenticatedException.UNAUTHENTICATED_MESSAGE;
@@ -17,7 +18,7 @@ public class LoginControllerTests extends BasicControllerTests {
     @Test
     void login() {
         LoginRequestDto loginRequestDto = new LoginRequestDto(DEFAULT_LOGIN_EMAIL, DEFAULT_LOGIN_PASSWORD);
-        requestLogin(loginRequestDto).isOk();
+        requestLogin(loginRequestDto).expectStatus().isOk();
     }
 
     @Test
@@ -72,10 +73,9 @@ public class LoginControllerTests extends BasicControllerTests {
     @Test
     @DisplayName("비로그인 상태에서 로그인 정보 조회")
     void lookup_fail() {
-        StatusAssertions statusAssertions = executeGet(LOOKUP_URL)
-            .exchange()
-            .expectStatus();
+        WebTestClient.ResponseSpec responseSpec = executeGet(LOOKUP_URL)
+            .exchange();
 
-        assertFailUnauthorized(statusAssertions, UNAUTHENTICATED_MESSAGE);
+        assertFailUnauthorized(responseSpec, UNAUTHENTICATED_MESSAGE);
     }
 }

@@ -5,7 +5,7 @@ public class VideoUpdateRequestDto {
     private String title;
     private String contents;
 
-    public VideoUpdateRequestDto() {
+    private VideoUpdateRequestDto() {
     }
 
     public VideoUpdateRequestDto(String youtubeId, String title, String contents) {

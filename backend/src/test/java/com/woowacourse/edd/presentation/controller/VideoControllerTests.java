@@ -24,13 +24,14 @@ public class VideoControllerTests extends BasicControllerTests {
 
     @Test
     void find_video_by_id() {
-        findVideo("/" + DEFAULT_VIDEO_ID).isOk()
+        findVideo("/" + DEFAULT_VIDEO_ID)
+            .expectStatus().isOk()
             .expectBody()
             .jsonPath("$.id").isNotEmpty()
             .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
             .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
             .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
-            .jsonPath("$.viewCount").isEqualTo(DEFAULT_VIDEO_VIEW_COUNT)
+            .jsonPath("$.viewCount").isEqualTo(DEFAULT_VIDEO_VIEW_COUNT + 1)
             .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(DEFAULT_VIDEO_DATETIME))
             .jsonPath("$.creator.id").isEqualTo(DEFAULT_VIDEO_ID)
             .jsonPath("$.creator.name").isEqualTo(DEFAULT_LOGIN_NAME);
@@ -52,7 +53,9 @@ public class VideoControllerTests extends BasicControllerTests {
             .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("555", "title5", "contents5"), jsessionid))
             .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("666", "title6", "contents6"), jsessionid));
 
-        findVideos(0, 6, "createDate", "DESC").isOk().expectBody()
+        findVideos(0, 6, "createDate", "DESC")
+            .expectStatus().isOk()
+            .expectBody()
             .jsonPath("$.content.length()").isEqualTo(6)
             .jsonPath("$.content[0].youtubeId").isEqualTo("666")
             .jsonPath("$.content[0].viewCount").isEqualTo(0)
@@ -65,7 +68,8 @@ public class VideoControllerTests extends BasicControllerTests {
     void save() {
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
-        saveVideo(videoSaveRequestDto, getDefaultLoginSessionId()).isCreated()
+        saveVideo(videoSaveRequestDto, getDefaultLoginSessionId())
+            .expectStatus().isCreated()
             .expectBody()
             .jsonPath("$.id").isNotEmpty()
             .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
@@ -105,19 +109,29 @@ public class VideoControllerTests extends BasicControllerTests {
 
     @Test
     void update() {
-        save();
+        String jsessionid = getDefaultLoginSessionId();
+        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
-        Long id = 2L;
+        String returnUrl = saveVideo(videoSaveRequestDto, jsessionid)
+            .expectStatus().isCreated()
+            .expectBody()
+            .returnResult()
+            .getResponseHeaders()
+            .getLocation()
+            .toASCIIString();
+
+        String[] urls = returnUrl.split("/");
+        Long id = Long.valueOf(urls[urls.length - 1]);
         String youtubeId = "updateYoutubeId";
         String title = "updateTitle";
         String contetns = "updateContents";
 
         VideoUpdateRequestDto videoUpdateRequestDto = new VideoUpdateRequestDto(youtubeId, title, contetns);
 
-        updateVideo(id, videoUpdateRequestDto, getDefaultLoginSessionId())
-            .isOk()
+        updateVideo(id, videoUpdateRequestDto, jsessionid)
+            .expectStatus().isOk()
             .expectHeader()
-            .valueMatches("location", VIDEOS_URI + "/" + id)
+            .valueMatches("location", returnUrl)
             .expectBody()
             .jsonPath("$.id").isEqualTo(id);
     }
@@ -135,33 +149,36 @@ public class VideoControllerTests extends BasicControllerTests {
     void update_view_count() {
         String sid = getDefaultLoginSessionId();
         String location = saveVideo(new VideoSaveRequestDto("abcdefg", "videos", "good video"), sid)
-            .isCreated()
+            .expectStatus().isCreated()
             .expectBody().returnResult().getResponseHeaders().getLocation().toASCIIString();
 
         webTestClient.get().uri(location)
             .exchange()
             .expectStatus().isOk()
             .expectBody()
-            .jsonPath("$.viewCount").isEqualTo(0)
+            .jsonPath("$.viewCount").isEqualTo(1)
             .consumeWith(res -> {
                 webTestClient.get().uri(location)
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
-                    .jsonPath("$.viewCount").isEqualTo(1);
+                    .jsonPath("$.viewCount").isEqualTo(2);
             });
     }
 
     @Test
     void delete() {
         EntityExchangeResult<byte[]> res = saveVideo(new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS), getDefaultLoginSessionId())
+            .expectStatus()
             .isCreated()
             .expectBody()
             .returnResult();
 
         String[] id = res.getResponseHeaders().getLocation().toASCIIString().split("/");
 
-        deleteVideo(Long.valueOf(id[id.length - 1]), getDefaultLoginSessionId()).isNoContent();
+        deleteVideo(Long.valueOf(id[id.length - 1]), getDefaultLoginSessionId())
+            .expectStatus()
+            .isNoContent();
     }
 
     @Test
@@ -169,13 +186,12 @@ public class VideoControllerTests extends BasicControllerTests {
         assertFailNotFound(deleteVideo(100L, getDefaultLoginSessionId()), "그런 비디오는 존재하지 않아!");
     }
 
-    private StatusAssertions findVideo(String uri) {
+    private WebTestClient.ResponseSpec findVideo(String uri) {
         return executeGet(VIDEOS_URI + uri)
-            .exchange()
-            .expectStatus();
+            .exchange();
     }
 
-    private StatusAssertions findVideos(int page, int size, String sort, String direction) {
+    private WebTestClient.ResponseSpec findVideos(int page, int size, String sort, String direction) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
         builder.path(VIDEOS_URI)
             .query("page=" + page)
@@ -183,34 +199,32 @@ public class VideoControllerTests extends BasicControllerTests {
             .query("sort=" + sort + "," + direction);
         String uri = builder.build().toUriString();
         return executeGet(uri)
-            .exchange()
-            .expectStatus();
+            .exchange();
     }
 
-    private StatusAssertions saveVideo(VideoSaveRequestDto videoSaveRequestDto, String jsessionid) {
+    private WebTestClient.ResponseSpec saveVideo(VideoSaveRequestDto videoSaveRequestDto, String jsessionid) {
         return executePost(VIDEOS_URI)
             .cookie(COOKIE_JSESSIONID, jsessionid)
             .body(Mono.just(videoSaveRequestDto), VideoSaveRequestDto.class)
-            .exchange()
-            .expectStatus();
+            .exchange();
     }
 
-    private StatusAssertions updateVideo(Long id, VideoUpdateRequestDto videoUpdateRequestDto, String jsessionid) {
+    private WebTestClient.ResponseSpec updateVideo(Long id, VideoUpdateRequestDto videoUpdateRequestDto, String jsessionid) {
         return executePut(VIDEOS_URI + "/" + id)
             .cookie(COOKIE_JSESSIONID, jsessionid)
             .body(Mono.just(videoUpdateRequestDto), VideoUpdateRequestDto.class)
-            .exchange()
-            .expectStatus();
+            .exchange();
     }
 
-    private StatusAssertions deleteVideo(Long id, String jsessionid) {
+    private WebTestClient.ResponseSpec deleteVideo(Long id, String jsessionid) {
         return executeDelete(VIDEOS_URI + "/" + id)
             .cookie(COOKIE_JSESSIONID, jsessionid)
-            .exchange()
-            .expectStatus();
+            .exchange();
     }
 
     private WebTestClient.BodyContentSpec saveNextVideo(VideoSaveRequestDto video, String sid) {
-        return saveVideo(video, sid).isCreated().expectBody();
+        return saveVideo(video, sid)
+            .expectStatus().isCreated()
+            .expectBody();
     }
 }
