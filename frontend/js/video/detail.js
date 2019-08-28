@@ -1,16 +1,21 @@
 const detailView = function() {
     const videoId = wootubeCtx.util.getUrlParams('id');
     api.requestVideo(videoId)
-    .then(response => response.json())
+    .then(response => {
+        if (response.status !== 200) {
+            response.json()
+            .then(err => {
+                alert('해당 동영상이 없습니다.');
+                window.location.href = "/"
+            })
+        } else {
+            return response.json()
+        }
+    })
     .then(data => detailVideo(data))
 }
 
 const detailVideo = function(data) {
-    if (data.result) {
-        alert('해당 동영상이 없습니다.');
-        return false;
-        // location.href = '/index.html';
-    }
     addVideoDetailTemplate(data)
 }
 
