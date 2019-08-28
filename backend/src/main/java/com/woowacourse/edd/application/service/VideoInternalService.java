@@ -36,6 +36,10 @@ class VideoInternalService {
             .orElseThrow(VideoNotFoundException::new);
     }
 
+    public void updateViewCount(Long videoId) {
+        findById(videoId).increaseViewCount();
+    }
+
     public Video update(Long id, VideoUpdateRequestDto requestDto) {
         Video video = findById(id);
         video.update(requestDto.getYoutubeId(), requestDto.getTitle(), requestDto.getContents());

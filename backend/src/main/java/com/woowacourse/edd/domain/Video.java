@@ -42,6 +42,9 @@ public class Video {
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
+    @Column(nullable = false)
+    private int viewCount;
+
     public Video() {
     }
 
@@ -53,6 +56,7 @@ public class Video {
         this.title = title.trim();
         this.contents = contents.trim();
         this.creator = creator;
+        this.viewCount = 0;
     }
 
     private void checkContents(String contents) {
@@ -82,6 +86,10 @@ public class Video {
         this.contents = contents;
     }
 
+    public void increaseViewCount() {
+        viewCount++;
+    }
+
     public Long getId() {
         return id;
     }
@@ -104,6 +112,10 @@ public class Video {
 
     public User getCreator() {
         return creator;
+    }
+
+    public int getViewCount() {
+        return viewCount;
     }
 
     @Override

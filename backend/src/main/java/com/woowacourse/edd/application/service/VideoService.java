@@ -47,6 +47,11 @@ public class VideoService {
         return VideoConverter.toUpdateResponse(video);
     }
 
+    public VideoResponse findWithIncreaseViewCount(Long videoId) {
+        videoInternalService.updateViewCount(videoId);
+        return VideoConverter.toResponse(videoInternalService.findById(videoId));
+    }
+
     public void delete(Long id) {
         videoInternalService.delete(id);
     }

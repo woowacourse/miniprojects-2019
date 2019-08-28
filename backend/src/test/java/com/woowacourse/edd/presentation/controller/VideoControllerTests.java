@@ -19,6 +19,7 @@ public class VideoControllerTests extends BasicControllerTests {
     private final String DEFAULT_VIDEO_CONTENTS = "내용";
     private final String VIDEOS_URI = "/v1/videos";
     private final LocalDateTime DEFAULT_VIDEO_DATETIME = LocalDateTime.of(2019, 5, 5, 15, 31, 23);
+    private final int DEFAULT_VIDEO_VIEW_COUNT = 100;
 
     @Test
     void find_video_by_id() {
@@ -28,6 +29,7 @@ public class VideoControllerTests extends BasicControllerTests {
             .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
             .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
             .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
+            .jsonPath("$.viewCount").isEqualTo(DEFAULT_VIDEO_VIEW_COUNT)
             .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(DEFAULT_VIDEO_DATETIME))
             .jsonPath("$.creator.id").isEqualTo(DEFAULT_VIDEO_ID)
             .jsonPath("$.creator.name").isEqualTo(DEFAULT_LOGIN_NAME);
@@ -51,6 +53,7 @@ public class VideoControllerTests extends BasicControllerTests {
         findVideos(0, 6, "createDate", "DESC").isOk().expectBody()
             .jsonPath("$.content.length()").isEqualTo(6)
             .jsonPath("$.content[0].youtubeId").isEqualTo("666")
+            .jsonPath("$.content[0].viewCount").isEqualTo(0)
             .jsonPath("$.content[3].youtubeId").isEqualTo("333")
             .jsonPath("$.content[5].youtubeId").isEqualTo("111")
             .jsonPath("$.content[5].creator.id").isEqualTo(DEFAULT_LOGIN_ID);
@@ -87,7 +90,6 @@ public class VideoControllerTests extends BasicControllerTests {
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, title, DEFAULT_VIDEO_CONTENTS);
 
         assertFailBadRequest(saveVideo(videoSaveRequestDto, getDefaultLoginSessionId()), "제목은 한 글자 이상이어야합니다");
-
     }
 
     @Test
@@ -116,7 +118,6 @@ public class VideoControllerTests extends BasicControllerTests {
             .valueMatches("location", VIDEOS_URI + "/" + id)
             .expectBody()
             .jsonPath("$.id").isEqualTo(id);
-
     }
 
     @Test
@@ -126,6 +127,27 @@ public class VideoControllerTests extends BasicControllerTests {
         VideoUpdateRequestDto videoUpdateRequestDto = new VideoUpdateRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
 
         assertFailNotFound(updateVideo(id, videoUpdateRequestDto, getDefaultLoginSessionId()), "그런 비디오는 존재하지 않아!");
+    }
+
+    @Test
+    void update_view_count() {
+        String sid = getDefaultLoginSessionId();
+        String location = saveVideo(new VideoSaveRequestDto("abcdefg", "videos", "good video"), sid)
+            .isCreated()
+            .expectBody().returnResult().getResponseHeaders().getLocation().toASCIIString();
+
+        webTestClient.get().uri(location)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .jsonPath("$.viewCount").isEqualTo(0)
+            .consumeWith(res -> {
+                webTestClient.get().uri(location)
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .jsonPath("$.viewCount").isEqualTo(1);
+            });
     }
 
     @Test

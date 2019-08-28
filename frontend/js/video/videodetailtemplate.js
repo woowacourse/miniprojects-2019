@@ -8,7 +8,7 @@ const addVideoDetailTemplate = function (data) {
         <div class="form-group row">
             <div class="col-md-12">
                 <h1 class="text-bold">${data.title}</h1>
-                <h4>조회수 1,000회</h4>
+                <h4>조회수 ${data.viewCount}회</h4>
             </div>
         </div>
         <hr>

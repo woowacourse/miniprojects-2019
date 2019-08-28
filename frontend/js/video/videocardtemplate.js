@@ -12,7 +12,7 @@ const addVideoCardTemplate = function (data, number, categorie) {
                 <h5 class="mrg-btm-10 no-mrg-top text-bold font-size-14 ls-0">${data[number].title}</h5>
                 <span class="font-size-13">${data[number].creator.name}</span>
                 <div class="font-size-13">
-                <span>조회수</span>
+                <span>조회수 ${data[number].viewCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
                 <span> · </span>
                 <span>${dateDifference}</span>
                 </div>
