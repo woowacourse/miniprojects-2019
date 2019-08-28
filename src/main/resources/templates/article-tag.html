@@ -3,6 +3,7 @@
       lang="ko">
 <head>
     <th:block th:replace="fragments/common-head :: common-head"></th:block>
+    <link rel="stylesheet" href="/css/mypage.css">
     <meta charset="UTF-8">
     <title>Tag Articles</title>
 </head>
@@ -36,6 +37,9 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    const tagName = [[${tagName}]];
+</script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
@@ -47,7 +51,7 @@
 <script src="/js/modal.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/util.js"></script>
-<script src="/js/user.js"></script>
 <script src="/js/tag.js"></script>
+<script src="/js/search.js"></script>
 </body>
 </html>

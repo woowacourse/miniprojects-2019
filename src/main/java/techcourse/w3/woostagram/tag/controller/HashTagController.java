@@ -12,8 +12,8 @@ import techcourse.w3.woostagram.tag.service.HashTagService;
 public class HashTagController {
 
     @GetMapping("/{hashTag}")
-    public String show(Model model, @PathVariable String tagName){
-        model.addAttribute("tagName",tagName);
-        return "article-hash";
+    public String show(Model model, @PathVariable String hashTag){
+        model.addAttribute("tagName",hashTag);
+        return "article-tag";
     }
 }

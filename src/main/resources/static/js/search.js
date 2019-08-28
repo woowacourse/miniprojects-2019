@@ -24,7 +24,7 @@ searchForm.addEventListener('input', (event) => {
         }
 
         for (tag of tags) {
-            searchList.insertAdjacentHTML('beforeend', `<a href="/tags/${tag.name.slice(1,tag.name.length)}"><p>${tag.name}</p></a>`);
+            searchList.insertAdjacentHTML('beforeend', `<a href="/tags/hash/${tag.name.slice(1,tag.name.length)}"><p>${tag.name}</p></a>`);
         }
     })
 });
