@@ -47,3 +47,8 @@
 .user-contents {
     padding: 20px;
 }
+
+.user-name {
+    display: inline;
+    font-weight: 600;
+}
