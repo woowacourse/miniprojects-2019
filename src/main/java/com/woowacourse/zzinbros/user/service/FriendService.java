@@ -1,10 +1,12 @@
 package com.woowacourse.zzinbros.user.service;
 
 import com.woowacourse.zzinbros.user.domain.Friend;
+import com.woowacourse.zzinbros.user.domain.FriendRequest;
 import com.woowacourse.zzinbros.user.domain.User;
 import com.woowacourse.zzinbros.user.domain.repository.FriendRepository;
+import com.woowacourse.zzinbros.user.domain.repository.FriendRequestRepository;
+import com.woowacourse.zzinbros.user.dto.FriendRequestDto;
 import com.woowacourse.zzinbros.user.dto.UserResponseDto;
-import com.woowacourse.zzinbros.user.exception.AlreadyFriendRequestExist;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,29 +17,81 @@ import java.util.stream.Collectors;
 @Transactional
 public class FriendService {
 
+    private final FriendRequestRepository friendRequestRepository;
     private final FriendRepository friendRepository;
+    private final UserService userService;
 
-    public FriendService(FriendRepository friendRepository) {
+    public FriendService(FriendRequestRepository friendRequestRepository,
+                         FriendRepository friendRepository,
+                         UserService userService) {
+        this.friendRequestRepository = friendRequestRepository;
         this.friendRepository = friendRepository;
+        this.userService = userService;
     }
 
-    public Friend sendFriendRequest(final User from, final User to) {
-        if (!friendRepository.existsByFromAndTo(from, to)) {
-            return friendRepository.save(Friend.of(from, to));
+    public boolean registerFriend(final UserResponseDto requestUser, final FriendRequestDto friendRequested) {
+        User sender = userService.findUserById(requestUser.getId());
+        User receiver = userService.findUserById(friendRequested.getRequestFriendId());
+        if (friendRequestRepository.existsBySenderAndReceiver(sender, receiver)) {
+            return false;
         }
-        throw new AlreadyFriendRequestExist("Already Friend Request");
+        return sendFriendRequest(sender, receiver);
     }
 
-    public boolean checkFriend(final User user, final User other) {
-        return friendRepository.existsByFromAndTo(user, other) && friendRepository.existsByFromAndTo(other, user);
+    private boolean sendFriendRequest(User sender, User receiver) {
+        if (friendRequestRepository.existsBySenderAndReceiver(receiver, sender)) {
+            friendRequestRepository.deleteBySenderAndReceiver(receiver, sender);
+            registerFriend(sender, receiver);
+            return true;
+        }
+        friendRequestRepository.save(new FriendRequest(sender, receiver));
+        return true;
     }
 
-    public Set<UserResponseDto> findFriendByUser(final User user) {
-        Set<Friend> friends = friendRepository.findByFrom(user);
+    private void registerFriend(User sender, User receiver) {
+        friendRepository.save(new Friend(sender, receiver));
+        friendRepository.save(new Friend(receiver, sender));
+    }
+
+    public Set<UserResponseDto> findFriendsByUser(final long id) {
+        User owner = userService.findUserById(id);
+        return this.friendToUserResponseDto(friendRepository.findAllByOwner(owner));
+    }
+
+    public Set<UserResponseDto> findFriendRequestsByUser(final UserResponseDto loginUserDto) {
+        return findFriendRequestsByUserId(loginUserDto.getId());
+    }
+
+    public Set<UserResponseDto> findFriendRequestsByUserId(final long id) {
+        User owner = userService.findUserById(id);
+        return friendRequestToUserResponseDto(friendRequestRepository.findAllByReceiver(owner));
+
+    }
+
+    public boolean isMyFriend(final long ownerId, final long slaveId) {
+        User owner = userService.findUserById(ownerId);
+        User slave = userService.findUserById(slaveId);
+        return friendRepository.existsByOwnerAndSlave(owner, slave);
+    }
+
+    public boolean readyToBeMyFriend(final long senderId, final long receiverId) {
+        User sender = userService.findUserById(senderId);
+        User receiver = userService.findUserById(receiverId);
+        return friendRequestRepository.existsBySenderAndReceiver(sender, receiver);
+    }
+
+    public Set<UserResponseDto> friendToUserResponseDto(Set<Friend> friends) {
         return friends.stream()
-                .filter(friend -> friend.isSameWithFrom(user))
-                .map(friend -> friend.getTo())
-                .map(u -> new UserResponseDto(u.getId(), u.getName(), u.getEmail()))
+                .map(friend -> friend.getSlave())
+                .map(user -> new UserResponseDto(user.getId(), user.getName(), user.getEmail()))
                 .collect(Collectors.toSet());
     }
+
+    public Set<UserResponseDto> friendRequestToUserResponseDto(Set<FriendRequest> friends) {
+        return friends.stream()
+                .map(friend -> friend.getSender())
+                .map(user -> new UserResponseDto(user.getId(), user.getName(), user.getEmail()))
+                .collect(Collectors.toSet());
+    }
+
 }

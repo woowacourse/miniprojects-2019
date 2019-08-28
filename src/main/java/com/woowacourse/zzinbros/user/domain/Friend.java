@@ -1,74 +1,57 @@
 package com.woowacourse.zzinbros.user.domain;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
+import com.woowacourse.zzinbros.common.domain.BaseEntity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
 
 @Table(
-        uniqueConstraints = @UniqueConstraint(columnNames = {"from_id", "to_id"})
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = {"owner_id", "slave_id"},
+                name = "UK_USER_SENDER_AND_RECEIVER")
 )
 @Entity
-public class Friend implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Friend extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "to_Id", foreignKey = @ForeignKey(name = "FRIEND_TO_OTHER"), updatable = false, nullable = false)
+    @JoinColumn(name = "owner_Id",
+            foreignKey = @ForeignKey(name = "FRIEND_TO_SENDER"),
+            updatable = false,
+            nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User to;
+    private User owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "from_Id", foreignKey = @ForeignKey(name = "FRIEND_TO_MASTER"), updatable = false, nullable = false)
+    @JoinColumn(name = "slave_Id",
+            foreignKey = @ForeignKey(name = "FRIEND_TO_RECEIVER"),
+            updatable = false,
+            nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User from;
+    private User slave;
+
 
     protected Friend() {
     }
 
-    private Friend(User from, User other) {
-        this.from = from;
-        this.to = other;
+    public Friend(User owner, User slave) {
+        this.owner = owner;
+        this.slave = slave;
     }
 
-    public static Friend of(User from, User to) {
-        Friend friend = new Friend(from, to);
-        return friend;
-    }
-
-    public boolean isSameWithFrom(User from) {
-        return this.from.equals(from);
+    public static Friend of(User owner, User slave) {
+        return new Friend(owner, slave);
     }
 
     public Long getId() {
         return id;
     }
 
-    public User getFrom() {
-        return from;
+    public User getOwner() {
+        return owner;
     }
 
-    public User getTo() {
-        return to;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Friend)) return false;
-        Friend friend = (Friend) o;
-        return Objects.equals(to, friend.to) &&
-                Objects.equals(from, friend.from);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(to, from);
+    public User getSlave() {
+        return slave;
     }
 }

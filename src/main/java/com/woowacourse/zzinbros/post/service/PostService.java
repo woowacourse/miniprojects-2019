@@ -2,13 +2,16 @@ package com.woowacourse.zzinbros.post.service;
 
 import com.woowacourse.zzinbros.post.domain.Post;
 import com.woowacourse.zzinbros.post.domain.PostLike;
+import com.woowacourse.zzinbros.post.domain.SharedPost;
 import com.woowacourse.zzinbros.post.domain.repository.PostLikeRepository;
 import com.woowacourse.zzinbros.post.domain.repository.PostRepository;
+import com.woowacourse.zzinbros.post.domain.repository.SharedPostRepository;
 import com.woowacourse.zzinbros.post.dto.PostRequestDto;
 import com.woowacourse.zzinbros.post.exception.PostNotFoundException;
 import com.woowacourse.zzinbros.post.exception.UnAuthorizedException;
 import com.woowacourse.zzinbros.user.domain.User;
 import com.woowacourse.zzinbros.user.service.UserService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +24,33 @@ public class PostService {
     private final UserService userService;
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
+    private final SharedPostRepository sharedPostRepository;
 
-    public PostService(UserService userService, PostRepository postRepository, PostLikeRepository postLikeRepository) {
+    public PostService(UserService userService,
+                       PostRepository postRepository,
+                       PostLikeRepository postLikeRepository,
+                       SharedPostRepository sharedPostRepository) {
         this.userService = userService;
         this.postRepository = postRepository;
         this.postLikeRepository = postLikeRepository;
+        this.sharedPostRepository = sharedPostRepository;
     }
 
     public Post add(PostRequestDto dto, long userId) {
         User user = userService.findUserById(userId);
         Post post = dto.toEntity(user);
+        return postRepository.save(post);
+    }
+
+    @Transactional
+    public Post add(PostRequestDto dto, long userId, long sharedPostId) {
+        User user = userService.findUserById(userId);
+        Post sharedPost = postRepository.findById(sharedPostId).orElseThrow(PostNotFoundException::new);
+        sharedPost.share();
+
+        sharedPostRepository.save(new SharedPost(user, sharedPost));
+        Post post = dto.toEntity(user, sharedPost);
+
         return postRepository.save(post);
     }
 
@@ -55,12 +75,12 @@ public class PostService {
         throw new UnAuthorizedException("작성자만 삭제할 수 있습니다.");
     }
 
-    public List<Post> readAll() {
-        return Collections.unmodifiableList(postRepository.findAll());
+    public List<Post> readAll(Sort sort) {
+        return Collections.unmodifiableList(postRepository.findAll(sort));
     }
 
-    public List<Post> readAllByUser(User user) {
-        return Collections.unmodifiableList(postRepository.findAllByAuthor(user));
+    public List<Post> readAllByUser(User user, Sort sort) {
+        return Collections.unmodifiableList(postRepository.findAllByAuthor(user, sort));
     }
 
     @Transactional
@@ -69,12 +89,12 @@ public class PostService {
         User user = userService.findUserById(userId);
         PostLike postLike = postLikeRepository.findByPostAndUser(post, user);
         if (Objects.isNull(postLike)) {
-            postLike = new PostLike(post, user);
-            post.addLike(postLike);
-            return post.getPostLikes().size();
+            post.addLike();
+            postLikeRepository.save(new PostLike(post, user));
+            return post.getCountOfLike();
         }
         postLikeRepository.delete(postLike);
-        post.removeLike(postLike);
-        return post.getPostLikes().size();
+        post.removeLike();
+        return post.getCountOfLike();
     }
 }

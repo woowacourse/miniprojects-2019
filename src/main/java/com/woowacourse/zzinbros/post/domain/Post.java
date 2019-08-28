@@ -4,14 +4,18 @@ import com.woowacourse.zzinbros.common.domain.BaseEntity;
 import com.woowacourse.zzinbros.mediafile.MediaFile;
 import com.woowacourse.zzinbros.post.exception.UnAuthorizedException;
 import com.woowacourse.zzinbros.user.domain.User;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@DynamicInsert
 public class Post extends BaseEntity {
     @Lob
     private String contents;
@@ -25,11 +29,16 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "media_file_id", foreignKey = @ForeignKey(name = "post_to_media_file"))
     private List<MediaFile> mediaFiles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private Set<PostLike> postLikes = new HashSet<>();
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "shared_post_id")
+    private Post sharedPost;
 
-    @Column
-    private int countOfLike;
+    @ColumnDefault("0")
+    private Integer countOfLike;
+
+    @ColumnDefault("0")
+    private Integer countOfShared;
 
     public Post() {
     }
@@ -37,7 +46,16 @@ public class Post extends BaseEntity {
     public Post(String contents, User author) {
         this.contents = contents;
         this.author = author;
-        countOfLike = 0;
+        this.countOfLike = 0;
+        this.countOfShared = 0;
+    }
+
+    public Post(String contents, User author, Post sharedPost) {
+        this.contents = contents;
+        this.author = author;
+        this.sharedPost = sharedPost;
+        this.countOfLike = 0;
+        this.countOfShared = 0;
     }
 
     public Post update(Post post) {
@@ -49,21 +67,23 @@ public class Post extends BaseEntity {
     }
 
     public boolean matchAuthor(User user) {
-        return this.author.equals(user);
+        return this.author.isAuthor(user);
     }
 
     public void addMediaFiles(MediaFile mediaFile) {
         this.mediaFiles.add(mediaFile);
     }
 
-    public void addLike(PostLike postLike) {
-        postLikes.add(postLike);
+    public void addLike() {
         countOfLike++;
     }
 
-    public void removeLike(PostLike postLike) {
-        postLikes.remove(postLike);
+    public void removeLike() {
         countOfLike--;
+    }
+
+    public void share() {
+        this.countOfShared++;
     }
 
     public Long getId() {
@@ -94,24 +114,18 @@ public class Post extends BaseEntity {
         this.mediaFiles = mediaFiles;
     }
 
-    public Set<PostLike> getPostLikes() {
-        return Collections.unmodifiableSet(postLikes);
-    }
-
     public int getCountOfLike() {
+        if (countOfLike == null) {
+            return 0;
+        }
         return countOfLike;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Post post = (Post) o;
-        return Objects.equals(id, post.id);
+    public Post getSharedPost() {
+        return sharedPost;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public Integer getCountOfShared() {
+        return countOfShared;
     }
 }

@@ -6,7 +6,6 @@ import com.woowacourse.zzinbros.user.exception.IllegalUserArgumentException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,18 +94,36 @@ public class User extends BaseEntity {
         return password;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return name.equals(user.name) &&
-                email.equals(user.email) &&
-                password.equals(user.password);
-    }
+//    public Set<Friend> getFollowing() {
+//        return following;
+//    }
+//
+//    public Set<Friend> getFollowedBy() {
+//        return followedBy;
+//    }
+//
+//    public Set<User> getRequestSenders() {
+//        Set<User> requests = collectSenders();
+//        requests.removeAll(collectReceivers());
+//        return requests;
+//    }
+//
+//    private Set<User> collectSenders() {
+//        return followedBy.stream()
+//                .map(Friend::getSender)
+//                .collect(Collectors.toSet());
+//    }
+//
+//    public Set<User> getFriends() {
+//        Set<User> intersection = collectReceivers();
+//        intersection.retainAll(collectSenders());
+//        return intersection;
+//    }
+//
+//    private Set<User> collectReceivers() {
+//        return following.stream()
+//                .map(Friend::getReceiver)
+//                .collect(Collectors.toSet());
+//    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, email, password);
-    }
 }
