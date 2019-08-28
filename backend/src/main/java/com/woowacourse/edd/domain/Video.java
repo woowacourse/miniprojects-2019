@@ -55,7 +55,7 @@ public class Video {
         this.title = title.trim();
         this.contents = contents.trim();
         this.creator = creator;
-        viewCount = 0;
+        this.viewCount = 0;
     }
 
     private void checkContents(String contents) {
