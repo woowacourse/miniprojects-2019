@@ -1,6 +1,6 @@
 package com.woowacourse.zzinbros.user.domain.repository;
 
-import com.woowacourse.zzinbros.user.domain.Friend;
+import com.woowacourse.zzinbros.user.domain.FriendRequest;
 import com.woowacourse.zzinbros.user.domain.User;
 import com.woowacourse.zzinbros.user.domain.UserBaseTest;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +26,7 @@ class UserAndFriendRepositoryTest extends UserBaseTest {
     UserRepository userRepository;
 
     @Autowired
-    FriendRepository friendRepository;
+    FriendRequestRepository friendRequestRepository;
 
     @Test
     @DisplayName("친구 요청 추가 후 Friend 객체에서 확인할 수 있다")
@@ -35,42 +35,19 @@ class UserAndFriendRepositoryTest extends UserBaseTest {
         User first = userRepository.save(userSampleOf(SAMPLE_TWO));
         User second = userRepository.save(userSampleOf(SAMPLE_THREE));
 
-        Friend firstFriend = friendRepository.save(Friend.of(me, first));
-        Friend secondFriend = friendRepository.save(Friend.of(me, second));
+        FriendRequest firstFriend = friendRequestRepository.save(new FriendRequest(me, first));
+        FriendRequest secondFriend = friendRequestRepository.save(new FriendRequest(me, second));
 
-        Set<Friend> expected = new HashSet<>(Arrays.asList(
+        Set<FriendRequest> expected = new HashSet<>(Arrays.asList(
                 firstFriend,
                 secondFriend
         ));
-        Set<Friend> actualByMe = friendRepository.findBySender(me);
-        Set<Friend> actualByFirst = friendRepository.findBySender(first);
+        Set<FriendRequest> actualByMe = friendRequestRepository.findAllBySender(me);
+        Set<FriendRequest> actualByFirst = friendRequestRepository.findAllBySender(first);
 
         assertEquals(2, actualByMe.size());
         assertEquals(expected, actualByMe);
         assertEquals(0, actualByFirst.size());
-    }
-
-    @Test
-    @DisplayName("친구 추가 후 User 객체에서 확인할 수 있다")
-    void friendAddAndCheckUser() {
-        User me = userRepository.save(userSampleOf(SAMPLE_ONE));
-        User first = userRepository.save(userSampleOf(SAMPLE_TWO));
-        User second = userRepository.save(userSampleOf(SAMPLE_THREE));
-
-        friendRepository.save(Friend.of(me, first));
-        friendRepository.save(Friend.of(first, me));
-        friendRepository.save(Friend.of(me, second));
-
-        User checkedMe = userRepository.findById(me.getId()).get();
-        User checkedFirst = userRepository.findById(first.getId()).get();
-        User checkedSecond = userRepository.findById(second.getId()).get();
-
-        assertEquals(2, checkedMe.getFollowing().size());
-        assertEquals(1, checkedMe.getFollowedBy().size());
-        assertEquals(1, checkedFirst.getFollowing().size());
-        assertEquals(1, checkedFirst.getFollowedBy().size());
-        assertEquals(0, checkedSecond.getFollowing().size());
-        assertEquals(1, checkedSecond.getFollowedBy().size());
     }
 
     @Test
@@ -79,9 +56,9 @@ class UserAndFriendRepositoryTest extends UserBaseTest {
         User me = userRepository.save(SAMPLE_USERS.get(SAMPLE_ONE));
         User other = userRepository.save(SAMPLE_USERS.get(SAMPLE_TWO));
 
-        friendRepository.save(Friend.of(me, other));
+        friendRequestRepository.save(new FriendRequest(me, other));
 
-        assertThatThrownBy(() -> friendRepository.save(Friend.of(me, other)))
+        assertThatThrownBy(() -> friendRequestRepository.save(new FriendRequest(me, other)))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
@@ -91,9 +68,9 @@ class UserAndFriendRepositoryTest extends UserBaseTest {
         User me = userRepository.save(userSampleOf(SAMPLE_ONE));
         User other = userRepository.save(userSampleOf(SAMPLE_TWO));
 
-        friendRepository.save(Friend.of(me, other));
+        friendRequestRepository.save(new FriendRequest(me, other));
 
-        assertTrue(friendRepository.existsBySenderAndReceiver(me, other));
+        assertTrue(friendRequestRepository.existsBySenderAndReceiver(me, other));
     }
 
     @Test
@@ -101,8 +78,8 @@ class UserAndFriendRepositoryTest extends UserBaseTest {
     void deleteUser() {
         User me = userRepository.save(SAMPLE_USERS.get(SAMPLE_ONE));
         User first = userRepository.save(SAMPLE_USERS.get(SAMPLE_TWO));
-        friendRepository.save(Friend.of(me, first));
-        friendRepository.save(Friend.of(first, me));
+        friendRequestRepository.save(new FriendRequest(me, first));
+        friendRequestRepository.save(new FriendRequest(first, me));
 
         userRepository.deleteById(me.getId());
 
@@ -116,12 +93,12 @@ class UserAndFriendRepositoryTest extends UserBaseTest {
     void deleteFriend() {
         User me = userRepository.save(SAMPLE_USERS.get(SAMPLE_ONE));
         User first = userRepository.save(SAMPLE_USERS.get(SAMPLE_TWO));
-        Friend deletedFriend = friendRepository.save(Friend.of(me, first));
-        Friend savedFriend = friendRepository.save(Friend.of(first, me));
+        FriendRequest deletedFriend = friendRequestRepository.save(new FriendRequest(me, first));
+        FriendRequest savedFriend = friendRequestRepository.save(new FriendRequest(first, me));
 
-        friendRepository.deleteById(deletedFriend.getId());
+        friendRequestRepository.deleteById(deletedFriend.getId());
 
-        assertEquals(savedFriend, friendRepository.findById(savedFriend.getId())
+        assertEquals(savedFriend, friendRequestRepository.findById(savedFriend.getId())
                 .orElseThrow(IllegalArgumentException::new));
         assertEquals(first, userRepository.findById(first.getId())
                 .orElseThrow(IllegalArgumentException::new));

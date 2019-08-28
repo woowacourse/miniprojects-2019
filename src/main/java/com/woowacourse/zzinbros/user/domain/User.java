@@ -5,13 +5,9 @@ import com.woowacourse.zzinbros.user.exception.IllegalUserArgumentException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Entity
 public class User extends BaseEntity {
@@ -30,12 +26,6 @@ public class User extends BaseEntity {
 
     @Column(name = "password", nullable = false, length = MAX_PASSWORD_LENGTH)
     private String password;
-
-    @OneToMany(mappedBy = "sender", orphanRemoval = true)
-    private Set<Friend> following = new HashSet<>();
-
-    @OneToMany(mappedBy = "receiver", orphanRemoval = true)
-    private Set<Friend> followedBy = new HashSet<>();
 
     public User() {
     }
@@ -104,35 +94,36 @@ public class User extends BaseEntity {
         return password;
     }
 
-    public Set<Friend> getFollowing() {
-        return following;
-    }
+//    public Set<Friend> getFollowing() {
+//        return following;
+//    }
+//
+//    public Set<Friend> getFollowedBy() {
+//        return followedBy;
+//    }
+//
+//    public Set<User> getRequestSenders() {
+//        Set<User> requests = collectSenders();
+//        requests.removeAll(collectReceivers());
+//        return requests;
+//    }
+//
+//    private Set<User> collectSenders() {
+//        return followedBy.stream()
+//                .map(Friend::getSender)
+//                .collect(Collectors.toSet());
+//    }
+//
+//    public Set<User> getFriends() {
+//        Set<User> intersection = collectReceivers();
+//        intersection.retainAll(collectSenders());
+//        return intersection;
+//    }
+//
+//    private Set<User> collectReceivers() {
+//        return following.stream()
+//                .map(Friend::getReceiver)
+//                .collect(Collectors.toSet());
+//    }
 
-    public Set<Friend> getFollowedBy() {
-        return followedBy;
-    }
-
-    public Set<User> getRequestSenders() {
-        Set<User> requests = collectSenders();
-        requests.removeAll(collectReceivers());
-        return requests;
-    }
-
-    private Set<User> collectSenders() {
-        return followedBy.stream()
-                .map(Friend::getSender)
-                .collect(Collectors.toSet());
-    }
-
-    public Set<User> getFriends() {
-        Set<User> intersection = collectReceivers();
-        intersection.retainAll(collectSenders());
-        return intersection;
-    }
-
-    private Set<User> collectReceivers() {
-        return following.stream()
-                .map(Friend::getReceiver)
-                .collect(Collectors.toSet());
-    }
 }

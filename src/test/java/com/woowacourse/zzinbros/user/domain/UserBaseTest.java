@@ -1,5 +1,6 @@
 package com.woowacourse.zzinbros.user.domain;
 
+import com.woowacourse.zzinbros.BaseTest;
 import com.woowacourse.zzinbros.user.dto.FriendRequestDto;
 import com.woowacourse.zzinbros.user.dto.UserResponseDto;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 
 import static com.woowacourse.zzinbros.common.domain.TestBaseMock.mockingId;
 
-public class UserBaseTest {
+public class UserBaseTest extends BaseTest {
 
     protected final static Map<Integer, User> SAMPLE_USERS;
     protected final static int SAMPLE_ONE = 1;

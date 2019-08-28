@@ -7,6 +7,8 @@ import com.woowacourse.zzinbros.user.dto.UserResponseDto;
 import com.woowacourse.zzinbros.user.exception.UserNotFoundException;
 import com.woowacourse.zzinbros.user.service.FriendService;
 import com.woowacourse.zzinbros.user.service.UserService;
+import com.woowacourse.zzinbros.user.web.support.SessionInfo;
+import com.woowacourse.zzinbros.user.web.support.UserSession;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,17 +32,21 @@ public class PostPageController {
     }
 
     @GetMapping(value = "posts")
-    public String showPage(@RequestParam("author") final Long id, Model model) {
+    public String showPage(@RequestParam("author") final Long authorId,
+                           @SessionInfo UserSession userSession,
+                           Model model) {
         try {
-            User author = userService.findUserById(id);
+            User author = userService.findUserById(authorId);
             Sort sort = Sort.by(Sort.Direction.DESC, "createdDateTime");
             List<Post> posts = postService.readAllByUser(author, sort);
-            Set<UserResponseDto> friends = friendService.findFriendsByUser(id);
-            Set<UserResponseDto> requests = friendService.findFriendRequestsByUserId(id);
+            Set<UserResponseDto> friends = friendService.findFriendsByUser(authorId);
+
             model.addAttribute("author", author);
             model.addAttribute("posts", posts);
             model.addAttribute("friends", friends);
-            model.addAttribute("requests", requests);
+            model.addAttribute("isMypage", userSession.matchId(authorId));
+            model.addAttribute("friendStatus", friendService.isMyFriend(userSession.getDto().getId(), authorId));
+            model.addAttribute("requestStatus", friendService.readyToBeMyFriend(userSession.getDto().getId(), authorId));
             return "user-page";
         } catch (UserNotFoundException e) {
             return "redirect:/";

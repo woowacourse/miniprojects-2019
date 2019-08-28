@@ -8,53 +8,50 @@ import javax.persistence.*;
 
 @Table(
         uniqueConstraints = @UniqueConstraint(
-                columnNames = {"sender_id", "receiver_id"},
+                columnNames = {"owner_id", "slave_id"},
                 name = "UK_USER_SENDER_AND_RECEIVER")
 )
 @Entity
 public class Friend extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_Id",
+    @JoinColumn(name = "owner_Id",
             foreignKey = @ForeignKey(name = "FRIEND_TO_SENDER"),
             updatable = false,
             nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User sender;
+    private User owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_Id",
+    @JoinColumn(name = "slave_Id",
             foreignKey = @ForeignKey(name = "FRIEND_TO_RECEIVER"),
             updatable = false,
             nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User receiver;
+    private User slave;
 
 
     protected Friend() {
     }
 
-    public Friend(User sender, User receiver) {
-        this.sender = sender;
-        this.receiver = receiver;
+    public Friend(User owner, User slave) {
+        this.owner = owner;
+        this.slave = slave;
     }
 
-    public static Friend of(User user, User another) {
-        Friend friend = new Friend(user, another);
-        user.getFollowing().add(friend);
-        another.getFollowedBy().add(friend);
-        return friend;
+    public static Friend of(User owner, User slave) {
+        return new Friend(owner, slave);
     }
 
     public Long getId() {
         return id;
     }
 
-    public User getSender() {
-        return sender;
+    public User getOwner() {
+        return owner;
     }
 
-    public User getReceiver() {
-        return receiver;
+    public User getSlave() {
+        return slave;
     }
 }
