@@ -30,10 +30,7 @@ public class TagService {
     }
 
     private Tag getOrCreate(Tag tag) {
-        if (tagRepository.existsByName(tag.getName())) {
-            return tagRepository.findByName(tag.getName()).orElseThrow(IllegalAccessError::new);
-        }
-        return tagRepository.save(tag);
+        return tagRepository.findByName(tag.getName()).orElseGet(() -> tagRepository.save(tag));
     }
 
     public List<Tag> parse(String contents, Pattern pattern) {
