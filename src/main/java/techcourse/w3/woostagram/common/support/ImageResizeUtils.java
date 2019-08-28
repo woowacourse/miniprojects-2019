@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,8 @@ public class ImageResizeUtils {
     private static final double MAX_WIDTH = 1000;
     private static final double MAX_HEIGHT = 1000;
 
-    public static void resizeImage(String fileExtension, File original, File resized) throws IOException {
+    public static void resizeImage(String fileExtension, File fileData, File resized) throws IOException {
+        FileInputStream original = new FileInputStream(fileData);
         BufferedImage originalImage = ImageIO.read(original);
         int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
         double width = originalImage.getWidth();

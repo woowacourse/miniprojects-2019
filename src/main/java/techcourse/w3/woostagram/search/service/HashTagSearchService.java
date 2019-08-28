@@ -2,7 +2,6 @@ package techcourse.w3.woostagram.search.service;
 
 import org.springframework.stereotype.Service;
 import techcourse.w3.woostagram.tag.domain.HashTag;
-import techcourse.w3.woostagram.tag.domain.Tag;
 import techcourse.w3.woostagram.tag.dto.TagDto;
 import techcourse.w3.woostagram.tag.service.HashTagService;
 
