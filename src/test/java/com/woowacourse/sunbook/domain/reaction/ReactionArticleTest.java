@@ -1,8 +1,8 @@
 package com.woowacourse.sunbook.domain.reaction;
 
+import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
-import com.woowacourse.sunbook.domain.comment.CommentFeature;
 import com.woowacourse.sunbook.domain.fileurl.FileUrl;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserEmail;
@@ -26,7 +26,7 @@ public class ReactionArticleTest {
     private static final String IMAGE_URL = "https://file.namu.moe/file/105db7e730e1402c09dcf2b281232df017f0966ba63375176cb0886869b81bf206145de5a7a149a987d6aae2d5230afaae4ca2bf0b418241957942ad4f4a08c8";
     private static final String VIDEO_URL = "https://youtu.be/mw5VIEIvuMI";
 
-    private static final CommentFeature commentFeature = new CommentFeature(CONTENTS);
+    private static final Content commentFeature = new Content(CONTENTS);
     private static final FileUrl imageUrl = new FileUrl(IMAGE_URL);
     private static final FileUrl videoUrl = new FileUrl(VIDEO_URL);
 
