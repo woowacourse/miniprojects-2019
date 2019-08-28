@@ -29,6 +29,7 @@ public class HashTagSearchService implements SearchService {
     public List<TagDto> search(String query) {
         return hashTagService.findByNameContaining(query).stream()
                 .map(HashTag::getTag)
+                .distinct()
                 .map(TagDto::from)
                 .collect(Collectors.toList());
     }

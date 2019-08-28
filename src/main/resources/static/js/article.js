@@ -50,6 +50,13 @@ const Article = (function () {
                             imageResize(img)
                         }
                     );
+
+                    document.querySelectorAll(".article-profile-img").forEach(
+                        (element) => {
+                            element.setAttribute('src', data.userInfoDto.profile);
+                        }
+                    );
+
                     document.querySelectorAll(".profile-name").forEach(
                         (element) => {
                             element.innerText = data.userInfoDto.userContentsDto.userName;

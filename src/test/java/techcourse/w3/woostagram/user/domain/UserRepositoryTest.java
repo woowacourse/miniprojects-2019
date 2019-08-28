@@ -23,7 +23,7 @@ public class UserRepositoryTest {
                 .email("ab@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
-                        .userName("a@naver.com")
+                        .userName("user1")
                         .build())
                 .build();
 
@@ -42,14 +42,14 @@ public class UserRepositoryTest {
                 .email("ab@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
-                        .userName("a@naver.com")
+                        .userName("user")
                         .build())
                 .build();
         User persistUser = testEntityManager.persist(user);
         testEntityManager.flush();
         testEntityManager.clear();
 
-        List<User> findUser = userRepository.findTop10ByUserContents_UserNameContainingIgnoreCaseOrderByUserContents_UserName("a");
+        List<User> findUser = userRepository.findTop10ByUserContents_UserNameContainingIgnoreCaseOrderByUserContents_UserName("user");
         assertThat(findUser).contains(persistUser);
 
     }
@@ -60,15 +60,14 @@ public class UserRepositoryTest {
                 .email("ab@naver.com")
                 .password("Aa12345!!")
                 .userContents(UserContents.builder()
-                        .userName("a@naver.com")
+                        .userName("user")
                         .build())
                 .build();
         User persistUser = testEntityManager.persist(user);
         testEntityManager.flush();
         testEntityManager.clear();
 
-        List<User> findUser = userRepository.findTop10ByUserContents_UserNameContainingIgnoreCaseOrderByUserContents_UserName("A");
+        List<User> findUser = userRepository.findTop10ByUserContents_UserNameContainingIgnoreCaseOrderByUserContents_UserName("user");
         assertThat(findUser).contains(persistUser);
-
     }
 }

@@ -1,56 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <th:block th:replace = "fragments/common-head :: common-head"></th:block>
+    <th:block th:replace="fragments/common-head :: common-head"></th:block>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
 <div class="authentication">
     <div class="sign-in-2">
         <div class="container-fluid no-pdd-horizon">
-            <div class="row" style="width: 100%">
+            <div class="row">
                 <div class="col-md-10 mr-auto ml-auto">
                     <div class="row">
                         <div class="mr-auto ml-auto full-height height-100 d-flex align-items-center">
-                            <div class="vertical-align full-height">
-                                <div class="table-cell">
-                                    <div class="card min-width-480px">
+                            <div class="con center-flex full-height">
+
+                                <div class="phone-con common-flex">
+                                    <div class="phone-body">
+                                        <img class="" src="/images/login/screen0.jpg">
+                                    </div>
+                                </div>
+
+                                <div class="login-form-con">
+                                    <div class="login-form-card min-widtt-">
                                         <div class="card-body">
-                                            <div class="pdd-horizon-30 pdd-vertical-30">
-                                                <div class="mrg-btm-30">
-                                                    <h2 class="text-center text-dark no-mrg-vertical mrg-btm-15">
-                                                        회원가입</h2>
+                                            <div class="pdd-horizon-20 pdd-vertical-20">
+                                                <div class=" logo-con common-flex mrg-btm-30">
+                                                    <img class="logo" src="/images/logo/instagram_logo_text.png">
                                                 </div>
-                                                <div th:if="${error}" th:text="${message}" class="alert alert-danger"
-                                                     role="alert"></div>
-                                                <form action="/users/signup" method="post">
+                                                <form class="login-form" action="/users/signup" method="post">
                                                     <div class="form-group">
-                                                        <label class="text-normal text-dark">Email Address</label>
                                                         <input type="email" name="email" class="form-control"
-                                                               required>
+                                                               placeholder="Email" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="text-normal text-dark">Password</label>
+                                                        <input type="text" name="name" class="form-control"
+                                                               placeholder="Name" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" name="userName" class="form-control"
+                                                               placeholder="User Name" required>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <input type="password" name="password" class="form-control"
                                                                placeholder="Password" required>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="text-normal text-dark">Confirm Password</label>
-                                                        <input type="password" class="form-control"
-                                                               placeholder="Password" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <button type="submit"
-                                                                class="btn btn-info btn-block border-radius-6 font-size-16 text-white">
-                                                            가입하기
-                                                        </button>
+                                                    <div th:if="${error}" th:text="${message}"
+                                                         class="alert alert-danger" role="alert"></div>
+                                                    <div class="login-btn-con common-flex form-group">
+                                                        <div class="login-btn-inner">
+                                                            <button type="submit"
+                                                                    class="login-btn ">
+                                                                가입
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </form>
-                                                <div class="text-dark">
-                                                    <span>이미 회원이신가요?</span>
-                                                    <a href="/users/login/form"
-                                                       class="text-info pointer mrg-left-5">로그인</a>
-                                                </div>
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sign-con login-form-card text-center">
+                                        <div class="pdd-horizon-20 pdd-vertical-20">
+                                        <div class="text-dark font-size-14">
+                                            <span>이미 회원이신가요?</span>
+                                            <a href="/users/login/form"
+                                               class="text-info pointer mrg-left-5">로그인</a>
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="download-con text-center">
+                                        <div class="text-dark">
+                                            <p>앱을 다운로드 하세요 </p>
+                                            <img src="/images/login/apple.png">
+                                            <img src="/images/login/google.png">
                                         </div>
                                     </div>
                                 </div>
@@ -63,6 +86,7 @@
     </div>
 </div>
 
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -74,6 +98,6 @@
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 <script src="/js/template.js"></script>
+<script src = "/js/screenSlide.js"></script>
 </body>
-
 </html>

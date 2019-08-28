@@ -1,5 +1,7 @@
 package techcourse.w3.woostagram.article.controller;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -7,13 +9,19 @@ import org.springframework.http.client.MultipartBodyBuilder;
 import techcourse.w3.woostagram.AbstractControllerTests;
 import techcourse.w3.woostagram.common.support.TestDataInitializer;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ArticleControllerTest extends AbstractControllerTests {
     @Test
-    void create_correctArticle_isOk() {
+    void create_correctArticle_isOk() throws IOException {
+        URL url = new URL("https://raw.githubusercontent.com/rohan-varma/rohan-blog/master/images/mnistimg.png");
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-        bodyBuilder.part("imageFile", new ByteArrayResource("<<png data>>".getBytes()) {
+        bodyBuilder.part("imageFile", new ByteArrayResource(IOUtils.toByteArray(url)) {
             @Override
             public String getFilename() {
                 return "test_image.jpg";

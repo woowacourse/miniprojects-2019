@@ -2,14 +2,19 @@ package techcourse.w3.woostagram.user.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
+import techcourse.w3.woostagram.user.dto.UserCreateDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
+import techcourse.w3.woostagram.user.exception.UserCreateException;
+import techcourse.w3.woostagram.user.exception.UserUpdateException;
 import techcourse.w3.woostagram.user.service.UserService;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import static techcourse.w3.woostagram.common.support.UserEmailArgumentResolver.LOGGED_IN_USER_SESSION_KEY;
 
@@ -45,16 +50,12 @@ public class UserController {
     }
 
     @PostMapping("signup")
-    public String create(UserDto userDto) {
+    public String create(@Valid UserCreateDto userDto, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new UserCreateException(result.getFieldError().getDefaultMessage());
+        }
         userService.save(userDto);
         return "redirect:/users/login/form";
-    }
-
-    @GetMapping("mypage")
-    public String show(Model model, @LoggedInUser String email) {
-        UserInfoDto userInfoDto = userService.findByEmail(email);
-        model.addAttribute("userInfo", userInfoDto);
-        return "mypage";
     }
 
     @GetMapping("mypage-edit/form")
@@ -65,7 +66,10 @@ public class UserController {
     }
 
     @PutMapping
-    public String update(UserUpdateDto userUpdateDto, @LoggedInUser String email, HttpSession httpSession) {
+    public String update(@Valid UserUpdateDto userUpdateDto, BindingResult result, @LoggedInUser String email, HttpSession httpSession) {
+        if (result.hasErrors()) {
+            throw new UserUpdateException(result.getFieldError().getDefaultMessage());
+        }
         userService.update(userUpdateDto, email);
         UserInfoDto userInfoDto = userService.findByEmail(email);
         httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, userService.findByEmail(email));

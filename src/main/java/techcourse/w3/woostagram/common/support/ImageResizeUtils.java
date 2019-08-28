@@ -1,29 +1,51 @@
 package techcourse.w3.woostagram.common.support;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class ImageResizeUtils {
-    private static final int IMG_WIDTH = 600;
-    private static final int IMG_HEIGHT = 700;
+    private static final double MAX_WIDTH = 1000;
+    private static final double MAX_HEIGHT = 1000;
 
-    public static void imageResize(String fileExtension, File original, File resized) throws IOException {
-
+    public static void resizeImage(String fileExtension, File fileData, File resized) throws IOException {
+        FileInputStream original = new FileInputStream(fileData);
         BufferedImage originalImage = ImageIO.read(original);
         int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-        BufferedImage resizeImage = resizeImageWithHint(originalImage, type);
+        double width = originalImage.getWidth();
+        double height = originalImage.getHeight();
+        List<Pair<Double, Double>> sizeCandidates = Arrays.asList(
+                Pair.of(width, height),
+                Pair.of(MAX_WIDTH, (height) / (width) * MAX_WIDTH),
+                Pair.of((width) / (height) * MAX_HEIGHT, MAX_HEIGHT)
+        );
 
-        ImageIO.write(resizeImage, fileExtension, resized);
+        for (Pair<Double, Double> size : sizeCandidates) {
+            width = size.getKey();
+            height = size.getValue();
+            if (validateSize(width, height)) {
+                BufferedImage resizeImage = resizeImageWithHint(originalImage, type, (int) width, (int) height);
+                ImageIO.write(resizeImage, fileExtension, resized);
+                return;
+            }
+        }
     }
 
-    private static BufferedImage resizeImageWithHint(BufferedImage originalImage, int type) {
+    private static boolean validateSize(double width, double height) {
+        return width <= MAX_WIDTH && height <= MAX_HEIGHT;
+    }
 
-        BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+    private static BufferedImage resizeImageWithHint(BufferedImage originalImage, int type, int width, int height) {
+        BufferedImage resizedImage = new BufferedImage(width, height, type);
         Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+        g.drawImage(originalImage, 0, 0, width, height, null);
         g.dispose();
         g.setComposite(AlphaComposite.Src);
 

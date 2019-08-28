@@ -35,7 +35,7 @@ const mypage = (function () {
         }
 
         return {
-            init : init
+            init: init
         }
     };
 
@@ -52,29 +52,47 @@ const mypage = (function () {
 
         const getPageData = (pageNum) => {
             const container = document.querySelector('.article-card');
-            const articleTemplate = function(articleId, imgUrl) {
-                return`
-                <div>
-                    <a href="/articles/${articleId}">
-                    <img src=${imgUrl}>
-                    </a>
-                </div>`
-            }
 
             mypageRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
                 , (status, data) => {
                     document.querySelector('.article-num').innerHTML = `<strong>${data.totalElements}</strong>`;
 
-                    let rowDiv = (pages)=> {return `<div class="article-row-card">${pages}</div>`};
-                    let rowNum = parseInt(data.content.length/3);
+                    let rowDiv = (pages) => {
+                        return `<div class="article-row-card">${pages}</div>`
+                    };
+                    let rowNum = Math.ceil(data.content.length / 3);
+
                     for (let i = 0; i <= rowNum; i++) {
                         let row = "";
-                        for(let j = 0; j <3; j++){
-                            row += articleTemplate(data.content[i*3 + j].article.id, data.content[i*3 + j].article.imageUrl);
+                        for (let j = 0; j < 3; j++) {
+                            if ( (i * 3 + j) < data.content.length) {
+                                row += getMypageArticleTemplate(data.content[i * 3 + j].article.id, data.content[i * 3 + j].article.imageUrl);
+                            }
                         }
-                        container.insertAdjacentHTML('beforeend',rowDiv(row));
+                        container.insertAdjacentHTML('beforeend', rowDiv(row));
+                    }
+
+                    return data.last;
+                }).then((last) => {
+                if (last === false) {
+                    const cardList = document.querySelectorAll('.article-row-card');
+                    const target = cardList[cardList.length - 1];
+                    console.log(target);
+                    lazyLoad(target, pageNum);
+                }
+            });
+        };
+
+        const lazyLoad = (target, pageNum) => {
+            const io = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        getPageData(pageNum + 1);
+                        observer.disconnect();
                     }
                 })
+            });
+            io.observe(target)
         };
 
         const modalActive = () => {
@@ -84,14 +102,14 @@ const mypage = (function () {
         const sendFollow = () => {
             const followingButton = document.querySelector('.following');
 
-            if(follow.getStatus()) {
-                follow.deleteFollow().then(()=>{
+            if (follow.getStatus()) {
+                follow.deleteFollow().then(() => {
                     followingButton.innerHTML = "팔로우";
                     getFollowers();
                 });
                 follow.toggleStatus();
             } else {
-                follow.addFollow().then(()=>{
+                follow.addFollow().then(() => {
                     followingButton.innerHTML = "팔로우 취소";
                     getFollowers();
                 });
@@ -116,12 +134,12 @@ const mypage = (function () {
         }
 
         return {
-            getPageData : getPageData,
-            getProfile : getProfile,
-            sendFollow : sendFollow,
+            getPageData: getPageData,
+            getProfile: getProfile,
+            sendFollow: sendFollow,
             modalActive: modalActive,
-            getFollowers : getFollowers,
-            getFollowings : getFollowings
+            getFollowers: getFollowers,
+            getFollowings: getFollowings
         }
     }
 
@@ -134,7 +152,7 @@ const mypage = (function () {
         init: init
     }
 
-} ());
+}());
 
 mypage.init();
 

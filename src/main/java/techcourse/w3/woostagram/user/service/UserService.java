@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserRepository;
+import techcourse.w3.woostagram.user.dto.UserCreateDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
@@ -27,11 +28,26 @@ public class UserService {
         this.storageService = storageService;
     }
 
-    public UserInfoDto save(UserDto userDto) {
+    public UserInfoDto save(UserCreateDto userDto) {
+        checkDuplicatedEmail(userDto.getEmail());
+        checkDuplicatedUserName(userDto.getUserName());
+
         try {
             return UserInfoDto.from(userRepository.save(userDto.toEntity()));
         } catch (Exception error) {
-            throw new UserCreateException();
+            throw new UserCreateException(error.getMessage());
+        }
+    }
+
+    private void checkDuplicatedEmail(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new UserCreateException("이미 존재하는 아이디입니다.");
+        }
+    }
+
+    private void checkDuplicatedUserName(String userName) {
+        if (userRepository.findByUserContents_UserName(userName).isPresent()) {
+            throw new UserCreateException("이미 존재하는 사용자 이름입니다.");
         }
     }
 
@@ -88,6 +104,7 @@ public class UserService {
         return fileUrl;
     }
 
+    @Transactional
     public String deleteProfileImage(String email) {
         User user = findUserByEmail(email);
         deleteUserProfileImage(user);

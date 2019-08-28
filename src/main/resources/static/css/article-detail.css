@@ -38,7 +38,6 @@
 
 .profile-text{
     margin-left:10px;
-
 }
 
 .profile img{
@@ -133,4 +132,31 @@
     bottom: 16px;
     position: absolute;
     right: 16px;
+}
+
+.comment-item {
+    display: flex;
+    max-width: 300px;
+}
+
+.comment-item > div {
+    margin-right: 12px;
+}
+
+.comment-item .comment-contents {
+    display: flex;
+    width: 90%;
+}
+
+i {
+    pointer-events: none;
+}
+
+.comment-delete{
+    cursor:pointer;
+}
+
+span {
+    word-break:break-all;
+    white-space: pre-wrap;
 }
