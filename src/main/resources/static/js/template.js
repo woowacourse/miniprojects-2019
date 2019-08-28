@@ -13,19 +13,15 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                             <div class="feed-header padding-15">
                                 <ul class="list-unstyled list-info">
                                     <li>
+                                        <a href = "/$">
                                         <img class="thumb-img img-circle" src=${profileUrl}
                                              alt="">
+                                             </a>
                                         <div class="info">
                                             <a href=""
                                                class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
                                         </div>
                                     </li>
-                                    <a class="pointer absolute top-10 right-0" data-toggle="dropdown"
-                                       aria-expanded="false">
-                                        <span class="btn-icon text-dark">
-                                            <i class="ti-more font-size-16"></i>
-                                        </span>
-                                    </a>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="pointer">
@@ -37,7 +33,9 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                 </ul>
                             </div>
                             <div class="feed-body no-pdd">
+                              
                                 <img class="article-image" src=${imageUrl} alt="">
+                               
                             </div>
                             <ul class="feed-action pdd-horizon-15 pdd-top-5">
                                 <li>
@@ -46,12 +44,12 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="/articles/${articleId}">
                                         <i class="ti-comment font-size-22"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a class = "copy-btn">
                                         <i class="ti-export font-size-22"></i>
                                     </a>
                                 </li>
