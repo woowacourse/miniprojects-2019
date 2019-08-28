@@ -9,7 +9,7 @@ const HeaderApp = (() => {
         const showFriendList = () => {
             const friendListBtn = document.getElementById('friend-list-btn');
             friendListBtn.addEventListener('click', headerService.showFriendList);
-        }
+        };
 
         const init = () => {
             renderHeader();
@@ -30,37 +30,44 @@ const HeaderApp = (() => {
             showModalBtn.click();
         };
 
+        const loginUser = () => {
+            return headerApi.getLoginUser();
+        };
+
         const renderLoginUser = () => {
             const loginUserName = document.getElementById('login-user-name');
 
             headerApi.getLoginUser()
-                .then(response => {
-                    return response.json();
-                }).then(json => {
-                if (json.hasOwnProperty('errorMessage')) {
-                    alert(json.errorMessage);
-                } else {
-                    console.log('header login user 요청', json);
-                    AppStorage.set('login-user', json);
-                    loginUserName.innerText = json.userName.name;
-                }
-            })
+                .then(json => {
+                    if (json.hasOwnProperty('errorMessage')) {
+                        alert(json.errorMessage);
+                    } else {
+                        console.log('header login user 요청', json);
+                        AppStorage.set('login-user', json);
+                        loginUserName.innerText = json.userName.name;
+                        document.getElementById("user-url").setAttribute("href", '/users/' + json.id);
+                    }
+                });
         };
 
         return {
             renderLoginUser: renderLoginUser,
             showFriendList: showFriendList,
+            loginUser: loginUser,
         };
     };
 
     const HeaderApi = function () {
-        const getLoginUser = (data) => {
-            return Api.get('/api/users');
+        const getLoginUser = () => {
+            return Api.get('/api/users')
+                .then(response => {
+                    return response.json();
+                });
         };
 
         return {
             getLoginUser: getLoginUser,
-        }
+        };
     };
 
     const init = () => {
@@ -71,11 +78,12 @@ const HeaderApp = (() => {
     const reRender = () => {
         const headerController = new HeaderController();
         headerController.reRender();
-    }
+    };
 
     return {
         init: init,
         reRender: reRender,
+        loginUser: new HeaderService().loginUser,
     };
 })();
 

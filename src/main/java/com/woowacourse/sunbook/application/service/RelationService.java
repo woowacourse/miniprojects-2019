@@ -41,7 +41,7 @@ public class RelationService {
 		relationRepository.save(fromRelation);
 		relationRepository.save(toRelation);
 
-		return new RelationResponseDto(toRelation);
+		return new RelationResponseDto(fromRelation);
 	}
 
 	@Transactional

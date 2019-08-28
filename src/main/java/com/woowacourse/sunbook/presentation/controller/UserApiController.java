@@ -25,6 +25,11 @@ public class UserApiController {
         return new ResponseEntity<>(loginUser.getUserResponseDto(), HttpStatus.OK);
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponseDto> show(@PathVariable Long userId) {
+        return new ResponseEntity<>(userService.findUser(userId), HttpStatus.OK);
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto userRequestDto) {
         UserResponseDto signUpUser = userService.save(userRequestDto);

@@ -5,57 +5,7 @@
 </head>
 <body>
 <div id="wootecobook-app">
-    <header id="header" class="header navbar">
-        <div class="header-container max-width-lg mx-auto">
-            <ul class="nav-left mrg-left-0">
-                <li>
-                    <a href="/newsfeed">
-                        <div class="logo" style="background-image: url('/images/default/icons.png')"></div>
-                    </a>
-                </li>
-                <li class="search-container">
-                <span class="search">
-                    <form action="" method="get">
-                        <input type="text" class="searchbox" placeholder="검색">
-                        <button type="submit" class="search-btn">
-                            <i class="ti-search"></i>
-                        </button>
-                    </form>
-                </span>
-                </li>
-            </ul>
-            <ul class="nav-right">
-                <li class="user-profile">
-                    <a href="/users">
-                        <img class="profile-img img-fluid" src="/images/default/eastjun_profile.jpg" alt="">
-                        <div class="user-info mrg-left-5">
-                            <span class="name pdd-right-5 text-white text-bold" id="login-user-name">eastjun</span>
-                        </div>
-                    </a>
-                </li>
-                <li class="">
-                    <a class="pointer" href="/newsfeed">
-                        <span class="text-white text-bold font-size-12">홈</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer">
-                        <span class="text-white text-bold font-size-12">만들기</span>
-                    </a>
-                </li>
-                <li>
-                    <div class="friend-btn pointer mrg-vertical-10 mrg-horizon-5" id="friend-list-btn"></div>
-                </li>
-                <li>
-                    <div class="message-btn pointer mrg-vertical-10 mrg-horizon-5"></div>
-                </li>
-                <li>
-                    <div class="notification-btn pointer mrg-vertical-10 mrg-horizon-5"></div>
-                </li>
-
-            </ul>
-        </div>
-    </header>
+    <th:block th:include="fragments/common-header" />
     <div class="container-fluid max-width-lg mx-auto">
         <div class="row jumbo mrg-top-30">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -63,11 +13,10 @@
                     <div class="pdd-right-5">
                         <img class="jumbo-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
                     </div>
-                    <div class="mr-auto align-self-end"><span class="font-size-50">EastJun</span></div>
-                    <div class="align-self-end">
-                        <button type="button" class="btn btn-info" id="user-update-form-btn">
-                            프로필 수정
-                        </button>
+                    <div class="mr-auto align-self-end">
+                        <span class="font-size-50" id="user-page-name">EastJun</span>
+                    </div>
+                    <div class="align-self-end" id="users-btn">
                     </div>
                 </div>
             </div>
@@ -185,6 +134,8 @@
 <!--modal end-->
 <th:block th:include="fragments/common-modal" />
 <th:block th:include="fragments/common-scripts" />
+<script src="/js/article-template.js"></script>
+<script src="/js/friends.js"></script>
 <script src="/js/users.js"></script>
 </body>
 </html>
