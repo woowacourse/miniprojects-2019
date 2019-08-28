@@ -58,10 +58,6 @@ public class VideoControllerTests extends BasicControllerTests {
             .jsonPath("$.content[5].creator.id").isEqualTo(DEFAULT_LOGIN_ID);
     }
 
-    WebTestClient.BodyContentSpec saveNextVideo(VideoSaveRequestDto video, String sid) {
-        return saveVideo(video, sid).isCreated().expectBody();
-    }
-
     @Test
     void save() {
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto(DEFAULT_VIDEO_YOUTUBEID, DEFAULT_VIDEO_TITLE, DEFAULT_VIDEO_CONTENTS);
@@ -190,5 +186,9 @@ public class VideoControllerTests extends BasicControllerTests {
             .cookie(COOKIE_JSESSIONID, jsessionid)
             .exchange()
             .expectStatus();
+    }
+
+    private WebTestClient.BodyContentSpec saveNextVideo(VideoSaveRequestDto video, String sid) {
+        return saveVideo(video, sid).isCreated().expectBody();
     }
 }
