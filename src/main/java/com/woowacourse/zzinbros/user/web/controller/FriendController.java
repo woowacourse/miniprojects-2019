@@ -3,7 +3,6 @@ package com.woowacourse.zzinbros.user.web.controller;
 import com.woowacourse.zzinbros.user.dto.FriendRequestDto;
 import com.woowacourse.zzinbros.user.dto.UserResponseDto;
 import com.woowacourse.zzinbros.user.service.FriendService;
-import com.woowacourse.zzinbros.user.service.UserService;
 import com.woowacourse.zzinbros.user.web.support.SessionInfo;
 import com.woowacourse.zzinbros.user.web.support.UserSession;
 import org.springframework.http.HttpStatus;

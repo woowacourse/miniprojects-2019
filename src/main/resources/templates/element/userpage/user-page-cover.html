@@ -12,7 +12,7 @@
         친구 추가
     </button>
     <button th:if="${session.loggedInUser != null && requests.contains(session.loggedInUser)}"
-            class="btn btn-lg btn-tecobook btn-inverse btn-rounded" id="friend-request-btn"disabled>
+            class="btn btn-lg btn-tecobook btn-inverse btn-rounded" id="friend-request-btn" disabled>
         친구 요청
     </button>
     <button th:if="${session.loggedInUser != null && friends.contains(session.loggedInUser)}" id="friend-btn"
