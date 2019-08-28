@@ -5,6 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findAllByAuthor(Pageable pageable, User author);
+
+    List<Article> findAllByAuthor(User author);
+
+    List<Article> findAllByAuthorInAndOpenRange(List<User> authors, OpenRange openRange);
 }

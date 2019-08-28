@@ -23,15 +23,16 @@ public class ArticleApiController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ArticleResponseDto>> show() {
-        List<ArticleResponseDto> articles = articleService.findAll();
+    public ResponseEntity<List<ArticleResponseDto>> show(LoginUser loginUser) {
+//        List<ArticleResponseDto> articles = articleService.findAll();
+        List<ArticleResponseDto> articles = articleService.findAll(loginUser.getId());
 
         return new ResponseEntity<>(articles, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<ArticleResponseDto> save(ArticleRequestDto articleRequestDto, LoginUser loginUser) {
-        ArticleResponseDto articleResponseDto = articleService.save(articleRequestDto.getArticleFeature(), loginUser.getId());
+        ArticleResponseDto articleResponseDto = articleService.save(articleRequestDto, loginUser.getId());
 
         return new ResponseEntity<>(articleResponseDto, HttpStatus.OK);
     }

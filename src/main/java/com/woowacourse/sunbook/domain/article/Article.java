@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Entity
-public class Article extends BaseEntity {
+public class Article extends BaseEntity implements Comparable<Article> {
 
     @Embedded
     private ArticleFeature articleFeature;
@@ -42,5 +42,10 @@ public class Article extends BaseEntity {
 
     public boolean isSameUser(User user) {
         return this.author.equals(user);
+    }
+
+    @Override
+    public int compareTo(Article article) {
+        return this.getUpdatedTime().compareTo(article.getUpdatedTime());
     }
 }
