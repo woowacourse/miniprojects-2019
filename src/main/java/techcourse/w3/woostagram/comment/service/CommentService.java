@@ -40,6 +40,10 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
+    public int countByArticleId(Long articleId){
+        return commentRepository.findByArticle_Id(articleId).size();
+    }
+
     public void deleteById(Long commentId, String email) {
         validateUser(commentId, email);
 
