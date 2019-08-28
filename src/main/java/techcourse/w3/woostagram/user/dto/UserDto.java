@@ -27,15 +27,6 @@ public class UserDto {
         this.password = password;
     }
 
-//    public User toEntity() {
-//        return User.builder()
-//                .email(email)
-//                .password(password)
-//                .userContents(UserContents.builder()
-//                        .userName(email).build())
-//                .build();
-//    }
-
     public User toEntity() {
         return User.builder()
                 .email(email)
