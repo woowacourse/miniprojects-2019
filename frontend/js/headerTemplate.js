@@ -1,7 +1,16 @@
-const addHeader = function (headerElement){
-    // TODO: 로그인 여부를 확인해서 삽입할 헤더를 결정해야 한다.
-    const signedInHeaderTemplate = 
-    `<header id="header" class="header navbar shadow-sm">
+const addHeader = function (headerElement) {
+
+    const setHeaderEvent = () => {
+        const sideNavToggle = function (event) {
+            event.preventDefault()
+            document.querySelector('.app').classList.toggle('is-collapsed')
+        }
+
+        document.querySelector('.side-nav-toggle').addEventListener('click', sideNavToggle)
+    }
+
+    const signedInHeaderTemplate =
+        `<header id="header" class="header navbar shadow-sm">
         <div class="header-container">
             <ul class="nav-left mrg-left-0">
                 <li>
@@ -14,8 +23,7 @@ const addHeader = function (headerElement){
                 </li>
             </ul>
             <ul class="nav-right padding-8">
-
-                <li class="">
+                <li>
                     <a href="video-create.html" class="pointer">
                         <i class="material-icons">video_call</i>
                     </a>
@@ -31,16 +39,15 @@ const addHeader = function (headerElement){
                     </a>
                 </li>
                 <li class="user-profile">
-                    <a href="/video-channel.html">
-                        <img class="profile-img img-fluid" src="./images/default/eastjun_profile.jpg" alt="">
-                    </a>
+                    <button type="button" class="btn btn-outline-primary btn-logout">로그아웃</button>
                 </li>
             </ul>
         </div>
     </header>`
 
-    const notSignedInHeaderTemplate = 
-    `<header id="header" class="header navbar shadow-sm">
+
+    const notSignedInHeaderTemplate =
+        `<header id="header" class="header navbar shadow-sm">
         <div class="header-container">
             <ul class="nav-left mrg-left-0">
                 <li>
@@ -54,8 +61,8 @@ const addHeader = function (headerElement){
             </ul>
             <ul class="nav-right padding-8">
 
-                <li class="">
-                    <a href="video-create.html" class="pointer">
+                <li>
+                    <a href="/login.html" class="pointer">
                         <i class="material-icons">video_call</i>
                     </a>
                 </li>
@@ -78,7 +85,31 @@ const addHeader = function (headerElement){
         </div>
     </header>`
 
-    headerElement.insertAdjacentHTML('afterbegin', notSignedInHeaderTemplate)
+    const scriptTemplate = `<script src="./js/logout.js"></script>`
+
+    const handleLogoutEvent = function () {
+
+        api.postLogout()
+            .then(res => {
+                window.location.reload();
+            })
+    }
+
+    api.retrieveLoginInfo()
+        .then(res => {
+            if (res.status === 200) {
+                headerElement.insertAdjacentHTML('afterbegin', signedInHeaderTemplate)
+                document.querySelector('body').insertAdjacentHTML('beforeend', scriptTemplate)
+                setHeaderEvent();
+                document.querySelector('.btn-logout')
+                    .addEventListener('click', handleLogoutEvent)
+                return;
+            }
+        })
+        .catch(res => {
+            headerElement.insertAdjacentHTML('afterbegin', notSignedInHeaderTemplate)
+            setHeaderEvent();
+        })
 }
 
 addHeader(document.querySelector('.header-wrapper'));
