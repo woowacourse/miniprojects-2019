@@ -19,14 +19,14 @@ class CommentTest extends MockStorage {
 
     @Test
     void 댓글_생성() {
-        assertDoesNotThrow(() -> new Comment(commentFeature, writer, article, null));
+        assertDoesNotThrow(() -> new Comment(content, writer, article, null));
     }
 
     @Test
     void 권한_있는_사용자_댓글_수정() {
         doNothing().when(injectComment).validateAuth(other, article);
 
-        assertDoesNotThrow(() -> injectComment.modify(commentFeature, other, article));
+        assertDoesNotThrow(() -> injectComment.modify(content, other, article));
     }
 
     @Test
@@ -34,7 +34,7 @@ class CommentTest extends MockStorage {
         doThrow(MismatchAuthException.class).when(injectComment).validateAuth(other, article);
 
         assertThrows(MismatchAuthException.class, () -> {
-            injectComment.modify(commentFeature, other, article);
+            injectComment.modify(content, other, article);
         });
     }
 
@@ -43,7 +43,7 @@ class CommentTest extends MockStorage {
         doThrow(MismatchAuthException.class).when(injectComment).validateAuth(writer, otherArticle);
 
         assertThrows(MismatchAuthException.class, () -> {
-            injectComment.modify(commentFeature, writer, otherArticle);
+            injectComment.modify(content, writer, otherArticle);
         });
     }
 }

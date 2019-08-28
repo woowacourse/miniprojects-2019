@@ -1,9 +1,9 @@
 package com.woowacourse.sunbook.presentation.controller;
 
 import com.woowacourse.sunbook.application.dto.comment.CommentResponseDto;
-import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.service.CommentService;
-import com.woowacourse.sunbook.domain.comment.CommentFeature;
+import com.woowacourse.sunbook.domain.Content;
+import com.woowacourse.sunbook.presentation.support.LoginUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +19,27 @@ public class CommentApiController {
         this.commentService = commentService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<CommentResponseDto>> show(@PathVariable final Long articleId) {
-        List<CommentResponseDto> commentResponseDto = commentService.findByArticleId(articleId);
+//    @GetMapping
+//    public ResponseEntity<List<CommentResponseDto>> show(@PathVariable final Long articleId) {
+//        List<CommentResponseDto> commentResponseDto = commentService.findComments(articleId);
+//
+//        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+//    }
+
+    @GetMapping(value = {"", "/{commentId}"})
+    public ResponseEntity<List<CommentResponseDto>> show(@PathVariable final Long articleId,
+                                                       @PathVariable(required = false) final Long commentId) {
+        List<CommentResponseDto> commentResponseDto = commentService.findByIdAndArticleId(articleId, commentId);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 
-    @PostMapping("/{commentId}")
+    @PostMapping(value = {"", "/{commentId}"})
     public ResponseEntity<CommentResponseDto> save(@PathVariable final Long articleId,
                                                    @PathVariable(required = false) final Long commentId,
-                                                   @SessionAttribute("loginUser") final UserResponseDto userResponseDto,
-                                                   @RequestBody final CommentFeature commentFeature) {
-        CommentResponseDto commentResponseDto = commentService.save(commentFeature, articleId, userResponseDto.getId(), commentId);
+                                                   final LoginUser loginUser,
+                                                   @RequestBody final Content content) {
+        CommentResponseDto commentResponseDto = commentService.save(content, articleId, loginUser.getId(), commentId);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
@@ -39,9 +47,9 @@ public class CommentApiController {
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> modify(@PathVariable final Long articleId,
                                                      @PathVariable final Long commentId,
-                                                     @SessionAttribute("loginUser") final UserResponseDto userResponseDto,
-                                                     @RequestBody final CommentFeature commentFeature) {
-        CommentResponseDto commentResponseDto = commentService.modify(commentId, commentFeature, articleId, userResponseDto.getId());
+                                                     final LoginUser loginUser,
+                                                     @RequestBody final Content content) {
+        CommentResponseDto commentResponseDto = commentService.modify(commentId, content, articleId, loginUser.getId());
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
@@ -49,8 +57,8 @@ public class CommentApiController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> remove(@PathVariable final Long articleId,
                                        @PathVariable final Long commentId,
-                                       @SessionAttribute("loginUser") final UserResponseDto userResponseDto) {
-        commentService.remove(commentId, articleId, userResponseDto.getId());
+                                       final LoginUser loginUser) {
+        commentService.remove(commentId, articleId, loginUser.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

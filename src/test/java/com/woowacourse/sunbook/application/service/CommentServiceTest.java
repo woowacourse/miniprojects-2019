@@ -5,7 +5,7 @@ import com.woowacourse.sunbook.application.dto.comment.CommentResponseDto;
 import com.woowacourse.sunbook.application.exception.NotFoundArticleException;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.comment.Comment;
-import com.woowacourse.sunbook.domain.comment.CommentFeature;
+import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.user.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +33,7 @@ class CommentServiceTest extends MockStorage {
         given(commentRepository.save(any(Comment.class))).willReturn(comment);
         given(modelMapper.map(mock(Comment.class), CommentResponseDto.class)).willReturn(mock(CommentResponseDto.class));
 
-        injectCommentService.save(mock(CommentFeature.class), ID, ID, null);
+        injectCommentService.save(mock(Content.class), ID, ID, null);
 
         verify(commentRepository).save(any(Comment.class));
     }
@@ -42,10 +42,11 @@ class CommentServiceTest extends MockStorage {
     void 대댓글_작성() {
         given(userService.findById(ID)).willReturn(user);
         given(articleService.findById(ID)).willReturn(article);
+        given(commentRepository.findById(ID)).willReturn(Optional.of(comment));
         given(commentRepository.save(any(Comment.class))).willReturn(comment);
         given(modelMapper.map(comment, CommentResponseDto.class)).willReturn(commentResponseDto);
 
-        injectCommentService.save(commentFeature, ID, ID, ID);
+        injectCommentService.save(content, ID, ID, ID);
 
         verify(commentRepository).save(any(Comment.class));
     }
@@ -63,7 +64,7 @@ class CommentServiceTest extends MockStorage {
         given(articleService.findById(ID)).willThrow(NotFoundArticleException.class);
 
         assertThrows(NotFoundArticleException.class, () -> {
-            injectCommentService.modify(ID, mock(CommentFeature.class), ID, ID);
+            injectCommentService.modify(ID, mock(Content.class), ID, ID);
         });
     }
 
@@ -75,9 +76,9 @@ class CommentServiceTest extends MockStorage {
         doNothing().when(mock(Comment.class)).validateAuth(mock(User.class), mock(Article.class));
         given(modelMapper.map(mock(Comment.class), CommentResponseDto.class)).willReturn(mock(CommentResponseDto.class));
 
-        injectCommentService.modify(ID, mock(CommentFeature.class), ID, ID);
+        injectCommentService.modify(ID, mock(Content.class), ID, ID);
 
-        verify(comment, times(1)).modify(any(CommentFeature.class), any(User.class), any(Article.class));
+        verify(comment, times(1)).modify(any(Content.class), any(User.class), any(Article.class));
     }
 
     @Test

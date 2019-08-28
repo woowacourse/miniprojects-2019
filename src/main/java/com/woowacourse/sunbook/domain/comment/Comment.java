@@ -1,6 +1,7 @@
 package com.woowacourse.sunbook.domain.comment;
 
 import com.woowacourse.sunbook.domain.BaseEntity;
+import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.comment.exception.MismatchAuthException;
 import com.woowacourse.sunbook.domain.user.User;
@@ -24,7 +25,7 @@ public class Comment extends BaseEntity {
     private static final String ARTICLE_FK_NAME = "fk_comment_to_article";
 
     @Embedded
-    private CommentFeature commentFeature;
+    private Content content;
 
     @ManyToOne
     @JoinColumn(name = USER_FK_FIELD_NAME, foreignKey = @ForeignKey(name = USER_FK_NAME))
@@ -40,19 +41,19 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_comment_to_comment"))
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     private List<Comment> children = new ArrayList<>();
 
-    public Comment(final CommentFeature commentFeature, final User author, final Article article, final Comment parent) {
-        this.commentFeature = commentFeature;
+    public Comment(final Content content, final User author, final Article article, final Comment parent) {
+        this.content = content;
         this.author = author;
         this.article = article;
         this.parent = parent;
     }
 
-    public Comment modify(final CommentFeature commentFeature, final User user, final Article article) {
+    public Comment modify(final Content content, final User user, final Article article) {
         validateAuth(user, article);
-        this.commentFeature = commentFeature;
+        this.content = content;
 
         return this;
     }
