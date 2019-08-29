@@ -27,6 +27,15 @@ class CommentServiceTest extends MockStorage {
     private CommentService injectCommentService;
 
     @Test
+    void 특정_게시글_댓글수_조회() {
+        given(commentRepository.countByArticleId(1L)).willReturn(2L);
+
+        injectCommentService.countByArticleId(1L);
+
+        verify(commentRepository).countByArticleId(1L);
+    }
+
+    @Test
     void 댓글_작성() {
         given(userService.findById(ID)).willReturn(mock(User.class));
         given(articleService.findById(ID)).willReturn(mock(Article.class));
@@ -49,13 +58,6 @@ class CommentServiceTest extends MockStorage {
         injectCommentService.save(content, ID, ID, ID);
 
         verify(commentRepository).save(any(Comment.class));
-    }
-
-    @Test
-    void 댓글_전체_조회() {
-        injectCommentService.findAll();
-
-        verify(commentRepository).findAll();
     }
 
     @Test

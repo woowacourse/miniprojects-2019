@@ -12,11 +12,18 @@ class CommentApiControllerTest extends TestTemplate {
     @Test
     void 댓글_등록() {
         String sessionId = loginSessionId(userRequestDto);
-        respondApi(loginAndRequest(HttpMethod.POST, "/api/articles/1/comments", new Content("abc"), HttpStatus.OK, sessionId))
+        respondApi(loginAndRequest(HttpMethod.POST, "/api/articles/2/comments", new Content("abc"), HttpStatus.OK, sessionId))
                 .jsonPath("$..id").isEqualTo(7)
                 .jsonPath("$..contents").isEqualTo("abc")
                 .jsonPath("$..authorName").isEqualTo("mir")
                 ;
+    }
+
+    @Test
+    void 특정_게시글_댓글_조회_수() {
+        String sessionId = loginSessionId(userRequestDto);
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/articles/1/comments/size", Void.class, HttpStatus.OK, sessionId))
+                .jsonPath("$").isEqualTo(6);
     }
 
     @Test
@@ -64,13 +71,13 @@ class CommentApiControllerTest extends TestTemplate {
     @Test
     void 권한_있는_사용자_댓글_삭제() {
         String sessionId = loginSessionId(userRequestDto);
-        loginAndRequest(HttpMethod.DELETE, "/api/articles/1/comments/2", Void.class, HttpStatus.OK, sessionId);
+        loginAndRequest(HttpMethod.DELETE, "/api/articles/2/comments/2", Void.class, HttpStatus.OK, sessionId);
     }
 
     @Test
     void 권한_없는_사용자_댓글_삭제() {
         String sessionId = loginSessionId(anotherRequestDto);
-        respondApi(loginAndRequest(HttpMethod.DELETE, "/api/articles/1/comments/1", Void.class, HttpStatus.OK, sessionId))
+        respondApi(loginAndRequest(HttpMethod.DELETE, "/api/articles/2/comments/1", Void.class, HttpStatus.OK, sessionId))
                 .jsonPath("$.errorMessage").isEqualTo("권한이 없습니다.")
                 ;
     }

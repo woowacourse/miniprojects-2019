@@ -26,6 +26,11 @@ public class CommentApiController {
         return ResponseEntity.ok().body(commentResponseDto);
     }
 
+    @GetMapping("/size")
+    public ResponseEntity<Long> showNumber(@PathVariable final Long articleId) {
+        return ResponseEntity.ok().body(commentService.countByArticleId(articleId));
+    }
+
     @PostMapping(value = {"", "/{commentId}"})
     public ResponseEntity<CommentResponseDto> save(@PathVariable final Long articleId,
                                                    @PathVariable(required = false) final Long commentId,

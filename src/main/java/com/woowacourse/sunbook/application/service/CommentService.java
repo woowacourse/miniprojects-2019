@@ -34,35 +34,9 @@ public class CommentService {
         this.modelMapper = modelMapper;
     }
 
-    @Transactional
-    public CommentResponseDto save(final Content content,
-                                   final Long articleId,
-                                   final Long userId,
-                                   final Long commentId) {
-        User user = userService.findById(userId);
-        Article article = articleService.findById(articleId);
-        Comment parent = findById(commentId);
-        Comment comment = commentRepository.save(new Comment(content, user, article, parent));
-
-        return modelMapper.map(comment, CommentResponseDto.class);
-    }
-
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> findAll() {
-        return Collections.unmodifiableList(
-                commentRepository.findAll().stream()
-                        .map(comment -> modelMapper.map(comment, CommentResponseDto.class))
-                        .collect(Collectors.toList())
-        );
-    }
-
-    @Transactional(readOnly = true)
-    public List<CommentResponseDto> findComments(final Long articleId) {
-        return Collections.unmodifiableList(
-                commentRepository.findByArticleId(articleId).stream()
-                        .map(comment -> modelMapper.map(comment, CommentResponseDto.class))
-                        .collect(Collectors.toList())
-        );
+    public Long countByArticleId(final Long articleId) {
+        return commentRepository.countByArticleId(articleId);
     }
 
     @Transactional(readOnly = true)
@@ -75,6 +49,19 @@ public class CommentService {
                         .map(comment -> modelMapper.map(comment, CommentResponseDto.class))
                         .collect(Collectors.toList())
         );
+    }
+
+    @Transactional
+    public CommentResponseDto save(final Content content,
+                                   final Long articleId,
+                                   final Long userId,
+                                   final Long commentId) {
+        User user = userService.findById(userId);
+        Article article = articleService.findById(articleId);
+        Comment parent = findById(commentId);
+        Comment comment = commentRepository.save(new Comment(content, user, article, parent));
+
+        return modelMapper.map(comment, CommentResponseDto.class);
     }
 
     @Transactional
