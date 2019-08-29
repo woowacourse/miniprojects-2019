@@ -21,7 +21,7 @@ const addVideoDetailTemplate = function (data) {
             </div>
             <div class="col-md-10">
                 <span class="text-bold">${data.creator.name}</span><br>
-                <span>게시일 : ${data.createDate}</span><br><br>
+                <span>게시일 : ${moment.utc(data.createDate).format('YYYY[년] MM[월] DD[일] hh:mm')}</span><br><br>
                 <span>${data.contents}</span>
             </div>
         </div>

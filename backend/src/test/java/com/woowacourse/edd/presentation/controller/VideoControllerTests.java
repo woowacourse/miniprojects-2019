@@ -2,7 +2,6 @@ package com.woowacourse.edd.presentation.controller;
 
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
-import com.woowacourse.edd.utils.Utils;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -10,7 +9,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class VideoControllerTests extends BasicControllerTests {
 
@@ -31,7 +32,6 @@ public class VideoControllerTests extends BasicControllerTests {
             .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
             .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
             .jsonPath("$.viewCount").isEqualTo(DEFAULT_VIDEO_VIEW_COUNT + 1)
-            .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(DEFAULT_VIDEO_DATETIME))
             .jsonPath("$.creator.id").isEqualTo(DEFAULT_VIDEO_ID)
             .jsonPath("$.creator.name").isEqualTo(DEFAULT_LOGIN_NAME);
     }
@@ -45,22 +45,22 @@ public class VideoControllerTests extends BasicControllerTests {
     void find_videos_by_date() {
         String jsessionid = getDefaultLoginSessionId();
 
-        saveNextVideo(new VideoSaveRequestDto("111", "title1", "contents1"), jsessionid)
-            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("222", "title2", "contents2"), jsessionid))
-            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("333", "title3", "contents3"), jsessionid))
-            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("444", "title4", "contents4"), jsessionid))
-            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("555", "title5", "contents5"), jsessionid))
-            .consumeWith(res -> saveNextVideo(new VideoSaveRequestDto("666", "title6", "contents6"), jsessionid));
+        saveVideo(new VideoSaveRequestDto("111", "title1", "contents1"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("222", "title2", "contents2"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("333", "title2", "contents3"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("444", "title4", "contents4"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("555", "title5", "contents5"), jsessionid);
+        saveVideo(new VideoSaveRequestDto("666", "title6", "contents6"), jsessionid);
 
-        findVideos(0, 6, "createDate", "DESC")
+        PageRequestContentDto response = findVideos(0, 6, "createDate", "DESC")
             .expectStatus().isOk()
-            .expectBody()
-            .jsonPath("$.content.length()").isEqualTo(6)
-            .jsonPath("$.content[0].youtubeId").isEqualTo("666")
-            .jsonPath("$.content[0].viewCount").isEqualTo(0)
-            .jsonPath("$.content[3].youtubeId").isEqualTo("333")
-            .jsonPath("$.content[5].youtubeId").isEqualTo("111")
-            .jsonPath("$.content[5].creator.id").isEqualTo(DEFAULT_LOGIN_ID);
+            .expectBody(PageRequestContentDto.class).returnResult().getResponseBody();
+
+        IntStream.range(0, response.getContent().size() - 1)
+            .forEach(i -> {
+                assertThat(LocalDateTime.parse((String) response.getContent().get(i).get("createDate")))
+                    .isAfter(LocalDateTime.parse((String) response.getContent().get(i + 1).get("createDate")));
+            });
     }
 
     @Test
@@ -74,7 +74,6 @@ public class VideoControllerTests extends BasicControllerTests {
             .jsonPath("$.youtubeId").isEqualTo(DEFAULT_VIDEO_YOUTUBEID)
             .jsonPath("$.title").isEqualTo(DEFAULT_VIDEO_TITLE)
             .jsonPath("$.contents").isEqualTo(DEFAULT_VIDEO_CONTENTS)
-            .jsonPath("$.createDate").isEqualTo(Utils.getFormedDate(LocalDateTime.now(ZoneId.of("UTC"))))
             .jsonPath("$.creator.id").isEqualTo(DEFAULT_LOGIN_ID)
             .jsonPath("$.creator.name").isEqualTo(DEFAULT_LOGIN_NAME);
     }

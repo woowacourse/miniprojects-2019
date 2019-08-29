@@ -8,7 +8,7 @@ const commentApp = (function() {
                 <span href="" class="text-bold inline-block">${data.author.name}</span>
         
                 <p class="width-80" id="contents-${data.id}"> ${data.contents}</p>
-                <span class="text-bold inline-block"> 생성날짜:${data.createDate}</span>
+                <span class="text-bold inline-block"> 생성날짜:${moment.utc(data.createDate).format('YYYY[년] MM[월] DD[일] hh:mm')}</span>
                 <button type="button" id="edit-btn-${data.id}" class="btn btn-danger">
                     <i class="ti-pencil text-dark font-size-16 pdd-horizontal-5"></i>
                 </button>

@@ -15,8 +15,7 @@ public class CommentConverter {
     }
 
     public static CommentResponse toResponse(Comment comment) {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMddHH");
-        String date = comment.getCreateDate().format(format);
+        String date = comment.getCreateDate().toString();
 
         return new CommentResponse(comment.getId(), comment.getContents(), comment.getAuthor(), date);
     }

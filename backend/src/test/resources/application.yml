@@ -19,6 +19,3 @@ spring:
   devtools:
     livereload:
       enabled: true
-
-debug: true
-trace: false
