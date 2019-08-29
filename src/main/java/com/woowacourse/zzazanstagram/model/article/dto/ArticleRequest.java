@@ -6,25 +6,17 @@ public class ArticleRequest {
 
     private MultipartFile file;
     private String contents;
-    private String hashTag;
 
-    public ArticleRequest() {
+    private ArticleRequest() {
+    }
+
+    public ArticleRequest(MultipartFile file, String contents) {
+        this.file = file;
+        this.contents = contents;
     }
 
     public String getContents() {
         return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public String getHashTag() {
-        return hashTag;
-    }
-
-    public void setHashTag(String hashTag) {
-        this.hashTag = hashTag;
     }
 
     public MultipartFile getFile() {
@@ -33,5 +25,9 @@ public class ArticleRequest {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 }

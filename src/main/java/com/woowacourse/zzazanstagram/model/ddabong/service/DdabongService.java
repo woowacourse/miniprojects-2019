@@ -3,14 +3,13 @@ package com.woowacourse.zzazanstagram.model.ddabong.service;
 import com.woowacourse.zzazanstagram.model.article.domain.Article;
 import com.woowacourse.zzazanstagram.model.article.service.ArticleService;
 import com.woowacourse.zzazanstagram.model.ddabong.domain.Ddabong;
-import com.woowacourse.zzazanstagram.model.ddabong.dto.DdabongResponse;
+import com.woowacourse.zzazanstagram.model.ddabong.dto.DdabongMemberResponse;
+import com.woowacourse.zzazanstagram.model.ddabong.dto.DdabongToggleResponse;
 import com.woowacourse.zzazanstagram.model.ddabong.repository.DdabongRepository;
 import com.woowacourse.zzazanstagram.model.member.domain.Member;
 import com.woowacourse.zzazanstagram.model.member.service.MemberService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 public class DdabongService {
@@ -24,22 +23,30 @@ public class DdabongService {
         this.memberService = memberService;
     }
 
+
     @Transactional
-    public DdabongResponse toggleDdabong(Long articleId, String memberEmail) {
-        Article article = articleService.findArticleById(articleId);
+    public DdabongToggleResponse findDdabongToggleResponseBy(Long articleId, String memberEmail) {
+        Article article = articleService.findById(articleId);
         Member member = memberService.findByEmail(memberEmail);
 
-        return ddabongRepository.findByArticleAndMember(article, member).map(ddabong -> {
-            ddabong.changeClicked();
-            return getDdabongResponse(article, ddabong);
-        }).orElseGet(() -> {
-            Ddabong createdDdabong = new Ddabong(article, member);
-            ddabongRepository.save(createdDdabong);
-            return getDdabongResponse(article, createdDdabong);
-        });
+        return ddabongRepository.findByArticleAndMember(article, member)
+                .map(ddabong -> {
+                    ddabong.changeClicked();
+                    return assembleToDdabongToggleResponseBy(article, ddabong);
+                })
+                .orElseGet(() -> {
+                    Ddabong createdDdabong = new Ddabong(article, member);
+                    ddabongRepository.save(createdDdabong);
+                    return assembleToDdabongToggleResponseBy(article, createdDdabong);
+                });
     }
 
-    private DdabongResponse getDdabongResponse(Article article, Ddabong createdDdabong) {
-        return DdabongAssembler.toDto(article.getDdabongCount(), createdDdabong.isClicked());
+    private DdabongToggleResponse assembleToDdabongToggleResponseBy(Article article, Ddabong createdDdabong) {
+        return DdabongAssembler.toDto(article.countClickedDdabong(), createdDdabong.isClicked());
+    }
+
+    public DdabongMemberResponse findDdabongMemberResponseBy(Long articleId) {
+        Article article = articleService.findById(articleId);
+        return DdabongAssembler.toDto(article.getDdabongs());
     }
 }
