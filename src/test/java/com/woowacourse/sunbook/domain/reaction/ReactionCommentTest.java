@@ -3,6 +3,7 @@ package com.woowacourse.sunbook.domain.reaction;
 import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
+import com.woowacourse.sunbook.domain.article.OpenRange;
 import com.woowacourse.sunbook.domain.comment.Comment;
 import com.woowacourse.sunbook.domain.fileurl.FileUrl;
 import com.woowacourse.sunbook.domain.user.User;
@@ -11,10 +12,7 @@ import com.woowacourse.sunbook.domain.user.UserName;
 import com.woowacourse.sunbook.domain.user.UserPassword;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ReactionCommentTest {
     private final UserEmail userEmail = new UserEmail("user@naver.com");
@@ -30,7 +28,7 @@ public class ReactionCommentTest {
     private static final FileUrl imageUrl = new FileUrl(IMAGE_URL);
     private static final FileUrl videoUrl = new FileUrl(VIDEO_URL);
 
-    private final Article article = new Article(new ArticleFeature(articleContents, imageUrl, videoUrl), author);
+    private final Article article = new Article(new ArticleFeature(articleContents, imageUrl, videoUrl), author, OpenRange.ALL);
 
     private static final String COMMENT_CONTENTS = "SunBook Comment Contents";
     private final Content commentFeature = new Content(COMMENT_CONTENTS);

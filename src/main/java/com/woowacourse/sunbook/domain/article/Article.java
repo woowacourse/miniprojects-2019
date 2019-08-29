@@ -25,11 +25,6 @@ public class Article extends BaseEntity implements Comparable<Article> {
     @Enumerated(EnumType.STRING)
     private OpenRange openRange;
 
-    public Article(ArticleFeature articleFeature, User author) {
-        this.articleFeature = articleFeature;
-        this.author = author;
-    }
-
     public Article(ArticleFeature articleFeature, User author, OpenRange openRange) {
         this.articleFeature = articleFeature;
         this.author = author;
