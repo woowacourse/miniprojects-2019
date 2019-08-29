@@ -190,11 +190,11 @@ const template = (function () {
                                     </li>
                                 </ul>
                                 <div class="font-size-12 pdd-left-10 pdd-top-5">
-                                    <span class="pointer text-link-color">좋아요</span>
-                                    <span>·</span>
-                                    <span class="pointer text-link-color">답글 달기</span>
+                                    <span class="pointer text-link-color" data-btn="comment-reaction-good-btn">좋아요</span>
                                     <span>·</span>
                                     <span class="pointer">{{updatedTime}}</span>
+                                    <i id="comment-good-btn-icon-{{id}}" class="fa fa-thumbs-o-up text-info font-size-16"></i>
+                                    <span id="comment-good-count-{{id}}" class="font-size-14 lh-2-1">{{numberOfGood}}</span>
                                 </div>
                             </div>
                         </li>`;
