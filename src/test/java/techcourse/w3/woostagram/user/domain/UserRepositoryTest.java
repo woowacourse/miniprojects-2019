@@ -37,7 +37,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void search(){
+    public void search() {
         User user = User.builder()
                 .email("ab@naver.com")
                 .password("Aa12345!!")
@@ -55,7 +55,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void searchIgnoreCase(){
+    public void searchIgnoreCase() {
         User user = User.builder()
                 .email("ab@naver.com")
                 .password("Aa12345!!")

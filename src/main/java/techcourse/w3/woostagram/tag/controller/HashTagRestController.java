@@ -20,7 +20,7 @@ public class HashTagRestController {
     }
 
     @GetMapping("/{hashTagName}")
-    public ResponseEntity<Page<HashTagArticleDto>> read(Pageable pageable, @PathVariable String hashTagName){
-        return ResponseEntity.ok(hashTagSearchService.getContainsHashTagArticles(hashTagName,pageable));
+    public ResponseEntity<Page<HashTagArticleDto>> read(Pageable pageable, @PathVariable String hashTagName) {
+        return ResponseEntity.ok(hashTagSearchService.getContainsHashTagArticles(hashTagName, pageable));
     }
 }

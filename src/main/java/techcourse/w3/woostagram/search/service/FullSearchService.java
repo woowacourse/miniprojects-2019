@@ -20,6 +20,6 @@ public class FullSearchService {
     public SearchDto search(String query) {
         List<UserInfoDto> users = userSearchService.search(query);
         List<TagDto> hashTags = hashTagSearchService.search(query);
-        return SearchDto.from(users,hashTags);
+        return SearchDto.from(users, hashTags);
     }
 }

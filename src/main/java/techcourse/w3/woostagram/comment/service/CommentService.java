@@ -40,7 +40,7 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    public int countByArticleId(Long articleId){
+    public int countByArticleId(Long articleId) {
         return commentRepository.findByArticle_Id(articleId).size();
     }
 
