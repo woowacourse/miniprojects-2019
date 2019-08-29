@@ -71,6 +71,7 @@ public class CommentService {
 
         return Collections.unmodifiableList(
                 commentRepository.findByParentAndArticleId(parent, articleId).stream()
+                        .sorted()
                         .map(comment -> modelMapper.map(comment, CommentResponseDto.class))
                         .collect(Collectors.toList())
         );

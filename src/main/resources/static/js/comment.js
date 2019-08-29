@@ -188,7 +188,11 @@ const CommentApp = (() => {
             commentApi.update(articleHiddenId.value, commentHiddenId.value, data)
                 .then(response => response.json())
                 .then(comment => {
-                    contents.innerText = comment.content.contents;
+                    if (comment.hasOwnProperty('errorMessage')) {
+                        alert(comment.errorMessage);
+                    } else {
+                        contents.innerText = comment.content.contents;
+                    }
                 });
         };
 
@@ -201,8 +205,13 @@ const CommentApp = (() => {
                 const commentId = comment.getAttribute('data-comment-id');
 
                 commentApi.remove(articleId, commentId)
-                    .then(() => {
-                        comment.remove();
+                    .then(response => response.json())
+                    .then((json) => {
+                        if (json.hasOwnProperty('errorMessage')) {
+                            alert(json.errorMessage);
+                        } else {
+                            comment.remove();
+                        }
                     });
             }
         };
