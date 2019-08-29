@@ -1,6 +1,5 @@
 package techcourse.w3.woostagram.article.controller;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ByteArrayResource;
@@ -9,9 +8,7 @@ import org.springframework.http.client.MultipartBodyBuilder;
 import techcourse.w3.woostagram.AbstractControllerTests;
 import techcourse.w3.woostagram.common.support.TestDataInitializer;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.assertj.core.api.Assertions.assertThat;

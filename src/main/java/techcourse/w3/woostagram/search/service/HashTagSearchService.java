@@ -19,6 +19,7 @@ public class HashTagSearchService implements SearchService {
     private final HashTagService hashTagService;
     private final LikesService likesService;
     private final CommentService commentService;
+
     public HashTagSearchService(final HashTagService hashTagService, LikesService likesService, CommentService commentService) {
         this.hashTagService = hashTagService;
         this.likesService = likesService;
@@ -35,7 +36,7 @@ public class HashTagSearchService implements SearchService {
     }
 
     public Page<HashTagArticleDto> getContainsHashTagArticles(String hashTagName, Pageable pageable) {
-        return hashTagService.findByName(HASH_TAG + hashTagName,pageable).map((x) -> x.getArticle()).map((article) -> HashTagArticleDto.from(article,
+        return hashTagService.findByName(HASH_TAG + hashTagName, pageable).map((x) -> x.getArticle()).map((article) -> HashTagArticleDto.from(article,
                 (long) likesService.findLikedUserByArticleId(article.getId()).size(),
                 (long) commentService.countByArticleId(article.getId())
         ));

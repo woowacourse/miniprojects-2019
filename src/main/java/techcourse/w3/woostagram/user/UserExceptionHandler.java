@@ -1,16 +1,12 @@
 package techcourse.w3.woostagram.user;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import techcourse.w3.woostagram.user.exception.LoginException;
 import techcourse.w3.woostagram.user.exception.UserCreateException;
 import techcourse.w3.woostagram.user.exception.UserUpdateException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Slf4j
 @ControllerAdvice

@@ -9,7 +9,6 @@ import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserContents;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class HashTagRepositoryTest {
@@ -49,7 +48,7 @@ class HashTagRepositoryTest {
                 .article(persistArticle)
                 .build();
 
-        HashTag persistHashTag =testEntityManager.persist(hashTag);
+        HashTag persistHashTag = testEntityManager.persist(hashTag);
 
         assertThat(hashTagRepository.findTop10ByTag_NameContainingIgnoreCaseOrderByTag_Name("hi")).contains(persistHashTag);
 

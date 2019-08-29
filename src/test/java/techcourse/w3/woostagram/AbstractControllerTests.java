@@ -1,7 +1,6 @@
 package techcourse.w3.woostagram;
 
 import org.apache.logging.log4j.util.Strings;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
