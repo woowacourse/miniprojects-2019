@@ -1,5 +1,6 @@
 const CommentApp = (() => {
     const commentTemplate = Handlebars.compile(template.comment);
+    const commentSubTemplate = Handlebars.compile(template.subComment);
     const commentArea = Handlebars.compile(template.commentArea);
 
     const CommentController = function () {
@@ -52,13 +53,13 @@ const CommentApp = (() => {
     const CommentService = function () {
         const commentApi = new CommentApi();
 
-        const renderComment = (articleId, commentId, commentList) => {
+        const renderComment = (articleId, commentId, commentList, template) => {
             commentApi.render(articleId, commentId)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(comment => {
                         commentList
-                            .insertAdjacentHTML('beforeend', commentTemplate({
+                            .insertAdjacentHTML('beforeend', template({
                                 "id": comment.id,
                                 "user-name": comment.authorName,
                                 "comment-contents": comment.content.contents,
@@ -84,7 +85,7 @@ const CommentApp = (() => {
                     return;
                 }
 
-                renderComment(articleId, commentId, commentList)
+                renderComment(articleId, commentId, commentList, commentTemplate)
             }
         };
 
@@ -115,7 +116,7 @@ const CommentApp = (() => {
                 inputArea.innerHTML = commentArea({id: commentId});
                 inputArea.addEventListener('keydown', add);
 
-                renderComment(articleId, commentId, commentList);
+                renderComment(articleId, commentId, commentList, commentSubTemplate);
             }
         };
 
@@ -130,6 +131,7 @@ const CommentApp = (() => {
                 const commentId = target.getAttribute('data-parents-comment-id') ? target.getAttribute('data-parents-comment-id') : '';
                 const commentList = commentId === "" ? document.getElementById('comment-list-' + articleId) :
                                                         document.getElementById('comment-sublist-' + commentId);
+                const template = commentId === "" ? commentTemplate : commentSubTemplate;
 
                 if (!event.shiftKey) {
                     const data = {
@@ -144,21 +146,7 @@ const CommentApp = (() => {
                                 }
                             }
 
-                            commentApi.render(articleId, commentId)
-                                .then(response => response.json())
-                                .then(data => {
-                                    data.forEach(comment => {
-                                        commentList
-                                            .insertAdjacentHTML('beforeend', commentTemplate({
-                                                "id": comment.id,
-                                                "user-name": comment.authorName,
-                                                "comment-contents": comment.content.contents,
-                                                "updatedTime": comment.updatedTime,
-                                            }));
-                                        ReactionApp.service().showGoodCount('comment', comment.id);
-                                    })
-                                })
-                                .catch(error => console.log("error: " + error));
+                            renderComment(articleId, commentId, commentList, template)
                         })
                         .then(() => {
                             target.value = "";
