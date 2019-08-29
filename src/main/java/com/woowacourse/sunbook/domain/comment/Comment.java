@@ -37,7 +37,7 @@ public class Comment extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Article article;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_comment_to_comment"))
     private Comment parent;
 
