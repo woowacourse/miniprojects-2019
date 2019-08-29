@@ -5,7 +5,14 @@ import com.woowacourse.sunbook.application.service.CommentService;
 import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.presentation.support.LoginUser;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -52,11 +59,9 @@ public class CommentApiController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> remove(@PathVariable final Long articleId,
-                                       @PathVariable final Long commentId,
-                                       final LoginUser loginUser) {
-        commentService.remove(commentId, articleId, loginUser.getId());
-
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Boolean> remove(@PathVariable final Long articleId,
+                                          @PathVariable final Long commentId,
+                                          final LoginUser loginUser) {
+        return ResponseEntity.ok().body(commentService.remove(commentId, articleId, loginUser.getId()));
     }
 }

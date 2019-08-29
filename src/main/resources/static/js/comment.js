@@ -66,6 +66,7 @@ const CommentApp = (() => {
                                 "updatedTime": comment.updatedTime,
                             }));
                         ReactionApp.service().showGoodCount('comment', comment.id);
+                        CommentApp.service().showCommentCount(articleId);
                     })
                 })
                 .catch(error => console.log("error: " + error));
@@ -212,9 +213,21 @@ const CommentApp = (() => {
                             alert(json.errorMessage);
                         } else {
                             comment.remove();
+                            CommentApp.service().showCommentCount(articleId);
                         }
                     });
             }
+        };
+
+        const showCommentCount = (articleId) => {
+            const commentSpan = document.getElementById(`article-${articleId}-comment-size`);
+            commentApi.size(articleId)
+                .then(data => {
+                    return data.json();
+                }).then(commentCount => {
+                    commentSpan.innerText = commentCount;
+            });
+
         };
 
         return {
@@ -224,6 +237,7 @@ const CommentApp = (() => {
             update: update,
             showModal: showModal,
             remove: remove,
+            showCommentCount: showCommentCount,
         }
     };
 
@@ -244,11 +258,16 @@ const CommentApp = (() => {
             return Api.get(`/api/articles/${articleId}/comments/${commentId}`);
         };
 
+        const size = (articleId) => {
+            return Api.get(`/api/articles/${articleId}/comments/size`);
+        };
+
         return {
             add: add,
             update: update,
             remove: remove,
             render: render,
+            size: size,
         };
     };
 
@@ -259,6 +278,7 @@ const CommentApp = (() => {
 
     return {
         init: init,
+        service: CommentService,
     }
 })();
 

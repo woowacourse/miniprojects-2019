@@ -44,7 +44,7 @@ const template = (function () {
                             <span id="article-good-count-{{id}}" class="font-size-14 lh-2-1">{{numberOfGood}}</span>
                         </li>
                         <li class="float-right mrg-right-15">
-                            <span class="font-size-13">댓글 <span id="article-{{id}}-comment-size"></span>개</span>
+                            <span class="font-size-13">댓글 <span id="article-{{id}}-comment-size"></span> 개</span>
                         </li>
                     </ul>
                     <ul class="feed-action border bottom d-flex">

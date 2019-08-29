@@ -68,6 +68,7 @@ const ArticleApp = (() => {
                             "authorName": article.authorName.name,
                         }));
                         ReactionApp.service().showGoodCount('article', article.id);
+                        CommentApp.service().showCommentCount(article.id);
                         checkBlank();
                     })
                 })
