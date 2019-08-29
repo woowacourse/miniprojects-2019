@@ -100,6 +100,13 @@ const channelService = (function () {
 
         nameElm.innerText = name
         emailElm.innerText = email
+
+        const topNameElm = document.querySelector('#top-name')
+        const topEmailElm = document.querySelector('#top-email')
+
+        topNameElm.innerText = name
+        topEmailElm.innerText = email
+
     }
 
     const init = () => {
