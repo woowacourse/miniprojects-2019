@@ -7,6 +7,7 @@ import com.wootecobook.turkey.friend.service.dto.FriendAskCreate;
 import com.wootecobook.turkey.friend.service.dto.FriendCreate;
 import com.wootecobook.turkey.friend.service.exception.AlreadyFriendException;
 import com.wootecobook.turkey.friend.service.exception.MismatchedUserException;
+import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
@@ -62,11 +63,11 @@ public class FriendServiceTest {
                 .password(VALID_PASSWORD)
                 .build();
 
-        UserResponse senderResponse = userService.save(senderRequest);
-        UserResponse receiverResponse = userService.save(receiverRequest);
+        User sender = userService.save(senderRequest);
+        User receiver = userService.save(receiverRequest);
 
-        senderId = senderResponse.getId();
-        receiverId = receiverResponse.getId();
+        senderId = sender.getId();
+        receiverId = receiver.getId();
 
         FriendAskCreate friendAskCreate = FriendAskCreate.builder().receiverId(receiverId).build();
         friendAskId = friendAskService.save(senderId, friendAskCreate).getFriendAskId();

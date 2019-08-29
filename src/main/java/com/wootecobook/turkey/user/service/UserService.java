@@ -43,9 +43,9 @@ public class UserService {
         return UserResponse.from(findById(id));
     }
 
-    public UserResponse save(final UserRequest userRequest) {
+    public User save(final UserRequest userRequest) {
         try {
-            return UserResponse.from(userRepository.save(userRequest.toEntity()));
+            return userRepository.save(userRequest.toEntity());
         } catch (Exception e) {
             throw new SignUpException(e.getMessage());
         }
@@ -76,5 +76,9 @@ public class UserService {
                 .filter(user -> !user.matchId(id))
                 .map(UserResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    public boolean existsById(final Long id) {
+        return userRepository.existsById(id);
     }
 }

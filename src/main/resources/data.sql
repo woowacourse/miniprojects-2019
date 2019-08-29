@@ -18,3 +18,13 @@ INSERT INTO comment(contents, user_id, post_id, created_at, updated_at) VALUES (
 
 INSERT INTO comment(contents, user_id, post_id, parent_id) VALUES ('comment4', 1, 1, 1);
 INSERT INTO comment(contents, user_id, post_id, parent_id) VALUES ('comment5', 1, 1, 1);
+
+INSERT INTO introduction(user_id) VALUES (1);
+INSERT INTO introduction(user_id) VALUES (2);
+INSERT INTO introduction(user_id) VALUES (3);
+INSERT INTO introduction(user_id) VALUES (4);
+INSERT INTO introduction(user_id) VALUES (5);
+INSERT INTO introduction(user_id) VALUES (6);
+INSERT INTO introduction(user_id) VALUES (7);
+INSERT INTO introduction(user_id) VALUES (8);
+INSERT INTO introduction(user_id) VALUES (9);

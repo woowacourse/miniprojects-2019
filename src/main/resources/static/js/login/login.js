@@ -4,7 +4,7 @@ function login() {
 
     if(!(event.keyCode === enter || event.which === click)) return
 
-    const loginRequest = $("#login_form").serializeObject()
+    const loginRequest = serializeObject($("#login_form"))
 
     api.POST("/login", loginRequest)
         .then(res => {

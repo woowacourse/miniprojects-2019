@@ -3,7 +3,7 @@ async function signup() {
 		"Content-Type": "application/json; charset=UTF-8"
 	}
 
-	const form_data = $("#reg").serializeObject()
+	const form_data = serializeObject($("#reg"))
 
     const res = await api.POST("/api/users", form_data)
 

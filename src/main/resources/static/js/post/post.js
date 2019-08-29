@@ -511,6 +511,8 @@ const fileAttach = (function () {
     }
 })();
 
-postOperateButton.init();
-fileAttach.init();
-initLoad();
+$(document).ready(function(){
+    postOperateButton.init();
+    fileAttach.init();
+    initLoad();
+})

@@ -138,7 +138,7 @@ public class PostServiceTest {
 //        IntStream.rangeClosed(1, 100).forEach(i ->
 //                postService.save(PostRequest.builder().contents("hello" + i).build(), author.getId()));
 //
-//        Page<PostResponse> pageResponse = postService.findPostResponses(PageRequest.of(pageNum, 10));
+//        Page<PostResponse> pageResponse = postService.findPostResponses(PageRequest.from(pageNum, 10));
 //
 //        assertThat(pageResponse.getTotalElements()).isEqualTo(100);
 //        assertThat(pageResponse.getTotalPages()).isEqualTo(10);

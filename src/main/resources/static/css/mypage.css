@@ -97,6 +97,12 @@
     width: 40vw;
 }
 
+body {
+    font-size: 14px;
+    color: #333;
+    letter-spacing: .2px;
+}
+
 /* 소개 카드 창 */
 .card .card-title {
     padding: 1rem 0 1rem 1rem;
@@ -125,4 +131,93 @@
 
 .card-block .card-images .image {
     width: 12vw;
+}
+
+/* 소개 내부 */
+
+.introduction-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -60px;
+    width: 24px;
+    height: 24px;
+    float: left;
+    background-size: 34px 332px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.education-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -242px;
+}
+
+.current-city-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -224px;
+}
+
+.hometown-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -260px;
+}
+
+.company-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -152px;
+}
+
+.card-contents > div {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    height: 30px;
+}
+
+.card-contents > div > i {
+    background-size: 34px 332px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    margin-right: 8px;
+    margin-top: 5px;
+}
+
+.update-introduction-input, .introduction-card {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.introduction-update-btn, .introduction-display-btn {
+    box-sizing: border-box;
+    width: 100%;
+    line-height: 26px;
+    padding: 0 10px;
+    background-color: #f5f6f7;
+    border-color: #ccd0d5;
+    color: #4b4f56;
+    border: 1px solid;
+    border-radius: 2px;
+    font-size: 12px;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    text-shadow: none;
+    vertical-align: middle;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.display-card, .introduction-update-btn {
+    display: block;
+}
+
+.update-card, .introduction-display-btn {
+    display: none;
 }

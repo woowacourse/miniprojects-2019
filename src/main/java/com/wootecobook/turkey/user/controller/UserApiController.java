@@ -2,6 +2,7 @@ package com.wootecobook.turkey.user.controller;
 
 import com.wootecobook.turkey.commons.resolver.LoginUser;
 import com.wootecobook.turkey.commons.resolver.UserSession;
+import com.wootecobook.turkey.user.service.UserCreateService;
 import com.wootecobook.turkey.user.service.UserDeleteService;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
@@ -24,11 +25,14 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class UserApiController {
 
     private final UserService userService;
+    private final UserCreateService userCreateService;
     private final UserDeleteService userDeleteService;
 
-    public UserApiController(final UserService userService, final UserDeleteService userDeleteService) {
+    public UserApiController(final UserService userService, final UserDeleteService userDeleteService,
+                             final UserCreateService userCreateService) {
         this.userService = userService;
         this.userDeleteService = userDeleteService;
+        this.userCreateService = userCreateService;
     }
 
     @GetMapping("/{id}")
@@ -38,7 +42,7 @@ public class UserApiController {
 
     @PostMapping
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest userRequest) {
-        UserResponse userResponse = userService.save(userRequest);
+        UserResponse userResponse = userCreateService.create(userRequest);
         URI uri = linkTo(UserApiController.class).slash(userResponse.getId()).toUri();
         return ResponseEntity.created(uri).body(userResponse);
     }

@@ -13,6 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
@@ -39,11 +40,11 @@ class UserServiceTest {
                 .build();
 
         //when
-        UserResponse userResponse = userService.save(userRequest);
+        User user = userService.save(userRequest);
 
         //then
-        assertThat(userResponse.getEmail()).isEqualTo(VALID_EMAIL);
-        assertThat(userResponse.getName()).isEqualTo(VALID_NAME);
+        assertThat(user.getEmail()).isEqualTo(VALID_EMAIL);
+        assertThat(user.getName()).isEqualTo(VALID_NAME);
     }
 
     @Test
@@ -94,15 +95,15 @@ class UserServiceTest {
                 .password(VALID_PASSWORD)
                 .build();
 
-        UserResponse userResponse = userService.save(userRequest);
+        User user = userService.save(userRequest);
 
         //when
-        UserResponse found = userService.findUserResponseById(userResponse.getId());
+        UserResponse found = userService.findUserResponseById(user.getId());
 
         //then
-        assertThat(userResponse.getId()).isEqualTo(found.getId());
-        assertThat(userResponse.getEmail()).isEqualTo(found.getEmail());
-        assertThat(userResponse.getName()).isEqualTo(found.getName());
+        assertThat(user.getId()).isEqualTo(found.getId());
+        assertThat(user.getEmail()).isEqualTo(found.getEmail());
+        assertThat(user.getName()).isEqualTo(found.getName());
     }
 
     @Test
@@ -114,15 +115,15 @@ class UserServiceTest {
                 .password(VALID_PASSWORD)
                 .build();
 
-        UserResponse userResponse = userService.save(userRequest);
+        User user = userService.save(userRequest);
 
         //when
-        User found = userService.findByEmail(userResponse.getEmail());
+        User found = userService.findByEmail(user.getEmail());
 
         //then
-        assertThat(userResponse.getId()).isEqualTo(found.getId());
-        assertThat(userResponse.getEmail()).isEqualTo(found.getEmail());
-        assertThat(userResponse.getName()).isEqualTo(found.getName());
+        assertThat(user.getId()).isEqualTo(found.getId());
+        assertThat(user.getEmail()).isEqualTo(found.getEmail());
+        assertThat(user.getName()).isEqualTo(found.getName());
     }
 
     @Test
@@ -153,7 +154,7 @@ class UserServiceTest {
         });
     }
 
-    private UserResponse createUser(String email, String name) {
+    private User createUser(String email, String name) {
         UserRequest userRequest = UserRequest.builder()
                 .email(email)
                 .name(name)
