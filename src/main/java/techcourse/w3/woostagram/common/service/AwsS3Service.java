@@ -6,6 +6,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import techcourse.w3.woostagram.article.exception.FileDeleteFailException;
 import techcourse.w3.woostagram.article.exception.FileSaveFailException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
 import techcourse.w3.woostagram.common.support.AwsS3Properties;
@@ -22,14 +23,12 @@ import java.util.UUID;
 public class AwsS3Service implements StorageService {
     private static final List<String> VALID_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
     private static final String PATH_DELIMITER = ".";
-    private final String AWS_S3_URL;
-    private final String BUCKET_NAME;
     private final AmazonS3 s3;
+    private final AwsS3Properties awsS3Properties;
 
     @Autowired
     public AwsS3Service(AwsS3Properties awsS3Properties, AmazonS3 s3) {
-        AWS_S3_URL = awsS3Properties.getUrl();
-        BUCKET_NAME = awsS3Properties.getBucket();
+        this.awsS3Properties = awsS3Properties;
         this.s3 = s3;
     }
 
@@ -44,16 +43,14 @@ public class AwsS3Service implements StorageService {
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(multipartFile.getBytes());
             ImageResizeUtils.resizeImage(fileExtension, file, resizedFile);
-            s3.putObject(BUCKET_NAME, fileName, resizedFile);
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-        } catch (IOException e) {
+            s3.putObject(awsS3Properties.getBucket(), fileName, resizedFile);
+        } catch (AmazonServiceException | IOException e) {
             throw new FileSaveFailException();
         } finally {
             file.delete();
             resizedFile.delete();
         }
-        return String.join("/", AWS_S3_URL, fileName);
+        return String.join("/", awsS3Properties.getUrl(), fileName);
     }
 
     private String validateFileExtension(String filename) {
@@ -66,11 +63,11 @@ public class AwsS3Service implements StorageService {
 
     @Override
     public void deleteFile(String fileUrl) {
-        String fileName = fileUrl.split(AWS_S3_URL + "/")[1];
+        String fileName = fileUrl.split(awsS3Properties.getUrl() + "/")[1];
         try {
-            s3.deleteObject(BUCKET_NAME, fileName);
+            s3.deleteObject(awsS3Properties.getBucket(), fileName);
         } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
+            throw new FileDeleteFailException();
         }
     }
 }
