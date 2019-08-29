@@ -32,3 +32,12 @@ CREATE TABLE IF NOT EXISTS comment(
 	FOREIGN KEY(author_id) REFERENCES user(id),
 	FOREIGN KEY(video_id) REFERENCES video(id)
 );
+
+CREATE TABLE IF NOT EXISTS subscription(
+	id BIGINT AUTO_INCREMENT,
+	subscribed_id BIGINT NOT NULL,
+	subscriber_id BIGINT NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY(subscribed_id) REFERENCES user(id),
+	FOREIGN KEY(subscriber_id) REFERENCES user(id)
+);
