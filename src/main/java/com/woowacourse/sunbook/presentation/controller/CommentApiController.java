@@ -21,10 +21,10 @@ public class CommentApiController {
 
     @GetMapping(value = {"", "/{commentId}"})
     public ResponseEntity<List<CommentResponseDto>> show(@PathVariable final Long articleId,
-                                                       @PathVariable(required = false) final Long commentId) {
+                                                         @PathVariable(required = false) final Long commentId) {
         List<CommentResponseDto> commentResponseDto = commentService.findByIdAndArticleId(articleId, commentId);
 
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+        return ResponseEntity.ok().body(commentResponseDto);
     }
 
     @PostMapping(value = {"", "/{commentId}"})
@@ -34,7 +34,7 @@ public class CommentApiController {
                                                    @RequestBody final Content content) {
         CommentResponseDto commentResponseDto = commentService.save(content, articleId, loginUser.getId(), commentId);
 
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+        return ResponseEntity.ok().body(commentResponseDto);
     }
 
     @PutMapping("/{commentId}")
@@ -44,7 +44,7 @@ public class CommentApiController {
                                                      @RequestBody final Content content) {
         CommentResponseDto commentResponseDto = commentService.modify(commentId, content, articleId, loginUser.getId());
 
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+        return ResponseEntity.ok().body(commentResponseDto);
     }
 
     @DeleteMapping("/{commentId}")
@@ -53,6 +53,6 @@ public class CommentApiController {
                                        final LoginUser loginUser) {
         commentService.remove(commentId, articleId, loginUser.getId());
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().body(null);
     }
 }
