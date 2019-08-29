@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Entity
-public class Comment extends BaseEntity {
+public class Comment extends BaseEntity implements Comparable<Comment> {
     private static final String USER_FK_FIELD_NAME = "author_id";
     private static final String USER_FK_NAME = "fk_comment_to_user";
     private static final String ARTICLE_FK_FILED_NAME = "article_id";
@@ -64,5 +64,10 @@ public class Comment extends BaseEntity {
         }
 
         throw new MismatchAuthException();
+    }
+
+    @Override
+    public int compareTo(Comment comment) {
+        return this.getCreatedTime().compareTo(comment.getCreatedTime());
     }
 }

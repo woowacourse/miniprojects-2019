@@ -20,12 +20,6 @@ class CommentApiControllerTest extends TestTemplate {
     }
 
     @Test
-    void 댓글_전체_조회() {
-        respondApi(loginAndRequest(HttpMethod.GET, "/api/articles/1/comments", Void.class, HttpStatus.OK, loginSessionId(userRequestDto)))
-                .jsonPath("$").isNotEmpty();
-    }
-
-    @Test
     void 권한_있는_사용자_댓글_수정() {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.PUT, "/api/articles/1/comments/1", new Content("abcd"), HttpStatus.OK, sessionId))
