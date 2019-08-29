@@ -12,7 +12,7 @@ public class ArticleRequestDto {
     private ArticleFeature articleFeature;
     private OpenRange openRange;
 
-    public ArticleRequestDto(ArticleFeature articleFeature, OpenRange openRange) {
+    public ArticleRequestDto(final ArticleFeature articleFeature, final OpenRange openRange) {
         this.articleFeature = articleFeature;
         this.openRange = openRange;
     }

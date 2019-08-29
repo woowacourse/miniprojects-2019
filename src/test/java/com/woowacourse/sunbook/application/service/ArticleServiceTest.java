@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-class   ArticleServiceTest extends MockStorage {
+class ArticleServiceTest extends MockStorage {
     private static final Long ARTICLE_ID = 1L;
     private static final Long USER_ID = 1L;
 
@@ -52,7 +52,7 @@ class   ArticleServiceTest extends MockStorage {
         given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
         given(userService.findById(any(Long.class))).willReturn(user);
 
-        injectArticleService.save(articleFeature, USER_ID);
+        injectArticleService.save(articleRequestDto, USER_ID);
 
         verify(articleRepository).save(any(Article.class));
     }
@@ -61,7 +61,7 @@ class   ArticleServiceTest extends MockStorage {
     void 게시글_생성시_없는_유저() {
         given(userService.findById(any(Long.class))).willThrow(NotFoundUserException.class);
 
-        assertThrows(NotFoundUserException.class, () -> injectArticleService.save(articleFeature, USER_ID));
+        assertThrows(NotFoundUserException.class, () -> injectArticleService.save(articleRequestDto, USER_ID));
     }
 
     @Test

@@ -198,8 +198,6 @@ const ArticleApp = (() => {
             const formData = new FormData();
             formData.append('data', file);
 
-            console.log(range);
-
             if (!file && !contents.value) {
                 AppStorage.set('article-add-run', false);
                 alert("뭐라도 쓰세요");

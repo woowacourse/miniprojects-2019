@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class ArticleArgumentResolver implements HandlerMethodArgumentResolver {
-
     private static final String JSONBODYATTRIBUTE = "JSON_REQUEST_BODY";
     private ObjectMapper objectMapper = new ObjectMapper();
 

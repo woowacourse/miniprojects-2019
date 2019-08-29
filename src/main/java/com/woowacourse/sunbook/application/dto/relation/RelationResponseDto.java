@@ -16,7 +16,7 @@ public class RelationResponseDto {
 	private UserName userName;
 	private Relationship relationship;
 
-	public RelationResponseDto(Relation relation) {
+	public RelationResponseDto(final Relation relation) {
 		this.id = relation.getTo().getId();
 		this.userName = relation.getTo().getUserName();
 		this.relationship = relation.getRelationship();

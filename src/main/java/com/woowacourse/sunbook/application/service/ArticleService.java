@@ -14,8 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,7 +39,8 @@ public class ArticleService {
         this.modelMapper = modelMapper;
     }
 
-    public List<ArticleResponseDto> findPageByAuthor(Pageable pageable, Long userId) {
+    @Transactional(readOnly = true)
+    public List<ArticleResponseDto> findPageByAuthor(final Pageable pageable, final Long userId) {
         User foundUser = userService.findById(userId);
         return Collections.unmodifiableList(
                 articleRepository.findAllByAuthor(pageable, foundUser).getContent().stream()
@@ -48,6 +49,7 @@ public class ArticleService {
         );
     }
 
+    @Transactional(readOnly = true)
     public List<ArticleResponseDto> findAll(final Long loginId) {
         User author = userService.findById(loginId);
         List<User> friends = relationService.getFriendsRelation(author).stream()
@@ -76,14 +78,6 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleResponseDto save(final ArticleFeature articleFeature, final Long userId) {
-        User author = userService.findById(userId);
-        Article savedArticle = articleRepository.save(new Article(articleFeature, author));
-
-        return modelMapper.map(savedArticle, ArticleResponseDto.class);
-    }
-
-    @Transactional
     public ArticleResponseDto save(final ArticleRequestDto articleRequestDto, final Long userId) {
         User author = userService.findById(userId);
         Article savedArticle = articleRepository
@@ -108,6 +102,7 @@ public class ArticleService {
         throw new MismatchAuthException();
     }
 
+    @Transactional
     public void remove(final Long articleId, final Long userId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(NotFoundArticleException::new);
@@ -122,7 +117,7 @@ public class ArticleService {
         throw new MismatchAuthException();
     }
 
-    protected Article findById(Long articleId) {
+    protected Article findById(final Long articleId) {
         return articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
     }
 }

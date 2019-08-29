@@ -20,7 +20,7 @@ public enum OpenRange {
         return Arrays.stream(values())
                 .filter(or -> openRange.equals(or.openRange))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException())
+                .orElseThrow(IllegalArgumentException::new)
                 ;
     }
 
