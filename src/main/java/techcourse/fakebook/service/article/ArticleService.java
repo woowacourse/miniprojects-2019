@@ -1,23 +1,28 @@
 package techcourse.fakebook.service.article;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import techcourse.fakebook.domain.article.Article;
 import techcourse.fakebook.domain.article.ArticleRepository;
 import techcourse.fakebook.domain.like.ArticleLike;
 import techcourse.fakebook.domain.like.ArticleLikeRepository;
 import techcourse.fakebook.domain.user.User;
+import techcourse.fakebook.exception.FileSaveException;
 import techcourse.fakebook.exception.InvalidAuthorException;
 import techcourse.fakebook.exception.NotFoundArticleException;
+import techcourse.fakebook.exception.NotImageTypeException;
 import techcourse.fakebook.service.article.assembler.ArticleAssembler;
 import techcourse.fakebook.service.article.dto.ArticleRequest;
 import techcourse.fakebook.service.article.dto.ArticleResponse;
-import techcourse.fakebook.service.attachment.dto.AttachmentResponse;
 import techcourse.fakebook.service.attachment.AttachmentService;
+import techcourse.fakebook.service.attachment.dto.AttachmentResponse;
 import techcourse.fakebook.service.notification.NotificationService;
 import techcourse.fakebook.service.user.UserService;
 import techcourse.fakebook.service.user.dto.UserOutline;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +31,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class ArticleService {
+    private static final Logger log = LoggerFactory.getLogger(ArticleService.class);
+
     private final ArticleRepository articleRepository;
     private final ArticleLikeRepository articleLikeRepository;
     private final UserService userService;
@@ -75,12 +82,15 @@ public class ArticleService {
         return articleAssembler.toResponse(article, attachments);
     }
 
+    @Transactional
     public ArticleResponse save(ArticleRequest articleRequest, UserOutline userOutline) {
         User user = userService.getUser(userOutline.getId());
         Article article = articleRepository.save(articleAssembler.toEntity(articleRequest, user));
+
         List<AttachmentResponse> files = Optional.ofNullable(articleRequest.getFiles()).orElse(new ArrayList<>()).stream()
                 .map(file -> attachmentService.saveAttachment(file, article))
                 .collect(Collectors.toList());
+
         return articleAssembler.toResponse(article, files);
     }
 
