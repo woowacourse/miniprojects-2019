@@ -24,7 +24,6 @@ public class ArticleApiController {
 
     @GetMapping
     public ResponseEntity<List<ArticleResponseDto>> show(LoginUser loginUser) {
-//        List<ArticleResponseDto> articles = articleService.findAll();
         List<ArticleResponseDto> articles = articleService.findAll(loginUser.getId());
 
         return new ResponseEntity<>(articles, HttpStatus.OK);

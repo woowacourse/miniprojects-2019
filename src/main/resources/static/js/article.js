@@ -136,9 +136,15 @@ const ArticleApp = (() => {
             };
 
             articleApi.update(data, articleId)
-                .then(() => {
-                    read();
-                });
+                .then(response => response.json())
+                .then((error) => {
+                    if (error.hasOwnProperty('errorMessage')) {
+                        alert(error.errorMessage);
+                    } else {
+                        read();
+                    }
+                })
+                .catch(error => console.log("error: " + error));
         };
 
         const remove = (event) => {
@@ -147,9 +153,15 @@ const ArticleApp = (() => {
                 const article = target.closest('div[data-object="article"]');
                 const articleId = article.getAttribute('data-article-id');
                 articleApi.remove(articleId)
-                    .then(() => {
-                        article.remove();
-                    });
+                    .then(response => response.json())
+                    .then((error) => {
+                        if (error.hasOwnProperty('errorMessage')) {
+                            alert(error.errorMessage);
+                        } else {
+                            article.remove();
+                        }
+                    })
+                    .catch(error => console.log("error: " + error));
             }
         };
 
