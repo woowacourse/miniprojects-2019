@@ -3,6 +3,7 @@
 <head>
     <th:block th:replace="fragments/common-head :: common-head"></th:block>
     <link rel="stylesheet" href="/css/article-detail.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 <th:block th:replace="fragments/header :: index-header"></th:block>
@@ -37,11 +38,26 @@
 
                     </div>
                 </div>
-                <div class="social-con">
+                    <div class="widget-feed no-pdd mrg-btm-0 social-con">
+                        <ul class="feed-action pdd-horizon-15 pdd-top-5 ">
+                        <li>
+                            <a class="like-btn">
+                            <i id="like-btn-icon" class="fa font-size-25"></i>
+                            </a>
+                        </li>
+                        <li>
+                        <a class = "copy-btn">
+                        <i class="ti-export font-size-22"></i>
+                        </a>
+                        </li>
+                        <li class="float-right">
+                            <a href="" class="pd-right-0">
+                                <span class="like-num"></span>
+                            </a>
+                        </li>
+                        </ul>
+                    </div>
 
-                    좋아요 등 버튼
-
-                </div>
                 <div class="add-comment relative">
                     <textarea rows="1" class="form-control text-dark padding-15 comment-input" placeholder="댓글 달기..."></textarea>
                     <div class="absolute top-5 right-0">
@@ -80,5 +96,6 @@
 <script src="/js/article.js"></script>
 <script src="/js/comment.js"></script>
 <script src="/js/search.js"></script>
+<script src="/js/article-detail.js"></script>
 </body>
 </html>

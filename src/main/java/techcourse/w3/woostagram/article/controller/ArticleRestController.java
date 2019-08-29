@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.service.ArticleService;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
+import techcourse.w3.woostagram.main.dto.MainArticleDto;
 
 @RestController
 @RequestMapping("/api/articles")
