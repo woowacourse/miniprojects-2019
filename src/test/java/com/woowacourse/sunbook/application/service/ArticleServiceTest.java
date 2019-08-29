@@ -5,12 +5,17 @@ import com.woowacourse.sunbook.application.dto.article.ArticleResponseDto;
 import com.woowacourse.sunbook.application.exception.NotFoundArticleException;
 import com.woowacourse.sunbook.application.exception.NotFoundUserException;
 import com.woowacourse.sunbook.domain.article.Article;
+import com.woowacourse.sunbook.domain.article.OpenRange;
 import com.woowacourse.sunbook.domain.comment.exception.MismatchAuthException;
+import com.woowacourse.sunbook.domain.relation.Relation;
 import com.woowacourse.sunbook.domain.user.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,13 +29,30 @@ class ArticleServiceTest extends MockStorage {
     @InjectMocks
     private ArticleService injectArticleService;
 
+    private List<User> friends = new ArrayList<>();
+
+    @Test
+    void 게시글_조회() {
+        given(userService.findById(any(Long.class))).willReturn(user);
+        given(relationService.getFriendsRelation(user).stream()
+                .map(Relation::getTo)
+                .collect(Collectors.toList())).willReturn(friends);
+        given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
+
+        injectArticleService.findAll(USER_ID);
+
+        verify(articleRepository).findAllByAuthor(user);
+        verify(articleRepository).findAllByAuthorInAndOpenRange(friends, OpenRange.ALL);
+        verify(articleRepository).findAllByAuthorInAndOpenRange(friends, OpenRange.ONLY_FRIEND);
+    }
+
     @Test
     void 게시글_정상_생성() {
         given(articleRepository.save(any(Article.class))).willReturn(article);
         given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
         given(userService.findById(any(Long.class))).willReturn(user);
 
-        injectArticleService.save(articleFeature, USER_ID);
+        injectArticleService.save(articleRequestDto, USER_ID);
 
         verify(articleRepository).save(any(Article.class));
     }
@@ -39,7 +61,7 @@ class ArticleServiceTest extends MockStorage {
     void 게시글_생성시_없는_유저() {
         given(userService.findById(any(Long.class))).willThrow(NotFoundUserException.class);
 
-        assertThrows(NotFoundUserException.class, () -> injectArticleService.save(articleFeature, USER_ID));
+        assertThrows(NotFoundUserException.class, () -> injectArticleService.save(articleRequestDto, USER_ID));
     }
 
     @Test

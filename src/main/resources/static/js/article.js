@@ -76,13 +76,15 @@ const ArticleApp = (() => {
 
         const add = () => {
             const contents = document.getElementById("article-contents");
+            const selectBtn = document.getElementById('article-range');
+            const selectedRange = selectBtn.options[selectBtn.selectedIndex].value;
 
             if (AppStorage.check('article-add-run')) {
                 return;
             }
             AppStorage.set('article-add-run', true);
 
-            upload(contents).then(data => {
+            upload(contents, translateSelectedRange(selectedRange)).then(data => {
                 articleApi.add(data)
                     .then(response => response.json())
                     .then((article) => {
@@ -109,6 +111,16 @@ const ArticleApp = (() => {
                 contents.value = "";
                 document.querySelector('#preview').src = "";
             });
+        };
+
+        const translateSelectedRange = (range) => {
+            if (range === '모두 공개') {
+                return '0';
+            } else if (range === '친구 공개') {
+                return '1';
+            } else if (range === '비공개') {
+                return '2';
+            }
         };
 
         const update = () => {
@@ -180,7 +192,7 @@ const ArticleApp = (() => {
             }
         };
 
-        const upload = (contents) => {
+        const upload = (contents, range) => {
             const files = document.querySelector('#photo-video-input');
             const file = files.files[0];
             const formData = new FormData();
@@ -197,6 +209,7 @@ const ArticleApp = (() => {
                         contents: contents.value,
                         imageUrl: "",
                         videoUrl: "",
+                        openRange: range,
                     });
                 });
             }
@@ -219,18 +232,21 @@ const ArticleApp = (() => {
                         contents: contents.value,
                         imageUrl: res,
                         videoUrl: "",
+                        openRange: range,
                     };
                 } else if (videoExtension.exec(res)) {
                     data = {
                         contents: contents.value,
                         imageUrl: "",
                         videoUrl: res,
+                        openRange: range,
                     };
                 } else {
                     data = {
                         contents: contents.value,
                         imageUrl: "",
                         videoUrl: "",
+                        openRange: range,
                     };
                 }
                 return data;

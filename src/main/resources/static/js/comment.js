@@ -65,6 +65,7 @@ const CommentApp = (() => {
                                 "comment-contents": comment.content.contents,
                                 "updatedTime": comment.updatedTime,
                             }));
+                        ReactionApp.service().showGoodCount('comment', comment.id);
                     })
                 })
                 .catch(error => console.log("error: " + error));

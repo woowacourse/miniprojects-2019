@@ -15,9 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -33,7 +31,7 @@ class ArticleTest {
 
     private User user;
 
-    private static final Content commentFeature = new Content(CONTENTS);
+    private static final Content contents = new Content(CONTENTS);
     private static final FileUrl imageUrl = new FileUrl(IMAGE_URL);
     private static final FileUrl videoUrl = new FileUrl(VIDEO_URL);
     private static final Content emptyContents = new Content(EMPTY);
@@ -46,11 +44,11 @@ class ArticleTest {
 
     static Stream<Arguments> articleParameters() {
         return Stream.of(
-                Arguments.of(commentFeature, imageUrl, videoUrl),
+                Arguments.of(contents, imageUrl, videoUrl),
                 Arguments.of(emptyContents, imageUrl, videoUrl),
-                Arguments.of(commentFeature, emptyUrl, videoUrl),
-                Arguments.of(commentFeature, imageUrl, emptyUrl),
-                Arguments.of(commentFeature, emptyUrl, emptyUrl),
+                Arguments.of(contents, emptyUrl, videoUrl),
+                Arguments.of(contents, imageUrl, emptyUrl),
+                Arguments.of(contents, emptyUrl, emptyUrl),
                 Arguments.of(emptyContents, imageUrl, emptyUrl),
                 Arguments.of(emptyContents, emptyUrl, videoUrl)
         );
@@ -59,17 +57,19 @@ class ArticleTest {
     @ParameterizedTest
     @MethodSource("articleParameters")
     void 게시글_정상_생성_테스트_통합(Content contents, FileUrl imageUrl, FileUrl videoUrl) {
-        assertDoesNotThrow(() -> new Article(new ArticleFeature(contents, imageUrl, videoUrl), user));
+        assertDoesNotThrow(() -> new Article(new ArticleFeature(contents, imageUrl, videoUrl),
+                user, OpenRange.ALL));
     }
 
     @Test
     void 게시글_생성_오류_아무것도_없음() {
-        assertThrows(IllegalArgumentException.class, () -> new Article(new ArticleFeature(emptyContents, emptyUrl, emptyUrl), user));
+        assertThrows(IllegalArgumentException.class,
+                () -> new Article(new ArticleFeature(emptyContents, emptyUrl, emptyUrl), user, OpenRange.ALL));
     }
 
     @Test
     void 게시글_정상_수정() {
-        Article article = new Article(new ArticleFeature(commentFeature, imageUrl, videoUrl), user);
+        Article article = new Article(new ArticleFeature(contents, imageUrl, videoUrl), user, OpenRange.ALL);
         ArticleFeature updatedArticleFeature = new ArticleFeature(
                 new Content(UPDATE_CONTENTS),
                 new FileUrl(UPDATE_IMAGE_URL),
@@ -80,7 +80,8 @@ class ArticleTest {
 
     @Test
     void 게시글_유저_확인() {
-        assertThat(new Article(new ArticleFeature(commentFeature, imageUrl, videoUrl), user).getAuthor()).isEqualTo(user);
+        assertThat(new Article(new ArticleFeature(contents, imageUrl, videoUrl), user, OpenRange.ALL)
+                .getAuthor()).isEqualTo(user);
     }
 
     @Test
@@ -88,8 +89,8 @@ class ArticleTest {
         User author = mock(User.class);
         given(author.getId()).willReturn(1L);
 
-        ArticleFeature articleFeature = new ArticleFeature(commentFeature, imageUrl, videoUrl);
-        Article article = new Article(articleFeature, author);
+        ArticleFeature articleFeature = new ArticleFeature(contents, imageUrl, videoUrl);
+        Article article = new Article(articleFeature, author, OpenRange.ALL);
 
         assertTrue(article.isSameUser(author));
     }

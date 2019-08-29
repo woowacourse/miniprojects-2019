@@ -14,7 +14,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final HandlerInterceptorAdapter interceptor;
     private final HandlerMethodArgumentResolver userSessionArgumentResolver;
 
-    public WebMvcConfig(HandlerInterceptorAdapter interceptor, HandlerMethodArgumentResolver userSessionArgumentResolver) {
+    public WebMvcConfig(HandlerInterceptorAdapter interceptor,
+                        HandlerMethodArgumentResolver userSessionArgumentResolver) {
         this.interceptor = interceptor;
         this.userSessionArgumentResolver = userSessionArgumentResolver;
     }
@@ -31,5 +32,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(userSessionArgumentResolver);
+        resolvers.add(new ArticleArgumentResolver());
     }
 }

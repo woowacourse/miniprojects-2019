@@ -8,14 +8,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Entity
-public class Article extends BaseEntity {
+public class Article extends BaseEntity implements Comparable<Article> {
 
     @Embedded
     private ArticleFeature articleFeature;
@@ -24,9 +22,13 @@ public class Article extends BaseEntity {
     @ManyToOne
     private User author;
 
-    public Article(ArticleFeature articleFeature, User author) {
+    @Enumerated(EnumType.STRING)
+    private OpenRange openRange;
+
+    public Article(ArticleFeature articleFeature, User author, OpenRange openRange) {
         this.articleFeature = articleFeature;
         this.author = author;
+        this.openRange = openRange;
     }
 
     public void update(ArticleFeature updatedArticleFeature) {
@@ -35,5 +37,10 @@ public class Article extends BaseEntity {
 
     public boolean isSameUser(User user) {
         return this.author.equals(user);
+    }
+
+    @Override
+    public int compareTo(Article article) {
+        return this.getUpdatedTime().compareTo(article.getUpdatedTime());
     }
 }
