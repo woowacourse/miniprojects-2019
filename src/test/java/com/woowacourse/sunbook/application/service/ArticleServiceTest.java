@@ -5,48 +5,45 @@ import com.woowacourse.sunbook.application.dto.article.ArticleResponseDto;
 import com.woowacourse.sunbook.application.exception.NotFoundArticleException;
 import com.woowacourse.sunbook.application.exception.NotFoundUserException;
 import com.woowacourse.sunbook.domain.article.Article;
+import com.woowacourse.sunbook.domain.article.OpenRange;
 import com.woowacourse.sunbook.domain.comment.exception.MismatchAuthException;
 import com.woowacourse.sunbook.domain.relation.Relation;
 import com.woowacourse.sunbook.domain.user.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-class ArticleServiceTest extends MockStorage {
+class   ArticleServiceTest extends MockStorage {
     private static final Long ARTICLE_ID = 1L;
     private static final Long USER_ID = 1L;
 
     @InjectMocks
     private ArticleService injectArticleService;
 
-    @Mock
-    private List<Relation> relations;
-
-    @Mock
-    private RelationService relationService;
-
-    @Mock
-    private List<User> friends;
+    private List<User> friends = new ArrayList<>();
 
     @Test
     void 게시글_조회() {
         given(userService.findById(any(Long.class))).willReturn(user);
-        given(relationService.getFriendsRelation(user)).willReturn(relations);
+        given(relationService.getFriendsRelation(user).stream()
+                .map(Relation::getTo)
+                .collect(Collectors.toList())).willReturn(friends);
         given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
 
         injectArticleService.findAll(USER_ID);
 
         verify(articleRepository).findAllByAuthor(user);
-//        verify(articleRepository).findAllByAuthorInAndOpenRange(friends, OpenRange.ALL);
-//        verify(articleRepository).findAllByAuthorInAndOpenRange(friends, OpenRange.ONLY_FRIEND);
+        verify(articleRepository).findAllByAuthorInAndOpenRange(friends, OpenRange.ALL);
+        verify(articleRepository).findAllByAuthorInAndOpenRange(friends, OpenRange.ONLY_FRIEND);
     }
 
     @Test
