@@ -4,7 +4,6 @@ import com.woowacourse.sunbook.application.dto.reaction.ReactionDto;
 import com.woowacourse.sunbook.application.service.ReactionArticleService;
 import com.woowacourse.sunbook.presentation.support.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,7 @@ public class ReactionArticleApiController {
         ReactionDto reactionDto = reactionArticleService
                 .showCount(loginUser.getId(), articleId);
 
-        return new ResponseEntity<>(reactionDto, HttpStatus.OK);
+        return ResponseEntity.ok().body(reactionDto);
     }
 
     @PostMapping
@@ -32,7 +31,7 @@ public class ReactionArticleApiController {
                                                  LoginUser loginUser) {
         ReactionDto reactionDto = reactionArticleService.save(loginUser.getId(), articleId);
 
-        return new ResponseEntity<>(reactionDto, HttpStatus.OK);
+        return ResponseEntity.ok().body(reactionDto);
     }
 
     @DeleteMapping
@@ -40,6 +39,6 @@ public class ReactionArticleApiController {
                                                   LoginUser loginUser) {
         ReactionDto reactionDto = reactionArticleService.remove(loginUser.getId(), articleId);
 
-        return new ResponseEntity<>(reactionDto, HttpStatus.OK);
+        return ResponseEntity.ok().body(reactionDto);
     }
 }

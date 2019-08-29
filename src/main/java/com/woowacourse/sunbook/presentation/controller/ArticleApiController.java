@@ -6,7 +6,6 @@ import com.woowacourse.sunbook.application.service.ArticleService;
 import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.presentation.support.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,14 +25,14 @@ public class ArticleApiController {
     public ResponseEntity<List<ArticleResponseDto>> show(LoginUser loginUser) {
         List<ArticleResponseDto> articles = articleService.findAll(loginUser.getId());
 
-        return new ResponseEntity<>(articles, HttpStatus.OK);
+        return ResponseEntity.ok().body(articles);
     }
 
     @PostMapping
     public ResponseEntity<ArticleResponseDto> save(ArticleRequestDto articleRequestDto, LoginUser loginUser) {
         ArticleResponseDto articleResponseDto = articleService.save(articleRequestDto, loginUser.getId());
 
-        return new ResponseEntity<>(articleResponseDto, HttpStatus.OK);
+        return ResponseEntity.ok().body(articleResponseDto);
     }
 
     @PutMapping("/{articleId}")
@@ -42,13 +41,13 @@ public class ArticleApiController {
                                                      LoginUser loginUser) {
         ArticleResponseDto articleResponseDto = articleService.modify(articleId, articleFeature, loginUser.getId());
 
-        return new ResponseEntity<>(articleResponseDto, HttpStatus.OK);
+        return ResponseEntity.ok().body(articleResponseDto);
     }
 
     @DeleteMapping("/{articleId}")
     public ResponseEntity<Void> remove(@PathVariable Long articleId, LoginUser loginUser) {
         articleService.remove(articleId, loginUser.getId());
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }

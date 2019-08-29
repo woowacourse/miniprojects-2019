@@ -5,7 +5,6 @@ import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.dto.user.UserUpdateRequestDto;
 import com.woowacourse.sunbook.application.service.UserService;
 import com.woowacourse.sunbook.presentation.support.LoginUser;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,19 +21,19 @@ public class UserApiController {
 
     @GetMapping
     public ResponseEntity<UserResponseDto> show(LoginUser loginUser) {
-        return new ResponseEntity<>(loginUser.getUserResponseDto(), HttpStatus.OK);
+        return ResponseEntity.ok().body(loginUser.getUserResponseDto());
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDto> show(@PathVariable Long userId) {
-        return new ResponseEntity<>(userService.findUser(userId), HttpStatus.OK);
+        return ResponseEntity.ok().body(userService.findUser(userId));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto userRequestDto) {
         UserResponseDto signUpUser = userService.save(userRequestDto);
 
-        return new ResponseEntity<>(signUpUser, HttpStatus.OK);
+        return ResponseEntity.ok().body(signUpUser);
     }
 
     @PutMapping
@@ -43,6 +42,6 @@ public class UserApiController {
         UserResponseDto updateUser = userService.update(loginUser.getUserResponseDto(), userUpdateRequestDto);
         httpSession.setAttribute("loginUser", updateUser);
 
-        return new ResponseEntity<>(updateUser, HttpStatus.OK);
+        return ResponseEntity.ok().body(updateUser);
     }
 }

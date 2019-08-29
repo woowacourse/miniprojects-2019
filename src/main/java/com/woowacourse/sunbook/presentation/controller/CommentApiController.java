@@ -4,7 +4,6 @@ import com.woowacourse.sunbook.application.dto.comment.CommentResponseDto;
 import com.woowacourse.sunbook.application.service.CommentService;
 import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.presentation.support.LoginUser;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +52,6 @@ public class CommentApiController {
                                        final LoginUser loginUser) {
         commentService.remove(commentId, articleId, loginUser.getId());
 
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().build();
     }
 }
