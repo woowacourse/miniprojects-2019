@@ -5,6 +5,7 @@ import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.exceptions.UnauthorizedAccessException;
 import com.woowacourse.edd.exceptions.UserNotFoundException;
 import com.woowacourse.edd.repository.UserRepository;
+import com.woowacourse.edd.repository.VideoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,9 @@ class UserInternalServiceTests {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private VideoRepository videoRepository;
 
     @BeforeEach
     void setUp() {

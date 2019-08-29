@@ -61,18 +61,18 @@ public class VideoControllerTests extends BasicControllerTests {
         IntStream.range(0, response.getContent().size() - 1)
             .forEach(i -> {
                 assertThat(LocalDateTime.parse((String) response.getContent().get(i).get("createDate")))
-                    .isAfter(LocalDateTime.parse((String) response.getContent().get(i + 1).get("createDate")));
+                    .isAfterOrEqualTo(LocalDateTime.parse((String) response.getContent().get(i + 1).get("createDate")));
             });
     }
 
     @Test
     void find_videos_by_creator() {
-        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("edan", "edan@gmail.com","p@ssW0rd");
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("edan", "edan1000@gmail.com","p@ssW0rd");
         String url = signUp(userSaveRequestDto).getResponseHeaders()
             .getLocation()
             .toASCIIString();
 
-        LoginRequestDto loginRequestDto = new LoginRequestDto("edan@gmail.com", "p@ssW0rd");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("edan1000@gmail.com", "p@ssW0rd");
         VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto("abc","newtitle","newContents");
         VideoSaveRequestDto secondVideoSaveRequestDto = new VideoSaveRequestDto("def", "secondtitle", "secondcontents");
 

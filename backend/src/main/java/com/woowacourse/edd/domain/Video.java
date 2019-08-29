@@ -4,6 +4,7 @@ import com.woowacourse.edd.exceptions.InvalidContentsException;
 import com.woowacourse.edd.exceptions.InvalidTitleException;
 import com.woowacourse.edd.exceptions.InvalidYoutubeIdException;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Where(clause = "is_deleted = 'false'")
 public class Video {
 
     @Id
@@ -45,6 +47,9 @@ public class Video {
     @Column(nullable = false)
     private int viewCount;
 
+    @Column(nullable = false, name = "is_deleted")
+    private boolean isDeleted;
+
     public Video() {
     }
 
@@ -57,6 +62,7 @@ public class Video {
         this.contents = contents.trim();
         this.creator = creator;
         this.viewCount = 0;
+        this.isDeleted = false;
     }
 
     private void checkContents(String contents) {
@@ -84,6 +90,10 @@ public class Video {
         this.youtubeId = youtubeId;
         this.title = title;
         this.contents = contents;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 
     public void increaseViewCount() {

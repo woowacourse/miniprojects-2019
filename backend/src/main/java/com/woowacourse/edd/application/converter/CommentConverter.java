@@ -6,8 +6,6 @@ import com.woowacourse.edd.domain.Comment;
 import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.domain.Video;
 
-import java.time.format.DateTimeFormatter;
-
 public class CommentConverter {
 
     public static Comment toEntity(Video video, User author, CommentRequestDto commentRequestDto) {
