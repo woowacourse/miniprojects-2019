@@ -6,10 +6,13 @@ import com.woowacourse.sunbook.application.exception.NotFoundArticleException;
 import com.woowacourse.sunbook.application.exception.NotFoundUserException;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.comment.exception.MismatchAuthException;
+import com.woowacourse.sunbook.domain.relation.Relation;
 import com.woowacourse.sunbook.domain.user.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,6 +26,28 @@ class ArticleServiceTest extends MockStorage {
 
     @InjectMocks
     private ArticleService injectArticleService;
+
+    @Mock
+    private List<Relation> relations;
+
+    @Mock
+    private RelationService relationService;
+
+    @Mock
+    private List<User> friends;
+
+    @Test
+    void 게시글_조회() {
+        given(userService.findById(any(Long.class))).willReturn(user);
+        given(relationService.getFriendsRelation(user)).willReturn(relations);
+        given(modelMapper.map(article, ArticleResponseDto.class)).willReturn(articleResponseDto);
+
+        injectArticleService.findAll(USER_ID);
+
+        verify(articleRepository).findAllByAuthor(user);
+//        verify(articleRepository).findAllByAuthorInAndOpenRange(friends, OpenRange.ALL);
+//        verify(articleRepository).findAllByAuthorInAndOpenRange(friends, OpenRange.ONLY_FRIEND);
+    }
 
     @Test
     void 게시글_정상_생성() {

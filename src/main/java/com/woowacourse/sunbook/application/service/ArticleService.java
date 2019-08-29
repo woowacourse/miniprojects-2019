@@ -54,35 +54,29 @@ public class ArticleService {
                 .map(Relation::getTo)
                 .collect(Collectors.toList())
                 ;
+
         List<Article> articles = new ArrayList<>(findAllByAuthor(author));
         articles.addAll(findAllByAuthors(friends, OpenRange.ALL));
         articles.addAll(findAllByAuthors(friends, OpenRange.ONLY_FRIEND));
 
-        return articles.stream()
+        return Collections.unmodifiableList(
+                articles.stream()
                 .sorted()
                 .map(article -> modelMapper.map(article, ArticleResponseDto.class))
                 .collect(Collectors.toList())
-                ;
+                );
     }
 
-    private List<Article> findAllByAuthor(User author) {
+    private List<Article> findAllByAuthor(final User author) {
         return articleRepository.findAllByAuthor(author);
     }
 
-    private List<Article> findAllByAuthors(List<User> authors, OpenRange openRange) {
+    private List<Article> findAllByAuthors(final List<User> authors, final OpenRange openRange) {
         return articleRepository.findAllByAuthorInAndOpenRange(authors, openRange);
     }
 
-    public List<ArticleResponseDto> findAll() {
-        return Collections.unmodifiableList(
-                articleRepository.findAll().stream()
-                        .map(article -> modelMapper.map(article, ArticleResponseDto.class))
-                        .collect(Collectors.toList())
-        );
-    }
-
     @Transactional
-    public ArticleResponseDto save(ArticleFeature articleFeature, Long userId) {
+    public ArticleResponseDto save(final ArticleFeature articleFeature, final Long userId) {
         User author = userService.findById(userId);
         Article savedArticle = articleRepository.save(new Article(articleFeature, author));
 
@@ -90,7 +84,7 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleResponseDto save(ArticleRequestDto articleRequestDto, Long userId) {
+    public ArticleResponseDto save(final ArticleRequestDto articleRequestDto, final Long userId) {
         User author = userService.findById(userId);
         Article savedArticle = articleRepository
                 .save(new Article(articleRequestDto.getArticleFeature(), author, articleRequestDto.getOpenRange()));
@@ -99,7 +93,9 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleResponseDto modify(long articleId, ArticleFeature articleFeature, Long userId) {
+    public ArticleResponseDto modify(final Long articleId,
+                                     final ArticleFeature articleFeature,
+                                     final Long userId) {
         Article article = articleRepository.findById(articleId).orElseThrow(NotFoundArticleException::new);
         User user = userService.findById(userId);
 
@@ -112,7 +108,7 @@ public class ArticleService {
         throw new MismatchAuthException();
     }
 
-    public void remove(Long articleId, Long userId) {
+    public void remove(final Long articleId, final Long userId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(NotFoundArticleException::new);
         User user = userService.findById(userId);
