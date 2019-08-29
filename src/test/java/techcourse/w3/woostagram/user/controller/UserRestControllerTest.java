@@ -6,6 +6,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import techcourse.w3.woostagram.AbstractControllerTests;
+import techcourse.w3.woostagram.common.support.TestDataInitializer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -56,10 +57,5 @@ public class UserRestControllerTest extends AbstractControllerTests {
     @Test
     void readLoginInformation_correctLoggedInUserId_isOk() {
         assertThat(getRequest("/api/users/loggedin").getStatus().is2xxSuccessful()).isTrue();
-    }
-
-    @Test
-    void delete_correct_isOk() {
-        assertThat(deleteRequest("api/users").getStatus().is2xxSuccessful()).isTrue();
     }
 }

@@ -107,6 +107,7 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void update_correct_isOk() {
+        loginRequest(TestDataInitializer.updateUser.getEmail(), TestDataInitializer.updateUser.getPassword());
         Map<String, String> params = new HashMap<>();
         params.put(NAME, "a");
         params.put(USER_NAME, "b");
