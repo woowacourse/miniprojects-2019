@@ -97,6 +97,22 @@ const Api = function () {
         return request(`${baseUrl}/v1/users`, 'POST', dataBody)
     }
 
+    const saveComment = (dataBody, videoId) => {
+        return request(`${baseUrl}/v1/videos/${videoId}/comments`, 'POST', dataBody)
+    }
+
+    const editComment = (dataBody, videoId, commentId) => {
+        return request(`${baseUrl}/v1/videos/${videoId}/comments/${commentId}`, 'PUT', dataBody)
+    }
+
+    const deleteComment = (videoId, commentId) => {
+        return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}/comments/${commentId}`, 'DELETE')
+    }
+
+    const retrieveComments = (videoId) => {
+        return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}/comments`, 'GET')
+    }
+    
     const requestUser = (id) => {
         return request(`${baseUrl}/v1/users/${id}`, 'GET');
     }
@@ -126,6 +142,10 @@ const Api = function () {
         postLogin,
         postLogout,
         signup,
+        saveComment,
+        editComment,
+        deleteComment,
+        retrieveComments,
         requestUser,
         updateUser,
         retrieveLoginInfo,
