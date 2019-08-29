@@ -73,7 +73,6 @@ const commentApp = (function() {
 
     const CommentService = function() {
         const save = function() {
-            
             const body = {};
             body.contents = document.getElementById('comment-input').value;
             const dataBody = JSON.stringify(body);
@@ -83,18 +82,15 @@ const commentApp = (function() {
         }
 
         const prepareEdit = function(event) {            
-            const iconElement = event.target.querySelector('i');
-            if(iconElement) {
-                if(iconElement.classList.contains("ti-pencil")) {
-                    const liElement = event.target.closest('li');
-                    const commentId = liElement.id;
-                    const editConfirmBtn = document.getElementById('edit-confirm-btn-' + commentId);
-                    const editText = document.getElementById('edit-text-' + commentId);
-                    const contents = document.getElementById('contents-' + commentId);
-                    editText.value = contents.textContent;
-                    editConfirmBtn.style.visibility = 'visible'
-                    editText.style.visibility = 'visible'
-                }
+            if(event.target.classList.contains("ti-pencil")) {
+                const liElement = event.target.closest('li');
+                const commentId = liElement.id;
+                const editConfirmBtn = document.getElementById('edit-confirm-btn-' + commentId);
+                const editText = document.getElementById('edit-text-' + commentId);
+                const contents = document.getElementById('contents-' + commentId);
+                editText.value = contents.textContent;
+                editConfirmBtn.style.visibility = 'visible'
+                editText.style.visibility = 'visible'
             }
         }
         
@@ -121,20 +117,17 @@ const commentApp = (function() {
         }
 
         const deleteComment = function(event) {
-            const iconElement = event.target.querySelector('i');
-            if(iconElement) {
-                if(iconElement.classList.contains('ti-trash')) {
-                    const liElement = event.target.closest('li');
-                    const commentId = liElement.id;
-                    api.deleteComment(wootubeCtx.util.getUrlParams('id'), commentId)
-                    .then(response => {
-                        if (response.status !== 204) {
-                            response.json().then(res => alert(res.message))
-                        } else {
-                            deleteCommentFromTemplate(commentId)
-                        }
-                    })
-                }
+            if(event.target.classList.contains('ti-trash')) {
+                const liElement = event.target.closest('li');
+                const commentId = liElement.id;
+                api.deleteComment(wootubeCtx.util.getUrlParams('id'), commentId)
+                .then(response => {
+                    if (response.status !== 204) {
+                        response.json().then(res => alert(res.message))
+                    } else {
+                        deleteCommentFromTemplate(commentId)
+                    }
+                })
             }
         }
 
