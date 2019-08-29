@@ -28,7 +28,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AwsS3ServiceTest {
-
     @InjectMocks
     private AwsS3Service awsS3Service;
 
