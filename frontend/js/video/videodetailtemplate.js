@@ -14,7 +14,7 @@ const addVideoDetailTemplate = function (data) {
         <hr>
         <div class="form-group row">
             <div class="col-md-2">
-            <a href="/video-channel.html">
+            <a href="/video-channel.html?id=${data.creator.id}">
                 <img class="banner-owner-img img-circle relative"
                     src="./images/default/eastjun_big.jpg" alt="">
              </a>

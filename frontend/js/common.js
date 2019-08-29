@@ -52,7 +52,7 @@ const Api = function () {
     }
 
     const requestMyChannelVideos = (userId) => {
-        return requestWithoutBody(`${baseUrl}/v1/users/${userId}/videos`,'GET')
+        return requestWithoutBody(`${baseUrl}/v1/videos/creators/${userId}`,'GET')
     }
 
     const requestVideo = (videoId) => {

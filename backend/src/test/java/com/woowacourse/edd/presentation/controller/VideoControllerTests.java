@@ -1,5 +1,7 @@
 package com.woowacourse.edd.presentation.controller;
 
+import com.woowacourse.edd.application.dto.LoginRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import org.junit.jupiter.api.Test;
@@ -61,6 +63,34 @@ public class VideoControllerTests extends BasicControllerTests {
                 assertThat(LocalDateTime.parse((String) response.getContent().get(i).get("createDate")))
                     .isAfter(LocalDateTime.parse((String) response.getContent().get(i + 1).get("createDate")));
             });
+    }
+
+    @Test
+    void find_videos_by_creator() {
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("edan", "edan@gmail.com","p@ssW0rd");
+        String url = signUp(userSaveRequestDto).getResponseHeaders()
+            .getLocation()
+            .toASCIIString();
+
+        LoginRequestDto loginRequestDto = new LoginRequestDto("edan@gmail.com", "p@ssW0rd");
+        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto("abc","newtitle","newContents");
+        VideoSaveRequestDto secondVideoSaveRequestDto = new VideoSaveRequestDto("def", "secondtitle", "secondcontents");
+
+        String cookie = getLoginCookie(loginRequestDto);
+        String[] urls = url.split("/");
+        Long userId = Long.valueOf(urls[urls.length - 1]);
+
+        saveVideo(videoSaveRequestDto, cookie);
+        saveVideo(secondVideoSaveRequestDto, cookie);
+
+        findVideo("/creators/" + userId)
+            .expectStatus().isOk()
+            .expectBody()
+            .jsonPath("$.length()").isEqualTo(2)
+            .jsonPath("$[0].creator.id").isEqualTo(userId)
+            .jsonPath("$[1].creator.id").isEqualTo(userId)
+            .jsonPath("$[0].title").isEqualTo("newtitle")
+            .jsonPath("$[1].title").isEqualTo("secondtitle");
     }
 
     @Test

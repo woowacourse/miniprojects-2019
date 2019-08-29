@@ -7,7 +7,7 @@ const channelCtx = {
 const loadVideoCards = function (userId) {
     api.requestMyChannelVideos(userId)
         .then(response => response.json())
-        .then(json => addVideoCardTemplates(json.content, 'dateVideoCard'))
+        .then(json => addChannelVideoCardTemplates(json, 'dateVideoCard'))
 }
 const userId = wootubeCtx.util.getUrlParams('id')
 loadVideoCards(userId)
@@ -139,6 +139,7 @@ const channelService = (function () {
                 setUserInfo(json.name, json.email)
                 document.querySelector('#btn-update').classList.remove('d-none')
                 document.querySelector('#btn-leave').classList.remove('d-none')
+                loadVideoCards(json.id)
             });
     }
     return {

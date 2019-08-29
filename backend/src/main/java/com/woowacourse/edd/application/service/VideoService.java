@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class VideoService {
@@ -54,5 +57,11 @@ public class VideoService {
 
     public void delete(Long id) {
         videoInternalService.delete(id);
+    }
+
+    public List<VideoPreviewResponse> findByCreatorId(Long creatorId) {
+        return videoInternalService.findByCreatorId(creatorId).stream()
+            .map(VideoConverter::toPreviewResponse)
+            .collect(Collectors.toList());
     }
 }

@@ -29,3 +29,9 @@ const addVideoCardTemplates = function (data, categorie) {
     }
 }
 
+const addChannelVideoCardTemplates = function (data, categorie) {
+    for(let i = 0; i < data.length; i++) {
+        addVideoCardTemplate(data, i, categorie)
+    }
+}
+

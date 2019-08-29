@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.net.URI;
+import java.util.List;
 
 import static com.woowacourse.edd.presentation.controller.VideoController.VIDEO_URL;
 
@@ -46,6 +47,11 @@ public class VideoController {
     @GetMapping
     public ResponseEntity<Page<VideoPreviewResponse>> findVideos(final Pageable pageable) {
         return ResponseEntity.ok(videoService.findByPageRequest(pageable));
+    }
+
+    @GetMapping("creators/{creatorId}")
+    public ResponseEntity<List<VideoPreviewResponse>> findVideosByCreator(@PathVariable Long creatorId) {
+        return ResponseEntity.ok(videoService.findByCreatorId(creatorId));
     }
 
     @PostMapping
