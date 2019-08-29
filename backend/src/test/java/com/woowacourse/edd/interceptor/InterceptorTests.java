@@ -5,7 +5,6 @@ import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import com.woowacourse.edd.presentation.controller.BasicControllerTests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 

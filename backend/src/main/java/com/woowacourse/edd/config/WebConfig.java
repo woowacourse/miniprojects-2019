@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
         needSignedIn(registry, "/v1/users/?**", "PUT", "DELETE");
         needSignedIn(registry, "/v1/logout", "POST");
         needSignedIn(registry, "/v1/login/users", "GET");
+        needSignedIn(registry, "/v1/users/**/subscribe", "POST", "DELETE");
     }
 
     private void needSignedIn(InterceptorRegistry registry, String pathPattern, String... allowedMethods) {

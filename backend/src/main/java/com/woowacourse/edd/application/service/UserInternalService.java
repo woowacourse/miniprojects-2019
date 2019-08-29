@@ -1,6 +1,5 @@
 package com.woowacourse.edd.application.service;
 
-import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import com.woowacourse.edd.application.dto.UserUpdateRequestDto;
 import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.exceptions.UnauthorizedAccessException;

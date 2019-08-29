@@ -5,7 +5,6 @@ import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import com.woowacourse.edd.utils.Utils;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;

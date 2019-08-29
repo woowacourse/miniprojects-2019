@@ -39,7 +39,7 @@ public class User {
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted;
 
-    public User() {
+    protected User() {
     }
 
     public User(String name, String email, String password) {

@@ -138,7 +138,7 @@ public class CommentControllerTests extends BasicControllerTests {
         CommentRequestDto updateCommentRequestDto = new CommentRequestDto(updateContents);
 
         assertFailNotFound(updateComment(DEFAULT_VIDEO_ID, commentId + 100L, updateCommentRequestDto, cookie)
-           , COMMENT_NOT_FOUND_MESSAGE);
+            , COMMENT_NOT_FOUND_MESSAGE);
     }
 
     @Test
