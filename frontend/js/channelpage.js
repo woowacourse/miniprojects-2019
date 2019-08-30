@@ -94,6 +94,39 @@ const changeUpdateState = function (flags) {
 const channelService = (function () {
     const id = wootubeCtx.util.getUrlParams('id')
 
+    const subscribe = function() {
+        api.subscribe(userId)
+        .then(res => {
+            if (res.status == 400) {
+                alert("이미 구독했습니다!")
+            }
+            if (res.status !== 201) {
+                alert('실패했습니다. 다시 시도해주세요.')
+            } else {
+                alert('구독되었습니다.')
+            }
+        })
+    }
+    
+    const cancelSubscribe = function() {
+        api.cancelSubscribe(userId)
+        .then(res => {
+            if (res.status !== 204) {
+                alert('실패했습니다. 다시 시도해주세요.')
+            } else {
+                alert('구독을 취소하였습니다.')
+            }
+        })
+    }
+    
+    const setSubscribeBtns = function() {
+        const subscribeBtn = document.getElementById('subscribe-btn')
+        const cancelSubscribeBtn = document.getElementById('cancel-subscribe-btn')
+    
+        subscribeBtn.addEventListener('click', subscribe)
+        cancelSubscribeBtn.addEventListener('click', cancelSubscribe)
+    }
+
     const setUserInfo = (name, email) => {
         const nameElm = document.querySelector('#user-name')
         const emailElm = document.querySelector('#user-email')
@@ -110,6 +143,7 @@ const channelService = (function () {
     }
 
     const init = () => {
+        setSubscribeBtns()
         if (id) {
             api.requestUser(id)
             .then(res => {
