@@ -18,6 +18,8 @@ public class UserContents {
     public static final String BLANK_ERROR_MESSAGE = "userName은 빈칸을 허용하지 않는 항목입니다.";
     public static final String PATTERN_ERROR_MESSAGE = "사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다.";
     public static final String LENGTH_ERROR_MESSAGE = "이름을 30자 미만으로 입력하세요.";
+    private static final int USER_NAME_MAX_LENGTH = 30;
+    private static final int USER_NAME_MIN_LENGTH = 1;
 
     private String name;
 
@@ -54,8 +56,12 @@ public class UserContents {
     }
 
     private void checkLength(String userName) {
-        if (userName.length() >= 30 || userName.length() < 1) {
+        if (userName.length() >= USER_NAME_MAX_LENGTH || userName.length() < USER_NAME_MIN_LENGTH) {
             throw new InvalidUserContentsException(LENGTH_ERROR_MESSAGE);
         }
+    }
+
+    public boolean isSameUserName(String userName) {
+        return this.userName.equals(userName);
     }
 }
