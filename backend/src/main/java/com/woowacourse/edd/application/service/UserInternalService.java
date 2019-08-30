@@ -3,6 +3,7 @@ package com.woowacourse.edd.application.service;
 import com.woowacourse.edd.application.dto.UserUpdateRequestDto;
 import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.domain.Video;
+import com.woowacourse.edd.exceptions.DuplicateEmailSignUpException;
 import com.woowacourse.edd.exceptions.UnauthorizedAccessException;
 import com.woowacourse.edd.exceptions.UserNotFoundException;
 import com.woowacourse.edd.repository.UserRepository;
@@ -25,7 +26,14 @@ class UserInternalService {
     }
 
     public User save(User user) {
+        checkEmailDuplication(user);
         return userRepository.save(user);
+    }
+
+    private void checkEmailDuplication(User user) {
+        if(userRepository.existsByEmail(user.getEmail())) {
+            throw new DuplicateEmailSignUpException();
+        }
     }
 
     @Transactional(readOnly = true)

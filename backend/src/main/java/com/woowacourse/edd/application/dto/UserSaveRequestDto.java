@@ -2,6 +2,7 @@ package com.woowacourse.edd.application.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class UserSaveRequestDto {
 
@@ -16,6 +17,7 @@ public class UserSaveRequestDto {
     private String name;
 
     @Email(message = INVALID_EMAIL_MESSAGE)
+    @Size(min = 1, message = INVALID_EMAIL_MESSAGE)
     private String email;
 
     @Pattern(regexp = USER_PASSWORD_PATTERN, message = INVALID_PASSWORD_MESSAGE)

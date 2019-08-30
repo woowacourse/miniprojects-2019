@@ -16,7 +16,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CommentTests extends DomainBasicTests {
+public class CommentTests extends BasicDomainTests {
 
     private Video video;
     private User author;

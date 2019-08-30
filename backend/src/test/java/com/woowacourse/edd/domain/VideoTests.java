@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class VideoTests extends DomainBasicTests {
+public class VideoTests extends BasicDomainTests {
 
     private static final String VALID_YOUTUBE_ID = "abc";
     private static final String VALID_TITLE = "abcd";
