@@ -99,6 +99,7 @@ const ArticleApp = (() => {
                                 "authorName": article.authorName.name,
                             }));
                         ReactionApp.service().showGoodCount('article', article.id);
+                        CommentApp.service().showCommentCount(article.id);
                         const videoTag = document.querySelector('video[data-object="article-video"]');
                         const imageTag = document.querySelector('img[data-object="article-image"]');
                         if (videoTag.getAttribute('src') === "") {
