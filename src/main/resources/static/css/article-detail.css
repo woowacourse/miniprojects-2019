@@ -38,6 +38,7 @@
 }
 
 .profile-text{
+    max-width:80%;
     margin-left:10px;
 }
 
@@ -84,6 +85,7 @@
     height:54px;
     border:0;
 }
+
 
 .pic-con{
     background-image:url(/images/logo/logo_solid.svg);
