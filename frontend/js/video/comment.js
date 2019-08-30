@@ -1,26 +1,29 @@
+const commentCtx = {
+    state: {
+        currentCommentId: null,
+    },
+}
+
 const commentApp = (function() {
     const insertComment = function (data) {
         const commentSection = document.getElementById('comment-section');
         const commentTemplate = ` 
-        <li class="comment-item border bottom mrg-btm-30" id="${data.id}">
+        <li class="comment-item border bottom mrg-btm-30" data-id="${data.id}">
             <img class="thumb-img img-circle" src="https://avatars3.githubusercontent.com/u/50367798?v=4" alt="">
             <div class="info">
-                <span href="" class="text-bold inline-block">${data.author.name}</span>
-        
-                <p class="width-80" id="contents-${data.id}"> ${data.contents}</p>
-                <span class="text-bold inline-block"> 생성날짜:${moment.utc(data.createDate).format('YYYY[년] MM[월] DD[일] hh:mm')}</span>
-                <button type="button" id="edit-btn-${data.id}" class="btn btn-danger">
-                    <i class="ti-pencil text-dark font-size-16 pdd-horizontal-5"></i>
-                </button>
-                <button id="edit-confirm-btn-${data.id}" class="float-right pointer btn btn-icon" style="visibility:hidden">저장확인</button>
-                <button type="button" id="delete-btn-${data.id}" class="btn btn-danger">
-                    <i class="ti-trash text-dark font-size-16 pdd-horizontal-5"></i>
-                </button>
-                <input type="text" id="edit-text-${data.id}" style="visibility:hidden">
+                <div class="d-flex flex-row align-items-center">
+                    <span class="text-bold inline-block">${data.author.name}</span> 
+                    <span class="d-inline-block ml-2 mr-1">|</span>
+                    <span class="inline-block">${moment.utc(data.createDate).local().format('YYYY. MM. DD. HH:mm')}</span>
+                    <a class="pointer btn-update-comment ml-3 line-height-100" data-toggle="modal" data-target="#comment-update-modal"><small>수정</small></a>
+                    <a class="pointer btn-delete-comment ml-2 line-height-100"><small>삭제</small></a>
+                </div>
+                <p class="width-80 comment-contents"> ${data.contents}</p>
+                
             </div>
         </li>
         `
-        commentSection.insertAdjacentHTML("afterbegin", commentTemplate)
+        commentSection.insertAdjacentHTML("beforeend", commentTemplate)
     }
     
     const CommentEvent = function() {
@@ -36,9 +39,9 @@ const commentApp = (function() {
             commentSection.addEventListener('click', commentService.prepareEdit)
         }
 
-        const finalizeEditComment = function() {
-            const commentSection = document.getElementById('comment-section')
-            commentSection.addEventListener('click', commentService.finalizeEdit)
+        const submitEditComment = function() {
+            const btnSubmitUpdate = document.querySelector('.modal .btn-update-submit')
+            btnSubmitUpdate.addEventListener('click', commentService.submitEdit)
         }
 
         const deleteComment = function() {
@@ -61,7 +64,7 @@ const commentApp = (function() {
         const init = function() {
             saveComment();
             prepareEditComment();
-            finalizeEditComment();
+            submitEditComment();
             deleteComment();
             loadComments();
         }
@@ -73,38 +76,43 @@ const commentApp = (function() {
 
     const CommentService = function() {
         const save = function() {
+            const inputElm = document.getElementById('comment-input')
             const body = {};
-            body.contents = document.getElementById('comment-input').value;
+            body.contents = inputElm.value
+            inputElm.value = '';
             const dataBody = JSON.stringify(body);
             api.saveComment(dataBody, wootubeCtx.util.getUrlParams('id'))
                 .then(response => response.json())
-                .then(data => insertComment(data))
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message)
+                        return
+                    }
+                    insertComment(data)
+                })
         }
 
-        const prepareEdit = function(event) {            
-            if(event.target.classList.contains("ti-pencil")) {
-                const liElement = event.target.closest('li');
-                const commentId = liElement.id;
-                const editConfirmBtn = document.getElementById('edit-confirm-btn-' + commentId);
-                const editText = document.getElementById('edit-text-' + commentId);
-                const contents = document.getElementById('contents-' + commentId);
-                editText.value = contents.textContent;
-                editConfirmBtn.style.visibility = 'visible'
-                editText.style.visibility = 'visible'
+        const prepareEdit = function(event) {
+            const { target } = event
+            if(target.classList.contains('btn-update-comment') ||
+                target.closest('.btn-update-comment')) {
+                const itemContainer = event.target.closest('li')
+                const contentsElm = itemContainer.querySelector('.comment-contents')
+                commentCtx.state.currentCommentId = itemContainer.dataset.id
+                document.querySelector('.modal .input-comment-update').value = contentsElm.innerText;
             }
         }
         
-        const finalizeEdit = function(event) {
-            if(event.target.classList.contains('btn-icon')) {
-                const liElement = event.target.closest('li');
-                const commentId = liElement.id;
-                const body = {};
-                body.contents = document.getElementById('edit-text-' + commentId).value;
-                const dataBody = JSON.stringify(body);
-                api.editComment(dataBody, wootubeCtx.util.getUrlParams('id'), commentId)
-                .then(response => response.json())
-                .then(json => updateTemplate(json, commentId));
-            }
+        const submitEdit = function() {
+            const itemContainer = event.target.closest('.modal')
+            const commentId = commentCtx.state.currentCommentId
+            const body = {
+                contents: itemContainer.querySelector('.input-comment-update').value
+            };
+            const dataBody = JSON.stringify(body);
+            api.editComment(dataBody, wootubeCtx.util.getUrlParams('id'), commentId)
+            .then(response => response.json())
+            .then(json => updateTemplate(json, commentId));
         }
 
         const updateTemplate = function(json, commentId) {
@@ -112,14 +120,16 @@ const commentApp = (function() {
                 alert(json.message);
                 return false;
             }
-            const contents = document.getElementById('contents-'+commentId);
+            const contents = document.querySelector(`li[data-id="${commentId}"] .comment-contents`)
             contents.innerText = json.contents;
         }
 
         const deleteComment = function(event) {
-            if(event.target.classList.contains('ti-trash')) {
-                const liElement = event.target.closest('li');
-                const commentId = liElement.id;
+            const { target } = event;
+            if(target.classList.contains('btn-delete-comment') ||
+                target.closest('.btn-delete-comment')) {
+                const itemContainer = target.closest('li')
+                const commentId = itemContainer.dataset.id
                 api.deleteComment(wootubeCtx.util.getUrlParams('id'), commentId)
                 .then(response => {
                     if (response.status !== 204) {
@@ -132,14 +142,13 @@ const commentApp = (function() {
         }
 
         const deleteCommentFromTemplate = function(commentId) {
-            const litagToDelete = document.getElementById(''+commentId);
-            litagToDelete.innerHTML = '';
+            document.querySelector(`li[data-id="${commentId}"]`).remove();
         }
 
         return {
             save: save,
             prepareEdit: prepareEdit,
-            finalizeEdit: finalizeEdit,
+            submitEdit: submitEdit,
             deleteComment: deleteComment
         }
     }

@@ -19,41 +19,56 @@
         </div>
 
         <div class="page-container">
-                <div class="main-content">
-                    <div class="container-fluid max-width-lg">
-                        <div class="card-block">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div id="video-area">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="width-100 border bottom mrg-btm-20 pdd-btm-10">
-                                        <span class="font-size-16">댓글</span>
-                                        <span class="font-size-16 text-info">2</span>
-                                    </div>
-                                    <div class="comment">
-                                        <ul class="list-unstyled list-info" id="comment-section">
-                                           
-                                        </ul>
-                                        <div class="add-comment">
-                                            <div id="editSection"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="add-comment-section">
-                                    <input type="text" id="comment-input">
-                                    <button type="button" id="save-comment-btn" class="btn btn-danger">저장</button>
+            <div class="main-content">
+                <div class="container-fluid max-width-lg">
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="video-area">
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="width-100 border bottom mrg-btm-20 pdd-btm-10">
+                                    <span class="font-size-16">댓글</span>
+                                    <span class="font-size-16 text-info">2</span>
+                                </div>
+                                <div class="comment">
+                                    <ul class="list-unstyled list-info" id="comment-section">
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div id="add-comment-section" class="d-block w-100">
+                                <textarea class="w-100" name="" id="comment-input" rows="4"></textarea>
+                                <button type="button" id="save-comment-btn" class="btn btn-danger">댓글 작성</button>
+                            </div>
                         </div>
-                        <button id="btn-edit" type="button" class="btn btn-default">수정하기</button>
-                        <button id="btn-delete" type="button" class="btn btn-default">삭제하기</button>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="comment-update-modal" aria-labelledby="comment-update-modal-title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="comment-update-modal-title">댓글 수정</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <textarea class="w-100 input-comment-update" name="contents" rows="4"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary btn-update-submit" data-dismiss="modal">확인</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>

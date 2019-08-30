@@ -114,3 +114,7 @@ header ul.nav-right li, header ul.nav-left li {
 .padding-8 {
     padding: 8px;
 }
+
+.line-height-100 {
+    line-height: 100%;
+}
