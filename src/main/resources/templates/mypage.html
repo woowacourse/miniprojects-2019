@@ -216,5 +216,13 @@
         document.querySelector("#profile-image-form").submit();
     });
 </script>
+<script th:if="${errors}" th:inline="javascript">
+    /* <![CDATA[ */
+    const initValue = [[ ${errors}]];
+    /* ]]> */
+
+    alert(initValue);
+
+</script>
 </body>
 </html>
