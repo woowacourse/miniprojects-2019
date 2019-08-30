@@ -12,8 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static com.wootecobook.turkey.user.service.IntroductionService.MISMATCH_USER_MESSAGE;
-import static com.wootecobook.turkey.user.service.IntroductionService.NOT_FOUND_INTRODUCTION_MESSAGE;
+import static com.wootecobook.turkey.user.service.IntroductionService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 

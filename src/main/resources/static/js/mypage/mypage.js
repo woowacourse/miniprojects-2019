@@ -9,8 +9,8 @@ const details = document.getElementById('details')
 const blockTypes = ['introduce', 'pictures', 'friends']
 
 const renderProfile = (uploadedProfile) => {
-    profile.style.backgroundImage = `url(${uploadedProfile === undefined ?
-        DEFAULT_PERSON_IMAGE_URL(generateRandomNumber(4)) : uploadedProfile})`
+    profile.style.backgroundImage = `url(${(uploadedProfile === undefined) || (uploadedProfile === null) ?
+        DEFAULT_PERSON_IMAGE_URL(generateRandomNumber(4)) : uploadedProfile.path})`
 }
 
 const renderCover = (uploadedCover) => {
@@ -26,7 +26,7 @@ const feedInitLoad = async () => {
     api.GET(MYPAGE_URI)
         .then(res => res.json())
         .then(dto => {
-            renderProfile(dto.user.profile.path)
+            renderProfile(dto.user.profile)
             renderCover(dto.cover)
             loadWriteForm(dto.user)
             return dto

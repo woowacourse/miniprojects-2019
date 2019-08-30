@@ -19,13 +19,15 @@ public class UserResponse {
     private String email;
     private String name;
     private FileFeature profile;
+    private boolean isLogin;
 
     @Builder
-    public UserResponse(final Long id, final String email, final String name, final FileFeature profile) {
+    public UserResponse(final Long id, final String email, final String name, final FileFeature profile, final boolean isLogin) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.profile = profile;
+        this.isLogin = isLogin;
     }
 
     public static UserResponse from(User user) {
@@ -33,6 +35,7 @@ public class UserResponse {
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
+                .isLogin(user.isLogin())
                 .build();
 
         Optional<UploadFile> maybeProfile = getFileFeatureOfProfile(user.getProfile());
