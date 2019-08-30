@@ -1,4 +1,4 @@
-package techcourse.w3.woostagram.main.dto;
+package techcourse.w3.woostagram.expolr.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class MainArticleDto {
+public class ArticleSearchDto {
     private ArticleDto article;
     private List<CommentDto> comments;
     private Boolean mine;
@@ -19,7 +19,7 @@ public class MainArticleDto {
     private Boolean liking;
 
     @Builder
-    public MainArticleDto(ArticleDto article, List<CommentDto> comments, Boolean mine, Long likes, Boolean liking) {
+    public ArticleSearchDto(ArticleDto article, List<CommentDto> comments, Boolean mine, Long likes, Boolean liking) {
         this.article = article;
         this.comments = comments;
         this.mine = mine;
@@ -27,8 +27,8 @@ public class MainArticleDto {
         this.liking = liking;
     }
 
-    public static MainArticleDto from(Article article, List<CommentDto> comments, Boolean mine, Long likes, Boolean liking) {
-        return MainArticleDto.builder()
+    public static ArticleSearchDto from(Article article, List<CommentDto> comments, Boolean mine, Long likes, Boolean liking) {
+        return ArticleSearchDto.builder()
                 .article(ArticleDto.from(article))
                 .comments(comments)
                 .mine(mine)
