@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
-import techcourse.w3.woostagram.expolr.service.ArticleSearchService;
 import techcourse.w3.woostagram.expolr.dto.ArticleSearchDto;
 import techcourse.w3.woostagram.expolr.dto.MypageArticleDto;
+import techcourse.w3.woostagram.expolr.service.ArticleSearchService;
 
 @RestController
 @RequestMapping("/api")
