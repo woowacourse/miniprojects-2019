@@ -92,11 +92,11 @@ public class Post extends BaseEntity {
         return contents;
     }
 
-    public LocalDateTime getCreateDateTime() {
+    public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
     }
 
-    public LocalDateTime getUpdateDateTime() {
+    public LocalDateTime getUpdatedDateTime() {
         return updatedDateTime;
     }
 
