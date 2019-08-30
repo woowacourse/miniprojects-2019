@@ -8,7 +8,7 @@ const getModalTemplate = (buttons, num) => {
     </div>`
 };
 
-const getArticleTemplate = function (articleId, userId, userName, imageUrl, profileUrl, contents, comments, likeNum, liking) {
+const getArticleTemplate = function (articleId, userId, userName, imageUrl, profileUrl, contents, comments, likeNum, liking, time) {
     return `<div class="article-card card widget-feed no-pdd mrg-btm-70" data-article-id = ${articleId} data-user-id = ${userId}>
                             <div class="feed-header padding-15">
                                 <ul class="list-unstyled list-info">
@@ -76,7 +76,7 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                                 </div>
                                                 ${comments}
                                             </div>
-                                           <time class="font-size-8 text-gray d-block">12시간 전</time>                           
+                                           <time class="font-size-8 text-gray d-block">${time}</time>                           
                                      </li>
                                     </ul>
                                     <div class="add-comment relative">
@@ -108,4 +108,12 @@ const getMypageArticleTemplate = function (articleId, imgUrl) {
             <img src=${imgUrl}>
         </a>
     </div>`
+};
+
+const getAlertTemplate = (message) => {
+    return `<div class = "alert-con">
+        <div class = "alert-box">
+        <p>${message}</p>
+        </div>
+        </div>`
 };
