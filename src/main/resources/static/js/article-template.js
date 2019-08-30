@@ -123,6 +123,26 @@ const template = (function () {
                         </div>
                     </li>`;
 
+    const friendShowCard = `<li class="friend">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="d-flex">
+                                        <div class="pdd-right-10 pdd-btm-10">
+                                            <img class="friend-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
+                                        </div>
+                                        <div>
+                                            <div class="d-flex flex-row">
+                                                <div>
+                                                    <span class="text-bold font-size-15">{{userName}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-auto" data-object="event-btn-group">
+                                                {{{btn}}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>`;
+
     const friends = {
         friendsBtn: {
             approve: `<button type="button" class="btn btn-outline-danger btn-sm" data-btn="friends-reject">
@@ -148,17 +168,17 @@ const template = (function () {
             add: `<button type="button" class="btn btn-info" id="friend-requesting-btn" data-friend-id="{{userId}}">
                         요청중
                     </button>`,
-            requested: `<button type="button" class="btn btn-info" id="friend-reject-btn" data-friend-id="{{userId}}">
+            requested: `<button type="button" class="btn btn-info" id="friend-reject-btn" data-friend-id="{{userId}}" data-btn="friends-no">
                         친구 거절
                     </button>
-                    <button type="button" class="btn btn-info" id="friend-approve-btn" data-friend-id="{{userId}}">
+                    <button type="button" class="btn btn-info" id="friend-approve-btn" data-friend-id="{{userId}}" data-btn="friends-ok">
                         친구 수락
                     </button>`,
-            friend: `<button type="button" class="btn btn-info" id="friend-ing-btn" data-friend-id="{{userId}}">
+            friend: `<button type="button" class="btn btn-info" id="friend-ing-btn" data-friend-id="{{userId}}" data-btn="friends-friends">
                         친구
                     </button>`,
         }
-    }
+    };
 
     const subComment = `<li class="comment-item" data-object="comment" data-comment-id="{{id}}">
                             <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="프로필이미지">
@@ -206,5 +226,6 @@ const template = (function () {
         friends: friends,
         subComment: subComment,
         commentArea: commentArea,
+        friendShowCard: friendShowCard,
     };
 })();

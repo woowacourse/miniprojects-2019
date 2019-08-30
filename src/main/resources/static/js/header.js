@@ -26,7 +26,7 @@ const HeaderApp = (() => {
         const headerApi = new HeaderApi();
 
         const showFriendList = () => {
-            const showModalBtn = document.getElementById('show-friend-modal-btn')
+            const showModalBtn = document.getElementById('show-friend-modal-btn');
             showModalBtn.click();
         };
 
