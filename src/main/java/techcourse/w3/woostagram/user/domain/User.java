@@ -64,9 +64,12 @@ public class User extends BaseEntity {
         return this.profile.equals(DEFAULT_PROFILE_IMAGE);
     }
 
+    public boolean isSameUserName(String userName) {
+        return this.userContents.isSameUserName(userName);
+    }
+
     @PrePersist
     public void prePersist() {
         this.profile = Objects.isNull(this.profile) ? DEFAULT_PROFILE_IMAGE : this.profile;
     }
-
 }

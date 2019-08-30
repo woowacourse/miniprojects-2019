@@ -10,10 +10,7 @@ import techcourse.w3.woostagram.user.dto.UserCreateDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
-import techcourse.w3.woostagram.user.exception.LoginException;
-import techcourse.w3.woostagram.user.exception.UserCreateException;
-import techcourse.w3.woostagram.user.exception.UserNotFoundException;
-import techcourse.w3.woostagram.user.exception.UserProfileException;
+import techcourse.w3.woostagram.user.exception.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,7 +57,16 @@ public class UserService {
     @Transactional
     public void update(UserUpdateDto userUpdateDto, String email) {
         User user = findUserByEmail(email);
+        if (!user.isSameUserName(userUpdateDto.getUserName())) {
+            checkDuplicatedUpdatedUserName(userUpdateDto.getUserName());
+        }
         user.updateContents(userUpdateDto.toEntity());
+    }
+
+    private void checkDuplicatedUpdatedUserName(String userName) {
+        if (userRepository.findByUserContents_UserName(userName).isPresent()) {
+            throw new UserUpdateException("이미 존재하는 사용자 이름입니다.");
+        }
     }
 
     public void deleteByEmail(String email) {

@@ -20,7 +20,7 @@
                         <span class="profile-name"></span>
                     </div>
                 </div>
-                <button class="modal-btn" type="button"/>
+                <button class="modal-btn" type="button" th:if="${session.loggedInUser.id} == ${article.user.id}"/>
             </header>
             <section class="contents-section common-flex">
                 <div class="contents-con common-flex">
@@ -51,15 +51,15 @@
                         </a>
                         </li>
                         <li class="float-right">
-                            <a href="" class="pd-right-0">
+                            <p class="pd-right-0">
                                 <span class="like-num"></span>
-                            </a>
+                            </p>
                         </li>
                         </ul>
-                    </div>
+                </div>
 
                 <div class="add-comment relative">
-                    <textarea rows="1" class="form-control text-dark padding-15 comment-input" placeholder="댓글 달기..."></textarea>
+                    <textarea rows="1" class="comment-textarea comment-textarea-width-80 form-control text-dark padding-15 comment-input" placeholder="댓글 달기..."></textarea>
                     <div class="absolute top-5 right-0">
                         <button class="comment-create-btn btn btn-default no-border text-gray">게시</button>
                     </div>
@@ -75,11 +75,12 @@
     </div>
 </div>
 <script th:inline="javascript">
-    const articleId = [[${articleId}]];
+    const articleId = [[${article.id}]];
 </script>
 <th:block th:replace="fragments/common-js :: common-js"></th:block>
 <script src="/js/article.js"></script>
 <script src="/js/comment.js"></script>
 <script src="/js/article-detail.js"></script>
+<script src="/js/alarm.js"></script>
 </body>
 </html>

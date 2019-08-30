@@ -15,7 +15,7 @@ axios.get('/api/users/loggedin')
     });
 
 function openSocket(userId) {
-    const socket = new SockJS("http://127.0.0.1:8080/portfolio");
+    const socket = new SockJS("/portfolio");
     const stompClient = Stomp.over(socket);
 
     const connectCallback = () => {

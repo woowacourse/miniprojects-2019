@@ -13,12 +13,12 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                             <div class="feed-header padding-15">
                                 <ul class="list-unstyled list-info">
                                     <li>
-                                        <a href = "/$">
+                                        <!--<a href = "/$">-->
                                         <img class="thumb-img img-circle" src=${profileUrl}
                                              alt="">
                                              </a>
                                         <div class="info">
-                                            <a href=""
+                                            <a href="/${userName}"
                                                class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
                                         </div>
                                     </li>
@@ -80,7 +80,7 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                      </li>
                                     </ul>
                                     <div class="add-comment relative">
-                                        <textarea rows="1" class="comment-textarea form-control text-dark padding-15"
+                                        <textarea rows="1" class="comment-textarea comment-textarea-width-80 form-control text-dark padding-15"
                                                   placeholder="댓글 달기..."></textarea>
                                         <div class="absolute top-5 right-0">
                                             <button class="comment-btn btn btn-default no-border text-gray">게시</button>

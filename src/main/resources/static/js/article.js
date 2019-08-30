@@ -59,7 +59,7 @@ const Article = (function () {
 
                     document.querySelectorAll(".profile-name").forEach(
                         (element) => {
-                            element.innerText = data.userInfoDto.userContentsDto.userName;
+                            element.innerHTML = `<a href="/${data.userInfoDto.userContentsDto.userName}">${data.userInfoDto.userContentsDto.userName}</a>`;
                         }
                     );
                     document.querySelector(".contents-para").innerText = data.contents;

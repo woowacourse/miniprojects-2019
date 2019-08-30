@@ -280,3 +280,9 @@ button {
     padding:30px;
     margin:0;
 }
+
+.comment-textarea-width-80{
+    width: 80%;
+    min-height: 50px !important;
+    resize: none;
+}
