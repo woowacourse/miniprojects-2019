@@ -106,7 +106,7 @@ public class CommentControllerTests extends BasicControllerTests {
         String invalidEmail = "heebong@email.com";
         String invalidPW = "P@ssw0rd";
 
-        UserSaveRequestDto invalidUserSaveRequestDto = new UserSaveRequestDto("heebong", invalidEmail, invalidPW);
+        UserSaveRequestDto invalidUserSaveRequestDto = new UserSaveRequestDto("heebong", invalidEmail, invalidPW, invalidPW);
         LoginRequestDto invalidUserLoginRequestDto = new LoginRequestDto(invalidEmail, invalidPW);
         signUp(invalidUserSaveRequestDto);
         String cookie = getLoginCookie(invalidUserLoginRequestDto);
@@ -191,7 +191,7 @@ public class CommentControllerTests extends BasicControllerTests {
 
     @Test
     void delete_invalid_userId() {
-        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("heebong", "heebong@naver.com", "P@ssW0rd");
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("heebong", "heebong@naver.com", "P@ssW0rd", "P@ssW0rd");
         signUp(userSaveRequestDto);
         String cookie = getLoginCookie(new LoginRequestDto("heebong@naver.com", "P@ssW0rd"));
 

@@ -37,7 +37,7 @@ public class LoginControllerTests extends BasicControllerTests {
         String testEmail = "edan@gmail.com";
         String testPassword = "p@ssW0rd";
 
-        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("edan", testEmail, testPassword);
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("edan", testEmail, testPassword, testPassword);
         String url = signUp(userSaveRequestDto).getResponseHeaders().getLocation().toASCIIString();
 
         String sid = getLoginCookie(new LoginRequestDto("edan@gmail.com", "p@ssW0rd"));

@@ -21,7 +21,6 @@ public class VideoControllerTests extends BasicControllerTests {
     private final String DEFAULT_VIDEO_TITLE = "제목";
     private final String DEFAULT_VIDEO_CONTENTS = "내용";
     private final String VIDEOS_URI = "/v1/videos";
-    private final LocalDateTime DEFAULT_VIDEO_DATETIME = LocalDateTime.of(2019, 5, 5, 15, 31, 23);
     private final int DEFAULT_VIDEO_VIEW_COUNT = 100;
 
     @Test
@@ -67,13 +66,13 @@ public class VideoControllerTests extends BasicControllerTests {
 
     @Test
     void find_videos_by_creator() {
-        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("edan", "edan1000@gmail.com","p@ssW0rd");
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("edan", "edan1000@gmail.com", "p@ssW0rd", "p@ssW0rd");
         String url = signUp(userSaveRequestDto).getResponseHeaders()
             .getLocation()
             .toASCIIString();
 
         LoginRequestDto loginRequestDto = new LoginRequestDto("edan1000@gmail.com", "p@ssW0rd");
-        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto("abc","newtitle","newContents");
+        VideoSaveRequestDto videoSaveRequestDto = new VideoSaveRequestDto("abc", "newtitle", "newContents");
         VideoSaveRequestDto secondVideoSaveRequestDto = new VideoSaveRequestDto("def", "secondtitle", "secondcontents");
 
         String cookie = getLoginCookie(loginRequestDto);

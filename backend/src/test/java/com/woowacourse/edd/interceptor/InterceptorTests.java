@@ -25,7 +25,7 @@ public class InterceptorTests extends BasicControllerTests {
 
     @Test
     void post_user() {
-        UserSaveRequestDto signUpUserDto = new UserSaveRequestDto("conas91", "conas91@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto signUpUserDto = new UserSaveRequestDto("conas91", "conas91@gmail.com", "p@ssW0rd", "p@ssW0rd");
         WebTestClient.ResponseSpec responseSpec = executePost(USER_URL).cookie(COOKIE_JSESSIONID, sessionId)
             .body(Mono.just(signUpUserDto), UserSaveRequestDto.class)
             .exchange();

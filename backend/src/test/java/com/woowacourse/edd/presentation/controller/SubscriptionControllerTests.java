@@ -15,8 +15,8 @@ public class SubscriptionControllerTests extends BasicControllerTests {
 
     @Test
     void subscribe() {
-        UserSaveRequestDto subscriber = new UserSaveRequestDto("conas", "bonghee@gmail.com", "p@ssW0rd");
-        UserSaveRequestDto subscribed = new UserSaveRequestDto("jm", "jayem@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto subscriber = new UserSaveRequestDto("conas", "bonghee@gmail.com", "p@ssW0rd", "p@ssW0rd");
+        UserSaveRequestDto subscribed = new UserSaveRequestDto("jm", "jayem@gmail.com", "p@ssW0rd", "p@ssW0rd");
         String url = signUp(subscribed).getResponseHeaders().getLocation().toASCIIString();
         signUp(subscriber);
 
@@ -32,8 +32,8 @@ public class SubscriptionControllerTests extends BasicControllerTests {
     @Test
     @DisplayName("동일한 구독 요청 여러번")
     void double_subscription() {
-        UserSaveRequestDto subscriber = new UserSaveRequestDto("conas", "babo@gmail.com", "p@ssW0rd");
-        UserSaveRequestDto subscribed = new UserSaveRequestDto("jm", "chunjae@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto subscriber = new UserSaveRequestDto("conas", "babo@gmail.com", "p@ssW0rd", "p@ssW0rd");
+        UserSaveRequestDto subscribed = new UserSaveRequestDto("jm", "chunjae@gmail.com", "p@ssW0rd", "p@ssW0rd");
         String url = signUp(subscribed).getResponseHeaders().getLocation().toASCIIString();
         signUp(subscriber);
 
@@ -48,7 +48,7 @@ public class SubscriptionControllerTests extends BasicControllerTests {
 
     @Test
     void subscribe_fail_without_login() {
-        UserSaveRequestDto subscribed = new UserSaveRequestDto("ethan", "ethan@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto subscribed = new UserSaveRequestDto("ethan", "ethan@gmail.com", "p@ssW0rd", "p@ssW0rd");
         String url = signUp(subscribed).getResponseHeaders().getLocation().toASCIIString();
 
         assertFailUnauthorized(webTestClient.post().uri(url + "/subscribe")
@@ -57,9 +57,9 @@ public class SubscriptionControllerTests extends BasicControllerTests {
 
     @Test
     void find_subscribers() {
-        UserSaveRequestDto subscriber1 = new UserSaveRequestDto("conas", "conas2@gmail.com", "p@ssW0rd");
-        UserSaveRequestDto subscriber2 = new UserSaveRequestDto("heebong", "heebong@gmail.com", "p@ssW0rd");
-        UserSaveRequestDto subscribed = new UserSaveRequestDto("jm", "jayem2@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto subscriber1 = new UserSaveRequestDto("conas", "conas2@gmail.com", "p@ssW0rd", "p@ssW0rd");
+        UserSaveRequestDto subscriber2 = new UserSaveRequestDto("heebong", "heebong@gmail.com", "p@ssW0rd", "p@ssW0rd");
+        UserSaveRequestDto subscribed = new UserSaveRequestDto("jm", "jayem2@gmail.com", "p@ssW0rd", "p@ssW0rd");
         signUp(subscriber1);
         signUp(subscriber2);
 
@@ -91,8 +91,8 @@ public class SubscriptionControllerTests extends BasicControllerTests {
 
     @Test
     void find_subscribeds() {
-        UserSaveRequestDto subscriber1 = new UserSaveRequestDto("conas", "conas21@gmail.com", "p@ssW0rd");
-        UserSaveRequestDto subscriber2 = new UserSaveRequestDto("heebong", "heebong1@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto subscriber1 = new UserSaveRequestDto("conas", "conas21@gmail.com", "p@ssW0rd", "p@ssW0rd");
+        UserSaveRequestDto subscriber2 = new UserSaveRequestDto("heebong", "heebong1@gmail.com", "p@ssW0rd", "p@ssW0rd");
 
         String urlSubscriber1 = signUp(subscriber1).getResponseHeaders().getLocation().toASCIIString();
         String urlSubscriber2 = signUp(subscriber2).getResponseHeaders().getLocation().toASCIIString();
@@ -114,9 +114,9 @@ public class SubscriptionControllerTests extends BasicControllerTests {
 
     @Test
     void cancel_subscription() {
-        UserSaveRequestDto subscribed1 = new UserSaveRequestDto("conas", "conas211@gmail.com", "p@ssW0rd");
-        UserSaveRequestDto subscribed2 = new UserSaveRequestDto("heebong", "heebong11@gmail.com", "p@ssW0rd");
-        UserSaveRequestDto subscriber = new UserSaveRequestDto("jay", "jay@gmail.com", "p@ssW0rd");
+        UserSaveRequestDto subscribed1 = new UserSaveRequestDto("conas", "conas211@gmail.com", "p@ssW0rd", "p@ssW0rd");
+        UserSaveRequestDto subscribed2 = new UserSaveRequestDto("heebong", "heebong11@gmail.com", "p@ssW0rd", "p@ssW0rd");
+        UserSaveRequestDto subscriber = new UserSaveRequestDto("jay", "jay@gmail.com", "p@ssW0rd", "p@ssW0rd");
 
         String urlSubscribed1 = signUp(subscribed1).getResponseHeaders().getLocation().toASCIIString();
         String urlSubscribed2 = signUp(subscribed2).getResponseHeaders().getLocation().toASCIIString();
