@@ -13,12 +13,12 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                             <div class="feed-header padding-15">
                                 <ul class="list-unstyled list-info">
                                     <li>
-                                        <a href = "/$">
+                                        <!--<a href = "/$">-->
                                         <img class="thumb-img img-circle" src=${profileUrl}
                                              alt="">
                                              </a>
                                         <div class="info">
-                                            <a href=""
+                                            <a href="/${userName}"
                                                class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
                                         </div>
                                     </li>
