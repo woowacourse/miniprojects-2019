@@ -72,7 +72,7 @@ public class UserControllerTests extends BasicControllerTests {
     @Test
     @DisplayName("이미 존재하는 이메일로 가입을 시도할 때")
     void duplicate_email_signup() {
-        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto(DEFAULT_LOGIN_NAME, DEFAULT_LOGIN_EMAIL, DEFAULT_LOGIN_PASSWORD);
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto(DEFAULT_LOGIN_NAME, DEFAULT_LOGIN_EMAIL, DEFAULT_LOGIN_PASSWORD, DEFAULT_LOGIN_PASSWORD);
         WebTestClient.ResponseSpec responseSpec = executePost(USER_URL)
             .body(Mono.just(userSaveRequestDto), UserSaveRequestDto.class)
             .exchange();
@@ -83,7 +83,7 @@ public class UserControllerTests extends BasicControllerTests {
     @Test
     @DisplayName("공백으로 이메일가입을 시도할 때")
     void blank_email_signup() {
-        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto(DEFAULT_LOGIN_NAME, " ", DEFAULT_LOGIN_PASSWORD);
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto(DEFAULT_LOGIN_NAME, " ", DEFAULT_LOGIN_PASSWORD, DEFAULT_LOGIN_PASSWORD);
         WebTestClient.ResponseSpec responseSpec = executePost(USER_URL)
             .body(Mono.just(userSaveRequestDto), UserSaveRequestDto.class)
             .exchange();
