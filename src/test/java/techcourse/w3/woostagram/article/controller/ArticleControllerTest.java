@@ -21,9 +21,9 @@ class ArticleControllerTest extends AbstractControllerTests {
         bodyBuilder.part("imageFile", new ByteArrayResource(IOUtils.toByteArray(url)) {
             @Override
             public String getFilename() {
-                return "test_image.jpg";
+                return "test_image.png";
             }
-        }, MediaType.IMAGE_JPEG);
+        }, MediaType.IMAGE_PNG);
         bodyBuilder.part("contents", "Moomin contents");
 
         assertThat(postMultipartRequest("/articles", bodyBuilder.build()).getStatus().is3xxRedirection()).isTrue();

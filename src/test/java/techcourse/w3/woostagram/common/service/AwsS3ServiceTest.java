@@ -43,7 +43,7 @@ class AwsS3ServiceTest {
     void setUp() throws IOException {
         URL url = new URL("https://raw.githubusercontent.com/rohan-varma/rohan-blog/master/images/mnistimg.png");
         multipartFile = new MockMultipartFile("testImage",
-                "testImage.jpg", MediaType.IMAGE_JPEG_VALUE, IOUtils.toByteArray(url));
+                "testImage.png", MediaType.IMAGE_PNG_VALUE, IOUtils.toByteArray(url));
     }
 
     @Test
