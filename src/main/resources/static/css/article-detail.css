@@ -32,7 +32,8 @@
 }
 
 .profile{
-    flex:9;
+    margin-top: 8px;
+    flex: 9;
     display:flex;
 }
 
