@@ -41,6 +41,26 @@ document.querySelector('#btn-submit').addEventListener('click', () => {
 })
 
 document.querySelector('#btn-leave').addEventListener('click', () => {
+    const id = wootubeCtx.util.getUrlParams('id')
+
+    if (id) {
+        api.deleteUser(id)
+        .then(res => {
+            if (res.status === 204) {
+                alert('탈퇴되었습니다')
+                window.location.href = '/'
+                return;
+            }
+            return res.json()
+        })
+        .then(json => {
+            const alertElm = document.querySelector('.alert.alert-danger')
+            alertElm.innerText = json.message
+            alertElm.classList.remove('d-none')
+        })
+        return
+    }
+    
     api.retrieveLoginInfo()
     .then(res => res.json())
     .then(json => api.deleteUser(json.id))
