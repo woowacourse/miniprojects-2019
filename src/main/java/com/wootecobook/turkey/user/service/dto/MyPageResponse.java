@@ -33,13 +33,13 @@ public class MyPageResponse {
                 .friends(friends)
                 .build();
 
-        Optional<FileFeature> maybeCover = getFileFeatureOfCover(user.getCover());
-        maybeCover.ifPresent(fileFeature -> myPageResponse.cover = fileFeature);
+        Optional<UploadFile> maybeCover = getFileFeatureOfCover(user.getCover());
+        maybeCover.ifPresent(cover -> myPageResponse.cover = cover.getFileFeature());
 
         return myPageResponse;
     }
 
-    private static Optional<FileFeature> getFileFeatureOfCover(UploadFile image) {
-        return Optional.ofNullable(image.getFileFeature());
+    private static Optional<UploadFile> getFileFeatureOfCover(UploadFile cover) {
+        return Optional.ofNullable(cover);
     }
 }

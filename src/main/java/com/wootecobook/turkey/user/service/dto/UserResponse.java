@@ -35,13 +35,13 @@ public class UserResponse {
                 .name(user.getName())
                 .build();
 
-        Optional<FileFeature> maybeProfile = getFileFeatureOfProfile(user.getProfile());
-        maybeProfile.ifPresent(fileFeature -> userResponse.profile = fileFeature);
+        Optional<UploadFile> maybeProfile = getFileFeatureOfProfile(user.getProfile());
+        maybeProfile.ifPresent(profile -> userResponse.profile = profile.getFileFeature());
 
         return userResponse;
     }
 
-    private static Optional<FileFeature> getFileFeatureOfProfile(final UploadFile profile) {
-        return Optional.ofNullable(profile.getFileFeature());
+    private static Optional<UploadFile> getFileFeatureOfProfile(final UploadFile profile) {
+        return Optional.ofNullable(profile);
     }
 }
