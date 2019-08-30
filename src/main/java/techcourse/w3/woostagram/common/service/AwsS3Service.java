@@ -45,7 +45,7 @@ public class AwsS3Service implements StorageService {
             ImageResizeUtils.resizeImage(fileExtension, file, resizedFile);
             s3.putObject(awsS3Properties.getBucket(), fileName, resizedFile);
         } catch (AmazonServiceException | IOException e) {
-            throw new FileSaveFailException();
+            throw new FileSaveFailException(e.getCause());
         } finally {
             file.delete();
             resizedFile.delete();
