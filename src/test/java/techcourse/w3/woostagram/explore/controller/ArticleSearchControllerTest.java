@@ -1,4 +1,4 @@
-package techcourse.w3.woostagram.expolr.controller;
+package techcourse.w3.woostagram.explore.controller;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ArticleSearchControllerTest extends AbstractControllerTests {
 

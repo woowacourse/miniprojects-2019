@@ -1,12 +1,12 @@
-package techcourse.w3.woostagram.expolr.service;
+package techcourse.w3.woostagram.explore.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import techcourse.w3.woostagram.article.service.ArticleService;
 import techcourse.w3.woostagram.comment.service.CommentService;
-import techcourse.w3.woostagram.expolr.dto.ArticleSearchDto;
-import techcourse.w3.woostagram.expolr.dto.MypageArticleDto;
+import techcourse.w3.woostagram.explore.dto.ArticleSearchDto;
+import techcourse.w3.woostagram.explore.dto.MypageArticleDto;
 import techcourse.w3.woostagram.follow.service.FollowService;
 import techcourse.w3.woostagram.like.service.LikesService;
 import techcourse.w3.woostagram.tag.domain.HashTag;

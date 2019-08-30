@@ -1,4 +1,4 @@
-package techcourse.w3.woostagram.expolr.dto;
+package techcourse.w3.woostagram.explore.dto;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package techcourse.w3.woostagram.expolr.controller;
+package techcourse.w3.woostagram.explore.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
-import techcourse.w3.woostagram.expolr.dto.ArticleSearchDto;
-import techcourse.w3.woostagram.expolr.dto.MypageArticleDto;
-import techcourse.w3.woostagram.expolr.service.ArticleSearchService;
+import techcourse.w3.woostagram.explore.dto.ArticleSearchDto;
+import techcourse.w3.woostagram.explore.dto.MypageArticleDto;
+import techcourse.w3.woostagram.explore.service.ArticleSearchService;
 
 @RestController
 @RequestMapping("/api")
