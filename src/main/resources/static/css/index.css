@@ -36,3 +36,7 @@ i {
 a:hover{
     cursor:pointer;
 }
+
+.list-info>li>a {
+    padding:0!important;
+}

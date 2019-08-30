@@ -153,7 +153,8 @@ const Index = (function () {
                 article.contents,
                 comments,
                 pageData.likes,
-                pageData.liking
+                pageData.liking,
+                getTime(article.created)
             )
         };
 
@@ -187,6 +188,32 @@ const Index = (function () {
             alert("게시글 링크가 복사되었습니다!")
         };
 
+        const getTime = (createdTime) => {
+            const created={
+                year:createdTime.split("-")[0],
+                month: createdTime.split("-")[1],
+                day:createdTime.split("-")[2].split("T")[0],
+                hour:createdTime.split("T")[1].split(":")[0]
+            }
+            for(key in created){
+                created[key] = parseInt(created[key]);
+            }
+            const date = new Date();
+            const current = {
+                year:date.getFullYear(),
+                month:date.getMonth()+1,
+                day:date.getDate(),
+                hour:date.getHours()
+            }
+            if(created.year!=current.year || created.month!=current.month){
+                return `${created.year}년 ${created.month}월 ${created.day}일`
+            }
+            const pastTime = 24 * (current.day - created.day) + current.day-created.day;
+            if(pastTime===0){
+                return `방금 전`
+            }
+            return `${pastTime}시간 전`
+        };
 
         return {
             getPageData: getPageData,
