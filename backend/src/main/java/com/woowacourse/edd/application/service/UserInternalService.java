@@ -9,6 +9,7 @@ import com.woowacourse.edd.exceptions.UserNotFoundException;
 import com.woowacourse.edd.repository.UserRepository;
 import com.woowacourse.edd.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,11 @@ class UserInternalService {
 
     public User save(User user) {
         checkEmailDuplication(user);
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateEmailSignUpException();
+        }
     }
 
     private void checkEmailDuplication(User user) {

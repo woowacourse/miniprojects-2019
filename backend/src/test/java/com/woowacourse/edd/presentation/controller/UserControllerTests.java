@@ -122,6 +122,22 @@ public class UserControllerTests extends BasicControllerTests {
     }
 
     @Test
+    @DisplayName("탈퇴된 이메일로 가입을 시도할 때")
+    void no_sigin_delete_try_user_email() {
+        String deleteEmail = "delete@email.com";
+        String deletePW = "P@ssw0rd";
+        UserSaveRequestDto deleteSaveRequestDto = new UserSaveRequestDto("delete", deleteEmail, deletePW, deletePW);
+        String url = signUp(deleteSaveRequestDto).getResponseHeaders().getLocation().toASCIIString();
+
+        deleteUser(url, getLoginCookie(new LoginRequestDto(deleteEmail, deletePW)))
+            .expectStatus().isNoContent();
+
+        assertFailBadRequest(executePost(USER_URL)
+            .body(Mono.just(deleteSaveRequestDto), UserSaveRequestDto.class)
+            .exchange(), DUPLICATE_EMAIL_SIGNUP_MESSAGE);
+    }
+
+    @Test
     @DisplayName("가입된 유저가 자신의 유저 삭제를 시도할 때")
     void authorized_user_delete_no_content() {
         UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("robby", "shit222@email.com", "P@ssW0rd", "P@ssW0rd");
