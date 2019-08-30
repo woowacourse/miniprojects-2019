@@ -3,17 +3,14 @@ package techcourse.fakebook.service.article;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import techcourse.fakebook.domain.article.Article;
 import techcourse.fakebook.domain.article.ArticleRepository;
 import techcourse.fakebook.domain.like.ArticleLike;
 import techcourse.fakebook.domain.like.ArticleLikeRepository;
 import techcourse.fakebook.domain.user.User;
-import techcourse.fakebook.exception.FileSaveException;
 import techcourse.fakebook.exception.InvalidAuthorException;
 import techcourse.fakebook.exception.NotFoundArticleException;
-import techcourse.fakebook.exception.NotImageTypeException;
 import techcourse.fakebook.service.article.assembler.ArticleAssembler;
 import techcourse.fakebook.service.article.dto.ArticleRequest;
 import techcourse.fakebook.service.article.dto.ArticleResponse;
@@ -68,13 +65,6 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    public List<ArticleResponse> findAll() {
-        List<Article> articles = articleRepository.findAllByOrderByCreatedDateDesc();
-        return articles.stream()
-                .map(this::getArticleResponse)
-                .collect(Collectors.toList());
-    }
-
     private ArticleResponse getArticleResponse(Article article) {
         List<AttachmentResponse> attachments = article.getAttachments().stream()
                 .map(attachmentService::getAttachmentResponse)
@@ -115,6 +105,7 @@ public class ArticleService {
         }
         final Article article = getArticle(id);
         articleLikeRepository.save(new ArticleLike(userService.getUser(userOutline.getId()), article));
+
         if (article.isNotAuthor(userOutline.getId())) {
             notificationService.notifyTo(
                     article.getUser().getId(),
