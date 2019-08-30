@@ -1,5 +1,8 @@
 package com.wootube.ioi.service;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.wootube.ioi.domain.exception.NotMatchPasswordException;
 import com.wootube.ioi.domain.model.ProfileImage;
 import com.wootube.ioi.domain.model.User;
@@ -15,13 +18,11 @@ import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
 
 @Service
 public class UserService {
