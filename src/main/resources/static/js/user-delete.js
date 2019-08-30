@@ -13,5 +13,5 @@
             })
     }
 
-    deleteBtn.addEventListener("click", deleteBtnHandler)
+    deleteBtn.addEventListener("click", deleteBtnHandler);
 })();
