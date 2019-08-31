@@ -7,6 +7,7 @@ import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.dto.IntroductionRequest;
 import com.wootecobook.turkey.user.service.dto.IntroductionResponse;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
+import com.wootecobook.turkey.user.service.exception.UserMismatchException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +105,7 @@ class IntroductionServiceTest {
                 .build();
 
         // when&then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(UserMismatchException.class,
                 () -> introductionService.update(introductionRequest, null));
     }
 
@@ -120,7 +121,7 @@ class IntroductionServiceTest {
                 .build();
 
         // when&then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(UserMismatchException.class,
                 () -> introductionService.update(introductionRequest, user.getId()));
     }
 
@@ -137,7 +138,7 @@ class IntroductionServiceTest {
                 .build();
 
         // when&then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(UserMismatchException.class,
                 () -> introductionService.update(introductionRequest, user.getId()));
     }
 

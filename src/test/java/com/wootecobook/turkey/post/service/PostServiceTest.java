@@ -78,6 +78,7 @@ public class PostServiceTest {
                 .contents(defaultContents)
                 .author(author)
                 .uploadFiles(new ArrayList<>())
+                .taggedUsers(new ArrayList<>())
                 .id(savedPostId)
                 .build();
     }

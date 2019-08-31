@@ -30,6 +30,10 @@ public class Post extends UpdatableEntity {
     @JoinColumn(name = "receiver_id", foreignKey = @ForeignKey(name = "fk_post_to_receiver_user"), updatable = false)
     private User receiver;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_tag", joinColumns = @JoinColumn(name = "post_no"), inverseJoinColumns = @JoinColumn(name = "tagged_user_no"))
+    private List<User> taggedUsers;
+
     @OneToMany
     @JoinTable(name = "post_file",
             joinColumns = @JoinColumn(name = "post_id"),
@@ -38,7 +42,8 @@ public class Post extends UpdatableEntity {
 
     @Builder
     private Post(final Long id, final User author, final User receiver,
-                 final Contents contents, final List<UploadFile> uploadFiles) {
+                 final Contents contents, final List<UploadFile> uploadFiles,
+                 final List<User> taggedUsers) {
         if (id == null) {
             validateAuthor(author);
         }
@@ -48,6 +53,7 @@ public class Post extends UpdatableEntity {
         this.receiver = receiver;
         this.contents = contents;
         this.uploadFiles = uploadFiles;
+        this.taggedUsers = taggedUsers;
     }
 
     private void validateContents(final Contents contents) {
