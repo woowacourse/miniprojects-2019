@@ -32,7 +32,7 @@ const Comment = (function () {
                     <div class="profile-text">
                         <span class="profile-name"><a href="/${data.userInfoDto.userContentsDto.userName}">
                             ${data.userInfoDto.userContentsDto.userName}</a></span>
-                        <span class="contents-para">${data.contents}</span>
+                        <span class="contents-para">${htmlToStringParse(data.contents)}</span>
                     </div>
                     <div class="comment-delete" data-id=${data.id}>                
                         <i class=" fa fa-times" aria-hidden="true"></i>
