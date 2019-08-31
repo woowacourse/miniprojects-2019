@@ -16,7 +16,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.persistence.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 class IntroductionServiceTest {
@@ -148,6 +149,6 @@ class IntroductionServiceTest {
         introductionService.save(user.getId());
 
         // when&then
-        assertDoesNotThrow(() ->introductionService.delete(user.getId()));
+        assertDoesNotThrow(() -> introductionService.delete(user.getId()));
     }
 }

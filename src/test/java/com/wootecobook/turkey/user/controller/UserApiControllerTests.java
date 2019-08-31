@@ -3,6 +3,7 @@ package com.wootecobook.turkey.user.controller;
 import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.user.service.UserService;
+import com.wootecobook.turkey.user.service.dto.MyPageResponse;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static com.wootecobook.turkey.user.domain.UserValidator.*;
+import static com.wootecobook.turkey.user.service.UserService.EMAIL_DUPLICATE_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.UserMismatchException.USER_MISMATCH_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,7 +83,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .getResponseBody();
 
         //then
-        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE);
+        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_DUPLICATE_MESSAGE);
     }
 
     @Test
@@ -108,6 +110,32 @@ class UserApiControllerTests extends BaseControllerTests {
 
         //then
         assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_CONSTRAINT_MESSAGE);
+    }
+
+    @Test
+    void 유저_생성_이메일_길이_에러() {
+        //given
+        UserRequest userRequest = UserRequest.builder()
+                .email("a@a.aaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                .name(VALID_USER_NAME)
+                .password(VALID_USER_PASSWORD)
+                .build();
+
+        //when
+        ErrorMessage errorMessage = webTestClient.post()
+                .uri(USER_API_URI)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
+                .body(Mono.just(userRequest), UserRequest.class)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MEDIA_TYPE)
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        //then
+        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_LENGTH_CONSTRAINT_MESSAGE);
     }
 
     @Test
@@ -171,20 +199,20 @@ class UserApiControllerTests extends BaseControllerTests {
         Long id = addUser(name, email, VALID_USER_PASSWORD);
 
         //when
-        UserResponse userResponse = webTestClient.get()
-                .uri(USER_API_URI_WITH_SLASH + id)
+        MyPageResponse myPageResponse = webTestClient.get()
+                .uri(USER_API_URI + "/{userId}/mypage", id)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MEDIA_TYPE)
-                .expectBody(UserResponse.class)
+                .expectBody(MyPageResponse.class)
                 .returnResult()
                 .getResponseBody();
 
         //then
-        assertThat(userResponse.getId()).isEqualTo(id);
-        assertThat(userResponse.getEmail()).isEqualTo(email);
-        assertThat(userResponse.getName()).isEqualTo(name);
+        assertThat(myPageResponse.getUser().getId()).isEqualTo(id);
+        assertThat(myPageResponse.getUser().getEmail()).isEqualTo(email);
+        assertThat(myPageResponse.getUser().getName()).isEqualTo(name);
     }
 
     @Test

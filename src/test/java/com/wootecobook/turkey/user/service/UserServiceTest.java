@@ -13,7 +13,6 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
@@ -55,6 +54,20 @@ class UserServiceTest {
                 .name(VALID_NAME)
                 .password(VALID_PASSWORD)
                 .build();
+
+        //when & then
+        assertThrows(SignUpException.class, () -> userService.save(userRequest));
+    }
+
+    @Test
+    void 유저_생성_중복_이메일_에러() {
+        //given
+        UserRequest userRequest = UserRequest.builder()
+                .email(VALID_EMAIL)
+                .name(VALID_NAME)
+                .password(VALID_PASSWORD)
+                .build();
+        userService.save(userRequest);
 
         //when & then
         assertThrows(SignUpException.class, () -> userService.save(userRequest));

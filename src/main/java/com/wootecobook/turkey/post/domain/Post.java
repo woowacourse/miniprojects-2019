@@ -8,6 +8,8 @@ import com.wootecobook.turkey.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,10 +25,12 @@ public class Post extends UpdatableEntity {
     private Contents contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "author_id", nullable = false, foreignKey = @ForeignKey(name = "fk_post_to_author_user"), updatable = false)
     private User author;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "receiver_id", foreignKey = @ForeignKey(name = "fk_post_to_receiver_user"), updatable = false)
     private User receiver;
 
@@ -34,7 +38,7 @@ public class Post extends UpdatableEntity {
     @JoinTable(name = "user_tag", joinColumns = @JoinColumn(name = "post_no"), inverseJoinColumns = @JoinColumn(name = "tagged_user_no"))
     private List<User> taggedUsers;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "post_file",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "file_id"))
