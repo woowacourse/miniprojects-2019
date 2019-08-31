@@ -26,27 +26,24 @@ const Comment = (function () {
     const CommentService = function () {
         const request = new Request(`/api/articles/${articleId}/comments`);
 
-        const commentTemplate =
+        const getCommentTemplate =(data)=>
             `<div class="profile">
-                    <img src={{userInfoDto.profile}}>
+                    <img src=${data.userInfoDto.profile}>
                     <div class="profile-text">
-                        <span class="profile-name"><a href="/{{userInfoDto.userContentsDto.userName}}">
-                            {{userInfoDto.userContentsDto.userName}}</a></span>
-                        <span class="contents-para">{{contents}}</span>
+                        <span class="profile-name"><a href="/${data.userInfoDto.userContentsDto.userName}">
+                            ${data.userInfoDto.userContentsDto.userName}</a></span>
+                        <span class="contents-para">${data.contents}</span>
                     </div>
-                    <div class="comment-delete" data-id={{id}}>                
+                    <div class="comment-delete" data-id=${data.id}>                
                         <i class=" fa fa-times" aria-hidden="true"></i>
                     </div>
                 </div>`;
 
-        const commentItemTemplate = Handlebars.compile(commentTemplate);
-
         const read = () => {
             request.get('/', (status, data) => {
                 document.querySelector('.comment-list').innerHTML = "";
-
                 data.forEach(e => {
-                    document.querySelector('.comment-list').insertAdjacentHTML('beforeend', commentItemTemplate(e))
+                    document.querySelector('.comment-list').insertAdjacentHTML('beforeend', getCommentTemplate(e))
                 });
             })
         };
