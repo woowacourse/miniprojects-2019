@@ -1,16 +1,12 @@
-const Index = (function () {
+const Index = (() => {
 
     const pageSize = 10;
-    let loggedinUserData;
 
     const IndexController = function () {
         const indexService = new IndexService();
         const articleList = document.querySelector('.article-card-con');
-        const loadInit = function () {
-            indexService.getLoggedInData().then((data) => {
-                loggedinUserData = data;
-                indexService.getPageData(0)
-            })
+        const loadInit = () => {
+            indexService.getPageData(0)
         };
 
         const likeButton = () => {
@@ -56,7 +52,7 @@ const Index = (function () {
             })
         };
 
-        const init = function () {
+        const init = () => {
             loadInit();
             likeButton();
             commentSubmitButton();
@@ -76,7 +72,7 @@ const Index = (function () {
         const userRequest = new Request("/api/users");
         const like = new Like();
         const getPageData = (pageNum) => {
-            return indexRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
+            return indexRequest.get(`?page=${pageNum}&size=${pageSize}&sort=id,DESC`
                 , (status, data) => {
                     let pagesHtml = "";
                     for (let i = 0; i < data.content.length; i++) {
@@ -112,13 +108,13 @@ const Index = (function () {
             })
         };
 
-        const eventLike = (articleId, isLike, e) => {
+        const eventLike = (articleId, isLike, element) => {
             if (isLike == 'false') {
                 like.addLike(articleId)
                     .then(() => {
-                        e.childNodes[1].classList.add("fa-heart");
-                        e.childNodes[1].classList.remove("fa-heart-o");
-                        e.dataset.liking = "true";
+                        element.childNodes[1].classList.add("fa-heart");
+                        element.childNodes[1].classList.remove("fa-heart-o");
+                        element.dataset.liking = "true";
                         const likeNumElement = e.closest(".article-card").querySelector(".like-num");
                         const likeNum = parseInt(likeNumElement.innerText) + 1;
                         likeNumElement.innerText = likeNum;
@@ -127,9 +123,9 @@ const Index = (function () {
             } else {
                 like.deleteLike(articleId)
                     .then(() => {
-                        e.childNodes[1].classList.add("fa-heart-o");
-                        e.childNodes[1].classList.remove("fa-heart");
-                        e.dataset.liking = "false";
+                        element.childNodes[1].classList.add("fa-heart-o");
+                        element.childNodes[1].classList.remove("fa-heart");
+                        element.dataset.liking = "false";
                         const likeNumElement = e.closest(".article-card").querySelector(".like-num");
                         const likeNum = parseInt(likeNumElement.innerText) - 1;
                         likeNumElement.innerText = likeNum;
@@ -181,35 +177,35 @@ const Index = (function () {
         const copyArticleLink = (articleId) => {
             const temp = document.createElement("textarea");
             document.body.appendChild(temp);
-            temp.value = window.location.host + "/articles/" + articleId;
+            temp.value = `${window.location.host}/articles/${articleId}`;
             temp.select();
             document.execCommand('copy');
             document.body.removeChild(temp);
-            alert("게시글 링크가 복사되었습니다!")
+            new Alert("게시글 URL이 복사되었습니다.")
         };
 
         const getTime = (createdTime) => {
-            const created={
-                year:createdTime.split("-")[0],
+            const created = {
+                year: createdTime.split("-")[0],
                 month: createdTime.split("-")[1],
-                day:createdTime.split("-")[2].split("T")[0],
-                hour:createdTime.split("T")[1].split(":")[0]
+                day: createdTime.split("-")[2].split("T")[0],
+                hour: createdTime.split("T")[1].split(":")[0]
             }
-            for(key in created){
+            for (key in created) {
                 created[key] = parseInt(created[key]);
             }
             const date = new Date();
             const current = {
-                year:date.getFullYear(),
-                month:date.getMonth()+1,
-                day:date.getDate(),
-                hour:date.getHours()
+                year: date.getFullYear(),
+                month: date.getMonth() + 1,
+                day: date.getDate(),
+                hour: date.getHours()
             }
-            if(created.year!=current.year || created.month!=current.month){
+            if (created.year != current.year || created.month != current.month) {
                 return `${created.year}년 ${created.month}월 ${created.day}일`
             }
-            const pastTime = 24 * (current.day - created.day) + current.day-created.day;
-            if(pastTime===0){
+            const pastTime = 24 * (current.day - created.day) + current.day - created.day;
+            if (pastTime === 0) {
                 return `방금 전`
             }
             return `${pastTime}시간 전`
@@ -233,6 +229,6 @@ const Index = (function () {
         init: init
     }
 
-}());
+})();
 
 Index.init();

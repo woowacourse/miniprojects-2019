@@ -1,4 +1,4 @@
-const Comment = (function () {
+const Comment = (() => {
     const CommentController = function () {
         const commentService = new CommentService();
 
@@ -14,7 +14,7 @@ const Comment = (function () {
             button.addEventListener('click', commentService.remove);
         };
 
-        const init = function () {
+        const init = () => {
             createButton();
             removeButton()
         };
@@ -26,7 +26,7 @@ const Comment = (function () {
     const CommentService = function () {
         const request = new Request(`/api/articles/${articleId}/comments`);
 
-        const getCommentTemplate =(data)=>
+        const getCommentTemplate = (data) =>
             `<div class="profile">
                     <img src=${data.userInfoDto.profile}>
                     <div class="profile-text">
@@ -50,7 +50,7 @@ const Comment = (function () {
 
         const create = () => {
             const commentInput = document.querySelector(".comment-input");
-            let contents = commentInput.value;
+            const contents = commentInput.value;
 
             if (contents.length === 0) {
                 return false;
@@ -91,6 +91,6 @@ const Comment = (function () {
     return {
         init: init
     }
-}());
+})();
 
 Comment.init();

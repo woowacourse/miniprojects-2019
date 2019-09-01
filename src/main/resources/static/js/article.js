@@ -1,4 +1,4 @@
-const Article = (function () {
+const Article = (() => {
 
     const modalButton =
         `<button class="create-modify-btn" tabindex="0">수정하기</button>
@@ -9,8 +9,8 @@ const Article = (function () {
     const ArticleController = function () {
         const articleService = new ArticleService();
         const modalButton = () => {
-            const button = document.querySelector('.modal-btn');
-            button.addEventListener('click', articleService.modalActive);
+            const button = document.querySelectorAll('.modal-btn');
+            Array.from(button).map(x => x.addEventListener('click', articleService.modalActive));
         };
         const modifyFormButton = () => {
             const button = document.querySelector(".create-modify-btn");
@@ -28,7 +28,7 @@ const Article = (function () {
             articleService.loadContent();
         };
 
-        const init = function () {
+        const init = () => {
             modifyButton();
             modifyFormButton();
             initContent();
@@ -142,6 +142,6 @@ const Article = (function () {
     return {
         init: init
     }
-}());
+})();
 
 Article.init();

@@ -41,6 +41,20 @@ class Request {
     }
 }
 
+class Alert {
+    constructor(message) {
+        this.message = message;
+        this.active()
+    }
+
+    active = () => {
+        document.body.insertAdjacentHTML('beforeend', getAlertTemplate(this.message));
+        setTimeout(() => {
+            document.querySelector(".alert-con").remove();
+        }, 2000)
+    }
+}
+
 const DomUtil = {
     active(domName) {
         const element = document.querySelector(domName);
@@ -54,7 +68,7 @@ const DomUtil = {
     }
 };
 
-const htmlToStringParse = (html)=>{
-    return html.replace("<","&lt;")
-        .replace(">","&gt;")
+const htmlToStringParse = (html) => {
+    return html.replace("<", "&lt;")
+        .replace(">", "&gt;")
 }

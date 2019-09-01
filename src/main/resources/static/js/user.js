@@ -1,4 +1,4 @@
-const User = (function () {
+const User = (() => {
     const profileImageModalButton =
         `<button id="select-image" class="create-modify-btn" tabindex="0">사진 선택</button>
         <button id="select-default-image" class="contents-remove-btn delete-btn font-cap" type="button" tabindex="0">기본 사진</button>`;
@@ -28,7 +28,7 @@ const User = (function () {
             image.addEventListener('change', userService.uploadImageFile)
         };
 
-        const init = function () {
+        const init = () => {
             profileImageModalButton();
             imageButton();
             defaultImageButton();
@@ -101,6 +101,6 @@ const User = (function () {
     return {
         init: init
     }
-}());
+})();
 
 User.init();
