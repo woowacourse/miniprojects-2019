@@ -11,17 +11,21 @@ import com.wootecobook.turkey.user.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 import static com.wootecobook.turkey.friend.service.FriendService.ALREADY_FRIEND_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class FriendApiControllerTests extends BaseControllerTests {
 
     private static final String FRIEND_ASK_API_URI = "/api/friends/asks";
@@ -36,8 +40,26 @@ class FriendApiControllerTests extends BaseControllerTests {
     private Long senderId;
     private Long receiverId;
 
-    @Autowired
-    private WebTestClient webTestClient;
+    private final RequestFieldsSnippet friendAskRequestFieldsSnippet = requestFields(
+            fieldWithPath("receiverId").description("요청을 받은 유저의 고유 식별자")
+    );
+
+    private final FieldDescriptor[] friendAskResponseFields = {
+            fieldWithPath("friendAskId").description("친구 요청 고유 식별자"),
+            fieldWithPath("senderId").description("친구 요청 보낸 유저의 고유 식별자"),
+            fieldWithPath("senderName").description("친구 요청 보낸 유저의 이름"),
+            fieldWithPath("receiverId").description("친구 요청 받은 유저의 고유 식별자"),
+            fieldWithPath("receiverName").description("친구 요청 받은 유저의 이름")
+    };
+
+    private final FieldDescriptor[] friendResponseFields = {
+            fieldWithPath("friendId").description("친구 정보 고유 식별자"),
+            fieldWithPath("relatedUserId").description("친구 유저의 고유 식별자"),
+            fieldWithPath("relatedUserName").description("친구 유저의 이름"),
+            fieldWithPath("login").description("친구의 접속 여부")
+    };
+
+
 
     @BeforeEach
     void setUp() {
@@ -56,7 +78,18 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .cookie(JSESSIONID, logIn(SENDER_EMAIL, VALID_USER_PASSWORD))
                 .body(Mono.just(friendAskCreate), FriendAskCreate.class)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isCreated()
+                .expectBody()
+                .consumeWith(document("friend/ask/201/create",
+                        friendAskRequestFieldsSnippet,
+                        responseFields(
+                                fieldWithPath("friendAskId").description("친구 요청 고유 식별자"),
+                                fieldWithPath("senderId").description("친구 요청 보낸 유저의 고유 식별자"),
+                                fieldWithPath("senderName").description("친구 요청 보낸 유저의 이름"),
+                                fieldWithPath("receiverId").description("친구 요청 받은 유저의 고유 식별자"),
+                                fieldWithPath("receiverName").description("친구 요청 받은 유저의 이름")
+                        )
+                ));
     }
 
     @Test
@@ -77,6 +110,10 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("friend/ask/400/create/already-friend",
+                        friendAskRequestFieldsSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -96,6 +133,10 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("friend/ask/400/create/already-friend",
+                        friendAskRequestFieldsSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -114,6 +155,11 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(FriendAskResponse.class)
+                .consumeWith(document("friend/ask/200/read",
+                        responseFields(
+                                fieldWithPath("[]").description("친구 요청 목록")).andWithPrefix("[].", friendAskResponseFields)
+                        )
+                )
                 .returnResult()
                 .getResponseBody();
 
@@ -144,6 +190,10 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("friend/ask/400/already-exist",
+                        friendAskRequestFieldsSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -173,6 +223,10 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("friend/ask/400/already-receive",
+                        friendAskRequestFieldsSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -192,13 +246,23 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
                 .body(Mono.just(friendCreate), FriendCreate.class)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isCreated()
+                .expectBody()
+                .consumeWith(document("friend/201/create",
+                        requestFields(
+                                fieldWithPath("friendAskId").description("친구 요청 정보의 고유 식별자")
+                        )
+                ));
 
         List<FriendResponse> friendResponses = webTestClient.get().uri(FRIEND_API_URI)
                 .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(FriendResponse.class)
+                .consumeWith(document("friend/200/read",
+                        responseFields(
+                                fieldWithPath("[]").description("친구 정보")).andWithPrefix("[].", friendResponseFields)
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -215,10 +279,16 @@ class FriendApiControllerTests extends BaseControllerTests {
 
         //when & then
         webTestClient.delete()
-                .uri(FRIEND_ASK_API_URI + "/" + friendAskId)
+                .uri(FRIEND_ASK_API_URI + "/{id}", friendAskId)
                 .cookie(JSESSIONID, logIn(SENDER_EMAIL, VALID_USER_PASSWORD))
                 .exchange()
-                .expectStatus().isNoContent();
+                .expectStatus().isNoContent()
+                .expectBody()
+                .consumeWith(document("friend/ask/204/delete",
+                        pathParameters(
+                                parameterWithName("id").description("친구 요청 고유 식별자")
+                        )
+                ));
     }
 
     @Test
@@ -242,11 +312,17 @@ class FriendApiControllerTests extends BaseControllerTests {
 
         //when
         ErrorMessage errorMessage = webTestClient.delete()
-                .uri(FRIEND_ASK_API_URI + "/" + friendAskId)
+                .uri(FRIEND_ASK_API_URI + "/{id}", friendAskId)
                 .cookie(JSESSIONID, logIn(MISMATCH_EMAIL, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("friend/ask/204/delete",
+                        pathParameters(
+                                parameterWithName("id").description("친구 요청 고유 식별자")
+                        ),
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -265,10 +341,16 @@ class FriendApiControllerTests extends BaseControllerTests {
         Long friendId = createFriend(friendCreate);
 
         //when & then
-        webTestClient.delete().uri(FRIEND_API_URI + "/" + friendId)
+        webTestClient.delete().uri(FRIEND_API_URI + "/{id}", friendId)
                 .cookie(JSESSIONID, logIn(RECEIVER_EMAIL, VALID_USER_PASSWORD))
                 .exchange()
-                .expectStatus().isNoContent();
+                .expectStatus().isNoContent()
+                .expectBody()
+                .consumeWith(document("friend/204/delete",
+                        pathParameters(
+                                parameterWithName("id").description("삭제할 친구 정보의 고유 식별자")
+                        )
+                ));
     }
 
     private Long createFriendAsk() {
