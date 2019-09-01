@@ -228,13 +228,14 @@ const ArticleApp = (() => {
                 });
             }
 
-            return $.ajax({
-                type: 'POST',
-                url: '/upload',
-                data: formData,
-                processData: false,
-                contentType: false
-            }).then(fileUrl => {
+
+            return fetch('/upload', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                },
+            }).then(res => res.json())
+                .then(fileUrl => {
                 let imgExtension = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
                 let videoExtension = /(\.mov|\.mp4)$/i;
                 let data;
