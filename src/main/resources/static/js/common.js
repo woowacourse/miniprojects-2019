@@ -31,8 +31,9 @@ const Api = {
     postImage: function (url, data) {
         return fetch(url, {
             method: 'POST',
-            enctype: "multipart/form-data",
             body: data,
+            headers: {
+            },
         });
     },
 };
@@ -99,5 +100,27 @@ const TimeApi = {
 
             day_diff >= 360 && (Math.floor( day_diff / 360 )===0?1:Math.floor( day_diff / 360 )) + " 년 전"
 
+    },
+};
+
+const LoadingApi = {
+    loading: function () {
+        const htmlAttr = document.documentElement;
+        const header = document.getElementById('header');
+        const loader = document.getElementById('loader');
+
+        header.style.display = "none";
+        loader.style.display = "block";
+        htmlAttr.classList.add('overlay-dark');
+    },
+
+    loadingDone: function () {
+        const htmlAttr = document.documentElement;
+        const header = document.getElementById('header');
+        const loader = document.getElementById('loader');
+
+        header.style.display = "block";
+        loader.style.display = "none";
+        htmlAttr.classList.remove('overlay-dark');
     },
 };
