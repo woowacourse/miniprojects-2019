@@ -27,11 +27,10 @@ public class ArticleController {
 
     @PostMapping
     public String create(ArticleDto articleDto, @LoggedInUser String email) {
-        if (userRateLimiter.get(email).tryAcquire()) {
-            return "redirect:/articles/" + articleService.save(articleDto, email);
-        } else {
+        if (!userRateLimiter.get(email).tryAcquire()) {
             throw new RequestTooFastException();
         }
+        return "redirect:/articles/" + articleService.save(articleDto, email);
     }
 
     @GetMapping("/{articleId}")

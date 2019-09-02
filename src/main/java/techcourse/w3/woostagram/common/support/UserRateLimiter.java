@@ -1,12 +1,12 @@
 package techcourse.w3.woostagram.common.support;
 
 import com.google.common.util.concurrent.RateLimiter;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+@Component
 public class UserRateLimiter {
     private Map<String, RateLimiter> limiters = new HashMap<>();
 
@@ -19,10 +19,6 @@ public class UserRateLimiter {
     }
 
     public void remove(String userEmail) {
-        try {
-            limiters.remove(userEmail);
-        } catch (Exception e) {
-
-        }
+        limiters.remove(userEmail);
     }
 }
