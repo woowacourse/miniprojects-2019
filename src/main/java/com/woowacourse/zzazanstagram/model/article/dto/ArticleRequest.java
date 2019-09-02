@@ -2,9 +2,12 @@ package com.woowacourse.zzazanstagram.model.article.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class ArticleRequest {
+import javax.validation.constraints.NotNull;
 
+public class ArticleRequest {
+    @NotNull
     private MultipartFile file;
+
     private String contents;
 
     private ArticleRequest() {

@@ -25,9 +25,6 @@
 						<div class="search-wrapper">
 							<div class="pdd-vertical-10">
 								<ul class="list-unstyled list-info">
-									<li class="search-result-item">
-										<a href="" class="text-dark">#우테코 1기</a>
-									</li>
 								</ul>
 							</div>
 						</div>
@@ -94,7 +91,7 @@
 							</div>
 							<ul class="feed-action pdd-horizon-15 pdd-top-5">
 								<li>
-									<a href="">
+									<a href="" class="ddabong-area">
 										<i th:if="${article.ddabongClicked}"
 										   class="ddabong-heart fa fa-heart activated-heart font-size-25"></i>
 										<i th:unless="${article.ddabongClicked}"
@@ -137,8 +134,8 @@
 												   th:text="${article.nickName}"
 												   class="title no-pdd-vertical text-bold inline-block font-size-15"></a>
 												<p th:id="'article-contents-' + ${article.id}"></p>
-												<time th:text="${article.lastModifiedDate}"
-												      class="font-size-8 text-gray d-block">
+												<time class="font-size-8 text-gray d-block"
+													  th:id="'article-lastModifiedDate-' + ${article.id}">
 												</time>
 												<a class="text-gray text-bold no-mrg"
 												   th:if="${#lists.size(article.commentResponses)} > 2"
@@ -155,7 +152,7 @@
 											   th:text="${comment.getCommenterNickName()}"></p>
 											<p class="inline-block no-mrg-btm mrg-left-5"
 											   th:if="${iter.index < 2}"
-											   th:text="${comment.getCommentContents()}"></p>
+											   th:utext="${comment.getCommentContents()}"></p>
 										</li>
 									</ul>
 									<p class="mrg-btm-5"></p>
@@ -197,6 +194,7 @@
         integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/js/search-box.js"></script>
 <script src="/js/MemberCardTemplate.js"></script>
 <script src="/js/tags.js"></script>
 <script th:inline="javascript">
@@ -211,8 +209,26 @@
                 .join(' ');
 
             articleContents.insertAdjacentHTML('afterbegin', contentsTag);
+
+			const lastModifiedDate = document.getElementById('article-lastModifiedDate-' + article.id);
+			lastModifiedDate.insertAdjacentText('afterbegin', postedTime(article.lastModifiedDate));
         });
-    }
+    };
+
+	const postedTime = function (date) {
+		const currentDate = new Date();
+		const postedDate = new Date(date);
+		const elapsed = Math.floor((currentDate.getTime() - postedDate.getTime()) / 1000);
+
+		if (elapsed >= 24 * 60 * 60) {
+			return String(postedDate.getUTCFullYear() + '년 ' + (postedDate.getMonth() + 1) + '월 ' + postedDate.getDate() + '일');
+		}
+		else if (elapsed <= 60 * 60) {
+			return String(Math.floor(elapsed / 60) + '분 전');
+		}
+
+		return String(Math.floor(elapsed / (60 * 60)) + '시간 전');
+	};
 </script>
 </body>
 </html>

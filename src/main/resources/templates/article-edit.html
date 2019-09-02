@@ -65,7 +65,8 @@
 										<input type="file" class="form-control" name="file" id="file">
 									</div>
 									<div class="info pdd-vertical-5">
-										<textarea id="contents" rows="1" name="contents" class="form-control text-dark padding-15"
+										<textarea id="contents" rows="1" name="contents"
+										          class="form-control text-dark padding-15"
 										          placeholder="사진에 대해 친구들에게 알려주세요 :)"></textarea>
 									</div>
 								</div>
@@ -118,11 +119,16 @@
 
     function submitArticle(event) {
         event.preventDefault();
-	
+        const target = event.target;
+        target.disabled = true;
         const file = document.getElementById("file").files[0];
-        const contents = document.getElementById("contents").value;
+        let contents = document.getElementById("contents").value;
 		const formData = new FormData();
-	
+
+		contents = contents.replace(/&/gi, "&amp;");
+		contents = contents.replace(/</gi, "&lt;");
+		contents = contents.replace(/>/gi, "&gt;");
+		
 		formData.append('file', file);
 		formData.append('contents', contents);
 		
@@ -131,12 +137,12 @@
 			url: '/api/articles',
 			data: formData,
 		}).then((response) => {
-			console.log(response);
 			window.location = '/';
 		}).catch((error) => {
 			const errRes = error.response;
-			if (error.response.status === 413) {
-				alert(errRes.data.msg);
+			if (error.response.status === 413 || error.response.status === 400) {
+				target.disabled = false;
+			    alert(errRes.data.msg);
 			}
 		});
     }
