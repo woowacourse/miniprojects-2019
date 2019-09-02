@@ -12,7 +12,7 @@
         // ajax 호출
 
         const searchRequest = new Request("/api/search");
-        searchRequest.get(`/${query}`, (status, data) => {
+        searchRequest.get(`/${encodeURIComponent(query)}`, (status, data) => {
             searchList.innerText = "";
             // 쿼리 결과로 온 유저와 태그 가져오기
             const users = data.userInfoDtos;

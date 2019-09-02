@@ -48,6 +48,7 @@ const Article = (() => {
                     loadImageProcess(data.imageUrl).then((img) => {
                             document.getElementById("pic").src = img.src;
                             imageResize(img)
+                            document.querySelector(".pic-con").style.backgroundImage = "none";
                         }
                     );
 
