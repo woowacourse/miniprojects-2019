@@ -1,4 +1,4 @@
-package techcourse.w3.woostagram;
+package techcourse.w3.woostagram.common.support;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
