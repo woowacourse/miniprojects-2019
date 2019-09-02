@@ -65,14 +65,15 @@ const addSideNavi = function (sideNaviElement) {
     api.retrieveLoginInfo()
     .then(response => {
         if (response.status !== 200) {
-            response.json().then(err => {
-                // console.log(err.message)
-            })
         } else {
             return response.json()
         }
     })
-    .then(response => addLoginArea(response))
+    .then(response => {
+        if (response) {
+            addLoginArea(response)
+        }
+    })
 }
 
 const addLoginArea = function(response) {
