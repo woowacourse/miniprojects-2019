@@ -59,7 +59,7 @@ class UserInternalService {
         User user = findById(id);
         user.delete();
 
-        videoRepository.findAllByCreator(user).forEach(Video::delete);
+        videoRepository.findAllByCreator(user).forEach(video -> video.delete(user.getId()));
     }
 
     public User findByEmail(String email) {

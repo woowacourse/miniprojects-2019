@@ -62,16 +62,18 @@ public class VideoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateVideo(@PathVariable Long id, @RequestBody VideoUpdateRequestDto requestDto) {
-        VideoUpdateResponse response = videoService.update(id, requestDto);
+    public ResponseEntity updateVideo(@PathVariable Long id, @RequestBody VideoUpdateRequestDto requestDto, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        VideoUpdateResponse response = videoService.update(id, requestDto, sessionUser.getId());
         return ResponseEntity.status(HttpStatus.OK)
             .header("location", VIDEO_URL + "/" + id)
             .body(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteVideo(@PathVariable Long id) {
-        videoService.delete(id);
+    public ResponseEntity deleteVideo(@PathVariable Long id, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        videoService.delete(id, sessionUser.getId());
         return ResponseEntity.noContent().build();
     }
 }
