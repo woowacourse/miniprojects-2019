@@ -2,6 +2,7 @@ package com.wootube.ioi.service.util;
 
 import com.wootube.ioi.service.exception.FileUploadException;
 import com.wootube.ioi.service.exception.InvalidFileExtensionException;
+
 import org.imgscalr.Scalr;
 import org.jcodec.api.FrameGrab;
 import org.jcodec.api.JCodecException;

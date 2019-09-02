@@ -152,17 +152,11 @@ public class CommentApiControllerTest extends CommonControllerTest {
 
     @Test
     void sortCommentByUpdateTime() {
-        List<CommentResponseDto> comments =
-                given().
-                when().
-                        get(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/sort/updatetime").
-                then().
-                        statusCode(200).
-                        extract().
-                        response().
-                        jsonPath().
-                        getList(".", CommentResponseDto.class);
-
-        assertThat(comments.size()).isNotNull();
+        given().
+        when().
+                get(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/sort/updatetime").
+        then().
+                statusCode(200).
+                body("", is(not(empty())));
     }
 }
