@@ -1,11 +1,13 @@
 const commentCtx = {
     state: {
         currentCommentId: null,
+        currentUserId: null,
     },
 }
 
 const commentApp = (function() {
     const insertComment = function (data) {
+        const { currentUserId } = commentCtx.state
         const commentSection = document.getElementById('comment-section');
         const commentTemplate = ` 
         <li class="comment-item border bottom mrg-btm-30" data-id="${data.id}">
@@ -15,8 +17,9 @@ const commentApp = (function() {
                     <span class="text-bold inline-block">${data.author.name}</span> 
                     <span class="d-inline-block ml-2 mr-1">|</span>
                     <span class="inline-block">${moment.utc(data.createDate).local().format('YYYY. MM. DD. HH:mm')}</span>
-                    <a class="pointer btn-update-comment ml-3 line-height-100" data-toggle="modal" data-target="#comment-update-modal"><small>수정</small></a>
-                    <a class="pointer btn-delete-comment ml-2 line-height-100"><small>삭제</small></a>
+                    ${currentUserId === data.author.id ? 
+                        `<a class="pointer btn-update-comment ml-3 line-height-100" data-toggle="modal" data-target="#comment-update-modal"><small>수정</small></a>
+                        <a class="pointer btn-delete-comment ml-2 line-height-100"><small>삭제</small></a>` : ''}
                 </div>
                 <p class="width-80 comment-contents"> ${data.contents}</p>
                 
@@ -50,7 +53,15 @@ const commentApp = (function() {
         }
 
         const loadComments = function() {
-            api.retrieveComments(wootubeCtx.util.getUrlParams('id'))
+            api.retrieveLoginInfo()
+                .then(res => res.json())
+                .then(json => {
+                    if (json) {
+                        commentCtx.state.currentUserId = json.id
+                        return api.retrieveComments(wootubeCtx.util.getUrlParams('id'))
+                    }
+                    return Promise.reject()
+                })
                 .then(response => response.json())
                 .then(data => insertComments(data))
         }
