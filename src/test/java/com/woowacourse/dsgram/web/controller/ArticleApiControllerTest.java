@@ -9,6 +9,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+
 
 class ArticleApiControllerTest extends AbstractControllerTest {
     private static String COMMON_REQUEST_URL = "/api/articles/{articleId}";
@@ -33,8 +36,40 @@ class ArticleApiControllerTest extends AbstractControllerTest {
     @DisplayName("게시글 생성 성공")
     void save() {
         requestWithBodyBuilder(createMultipartBodyBuilder("contents"), HttpMethod.POST, "/api/articles", cookie)
-                .expectStatus()
-                .isOk();
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(document("articles/post/write",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @Test
+    @DisplayName("게시글 1개 조회")
+    void findArticle() {
+        webTestClient.get().uri(COMMON_REQUEST_URL, 1)
+                .header("Cookie", cookie)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(document("articles/get/oneArticle",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @Test
+    @DisplayName("페이지별 게시글 조회")
+    void findAllArticle() {
+        webTestClient.get().uri("/api/articles?page=0")
+                .header("Cookie", cookie)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(document("articles/get/articlesPerPage",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 
     @Test
@@ -58,8 +93,12 @@ class ArticleApiControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(articleEditRequest), ArticleEditRequest.class)
                 .exchange()
-                .expectStatus()
-                .isOk();
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(document("articles/put/updateArticle",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         webTestClient.get().uri("/articles/{articleId}", articleId)
                 .header("Cookie", cookie)
@@ -88,7 +127,12 @@ class ArticleApiControllerTest extends AbstractControllerTest {
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isOk()
+                .expectBody()
+                .consumeWith(document("articles/delete/deleteArticle",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         webTestClient.get().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", cookie)
