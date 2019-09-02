@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import techcourse.w3.woostagram.common.exception.WoostagramExeception;
+import techcourse.w3.woostagram.common.exception.WoostagramException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class ControllerExceptionHandler {
     public static final String EXCEPTION_MESSAGE = "예기치 않은 오류가 발생했습니다.";
 
-    @ExceptionHandler(WoostagramExeception.class)
+    @ExceptionHandler(WoostagramException.class)
     @Order(1)
     public String handleWoostagramException(Exception error, HttpServletRequest servletRequest, RedirectAttributes redirectAttributes) {
         return handleException(servletRequest, redirectAttributes, error.getMessage());

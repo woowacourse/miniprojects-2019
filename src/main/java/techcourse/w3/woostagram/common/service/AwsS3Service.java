@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.article.exception.FileDeleteFailException;
 import techcourse.w3.woostagram.article.exception.FileSaveFailException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
+import techcourse.w3.woostagram.common.exception.EmptyFileException;
 import techcourse.w3.woostagram.common.support.AwsS3Properties;
 import techcourse.w3.woostagram.common.support.ImageResizeUtils;
 
@@ -34,6 +35,7 @@ public class AwsS3Service implements StorageService {
 
     @Override
     public String saveMultipartFile(MultipartFile multipartFile) {
+        validateNullFile(multipartFile);
         String fileExtension = validateFileExtension(multipartFile.getOriginalFilename());
         String fileName = String.join(PATH_DELIMITER, UUID.randomUUID().toString(), fileExtension);
         File file = new File(fileName);
@@ -60,6 +62,12 @@ public class AwsS3Service implements StorageService {
             throw new InvalidExtensionException();
         }
         return fileExtension;
+    }
+
+    private void validateNullFile(MultipartFile multipartFile) {
+        if (multipartFile.isEmpty()) {
+            throw new EmptyFileException();
+        }
     }
 
     @Override
