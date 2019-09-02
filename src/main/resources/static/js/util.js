@@ -13,7 +13,7 @@ class Request {
     }
 
     handleError = (error) => {
-        return Promise.reject(console.log(error));
+        return Promise.reject(new Alert(error));
     };
 
     get = (attachedUrl, callback = this.defaultCallback) => {
@@ -41,6 +41,20 @@ class Request {
     }
 }
 
+class Alert {
+    constructor(message) {
+        this.message = message;
+        this.active()
+    }
+
+    active = () => {
+        document.body.insertAdjacentHTML('beforeend', getAlertTemplate(this.message));
+        setTimeout(() => {
+            document.querySelector(".alert-con").remove();
+        }, 2000)
+    }
+}
+
 const DomUtil = {
     active(domName) {
         const element = document.querySelector(domName);
@@ -54,7 +68,15 @@ const DomUtil = {
     }
 };
 
-const htmlToStringParse = (html)=>{
-    return html.replace("<","&lt;")
-        .replace(">","&gt;")
+const htmlToStringParse = (html) => {
+    return html.replace("<", "&lt;")
+        .replace(">", "&gt;")
+}
+
+const hashTagAddLink = (message)=>{
+    return message.replace(/(^|\s)(#[a-z\d-_]+)/ig, (result)=>{
+        const tag = result.split("#")[1];
+        console.log(tag);
+        return`<a class = "hashtag" href = "/tags/hash/${tag}">#${tag}</a>`
+    });
 }

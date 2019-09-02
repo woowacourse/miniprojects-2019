@@ -53,7 +53,7 @@ const mypage = (function () {
         const getPageData = (pageNum) => {
             const container = document.querySelector('.article-card');
 
-            mypageRequest.get('?page=' + pageNum + "&size=" + pageSize + "&sort=id,DESC"
+            mypageRequest.get(`?page=${pageNum}&size=${pageSize}&sort=id,DESC`
                 , (status, data) => {
                     document.querySelector('.article-num').innerHTML = `<strong>${data.totalElements}</strong>`;
 

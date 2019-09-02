@@ -1,4 +1,4 @@
-const Index = (function () {
+const Index = (() => {
 
     const pageSize = 10;
 
@@ -6,16 +6,16 @@ const Index = (function () {
         const indexService = new IndexService();
         const articleList = document.querySelector('.article-card-con');
 
-        const loadInit = function () {
+        const loadInit = () => {
             indexService.getPageData(0);
-            document.querySelector("i").addEventListener("click", function (e) {
-                e.stopPropagation();
-                e.preventDefault();
+            document.querySelector("i").addEventListener("click", (event) => {
+                event.stopPropagation();
+                event.preventDefault();
             });
         };
 
         const likeButton = () => {
-            articleList.addEventListener('click', function (event) {
+            articleList.addEventListener('click', (event) => {
                 if (event.target.classList.contains('like-btn')) {
                     const articleId = event.target.closest('.article-card').dataset.articleId;
                     const isLike = event.target.dataset.liking;
@@ -24,7 +24,7 @@ const Index = (function () {
             })
         };
 
-        const init = function () {
+        const init = () => {
             loadInit();
             likeButton()
         };
@@ -102,6 +102,6 @@ const Index = (function () {
         init: init
     }
 
-}());
+})();
 
 Index.init();
