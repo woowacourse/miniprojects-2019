@@ -27,7 +27,16 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    const error = [[${error}]];
+    const message = [[${message}]];
+</script>
 <th:block th:replace="fragments/common-js :: common-js"></th:block>
 <script src="/js/form.js"></script>
+<script>
+    if(error){
+        new Alert(message);
+    }
+</script>
 </body>
 </html>
