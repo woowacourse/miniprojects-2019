@@ -1,5 +1,6 @@
 package com.woowacourse.edd.application.converter;
 
+import com.nhncorp.lucy.security.xss.XssPreventer;
 import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import com.woowacourse.edd.application.response.LoginUserResponse;
 import com.woowacourse.edd.application.response.SessionUser;
@@ -9,7 +10,7 @@ import com.woowacourse.edd.domain.User;
 public class UserConverter {
 
     public static User toSaveEntity(UserSaveRequestDto userSaveRequestDto) {
-        return new User(userSaveRequestDto.getName(), userSaveRequestDto.getEmail(), userSaveRequestDto.getPassword());
+        return new User(XssPreventer.escape(userSaveRequestDto.getName()), XssPreventer.escape(userSaveRequestDto.getEmail()), userSaveRequestDto.getPassword());
     }
 
     public static UserResponse toResponse(User user) {
