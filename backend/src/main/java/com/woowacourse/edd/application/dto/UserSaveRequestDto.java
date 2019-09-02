@@ -9,7 +9,7 @@ import static com.woowacourse.edd.domain.User.EMAIL_LENGTH_MIN;
 
 public class UserSaveRequestDto {
 
-    public static final String INVALID_NAME_MESSAGE = "이름은 2자이상 16자이하의 영문이어야 합니다.";
+    public static final String INVALID_NAME_MESSAGE = "이름은 2자이상 16자이하의 영문 혹은 한글이어야 합니다.";
     public static final String INVALID_EMAIL_FORM_MESSAGE = "올바르지 않은 이메일형식 입니다.";
     public static final String INVALID_EMAIL_SIZE_MESSAGE = "이메일은 1~255자만 가능합니다.";
     public static final String INVALID_PASSWORD_MESSAGE = "비밀번호는 8자이상의 영문 대,소문자, 특수문자의 조합이여야 합니다.";
