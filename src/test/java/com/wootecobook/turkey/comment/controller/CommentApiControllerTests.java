@@ -292,7 +292,7 @@ class CommentApiControllerTests extends BaseControllerTests {
     }
 
     private Long addComment(CommentCreate commentCreate) {
-        final CommentResponse commentResponse = webTestClient.post().uri(uri)
+        final CommentResponse commentResponse = webTestClient.post().uri(COMMENT_API_URI, postId)
                 .accept(MEDIA_TYPE)
                 .cookie(JSESSIONID, jSessionId)
                 .body(Mono.just(commentCreate), CommentCreate.class)
@@ -301,6 +301,25 @@ class CommentApiControllerTests extends BaseControllerTests {
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectHeader().valueMatches("Location", ".*" + uri)
                 .expectBody(CommentResponse.class)
+                .consumeWith(document("comment/201/create",
+                        pathParameters(
+                                parameterWithName("postId").description("댓글을 작성하는 게시글의 고유 식별자")
+                        ),
+                        requestFields(
+                                fieldWithPath("contents").description("댓글 내용"),
+                                fieldWithPath("parentId").optional().type(JsonFieldType.NUMBER).description("답글인 경우 상위 댓글 고유 식별자")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("Comment 고유 식별자"),
+                                fieldWithPath("parentId").type(JsonFieldType.NUMBER).optional().description("해당 Comment의 상위 댓글 고유 식별자"),
+                                fieldWithPath("contents").description("Comment 내용"),
+                                fieldWithPath("countOfChildren").description("답글의 갯수"),
+                                fieldWithPath("createdAt").description("댓글 생성 날짜"),
+                                fieldWithPath("updatedAt").description("댓글 수정 날짜"),
+                                subsectionWithPath("userResponse").description("댓글 작성한 유저의 정보"),
+                                subsectionWithPath("goodResponse").description("댓글의 좋아요 정보")
+                        )
+                ))
                 .returnResult()
                 .getResponseBody();
 

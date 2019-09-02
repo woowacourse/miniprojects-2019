@@ -133,7 +133,7 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ErrorMessage.class)
-                .consumeWith(document("friend/ask/400/create/already-friend",
+                .consumeWith(document("friend/ask/400/create/none",
                         friendAskRequestFieldsSnippet,
                         badRequestSnippets
                 ))
@@ -317,7 +317,7 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ErrorMessage.class)
-                .consumeWith(document("friend/ask/204/delete",
+                .consumeWith(document("friend/ask/400/delete",
                         pathParameters(
                                 parameterWithName("id").description("친구 요청 고유 식별자")
                         ),
