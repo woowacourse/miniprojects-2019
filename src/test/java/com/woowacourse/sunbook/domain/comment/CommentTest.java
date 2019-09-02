@@ -23,6 +23,11 @@ class CommentTest extends MockStorage {
     }
 
     @Test
+    void 대댓글_생성() {
+        assertDoesNotThrow(() -> new Comment(content, writer, article, comment));
+    }
+
+    @Test
     void 권한_있는_사용자_댓글_수정() {
         doNothing().when(injectComment).validateAuth(other, article);
 

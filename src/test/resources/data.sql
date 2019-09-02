@@ -27,17 +27,17 @@ INSERT INTO article (id, updated_time, contents, image_url, video_url, open_rang
 VALUES (5, '2019-08-28 23:44:30', 'show none contents', 'http://mblogthumb3.phinf.naver.net/MjAxNzA2MDhfODYg/MDAxNDk2ODgyNDE3NDYz.yMs2-E3-GlBu9U_4r2GMnBd1IEgVlWG2Qos9pb-2WWIg.M4JN5W9K2kMt9n76gjYQUKPBGt0eHMXE0UrvWFvr6Vgg.PNG.smartbaedal/18.png?type=w800'
        , 'https://youtu.be/5HG_CJzyX6A', 'NONE', 2);
 
-INSERT INTO comment (id, contents, author_id, article_id)
-VALUES (1, '첫번째 댓글', 1, 1);
+INSERT INTO comment (id, created_time, contents, author_id, article_id)
+VALUES (1, '2019-09-01 00:00:00', '첫번째 댓글', 1, 1);
 
-INSERT INTO comment (id, contents, author_id, article_id)
-VALUES (2, '두번째 댓글', 1, 1);
+INSERT INTO comment (id, created_time, contents, author_id, article_id, parent_id)
+VALUES (2, '2019-09-02 00:00:00', '두번째 댓글', 1, 1, 1);
 
-INSERT INTO comment (id, contents, author_id, article_id)
-VALUES (3, '세번째 댓글', 1, 1);
+INSERT INTO comment (id, created_time, contents, author_id, article_id, parent_id)
+VALUES (3, '2019-09-01 01:00:00', '세번째 댓글', 1, 1, 1);
 
-INSERT INTO comment (id, contents, author_id, article_id)
-VALUES (4, '네번째 댓글', 1, 1);
+INSERT INTO comment (id, created_time, contents, author_id, article_id, parent_id)
+VALUES (4, '2019-09-01 00:05:00', '네번째 댓글', 1, 1, 1);
 
 INSERT INTO comment (id, contents, author_id, article_id)
 VALUES (5, '다섯번째 댓글', 1, 1);

@@ -3,9 +3,9 @@ package com.woowacourse.sunbook.application.service;
 import com.woowacourse.sunbook.MockStorage;
 import com.woowacourse.sunbook.application.dto.comment.CommentResponseDto;
 import com.woowacourse.sunbook.application.exception.NotFoundArticleException;
+import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.comment.Comment;
-import com.woowacourse.sunbook.domain.Content;
 import com.woowacourse.sunbook.domain.user.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,6 +61,16 @@ class CommentServiceTest extends MockStorage {
     }
 
     @Test
+    void 대댓글_조회() {
+        given(commentRepository.findById(ID)).willReturn(Optional.of(comment));
+        given(commentService.findById(ID)).willReturn(comment);
+
+        injectCommentService.findByIdAndArticleId(ID, ID);
+
+        verify(commentRepository).findByParentAndArticleId(any(Comment.class), any(Long.class));
+    }
+
+    @Test
     void 없는_게시글_댓글_수정() {
         given(userService.findById(ID)).willReturn(mock(User.class));
         given(articleService.findById(ID)).willThrow(NotFoundArticleException.class);
@@ -80,7 +90,7 @@ class CommentServiceTest extends MockStorage {
 
         injectCommentService.modify(ID, mock(Content.class), ID, ID);
 
-        verify(comment, times(1)).modify(any(Content.class), any(User.class), any(Article.class));
+        verify(comment).modify(any(Content.class), any(User.class), any(Article.class));
     }
 
     @Test
@@ -104,6 +114,6 @@ class CommentServiceTest extends MockStorage {
 
         injectCommentService.remove(ID, ID, ID);
 
-        verify(commentRepository, times(1)).delete(any(Comment.class));
+        verify(commentRepository).delete(any(Comment.class));
     }
 }
