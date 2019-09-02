@@ -53,11 +53,6 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                         <i class="ti-export font-size-22"></i>
                                     </a>
                                 </li>
-                                <li class="float-right">
-                                    <a href="" class="pd-right-0">
-                                        <i class="fa fa-bookmark-o font-size-25"></i>
-                                    </a>
-                                </li>
                             </ul>
                             <div class="feedback-status-container pdd-horizon-15">
                                 <p class="no-mrg pdd-left-5 d-inline-block">
@@ -70,9 +65,9 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                         <li class="comment-item no-pdd">
                                             <div class = "comment-list">
                                                 <div class="info pdd-left-15 pdd-vertical-5">
-                                                   <a href=""
+                                                   <a href="/${userName}"
                                                    class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
-                                                   <span class="font-size-14">${contents}</span>
+                                                   <span class="font-size-14">${hashTagAddLink(htmlToStringParse(contents))}</span>
                                                 </div>
                                                 ${comments}
                                             </div>
@@ -96,7 +91,7 @@ const getCommentTemplate = (commentId, userName, contents) => {
     <div class="info pdd-left-15 pdd-vertical-5" data-comment-id = ${commentId} >
        <a href=""
        class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
-       <span class="font-size-14">${contents}</span>
+       <span class="font-size-14">${hashTagAddLink(htmlToStringParse(contents))}</span>
     </div>
       `;
 };
