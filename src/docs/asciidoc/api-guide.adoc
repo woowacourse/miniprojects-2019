@@ -9,7 +9,11 @@
 
 [[Introduction]]
 == 소개
-이 문서는 Turkeybook 서비스의 API 명세를 작성한 문서입니다.\
+이 문서는 Turkeybook 서비스의 API 명세를 작성한 문서입니다.
+
+아래 예시에서 나온 포트는 WebTestClient와 Spring MVC 간 차이 문제로 임시로 배정한 포트입니다.
+
+요청 포트보다 `path`와 요청, 응답 형식에 집중해주세요 ^^
 
 [[Environment]]
 == 개발 환경
