@@ -3,12 +3,12 @@ const searchDropdown = document.getElementById('search-dropdown')
 const dropdownMenu = document.getElementById('dropdown-menu')
 
 const searchbox = function (event) {
-    const keyword = event.target.value
+    const keyword = changeSlash(event.target.value)
+
     if (keyword.length === 0) {
         searchDropdown.classList.remove('show')
         return
     }
-    console.log(keyword)
 
     api.GET(`/api/users/search?name=${keyword}`)
         .then(res => res.json())
@@ -30,7 +30,7 @@ const searchbox = function (event) {
 }
 
 const searchEnter = function (event) {
-    const keyword = event.target.value
+    const keyword = changeSlash(event.target.value)
     const enter = 13;
     if (event.keyCode !== enter) return
 
@@ -44,6 +44,10 @@ const getATag = function (location, html) {
     aTag.href = location
     aTag.innerHTML = html
     return aTag
+}
+
+const changeSlash = function(text){
+    return text.replace(/\//g, "-").replace(/\\/g, "_")
 }
 
 searchboxContainer.addEventListener('keyup', searchbox)
