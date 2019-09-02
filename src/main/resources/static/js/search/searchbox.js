@@ -4,13 +4,13 @@ const dropdownMenu = document.getElementById('dropdown-menu')
 
 const searchbox = function (event) {
     const keyword = event.target.value
-
     if (keyword.length === 0) {
         searchDropdown.classList.remove('show')
         return
     }
+    console.log(keyword)
 
-    api.GET(`/api/users/${keyword}/search`)
+    api.GET(`/api/users/search?name=${keyword}`)
         .then(res => res.json())
         .then(users => {
             dropdownMenu.innerHTML = ''
@@ -34,7 +34,7 @@ const searchEnter = function (event) {
     const enter = 13;
     if (event.keyCode !== enter) return
 
-    location.href = `/search/${keyword}`
+    location.href = `/search?keyword=${keyword}`
 
 }
 
