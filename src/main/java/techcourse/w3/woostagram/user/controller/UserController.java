@@ -43,8 +43,8 @@ public class UserController {
     }
 
     @GetMapping("logout")
-    public String logout(HttpSession session) {
-//        userRateLimiter.remove((String) session.getAttribute(LOGGED_IN_USER_SESSION_KEY));
+    public String logout(HttpSession session, @LoggedInUser String email) {
+        userRateLimiter.remove(email);
         session.removeAttribute(LOGGED_IN_USER_SESSION_KEY);
         return "redirect:/users/login/form";
     }

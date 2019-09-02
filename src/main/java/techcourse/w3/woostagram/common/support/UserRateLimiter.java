@@ -19,6 +19,10 @@ public class UserRateLimiter {
     }
 
     public void remove(String userEmail) {
-        limiters.remove(userEmail);
+        try {
+            limiters.remove(userEmail);
+        } catch (Exception e) {
+
+        }
     }
 }
