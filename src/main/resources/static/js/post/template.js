@@ -152,9 +152,7 @@ const friendTagTemplate = (friend) =>
 <li class="friends-tag-list-item" data-id="${friend.relatedUserId}">
     <div class="_740n">
         <input type="checkbox">
-        <span>
-        ${friend.relatedUserName}
-    </span>
+        <span>${friend.relatedUserName}</span>
     </div>
 </li>
 `

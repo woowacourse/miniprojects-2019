@@ -24,10 +24,10 @@
                 </div>
             </div>
             <div class="friend-tag-modal-footer modal-footer">
-                <button data-dismiss="modal" class="btn btn-default btn-block no-mrg no-border pdd-vertical-15 ng-scope">
-                    <span class="text-uppercase">취소</span>
+                <button data-dismiss="modal" class="btn btn-default btn-block no-mrg no-border pdd-vertical-15 ng-scope" onclick="friendTagService.cancelTag()">
+                    <span class="text-uppercase">태그 취소</span>
                 </button>
-                <button data-dismiss="modal" class="btn btn-primary btn-block no-mrg no-border pdd-vertical-15 ng-scope" onclick="friendTagService.tag()">
+                <button data-dismiss="modal" class="btn btn-primary btn-block no-mrg no-border pdd-vertical-15 ng-scope" onclick="friendTagService.showTaggedUserNames()">
                     <span class="text-uppercase">태그</span>
                 </button>
             </div>
