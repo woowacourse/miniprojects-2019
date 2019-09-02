@@ -1,0 +1,35 @@
+// hashTag/query.adoc
+= Hash Tag
+
+== Autocomplete search query (GET)
+
+=== Example request
+
+include::{snippets}/hashTags/get/query/curl-request.adoc[]
+
+==== Request parameter
+
+include::{snippets}/hashTags/get/query/request-parameters.adoc[]
+
+=== Example response
+
+include::{snippets}/hashTags/get/query/http-response.adoc[]
+
+==== Response body description
+
+include::{snippets}/hashTags/get/query/response-fields.adoc[]
+
+
+== Search for Article by Hash tag (GET)
+
+=== Example request
+
+include::{snippets}/hashTags/get/search/curl-request.adoc[]
+
+==== Path parameter
+
+include::{snippets}/hashTags/get/search/path-parameters.adoc[]
+
+=== Example response
+
+include::{snippets}/hashTags/get/search/http-response.adoc[]
