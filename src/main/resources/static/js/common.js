@@ -42,3 +42,7 @@ class Like {
         return this.request.delete('/' + articleId + '/likes')
     }
 }
+
+if(window.location.host.indexOf('localhost:8080') < 0) {
+    console.log = function(){};
+}
