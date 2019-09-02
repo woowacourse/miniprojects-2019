@@ -1,6 +1,6 @@
-= users
+= User
 
-== Sign up (POST)
+== Sign up
 
 === Example request
 
@@ -19,7 +19,7 @@ include::{snippets}/users/post/signUp/request-fields.adoc[]
 include::{snippets}/users/post/signUp/http-response.adoc[]
 
 
-== Update user Information (PUT)
+== Update user Information
 
 === Example request
 
@@ -34,7 +34,7 @@ include::{snippets}/users/put/update/request-body.adoc[]
 include::{snippets}/users/put/update/http-response.adoc[]
 
 
-== Withdrawal user (DELETE)
+== Withdrawal user
 
 === CURL
 

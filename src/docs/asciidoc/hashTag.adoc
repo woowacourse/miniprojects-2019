@@ -1,7 +1,6 @@
-// hashTag/query.adoc
 = Hash Tag
 
-== Autocomplete search query (GET)
+== Autocomplete search query
 
 === Example request
 
@@ -20,7 +19,7 @@ include::{snippets}/hashTags/get/query/http-response.adoc[]
 include::{snippets}/hashTags/get/query/response-fields.adoc[]
 
 
-== Search for Article by Hash tag (GET)
+== Search for Article by Hash tag
 
 === Example request
 
