@@ -64,6 +64,11 @@ const IndexApp = (() => {
             const email = document.getElementById('login-email');
             const password = document.getElementById('login-password');
 
+            if (String(email.value).length > 50 ) {
+                alert("이메일이 너무 깁니다.");
+                return;
+            }
+
             const data = {
                 userEmail: email.value,
                 userPassword: password.value
