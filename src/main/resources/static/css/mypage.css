@@ -52,3 +52,7 @@
     display: inline;
     font-weight: 600;
 }
+
+#profile-image-btn, .user-modal-btn{
+    cursor:pointer;
+}

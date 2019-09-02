@@ -76,7 +76,6 @@ const htmlToStringParse = (html) => {
 const hashTagAddLink = (message)=>{
     return message.replace(/(^|\s)(#[a-z\d-_]+)/ig, (result)=>{
         const tag = result.split("#")[1];
-        console.log(tag);
         return`<a class = "hashtag" href = "/tags/hash/${tag}">#${tag}</a>`
     });
 }
