@@ -62,11 +62,12 @@ const commentApp = (function() {
         }
 
         const init = function() {
-            saveComment();
-            prepareEditComment();
-            submitEditComment();
-            deleteComment();
-            loadComments();
+            saveComment()
+            prepareEditComment()
+            submitEditComment()
+            deleteComment()
+            loadComments()
+            commentService.refreshCommentCount()
         }
 
         return {
@@ -89,6 +90,7 @@ const commentApp = (function() {
                         return
                     }
                     insertComment(data)
+                    refreshCommentCount()
                 })
         }
 
@@ -124,6 +126,11 @@ const commentApp = (function() {
             contents.innerText = json.contents;
         }
 
+        const refreshCommentCount = function() {
+            document.querySelector('.comment-count')
+            .innerText = document.querySelectorAll('#comment-section li').length;
+        }
+
         const deleteComment = function(event) {
             const { target } = event;
             if(target.classList.contains('btn-delete-comment') ||
@@ -137,24 +144,26 @@ const commentApp = (function() {
                     } else {
                         deleteCommentFromTemplate(commentId)
                     }
+                    refreshCommentCount()
                 })
             }
         }
 
         const deleteCommentFromTemplate = function(commentId) {
-            document.querySelector(`li[data-id="${commentId}"]`).remove();
+            document.querySelector(`li[data-id="${commentId}"]`).remove()
         }
 
         return {
             save: save,
             prepareEdit: prepareEdit,
             submitEdit: submitEdit,
-            deleteComment: deleteComment
+            deleteComment: deleteComment,
+            refreshCommentCount: refreshCommentCount,
         }
     }
 
     const init = function() {
-        const commentEvent = new CommentEvent();
+        const commentEvent = new CommentEvent()
         commentEvent.init();
     }
 
