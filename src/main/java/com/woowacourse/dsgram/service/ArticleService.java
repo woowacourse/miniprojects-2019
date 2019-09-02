@@ -17,7 +17,6 @@ import com.woowacourse.dsgram.service.dto.user.UserInfo;
 import com.woowacourse.dsgram.service.strategy.ArticleFileNamingStrategy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,11 +72,6 @@ public class ArticleService {
                 .orElseThrow(() -> new EntityNotFoundException(articleId + "번 게시글을 조회하지 못했습니다."));
     }
 
-    @Transactional(readOnly = true)
-    public List<Article> findAll() {
-        return articleRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
-    }
-
     @Transactional
     public void update(long articleId, ArticleEditRequest articleEditRequest, LoggedInUser loggedInUser) {
         Article article = findById(articleId);
@@ -95,11 +89,6 @@ public class ArticleService {
 
     public byte[] findFileById(long articleId) {
         return fileService.readFileByFileInfo(findById(articleId).getFileInfo());
-    }
-
-    public List<Article> findArticlesByAuthorNickName(String nickName) {
-        userService.findByNickName(nickName);
-        return articleRepository.findAllByAuthorNickNameOrderByCreatedDateDesc(nickName);
     }
 
     public Page<ArticleInfo> findArticlesByAuthorNickName(int page, String nickName, long viewerId) {
