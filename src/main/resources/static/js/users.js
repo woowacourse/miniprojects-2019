@@ -43,7 +43,7 @@ const UsersApp = (() => {
             .then(response => response.json())
             .then(userInfo => {
                 const userPageName = document.getElementById("user-page-name");
-                userPageName.innerText = userInfo.userName.name;
+                userPageName.innerText = userInfo.userName.fullName;
             });
 
         const drawBtn = (relationship) => {
@@ -176,8 +176,8 @@ const UsersApp = (() => {
 
             const loginUser = AppStorage.get('login-user');
             email.value = loginUser.userEmail.email;
-            lastName.value = loginUser.userName.name;
-            firstName.value = loginUser.userName.name;
+            lastName.value = loginUser.userName.lastName;
+            firstName.value = loginUser.userName.firstName;
 
             const showModalBtn = document.getElementById('show-user-update-modal-btn')
             showModalBtn.click();
@@ -197,7 +197,10 @@ const UsersApp = (() => {
             const changePassword = document.getElementById('user-update-change-password');
 
             const data = {
-                userName: lastName.value + firstName.value,
+                userName: {
+                    firstName: firstName.value,
+                    lastName: lastName.value,
+                },
                 userEmail: email.value,
                 userPassword: nowPassword.value,
                 changePassword: changePassword.value
@@ -207,20 +210,18 @@ const UsersApp = (() => {
                 .then(response => {
                     return response.json();
                 }).then(json => {
+                    nowPassword.value = "";
+                    email.value = "";
+                    lastName.value = "";
+                    firstName.value = "";
+                    changePassword.value = "";
+                    AppStorage.set(storageKeyName, false);
                     if (json.hasOwnProperty('errorMessage')) {
                         alert(json.errorMessage);
                     } else {
-                        nowPassword.value = "";
-                        email.value = "";
-                        lastName.value = "";
-                        firstName.value = "";
-                        changePassword.value = "";
-
                         HeaderApp.reRender();
-
                         alert('회원 정보를 수정 했습니다.');
                     }
-                    AppStorage.set(storageKeyName, false);
                 })
         };
 

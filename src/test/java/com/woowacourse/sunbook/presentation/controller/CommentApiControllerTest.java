@@ -17,7 +17,7 @@ class CommentApiControllerTest extends TestTemplate {
         respondApi(loginAndRequest(HttpMethod.POST, "/api/articles/2/comments", new Content("abc"), HttpStatus.OK, sessionId))
                 .jsonPath("$..id").isEqualTo(7)
                 .jsonPath("$..contents").isEqualTo("abc")
-                .jsonPath("$..authorName").isEqualTo("mir")
+                .jsonPath("$..authorName.firstName").isEqualTo("mir")
                 ;
     }
 
@@ -43,7 +43,7 @@ class CommentApiControllerTest extends TestTemplate {
         respondApi(loginAndRequest(HttpMethod.PUT, "/api/articles/1/comments/1", new Content("abcd"), HttpStatus.OK, sessionId))
                 .jsonPath("$..id").isEqualTo(ID.intValue())
                 .jsonPath("$..contents").isEqualTo("abcd")
-                .jsonPath("$..authorName").isEqualTo("mir")
+                .jsonPath("$..authorName.firstName").isEqualTo("mir")
                 ;
     }
 

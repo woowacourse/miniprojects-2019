@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ReactionArticleTest {
     private final UserEmail userEmail = new UserEmail("user@naver.com");
-    private final UserName userName = new UserName("park");
+    private final UserName userName = new UserName("park", "lee");
     private final UserPassword userPassword = new UserPassword("Password123!");
 
     private final User author = new User(userEmail, userPassword, userName);

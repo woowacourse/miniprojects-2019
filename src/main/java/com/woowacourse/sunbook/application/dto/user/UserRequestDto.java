@@ -19,4 +19,13 @@ public class UserRequestDto {
         this.userName = userName;
         this.userPassword = userPassword;
     }
+
+    @Override
+    public String toString() {
+        return "UserRequestDto{" +
+                "userEmail=" + userEmail +
+                ", userName=" + userName +
+                ", userPassword=" + userPassword +
+                '}';
+    }
 }

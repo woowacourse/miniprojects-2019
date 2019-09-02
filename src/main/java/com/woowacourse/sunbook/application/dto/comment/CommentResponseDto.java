@@ -1,6 +1,7 @@
 package com.woowacourse.sunbook.application.dto.comment;
 
 import com.woowacourse.sunbook.domain.Content;
+import com.woowacourse.sunbook.domain.user.UserName;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,6 @@ import java.time.LocalDateTime;
 public class CommentResponseDto {
     private Long id;
     private Content content;
-    private String authorName;
+    private UserName authorName;
     private LocalDateTime updatedTime;
 }

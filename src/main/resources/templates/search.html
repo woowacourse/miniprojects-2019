@@ -51,7 +51,7 @@
                             <li>
                                 <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
                                 <div class="info">
-                                    <a th:href="@{/users/{userId}(userId=${user.id})}" class="title no-pdd-vertical text-semibold inline-block" th:text="${user.userName.name}"></a>
+                                    <a th:href="@{/users/{userId}(userId=${user.id})}" class="title no-pdd-vertical text-semibold inline-block" th:text="${user.userName.getFullName()}"></a>
                                     <span class="sub-title" th:text="${user.userEmail.email}"></span>
                                 </div>
                             </li>

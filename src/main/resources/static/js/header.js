@@ -43,7 +43,7 @@ const HeaderApp = (() => {
                         alert(json.errorMessage);
                     } else {
                         AppStorage.set('login-user', json);
-                        loginUserName.innerText = json.userName.name;
+                        loginUserName.innerText = json.userName.fullName;
                         document.getElementById("user-url").setAttribute("href", '/users/' + json.id);
                     }
                 });

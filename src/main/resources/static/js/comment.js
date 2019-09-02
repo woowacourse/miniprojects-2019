@@ -61,7 +61,7 @@ const CommentApp = (() => {
                         commentList
                             .insertAdjacentHTML('beforeend', template({
                                 "id": comment.id,
-                                "user-name": comment.authorName,
+                                "user-name": comment.authorName.fullName,
                                 "comment-contents": comment.content.contents,
                                 "updatedTime": TimeApi.pretty(comment.updatedTime),
                             }));

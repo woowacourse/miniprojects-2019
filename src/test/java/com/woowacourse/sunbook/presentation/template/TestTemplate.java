@@ -29,19 +29,19 @@ public class TestTemplate {
 
     protected UserRequestDto userRequestDto = new UserRequestDto(
             new UserEmail("ddu0422@naver.com"),
-            new UserName("mir"),
+            new UserName("mir", "lee"),
             new UserPassword("asdf1234!A")
     );
 
     protected UserRequestDto otherRequestDto = new UserRequestDto(
             new UserEmail("eara12sa@naver.com"),
-            new UserName("abc"),
+            new UserName("abc", "lee"),
             new UserPassword("asdf1234!A")
     );
 
     protected UserRequestDto anotherRequestDto = new UserRequestDto(
             new UserEmail("andole@naver.com"),
-            new UserName("abc"),
+            new UserName("abc", "lee"),
             new UserPassword("asdf1234!A")
     );
 

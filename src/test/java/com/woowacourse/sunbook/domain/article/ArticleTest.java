@@ -39,7 +39,7 @@ class ArticleTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르"));
+        user = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르", "lee"));
     }
 
     static Stream<Arguments> articleParameters() {

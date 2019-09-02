@@ -11,12 +11,13 @@ import org.springframework.http.HttpStatus;
 
 class LoginApiControllerTest extends TestTemplate {
     private static final String USER_EMAIL = "ddu0422@naver.com";
-    private static final String USER_NAME = "mir";
+    private static final String USER_FIRST_NAME = "mir";
+    private static final String USER_LAST_NAME = "lee";
     private static final String USER_PASSWORD = "asdf1234!A";
     private static final String WRONG_USER_PASSWORD = "ASDF1324!a";
 
     private UserEmail userEmail = new UserEmail(USER_EMAIL);
-    private UserName userName = new UserName(USER_NAME);
+    private UserName userName = new UserName(USER_FIRST_NAME, USER_LAST_NAME);
     private UserPassword userPassword = new UserPassword(USER_PASSWORD);
     private UserPassword wrongUserPassword = new UserPassword(WRONG_USER_PASSWORD);
     private UserRequestDto userLoginRequestDto = new UserRequestDto(userEmail, userName, userPassword);
@@ -26,7 +27,7 @@ class LoginApiControllerTest extends TestTemplate {
     void 로그인_성공() {
         respondApi(request(HttpMethod.POST, "/api/signin", userLoginRequestDto, HttpStatus.OK))
                 .jsonPath("$..email").isEqualTo(USER_EMAIL)
-                .jsonPath("$..name").isEqualTo(USER_NAME)
+                .jsonPath("$..userName.firstName").isEqualTo(USER_FIRST_NAME)
                 ;
     }
 
