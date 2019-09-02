@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
+import techcourse.w3.woostagram.common.support.UserRateLimiter;
 import techcourse.w3.woostagram.user.dto.UserCreateDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
@@ -22,9 +23,11 @@ import static techcourse.w3.woostagram.common.support.UserEmailArgumentResolver.
 @RequestMapping("users")
 public class UserController {
     private final UserService userService;
+    private final UserRateLimiter userRateLimiter;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRateLimiter userRateLimiter) {
         this.userService = userService;
+        this.userRateLimiter = userRateLimiter;
     }
 
     @GetMapping("login/form")
@@ -35,11 +38,13 @@ public class UserController {
     @PostMapping("login")
     public String login(UserDto userDto, HttpSession httpSession) {
         httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, userService.authUser(userDto));
+        userRateLimiter.put(userDto.getEmail());
         return "redirect:/";
     }
 
     @GetMapping("logout")
     public String logout(HttpSession session) {
+//        userRateLimiter.remove((String) session.getAttribute(LOGGED_IN_USER_SESSION_KEY));
         session.removeAttribute(LOGGED_IN_USER_SESSION_KEY);
         return "redirect:/users/login/form";
     }
