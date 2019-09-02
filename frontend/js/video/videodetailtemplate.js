@@ -1,4 +1,9 @@
-const addVideoDetailTemplate = function (data) {
+const addVideoDetailTemplate = function (data, isAuthor) {
+    const authorArea = isAuthor ?
+        `<div>
+            <button id="btn-edit" type="button" class="btn btn-rounded btn-icon bg-transparent"><i class="ti-pencil"></i></button>
+            <button id="btn-delete" type="button" class="btn btn-rounded btn-icon bg-transparent"><i class="ti-trash"></i></button>
+        </div>` : ''
     const videoDetailTemplate =
         `<div class="d-flex flex-column align-items-center">
             <iframe width="913" height="514"
@@ -10,10 +15,7 @@ const addVideoDetailTemplate = function (data) {
             <div class="col-md-12">
                 <h1 class="mt-4">${data.title}</h1>
                 <h4>조회수 ${data.viewCount}회</h4>
-                <div>
-                    <button id="btn-edit" type="button" class="btn btn-rounded btn-icon bg-transparent"><i class="ti-pencil"></i></button>
-                    <button id="btn-delete" type="button" class="btn btn-rounded btn-icon bg-transparent"><i class="ti-trash"></i></button>
-                </div>
+                ${authorArea}
             </div>
         </div>
         <hr>
