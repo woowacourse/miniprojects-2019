@@ -6,7 +6,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import techcourse.w3.woostagram.AbstractControllerTests;
-import techcourse.w3.woostagram.common.support.TestDataInitializer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,7 +37,7 @@ public class UserRestControllerTest extends AbstractControllerTests {
             }
         }, MediaType.IMAGE_JPEG);
 
-        assertThat(postMultipartRequest("/api/users", bodyBuilder.build()).getStatus().is5xxServerError()).isTrue();
+        assertThat(postMultipartRequest("/api/users", bodyBuilder.build()).getStatus().is4xxClientError()).isTrue();
     }
 
     @Test
@@ -51,7 +50,7 @@ public class UserRestControllerTest extends AbstractControllerTests {
             }
         });
 
-        assertThat(postMultipartRequest("/api/users", bodyBuilder.build()).getStatus().is5xxServerError()).isTrue();
+        assertThat(postMultipartRequest("/api/users", bodyBuilder.build()).getStatus().is4xxClientError()).isTrue();
     }
 
     @Test

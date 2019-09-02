@@ -46,6 +46,6 @@ class ArticleControllerTest extends AbstractControllerTests {
 
     @Test
     void delete_incorrectArticleId_isNotFound() {
-        assertThat(deleteRequest("/articles/11231").getStatus().is4xxClientError()).isTrue();
+        assertThat(deleteRequest("/articles/11231").getStatus().is3xxRedirection()).isTrue();
     }
 }
