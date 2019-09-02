@@ -8,7 +8,7 @@ const logoutMarkTemplate = `
 
 const allUserTemplate = (user) =>
 `
-<div class="btn-group dropleft" data-id="${user.id}">
+<div class="btn-group dropleft data-id" data-id="${user.id}">
     <button type="button" class="list-group-item list-group-item-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img class="img-circle width-25px" src=
         ${
@@ -35,15 +35,26 @@ const allUserTemplate = (user) =>
     		<i class="friendAddBtn"></i>
     		친구 추가
     	</button>
+    	<button class="start-messenger" aria-label="${user.name}님과 메신저" type="button">
+            <i class="friendAddBtn"></i>
+            메신저
+    	</button>
     </div>
 </div>
 `
 
 const friendTemplate = (friend) =>
 `
-<div class="btn-group dropleft" data-id="${friend.friendId}">
+<div class="btn-group dropleft data-id" data-id="${friend.friendId}">
     <button type="button" class="list-group-item list-group-item-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <img class="img-circle width-25px" src="/images/default/eastjun_profile.jpg">
+        <img class="img-circle width-25px" src=
+        ${
+            (() => {
+                return (friend.profile === undefined) || (friend.profile === null) ?
+                  DEFAULT_PROFILE_IMAGE_URL : friend.profile.path
+            })()
+        }
+        >
         ${friend.relatedUserName}
         ${
             (() => {
