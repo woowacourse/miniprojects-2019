@@ -115,7 +115,7 @@ const Index = (() => {
                         element.childNodes[1].classList.add("fa-heart");
                         element.childNodes[1].classList.remove("fa-heart-o");
                         element.dataset.liking = "true";
-                        const likeNumElement = e.closest(".article-card").querySelector(".like-num");
+                        const likeNumElement = element.closest(".article-card").querySelector(".like-num");
                         const likeNum = parseInt(likeNumElement.innerText) + 1;
                         likeNumElement.innerText = likeNum;
                     });
@@ -126,7 +126,7 @@ const Index = (() => {
                         element.childNodes[1].classList.add("fa-heart-o");
                         element.childNodes[1].classList.remove("fa-heart");
                         element.dataset.liking = "false";
-                        const likeNumElement = e.closest(".article-card").querySelector(".like-num");
+                        const likeNumElement = element.closest(".article-card").querySelector(".like-num");
                         const likeNum = parseInt(likeNumElement.innerText) - 1;
                         likeNumElement.innerText = likeNum;
                     });
