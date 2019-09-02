@@ -66,10 +66,9 @@ const AppStorage = (function() {
 
 const TimeApi = {
     pretty : function (time) {
-        let date = new Date(time);
-        let secondDiff = Math.floor((Date.now() - date) / 1000);
-
-        secondDiff = secondDiff - 32400;
+        const date = new Date(time);
+        const today = new Date();
+        let secondDiff = Math.floor((today - date) / 1000);
 
         if (secondDiff < 0) secondDiff = 0;
 
