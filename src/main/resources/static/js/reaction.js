@@ -22,9 +22,9 @@ const ReactionApp = (function () {
 
         const clickGood = (event) => {
             const target = event.target;
-            if (target.closest('li[data-btn="article-reaction-good-btn"]')) {
+            if (target.closest('li.article-reaction-good-btn')) {
                 clickArticleGood(target);
-            } else if (target.closest('span[data-btn="comment-reaction-good-btn"]')) {
+            } else if (target.closest('span.comment-reaction-good-btn')) {
                 clickCommentGood(target);
             }
         };
@@ -34,12 +34,14 @@ const ReactionApp = (function () {
             const articleId = article.getAttribute('data-article-id');
             const data = document.getElementById(`article-good-count-${articleId}`).innerText;
             const goodBtn = document.getElementById(`article-good-btn-icon-${articleId}`);
+            const doesNotClickGoodBtnClassNames = ['fa', 'fa-thumbs-o-up', 'font-size-16'];
+            const clickedGoodBtnClassNames = ['fa', 'fa-thumbs-up', 'text-info', 'font-size-16'];
 
-            if (goodBtn.className === 'fa fa-thumbs-o-up font-size-16') {
+            if (isContainedClassNames(goodBtn, doesNotClickGoodBtnClassNames)) {
                 reactionApi.addGood(Number(data), 'articles', articleId)
                     .then(response => response.json())
                     .then(data => saveGoodData('article', articleId, data));
-            } else if (goodBtn.className === 'fa fa-thumbs-up text-info font-size-16') {
+            } else if (isContainedClassNames(goodBtn, clickedGoodBtnClassNames)) {
                 reactionApi.deleteGood('articles', articleId)
                     .then(response => response.json())
                     .then(data => saveGoodData('article', articleId, data));
@@ -51,16 +53,22 @@ const ReactionApp = (function () {
             const commentId = comment.getAttribute('data-comment-id');
             const data = document.getElementById(`comment-good-count-${commentId}`).innerText;
             const goodIcon = document.getElementById(`comment-good-btn-icon-${commentId}`);
+            const doesNotClickGoodIconClassNames = ['fa', 'fa-thumbs-o-up', 'text-info', 'font-size-16'];
+            const clickedGoodIconClassNames = ['fa', 'fa-thumbs-up', 'text-info', 'font-size-16'];
 
-            if (goodIcon.className === 'fa fa-thumbs-o-up text-info font-size-16') {
+            if (isContainedClassNames(goodIcon, doesNotClickGoodIconClassNames)) {
                 reactionApi.addGood(Number(data), 'comments', commentId)
                     .then(response => response.json())
                     .then(data => saveGoodData('comment', commentId, data));
-            } else if (goodIcon.className === 'fa fa-thumbs-up text-info font-size-16') {
+            } else if (isContainedClassNames(goodIcon, clickedGoodIconClassNames)) {
                 reactionApi.deleteGood('comments', commentId)
                     .then(response => response.json())
                     .then(data => saveGoodData('comment', commentId, data));
             }
+        };
+
+        const isContainedClassNames = (el, classNames) => {
+            return classNames.every(className => el.classList.contains(className));
         };
 
         const saveGoodData = (objectName, objectId, good) => {
@@ -80,16 +88,17 @@ const ReactionApp = (function () {
         };
 
         const showGoodBtn = (objectName, objectId, hasGood) => {
+            const goodObject = document.getElementById(`${objectName}-good-btn-icon-${objectId}`);
             if (hasGood) {
-                document.getElementById(`${objectName}-good-btn-icon-${objectId}`)
-                    .setAttribute('class', 'fa fa-thumbs-up text-info font-size-16');
+                goodObject.classList.remove('fa-thumbs-o-up');
+                goodObject.classList.add('fa-thumbs-up', 'text-info');
             } else {
                 if (objectName === 'article') {
-                    document.getElementById(`${objectName}-good-btn-icon-${objectId}`)
-                        .setAttribute('class', 'fa fa-thumbs-o-up font-size-16');
+                    goodObject.classList.remove('fa-thumbs-up', 'text-info');
+                    goodObject.classList.add('fa-thumbs-o-up');
                 } else if (objectName === 'comment') {
-                    document.getElementById(`${objectName}-good-btn-icon-${objectId}`)
-                        .setAttribute('class', 'fa fa-thumbs-o-up text-info font-size-16');
+                    goodObject.classList.remove('fa-thumbs-up');
+                    goodObject.classList.add('fa-thumbs-o-up');
                 }
             }
         };
@@ -101,24 +110,23 @@ const ReactionApp = (function () {
     };
 
     const ReactionApi = function () {
-        const clickGood = (data, objectName, objectId) => {
-            return Api.post(`/api/${objectName}/${objectId}/good`, data)
-        };
-
         const addGood = (data, objectName, objectId) => {
-            return Api.post(`/api/${objectName}/${objectId}/good`, data)
+            return Api.post(reactionUri(objectName, objectId), data)
         };
 
         const deleteGood = (objectName, objectId) => {
-            return Api.delete(`/api/${objectName}/${objectId}/good`);
-        }
+            return Api.delete(reactionUri(objectName, objectId));
+        };
 
         const showGoodCount = (objectName, objectId) => {
-            return Api.get(`/api/${objectName}/${objectId}/good`);
+            return Api.get(reactionUri(objectName, objectId));
+        };
+
+        const reactionUri = (objectName, objectId) => {
+            return `/api/${objectName}/${objectId}/good`;
         };
 
         return {
-            clickGood: clickGood,
             addGood: addGood,
             deleteGood: deleteGood,
             showGoodCount: showGoodCount,

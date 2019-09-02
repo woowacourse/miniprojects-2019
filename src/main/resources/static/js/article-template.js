@@ -51,7 +51,7 @@ const template = (function () {
                         </li>
                     </ul>
                     <ul class="feed-action border bottom d-flex">
-                        <li class="text-center flex-grow-1" data-btn="article-reaction-good-btn">
+                        <li class="text-center flex-grow-1 article-reaction-good-btn">
                             <button class="btn btn-default no-border pdd-vertical-0 no-mrg width-100">
                                 <i id="article-good-btn-icon-{{id}}" class="fa fa-thumbs-o-up font-size-16"></i>
                                 <span class="font-size-13">좋아요</span>
@@ -109,7 +109,7 @@ const template = (function () {
                                 </li>
                             </ul>
                             <div class="font-size-12 pdd-left-10 pdd-top-5">
-                                <span class="pointer text-link-color" data-btn="comment-reaction-good-btn">좋아요</span>
+                                <span class="pointer text-link-color comment-reaction-good-btn">좋아요</span>
                                 <span>·</span>
                                 <span class="pointer text-link-color" data-comment-list="comment-subList">답글 달기</span>
                                 <span>·</span>
