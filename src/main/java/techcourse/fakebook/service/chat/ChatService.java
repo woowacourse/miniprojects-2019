@@ -26,7 +26,6 @@ public class ChatService {
     private final UserService userService;
     private final SimpMessagingTemplate messanger;
 
-
     public ChatService(ChatRepository chatRepository, ChatAssembler chatAssembler, UserService userService, SimpMessagingTemplate messanger) {
         this.chatRepository = chatRepository;
         this.chatAssembler = chatAssembler;
