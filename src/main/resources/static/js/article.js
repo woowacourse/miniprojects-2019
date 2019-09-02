@@ -62,7 +62,7 @@ const Article = (() => {
                             element.innerHTML = `<a href="/${data.userInfoDto.userContentsDto.userName}">${data.userInfoDto.userContentsDto.userName}</a>`;
                         }
                     );
-                    document.querySelector(".contents-para").innerText = data.contents;
+                    document.querySelector(".contents-para").innerHTML = hashTagAddLink(htmlToStringParse(data.contents));
                 });
 
 

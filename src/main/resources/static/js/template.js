@@ -67,7 +67,7 @@ const getArticleTemplate = function (articleId, userId, userName, imageUrl, prof
                                                 <div class="info pdd-left-15 pdd-vertical-5">
                                                    <a href="/${userName}"
                                                    class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
-                                                   <span class="font-size-14">${htmlToStringParse(contents)}</span>
+                                                   <span class="font-size-14">${hashTagAddLink(htmlToStringParse(contents))}</span>
                                                 </div>
                                                 ${comments}
                                             </div>
@@ -91,7 +91,7 @@ const getCommentTemplate = (commentId, userName, contents) => {
     <div class="info pdd-left-15 pdd-vertical-5" data-comment-id = ${commentId} >
        <a href=""
        class="title no-pdd-vertical text-bold inline-block font-size-15">${userName}</a>
-       <span class="font-size-14">${htmlToStringParse(contents)}</span>
+       <span class="font-size-14">${hashTagAddLink(htmlToStringParse(contents))}</span>
     </div>
       `;
 };
