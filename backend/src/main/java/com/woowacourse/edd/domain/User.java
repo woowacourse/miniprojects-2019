@@ -19,6 +19,9 @@ import java.util.Objects;
 @Where(clause = "is_deleted = 'false'")
 public class User {
 
+    public static final int EMAIL_LENGTH_MIN = 1;
+    public static final int EMAIL_LENGTH_MAX = 255;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

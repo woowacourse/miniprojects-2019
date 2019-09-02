@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -55,14 +56,14 @@ public class VideoController {
     }
 
     @PostMapping
-    public ResponseEntity<VideoResponse> saveVideo(@RequestBody VideoSaveRequestDto requestDto, HttpSession session) {
+    public ResponseEntity<VideoResponse> saveVideo(@Valid @RequestBody VideoSaveRequestDto requestDto, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
         VideoResponse response = videoService.save(requestDto, sessionUser.getId());
         return ResponseEntity.created(URI.create(VIDEO_URL + "/" + response.getId())).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateVideo(@PathVariable Long id, @RequestBody VideoUpdateRequestDto requestDto, HttpSession session) {
+    public ResponseEntity updateVideo(@PathVariable Long id, @Valid @RequestBody VideoUpdateRequestDto requestDto, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
         VideoUpdateResponse response = videoService.update(id, requestDto, sessionUser.getId());
         return ResponseEntity.status(HttpStatus.OK)

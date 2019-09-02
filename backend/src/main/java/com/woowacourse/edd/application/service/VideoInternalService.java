@@ -1,7 +1,6 @@
 package com.woowacourse.edd.application.service;
 
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
-import com.woowacourse.edd.application.response.VideoPreviewResponse;
 import com.woowacourse.edd.domain.Video;
 import com.woowacourse.edd.exceptions.VideoNotFoundException;
 import com.woowacourse.edd.repository.VideoRepository;

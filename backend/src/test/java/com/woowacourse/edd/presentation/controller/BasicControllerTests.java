@@ -9,6 +9,8 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.util.stream.IntStream;
+
 import static com.woowacourse.edd.presentation.controller.LoginController.LOGIN_URL;
 import static com.woowacourse.edd.presentation.controller.UserController.USER_URL;
 
@@ -107,5 +109,11 @@ public class BasicControllerTests {
             .getResponseCookies()
             .getFirst(COOKIE_JSESSIONID)
             .getValue();
+    }
+
+    protected String getOverSizeString(int overSizeCount) {
+        StringBuilder sb = new StringBuilder(overSizeCount);
+        IntStream.range(0, overSizeCount).forEach(i -> sb.append("A"));
+        return sb.toString();
     }
 }

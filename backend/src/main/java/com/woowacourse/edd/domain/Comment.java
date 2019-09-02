@@ -24,6 +24,8 @@ import java.util.Objects;
 @Entity
 public class Comment {
 
+    public static final int CONTENTS_LENGTH_MAX = 255;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
