@@ -23,8 +23,20 @@ public class UserControllerTests extends BasicControllerTests {
     public static final String DEFAULT_USER_PASSWORD = "P@ssW0rd";
 
     @Test
-    void email_validation() {
-        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto(DEFAULT_USER_NAME, "asdadasdasd", DEFAULT_USER_PASSWORD, DEFAULT_USER_PASSWORD);
+    void email_validation_not_email_name() {
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("robby", "@gmail.com", "P@ssW0rd", "P@ssW0rd");
+        assertFailBadRequest(assertRequestValidation(userSaveRequestDto), INVALID_EMAIL_FORM_MESSAGE);
+    }
+
+    @Test
+    void email_validation_not_at() {
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("robby", "asdadasdasd", "P@ssW0rd", "P@ssW0rd");
+        assertFailBadRequest(assertRequestValidation(userSaveRequestDto), INVALID_EMAIL_FORM_MESSAGE);
+    }
+
+    @Test
+    void email_validation_not_dot() {
+        UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("robby", "asdadasdasd@gmail", "P@ssW0rd", "P@ssW0rd");
         assertFailBadRequest(assertRequestValidation(userSaveRequestDto), INVALID_EMAIL_FORM_MESSAGE);
     }
 
