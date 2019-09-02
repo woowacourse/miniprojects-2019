@@ -71,6 +71,9 @@ dependencies {
     
     // gson
     implementation 'com.google.code.gson:gson:2.8.5'
+    
+    // guava
+    compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
 }
 
 test {

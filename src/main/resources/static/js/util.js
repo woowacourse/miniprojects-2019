@@ -13,7 +13,7 @@ class Request {
     }
 
     handleError = (error) => {
-        return Promise.reject(new Alert(error));
+        return Promise.reject(new Alert(error.response.data));
     };
 
     get = (attachedUrl, callback = this.defaultCallback) => {

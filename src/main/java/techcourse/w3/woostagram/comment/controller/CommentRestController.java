@@ -3,9 +3,11 @@ package techcourse.w3.woostagram.comment.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import techcourse.w3.woostagram.article.exception.RequestTooFastException;
 import techcourse.w3.woostagram.comment.dto.CommentDto;
 import techcourse.w3.woostagram.comment.service.CommentService;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
+import techcourse.w3.woostagram.common.support.UserRateLimiter;
 
 import java.util.List;
 
@@ -13,14 +15,20 @@ import java.util.List;
 @RequestMapping("/api/articles/{articleId}/comments")
 public class CommentRestController {
     private final CommentService commentService;
+    private final UserRateLimiter userRateLimiter;
 
-    public CommentRestController(CommentService commentService) {
+    public CommentRestController(CommentService commentService, UserRateLimiter userRateLimiter) {
         this.commentService = commentService;
+        this.userRateLimiter = userRateLimiter;
     }
 
     @PostMapping
     public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @LoggedInUser String email, @PathVariable Long articleId) {
-        return new ResponseEntity<>(commentService.save(commentDto, email, articleId), HttpStatus.CREATED);
+        if (userRateLimiter.get(email).tryAcquire()) {
+            return new ResponseEntity<>(commentService.save(commentDto, email, articleId), HttpStatus.CREATED);
+        } else {
+            throw new RequestTooFastException();
+        }
     }
 
     @GetMapping
