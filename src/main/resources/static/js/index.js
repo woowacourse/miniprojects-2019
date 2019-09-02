@@ -33,12 +33,15 @@ const IndexApp = (() => {
         const login = () => {
             const loginBtn = document.getElementById('login-btn');
             loginBtn.addEventListener('click', indexService.login);
-
+            const loginPassword = document.getElementById('login-password');
+            loginPassword.addEventListener('keydown', indexService.keyDownLogin);
         };
 
         const signUp = () => {
             const signUpBtn = document.getElementById('signup-btn');
             signUpBtn.addEventListener('click', indexService.signUp);
+            const signUpArea = document.getElementById('contentwrapper');
+            signUpArea.addEventListener('keydown', indexService.keyDownSignUp);
         };
 
         const init = () => {
@@ -112,9 +115,29 @@ const IndexApp = (() => {
                 })
         };
 
+        const keyDownLogin = (event) => {
+            event.stopPropagation();
+            const loginBtn = document.getElementById('login-btn');
+
+            if (event.which === 13) {
+                loginBtn.click();
+            }
+        };
+
+        const keyDownSignUp = (event) => {
+            event.stopPropagation();
+            const signUpBtn = document.getElementById('signup-btn');
+
+            if (event.which === 13) {
+                signUpBtn.click();
+            }
+        };
+
         return {
             login: login,
             signUp: signUp,
+            keyDownLogin: keyDownLogin,
+            keyDownSignUp: keyDownSignUp,
         };
     };
 
