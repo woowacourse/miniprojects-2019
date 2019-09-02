@@ -33,9 +33,4 @@ public class CommentRestController {
         commentService.deleteById(commentId, email);
         return ResponseEntity.ok().build();
     }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
 }

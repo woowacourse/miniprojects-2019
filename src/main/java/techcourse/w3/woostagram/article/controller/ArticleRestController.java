@@ -25,9 +25,4 @@ public class ArticleRestController {
         articleService.update(articleDto, email);
         return ResponseEntity.ok().build();
     }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
 }
