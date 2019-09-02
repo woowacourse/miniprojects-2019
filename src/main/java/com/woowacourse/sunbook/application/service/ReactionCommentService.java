@@ -26,20 +26,6 @@ public class ReactionCommentService {
         this.userService = userService;
     }
 
-    @Transactional
-    public ReactionDto clickGood(final Long userId, final Long commentId) {
-        User author = userService.findById(userId);
-        Comment comment = commentService.findById(commentId);
-
-        ReactionComment reactionComment = reactionCommentRepository
-                .findByAuthorAndComment(author, comment)
-                .orElseGet(() ->
-                        reactionCommentRepository.save(new ReactionComment(author, comment)));
-        reactionComment.toggleGood();
-
-        return new ReactionDto(getCount(comment), reactionComment.getHasGood());
-    }
-
     public ReactionDto showCount(final Long userId, final Long commentId) {
         User author = userService.findById(userId);
         Comment comment = commentService.findById(commentId);

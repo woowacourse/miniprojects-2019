@@ -12,5 +12,9 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     List<Article> findAllByAuthor(User author);
 
+    List<Article> findAllByAuthorAndOpenRange(User author, OpenRange openRange);
+
     List<Article> findAllByAuthorInAndOpenRange(List<User> authors, OpenRange openRange);
+
+    List<Article> findAllByOpenRangeAndAuthorNot(OpenRange openRange, User author);
 }

@@ -10,4 +10,6 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
 	Optional<Relation> findByFromAndTo(User from, User to);
 
 	List<Relation> findAllByFromAndRelationship(User from, Relationship relationship);
+
+	boolean existsByFromAndToAndRelationship(User from, User To, Relationship relationship);
 }

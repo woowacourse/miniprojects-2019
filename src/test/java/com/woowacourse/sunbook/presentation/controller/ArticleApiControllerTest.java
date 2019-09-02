@@ -9,10 +9,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ArticleApiControllerTest extends TestTemplate {
+    private static final Long USER_ID = 1L;
+    private static final Long FRIEND_PAGE_USER_ID = 2L;
+    private static final Long STRANGER_PAGE_USER_ID = 3L;
+    private static final String NEWSFEED_PAGE = "newsfeed";
+    private static final String USER_PAGE = "users";
+
     private static final String RANGE_ALL = "0";
     private static final String RANGE_FRIEND = "1";
     private static final String RANGE_NONE = "2";
@@ -33,26 +39,83 @@ class ArticleApiControllerTest extends TestTemplate {
     private static final FileUrl updatedVideoUrl = new FileUrl(UPDATE_VIDEO_URL);
 
     @Test
-    void 공개된_게시글_조회() {
-        respondApi(loginAndRequest(HttpMethod.GET, "/api/articles", Void.class, HttpStatus.OK, loginSessionId(userRequestDto)))
-                .jsonPath("$..contents.contents").value(hasItem(ALL_CONTENTS))
-                .jsonPath("$..imageUrl.fileUrl").value(hasItem(IMAGE_URL))
-                .jsonPath("$..videoUrl.fileUrl").value(hasItem(VIDEO_URL))
+    void 뉴스피드_게시글_조회() {
+        webTestClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/api/articles")
+                        .queryParam("target", NEWSFEED_PAGE)
+                        .queryParam("pageUserId", USER_ID)
+                        .build())
+                .cookie("JSESSIONID", loginSessionId(userRequestDto))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .consumeWith(res -> {
+                    String body = new String(res.getResponseBody());
+                    assertTrue(body.contains(ALL_CONTENTS));
+                    assertFalse(body.contains(NONE_CONTENTS));
+                })
                 ;
     }
 
     @Test
-    void 친구가_아닌_게시글_조회_불가() {
-        respondApi(loginAndRequest(HttpMethod.GET, "/api/articles", Void.class, HttpStatus.OK, loginSessionId(userRequestDto)))
-                .jsonPath("$..contents.contents").value(not(FRIEND_CONTENTS))
+    void 자신의_마이페이지_게시글_조회() {
+        webTestClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/api/articles")
+                        .queryParam("target", USER_PAGE)
+                        .queryParam("pageUserId", USER_ID)
+                        .build())
+                .cookie("JSESSIONID", loginSessionId(userRequestDto))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .consumeWith(res -> {
+                    String body = new String(res.getResponseBody());
+                    assertTrue(body.contains(ALL_CONTENTS));
+                    assertFalse(body.contains(NONE_CONTENTS));
+                })
         ;
     }
 
     @Test
-    void 비공개_게시글_조회_불가() {
-        respondApi(loginAndRequest(HttpMethod.GET, "/api/articles", Void.class, HttpStatus.OK, loginSessionId(userRequestDto)))
-                .jsonPath("$..contents.contents").value(not(NONE_CONTENTS))
-                ;
+    void 친구_마이페이지_게시글_조회() {
+        webTestClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/api/articles")
+                        .queryParam("target", USER_PAGE)
+                        .queryParam("pageUserId", FRIEND_PAGE_USER_ID)
+                        .build())
+                .cookie("JSESSIONID", loginSessionId(userRequestDto))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .consumeWith(res -> {
+                    String body = new String(res.getResponseBody());
+//                    assertTrue(body.contains(FRIEND_CONTENTS));
+                    assertFalse(body.contains(NONE_CONTENTS));
+                })
+        ;
+    }
+
+    @Test
+    void 친구가_아닌_타인의_마이페이지_게시글_조회() {
+        webTestClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/api/articles")
+                        .queryParam("target", USER_PAGE)
+                        .queryParam("pageUserId", STRANGER_PAGE_USER_ID)
+                        .build())
+                .cookie("JSESSIONID", loginSessionId(userRequestDto))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .consumeWith(res -> {
+                    String body = new String(res.getResponseBody());
+                    assertFalse(body.contains(FRIEND_CONTENTS));
+                    assertFalse(body.contains(NONE_CONTENTS));
+                })
+        ;
     }
 
     @Test
@@ -66,7 +129,7 @@ class ArticleApiControllerTest extends TestTemplate {
                 .jsonPath("$..contents.contents").isEqualTo(ALL_CONTENTS)
                 .jsonPath("$..imageUrl.fileUrl").isEqualTo(IMAGE_URL)
                 .jsonPath("$..videoUrl.fileUrl").isEqualTo(VIDEO_URL)
-                ;
+        ;
     }
 
     @Test
@@ -104,7 +167,7 @@ class ArticleApiControllerTest extends TestTemplate {
                 .jsonPath("$..contents.contents").isEqualTo(UPDATE_CONTENTS)
                 .jsonPath("$..imageUrl.fileUrl").isEqualTo(UPDATE_IMAGE_URL)
                 .jsonPath("$..videoUrl.fileUrl").isEqualTo(UPDATE_VIDEO_URL)
-                ;
+        ;
     }
 
     @Test

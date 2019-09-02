@@ -6,6 +6,7 @@
 <body>
 <div id="wootecobook-app">
     <th:block th:include="fragments/common-header" />
+    <div id="loader" class="loader" style="display: none; top: 50%; left: 50%; position: absolute; z-index: 10;"></div>
     <div class="container-fluid max-width-lg mx-auto">
         <div class="row jumbo mrg-top-30">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -51,14 +52,15 @@
             </div>
             <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
                 <div class="social-feeds">
-                    <div class="card widget-compose">
+                    <div id="create-article" class="card widget-compose" style="display:none">
                         <p class="border bottom width-100 pdd-btm-5 text-bold">게시물 만들기</p>
                         <textarea id="article-contents"
                                   class="resize-none form-control border bottom resize-none"
                                   placeholder="oo님, 무슨 생각을 하고 계신가요?"></textarea>
                         <ul class="composor-tools pdd-top-15">
+                            <input type="file" id="photo-video-input" name="photo-video" style="display:none" accept=".jpg,.jpeg.,.gif,.png,.mov,.mp4">
                             <li class="bg-lightgray border-radius-round mrg-right-5">
-                                <a class="pdd-vertical-5 pdd-horizon-10 pointer">
+                                <a class="pdd-vertical-5 pdd-horizon-10 pointer" id="photo-video-btn">
                                     <div class="icons photo-video"></div>
                                     <span class="icon-name font-size-13 text-bold"> 사진/동영상</span>
                                 </a>
@@ -75,6 +77,18 @@
                                     <span class="icon-name font-size-13 text-bold"> 기분/활동</span>
                                 </a>
                             </li>
+                            <li>
+                                <select id="article-range" class="selectpicker" data-width="fit">
+                                    <option>모두 공개</option>
+                                    <option>친구 공개</option>
+                                    <option>비공개</option>
+                                </select>
+                            </li>
+                        </ul>
+                        <ul class="composor-tools pdd-top-15">
+                            <li class="mrg-btm-5">
+                                <img id="preview" src="" width="120px" alt="">
+                            </li>
                         </ul>
                         <ul class="composor-tools pdd-top-15">
                             <li class="mrg-right-5 block">
@@ -86,7 +100,7 @@
                     </div>
                 </div>
 
-                <div id="article-list"></div>
+                <div id="article-list" data-target="users"></div>
             </div>
         </div>
     </div>
@@ -137,5 +151,8 @@
 <script src="/js/article-template.js"></script>
 <script src="/js/friends.js"></script>
 <script src="/js/users.js"></script>
+<script src="/js/reaction.js"></script>
+<script src="/js/article.js"></script>
+<script src="/js/comment.js"></script
 </body>
 </html>

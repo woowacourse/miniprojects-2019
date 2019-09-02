@@ -7,14 +7,7 @@ import com.woowacourse.sunbook.domain.article.ArticleFeature;
 import com.woowacourse.sunbook.presentation.support.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,8 +22,12 @@ public class ArticleApiController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ArticleResponseDto>> show(LoginUser loginUser) {
-        List<ArticleResponseDto> articles = articleService.findAll(loginUser.getId());
+    public ResponseEntity<List<ArticleResponseDto>> show(
+            @RequestParam(value = "target") String target,
+            @RequestParam(value = "pageUserId") String pageUserId,
+            LoginUser loginUser) {
+        List<ArticleResponseDto> articles = articleService.findAll(
+                loginUser.getId(), Long.parseLong(pageUserId), target);
 
         return ResponseEntity.ok().body(articles);
     }

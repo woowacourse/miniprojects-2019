@@ -79,6 +79,9 @@ const UsersApp = (() => {
                         userBtn.innerHTML = templateProfileUpdate();
                         const userUpdateModalBtn = document.getElementById('user-update-form-btn');
                         userUpdateModalBtn.addEventListener('click', showUserUpdateModal);
+
+                        const articleBtn = document.getElementById('create-article');
+                        articleBtn.setAttribute('style', '');
                     } else {
                         friendApi.relation(userId).then(relation => {
                             const relationship = relation.relationship;

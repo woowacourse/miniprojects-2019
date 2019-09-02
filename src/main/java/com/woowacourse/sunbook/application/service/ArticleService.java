@@ -12,7 +12,6 @@ import com.woowacourse.sunbook.domain.relation.Relation;
 import com.woowacourse.sunbook.domain.user.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,41 +39,59 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponseDto> findPageByAuthor(final Pageable pageable, final Long userId) {
-        User foundUser = userService.findById(userId);
+    public List<ArticleResponseDto> findAll(final Long loginId,
+                                            final Long pageUserId,
+                                            final String target) {
         return Collections.unmodifiableList(
-                articleRepository.findAllByAuthor(pageable, foundUser).getContent().stream()
+                checkPage(loginId, pageUserId, target).stream()
+                        .sorted()
                         .map(article -> modelMapper.map(article, ArticleResponseDto.class))
                         .collect(Collectors.toList())
         );
     }
 
-    @Transactional(readOnly = true)
-    public List<ArticleResponseDto> findAll(final Long loginId) {
+    private List<Article> checkPage(final Long loginId, final Long pageUserId, final String target) {
+        if ("users".equals(target)) {
+            return findAllUserPage(loginId, pageUserId);
+        }
+
+        return findAllNewsFeed(loginId);
+    }
+
+    private List<Article> findAllNewsFeed(final Long loginId) {
         User author = userService.findById(loginId);
         List<User> friends = relationService.getFriendsRelation(author).stream()
                 .map(Relation::getTo)
-                .collect(Collectors.toList())
-                ;
+                .collect(Collectors.toList());
 
-        List<Article> articles = new ArrayList<>(findAllByAuthor(author));
-        articles.addAll(findAllByAuthors(friends, OpenRange.ALL));
-        articles.addAll(findAllByAuthors(friends, OpenRange.ONLY_FRIEND));
+        List<Article> newsFeedArticles = new ArrayList<>(articleRepository.findAllByAuthor(author));
+            newsFeedArticles.addAll(articleRepository.findAllByOpenRangeAndAuthorNot(OpenRange.ALL, author));
+        newsFeedArticles.addAll(articleRepository.findAllByAuthorInAndOpenRange(friends, OpenRange.ONLY_FRIEND));
 
-        return Collections.unmodifiableList(
-                articles.stream()
-                .sorted()
-                .map(article -> modelMapper.map(article, ArticleResponseDto.class))
-                .collect(Collectors.toList())
-                );
+        return Collections.unmodifiableList(newsFeedArticles);
     }
 
-    private List<Article> findAllByAuthor(final User author) {
-        return articleRepository.findAllByAuthor(author);
+    private List<Article> findAllUserPage(final Long loginId, final Long pageUserId) {
+        if (loginId.equals(pageUserId)) {
+            User author = userService.findById(loginId);
+
+            return Collections.unmodifiableList(articleRepository.findAllByAuthor(author));
+        }
+
+        return findAllAnotherPage(loginId, pageUserId);
     }
 
-    private List<Article> findAllByAuthors(final List<User> authors, final OpenRange openRange) {
-        return articleRepository.findAllByAuthorInAndOpenRange(authors, openRange);
+    private List<Article> findAllAnotherPage(final Long loginId, final Long pageUserId) {
+        User pageUser = userService.findById(pageUserId);
+        List<Article> userPageArticles =
+                new ArrayList<>(articleRepository.findAllByAuthorAndOpenRange(pageUser, OpenRange.ALL));
+
+        if (relationService.isFriend(loginId, pageUserId)) {
+            userPageArticles.addAll(articleRepository
+                    .findAllByAuthorAndOpenRange(pageUser, OpenRange.ONLY_FRIEND));
+        }
+
+        return Collections.unmodifiableList(userPageArticles);
     }
 
     @Transactional

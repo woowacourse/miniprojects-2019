@@ -116,4 +116,10 @@ public class RelationService {
 	private List<Relation> getRequestedFriendsRelation(User user) {
 		return relationRepository.findAllByFromAndRelationship(user, Relationship.REQUESTED);
 	}
+
+	protected boolean isFriend(Long toId, Long fromId) {
+		User toUser = userService.findById(toId);
+		User fromUser = userService.findById(fromId);
+		return relationRepository.existsByFromAndToAndRelationship(toUser, fromUser, Relationship.FRIEND);
+	}
 }

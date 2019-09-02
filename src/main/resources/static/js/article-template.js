@@ -2,10 +2,13 @@ const template = (function () {
     const article = `<div class="card widget-feed" data-object="article" data-article-id="{{id}}">
                     <div class="feed-header">
                         <ul class="list-unstyled list-info">
+                            <li class="float-right mrg-right-40">
+                                <div id="range-icon-{{id}}" class="ti-lock font-size-20"></div>
+                            </li>
                             <li>
                                 <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
                                 <div class="info">
-                                    <a href="" class="title no-pdd-vertical text-semibold inline-block">{{authorName}}</a>
+                                    <a href="/users/{{authorId}}" class="title no-pdd-vertical text-semibold inline-block">{{authorName}}</a>
                                     <span class="sub-title">{{updatedTime}}</span>
                                     <a class="pointer absolute top-0 right-0" data-toggle="dropdown"
                                        aria-expanded="false">

@@ -54,8 +54,11 @@ const ArticleApp = (() => {
 
         const read = () => {
             const articleList = document.getElementById('article-list');
+            const targetHTML = articleList.getAttribute('data-target');
+            const pageUserId = targetHTML === 'users' ? window.location.pathname.split('/')[2] : 0;
+            articleList.innerHTML = "";  // 게시글 수정 버그 수정
 
-            articleApi.render()
+            articleApi.render(targetHTML, pageUserId)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(article => {
@@ -65,9 +68,11 @@ const ArticleApp = (() => {
                             "article-contents": article.articleFeature.contents.contents,
                             "article-videoUrl": article.articleFeature.videoUrl.fileUrl,
                             "article-imageUrl": article.articleFeature.imageUrl.fileUrl,
+                            "authorId": article.authorId,
                             "authorName": article.authorName.name,
                         }));
                         ReactionApp.service().showGoodCount('article', article.id);
+                        addRangeIcon(article.id, article.openRange);
                         CommentApp.service().showCommentCount(article.id);
                         checkBlank();
                     })
@@ -88,7 +93,7 @@ const ArticleApp = (() => {
             upload(contents, translateSelectedRange(selectedRange)).then(data => {
                 articleApi.add(data)
                     .then(response => response.json())
-                    .then((article) => {
+                    .then(article => {
                         document.getElementById('article-list')
                             .insertAdjacentHTML('afterbegin', articleTemplate({
                                 "id": article.id,
@@ -96,9 +101,11 @@ const ArticleApp = (() => {
                                 "article-contents": article.articleFeature.contents.contents,
                                 "article-videoUrl": article.articleFeature.videoUrl.fileUrl,
                                 "article-imageUrl": article.articleFeature.imageUrl.fileUrl,
+                                "authorId": article.authorId,
                                 "authorName": article.authorName.name,
                             }));
                         ReactionApp.service().showGoodCount('article', article.id);
+                        addRangeIcon(article.id, article.openRange);
                         CommentApp.service().showCommentCount(article.id);
                         const videoTag = document.querySelector('video[data-object="article-video"]');
                         const imageTag = document.querySelector('img[data-object="article-image"]');
@@ -125,16 +132,30 @@ const ArticleApp = (() => {
             }
         };
 
+        const addRangeIcon = (articleId, range) => {
+            const rangeIcon = document.getElementById(`range-icon-${articleId}`);
+
+            if (range === 'ALL') {
+                rangeIcon.setAttribute('class', '');
+            } else if (range === 'ONLY_FRIEND') {
+                rangeIcon.setAttribute('class', 'friend-btn font-size-20');
+            } else if (range === 'NONE') {
+                rangeIcon.setAttribute('class', 'ti-lock font-size-20');
+            }
+        };
+
         const update = () => {
             const updateArea = document.getElementById('article-update-contents');
             const articleId = updateArea.getAttribute('data-update-article-id');
             const article = document.querySelector(`div[data-article-id="${articleId}"]`);
             const imageUrl = article.querySelector('img[data-object="article-image"]');
             const videoUrl = article.querySelector('video[data-object="article-video"]');
+            const currentUrl = String(window.location);
+
             const data = {
                 contents: updateArea.value,
-                imageUrl: imageUrl.src.includes("newsfeed") ? "" : imageUrl.src,
-                videoUrl: videoUrl.src.includes("newsfeed") ? "" : videoUrl.src,
+                imageUrl: (imageUrl.src === currentUrl) ? "" : imageUrl.src,
+                videoUrl: (videoUrl.src === currentUrl) ? "" : videoUrl.src,
             };
 
             articleApi.update(data, articleId)
@@ -297,8 +318,8 @@ const ArticleApp = (() => {
             return Api.delete(`/api/articles/${articleId}`);
         };
 
-        const render = () => {
-            return Api.get(`/api/articles`);
+        const render = (targetHTML, pageUserId) => {
+            return Api.get(`/api/articles?target=${targetHTML}&pageUserId=${pageUserId}`);
         };
 
         const update = (data, articleId) => {

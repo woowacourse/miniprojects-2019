@@ -28,7 +28,7 @@ public class ReactionCommentServiceTest extends MockStorage {
         given(reactionCommentRepository.findByAuthorAndComment(author, comment))
                 .willReturn(Optional.of(reactionComment));
 
-        injectReactionCommentService.clickGood(AUTHOR_ID, COMMENT_ID);
+        injectReactionCommentService.save(AUTHOR_ID, COMMENT_ID);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class ReactionCommentServiceTest extends MockStorage {
         given(reactionCommentRepository.findByAuthorAndComment(author, comment))
                 .willReturn(Optional.of(reactionComment));
 
-        injectReactionCommentService.clickGood(AUTHOR_ID, COMMENT_ID);
+        injectReactionCommentService.remove(AUTHOR_ID, COMMENT_ID);
 
         verify(reactionCommentRepository, never()).save(any(ReactionComment.class));
     }

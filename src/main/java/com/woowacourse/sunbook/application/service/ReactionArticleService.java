@@ -43,20 +43,6 @@ public class ReactionArticleService {
     }
 
     @Transactional
-    public ReactionDto clickGood(final Long userId, final Long articleId) {
-        User author = userService.findById(userId);
-        Article article = articleService.findById(articleId);
-
-        ReactionArticle reactionArticle = reactionArticleRepository
-                .findByAuthorAndArticle(author, article)
-                .orElseGet(() ->
-                        reactionArticleRepository.save(new ReactionArticle(author, article)));
-        reactionArticle.toggleGood();
-
-        return new ReactionDto(getCount(article), reactionArticle.getHasGood());
-    }
-
-    @Transactional
     public ReactionDto save(final Long userId, final Long articleId) {
         User author = userService.findById(userId);
         Article article = articleService.findById(articleId);
