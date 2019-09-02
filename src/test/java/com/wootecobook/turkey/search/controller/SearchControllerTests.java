@@ -8,7 +8,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class SearchControllerTests extends BaseControllerTests {
 
     private final String uri = linkTo(SearchController.class).toString();
