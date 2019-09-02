@@ -53,3 +53,8 @@ const DomUtil = {
         element.classList.add("inactive")
     }
 };
+
+const htmlToStringParse = (html)=>{
+    return html.replace("<","&lt;")
+        .replace(">","&gt;")
+}
