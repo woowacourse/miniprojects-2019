@@ -1,6 +1,8 @@
 package techcourse.w3.woostagram.user.exception;
 
-public class UserUpdateException extends RuntimeException {
+import techcourse.w3.woostagram.common.exception.WoostagramExeception;
+
+public class UserUpdateException extends WoostagramExeception {
     private static final String ERROR_USER_CREATE = "유저 네임은 반드시 필요합니다.";
 
     public UserUpdateException() {

@@ -38,10 +38,4 @@ public class ArticleController {
         articleService.deleteById(articleId, email);
         return "redirect:/";
     }
-
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleRuntimeException() {
-        return "redirect:/";
-    }
 }
