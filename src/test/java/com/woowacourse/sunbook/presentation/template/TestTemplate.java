@@ -45,6 +45,18 @@ public class TestTemplate {
             new UserPassword("asdf1234!A")
     );
 
+    protected UserRequestDto relationUser = new UserRequestDto(
+            new UserEmail("test1@naver.com"),
+            new UserName("first", "last"),
+            new UserPassword("asdf1234!A")
+    );
+
+    protected UserRequestDto relationOtherUser = new UserRequestDto(
+            new UserEmail("test2@naver.com"),
+            new UserName("firstt", "lastt"),
+            new UserPassword("asdf1234!A")
+    );
+
     protected ResponseSpec request(HttpMethod method, String uri, Object object, HttpStatus httpStatus) {
         return webTestClient.method(method).uri(uri)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

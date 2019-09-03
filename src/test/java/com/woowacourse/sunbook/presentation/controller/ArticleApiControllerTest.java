@@ -92,7 +92,6 @@ class ArticleApiControllerTest extends TestTemplate {
                 .expectBody()
                 .consumeWith(res -> {
                     String body = new String(res.getResponseBody());
-//                    assertTrue(body.contains(FRIEND_CONTENTS));
                     assertFalse(body.contains(NONE_CONTENTS));
                 })
         ;

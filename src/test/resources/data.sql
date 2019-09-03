@@ -7,6 +7,14 @@ VALUES (2, 'eara12sa@naver.com', 'lee', 'abc', 'asdf1234!A');
 INSERT INTO user (id, email, last_name, first_name, password)
 VALUES (999, 'andole@naver.com', 'lee', 'abc', 'asdf1234!A');
 
+
+INSERT INTO user (id, email, last_name, first_name, password)
+VALUES (998, 'test1@naver.com', 'last', 'first', 'asdf1234!A');
+
+INSERT INTO user (id, email, last_name, first_name, password)
+VALUES (997, 'test2@naver.com', 'lastt', 'firstt', 'asdf1234!A');
+
+
 INSERT INTO article (id, updated_time, contents, image_url, video_url, open_range, author_id)
 VALUES (1, '2019-08-28 23:40:30', 'SunBook Contents', 'https://file.namu.moe/file/105db7e730e1402c09dcf2b281232df017f0966ba63375176cb0886869b81bf206145de5a7a149a987d6aae2d5230afaae4ca2bf0b418241957942ad4f4a08c8'
 , 'https://youtu.be/mw5VIEIvuMI', 'ALL', 1);

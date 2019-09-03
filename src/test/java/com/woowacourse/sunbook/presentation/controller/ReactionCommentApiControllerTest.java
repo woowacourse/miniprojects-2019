@@ -20,7 +20,6 @@ public class ReactionCommentApiControllerTest extends TestTemplate {
 
     @Test
     void 초기_좋아요_개수_정상_조회() {
-        // 좋아요 조회
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.GET, "/api/comments/6/good", Void.class, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(0L)
@@ -30,14 +29,12 @@ public class ReactionCommentApiControllerTest extends TestTemplate {
 
     @Test
     void 좋아요_후_개수_정상_조회() {
-        // 좋아요 누르기(TestTemplate 로 분리하기)
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.POST, "/api/comments/5/good", reactionDto, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(1L)
                 .jsonPath("$.hasGood").isEqualTo(true)
         ;
 
-        // 좋아요 조회
         respondApi(loginAndRequest(HttpMethod.GET, "/api/comments/5/good", Void.class, HttpStatus.OK, sessionId))
                 .jsonPath("$.numberOfGood").isEqualTo(1L)
                 .jsonPath("$.hasGood").isEqualTo(true)

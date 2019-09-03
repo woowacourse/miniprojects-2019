@@ -56,7 +56,7 @@ const ArticleApp = (() => {
             const articleList = document.getElementById('article-list');
             const targetHTML = articleList.getAttribute('data-target');
             const pageUserId = targetHTML === 'users' ? window.location.pathname.split('/')[2] : 0;
-            articleList.innerHTML = "";  // 게시글 수정 버그 수정
+            articleList.innerHTML = "";
 
             articleApi.render(targetHTML, pageUserId)
                 .then(response => response.json())
@@ -226,7 +226,6 @@ const ArticleApp = (() => {
             } else {
                 let reader = new FileReader();
                 reader.readAsDataURL(files[0]);
-                //로드 한 후
                 reader.onload = function  () {
                     document.querySelector('#preview').src = reader.result ;
                 };

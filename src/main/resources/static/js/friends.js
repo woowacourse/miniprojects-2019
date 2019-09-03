@@ -38,7 +38,7 @@ const FriendsApp = (() => {
             .then(data => {
                 data.forEach(friendCards => {
                     friendListForm.insertAdjacentHTML('afterbegin', friendTemplate({
-                        "userName": friendCards.userName.name,
+                        "userName": `${friendCards.userName.lastName} ${friendCards.userName.firstName}`,
                         "btn": templateFriend({'userId': friendCards.id}),
                     }))
                 })
@@ -49,7 +49,7 @@ const FriendsApp = (() => {
                 .then(data => {
                     data.forEach(friendCards => {
                         friendListForm.insertAdjacentHTML('afterbegin', friendTemplate({
-                            "userName": friendCards.userName.name,
+                            "userName": `${friendCards.userName.lastName} ${friendCards.userName.firstName}`,
                             "btn": templateRequested({'userId': friendCards.id}),
                         }))
                     })
