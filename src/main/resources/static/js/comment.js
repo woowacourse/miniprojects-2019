@@ -31,10 +31,6 @@ const CommentApp = (function() {
                         </li>
                     </ul>
                     <div class="font-size-12 pdd-left-10 pdd-top-5">
-                        <span class="pointer text-link-color">좋아요</span>
-                        <span>·</span>
-                        <span class="pointer text-link-color">답글 달기</span>
-                        <span>·</span>
                         <time datetime="${comment.createdDateTime}">${comment.createdDateTime}</time>
                     </div>
                 </div>
