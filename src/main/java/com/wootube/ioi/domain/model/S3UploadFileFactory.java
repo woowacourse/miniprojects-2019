@@ -1,14 +1,15 @@
 package com.wootube.ioi.domain.model;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.wootube.ioi.service.exception.FileConvertException;
 import com.wootube.ioi.service.util.FileConverter;
 import com.wootube.ioi.service.util.FileUploader;
 import com.wootube.ioi.service.util.UploadType;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 public class S3UploadFileFactory {
