@@ -7,7 +7,7 @@ import techcourse.w3.woostagram.user.domain.User;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 @ToString
 public class UserInfoDto {
     private Long id;

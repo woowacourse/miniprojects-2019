@@ -37,6 +37,9 @@ class AwsS3ServiceTest {
     @Mock
     private AwsS3Properties awsS3Properties;
 
+    @Mock
+    private ImageResizeService imageResizeService;
+
     private MultipartFile multipartFile;
 
     @BeforeEach
@@ -61,7 +64,6 @@ class AwsS3ServiceTest {
     void saveMultipartFile_incorrect_FileSaveFailException() {
         when(awsS3Properties.getBucket()).thenReturn("mybucket");
         when(amazonS3.putObject(anyString(), anyString(), any(File.class))).thenThrow(AmazonServiceException.class);
-
         assertThrows(FileSaveFailException.class, () -> awsS3Service.saveMultipartFile(multipartFile));
     }
 

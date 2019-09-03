@@ -43,6 +43,7 @@ class Like {
     }
 }
 
-if(window.location.host.indexOf('localhost:8080') < 0) {
-    console.log = function(){};
+if (window.location.host.indexOf('localhost:8080') < 0) {
+    console.log = function () {
+    };
 }

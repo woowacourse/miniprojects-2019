@@ -39,7 +39,7 @@ public class AbstractControllerTests {
 
     protected EntityExchangeResult<byte[]> postMultipartRequest(String uri, MultiValueMap params) {
         return webTestClient.post().uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .syncBody(params)
                 .exchange()
@@ -50,7 +50,7 @@ public class AbstractControllerTests {
     protected <T> T getRequest(String uri, Class<T> bodyType) {
         return webTestClient.get()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .exchange()
                 .expectBody(bodyType)
@@ -61,7 +61,7 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> getRequest(String uri) {
         return webTestClient.get()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .exchange()
                 .expectBody()
                 .returnResult();
@@ -70,7 +70,7 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> postJsonRequest(String uri, Map<String, String> params) {
         return webTestClient.post()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .body(Mono.just(params), Map.class)
                 .exchange()
                 .expectBody()
@@ -80,7 +80,7 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> postFormRequest(String uri, Map<String, String> params) {
         return webTestClient.post()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(mapBy(params))
@@ -92,7 +92,7 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> deleteRequest(String uri) {
         return webTestClient.delete()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .exchange()
                 .expectBody()
@@ -102,7 +102,7 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> putFormRequest(String uri, Map<String, String> params) {
         return webTestClient.put()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(mapBy(params))
@@ -114,7 +114,7 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> putJsonRequest(String uri, Map<String, String> params) {
         return webTestClient.put()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .body(Mono.just(params), Map.class)
                 .exchange()
                 .expectBody()
