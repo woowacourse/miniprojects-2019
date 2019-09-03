@@ -13,12 +13,12 @@ import techcourse.w3.woostagram.search.service.FullSearchService;
 public class SearchRestController {
     private final FullSearchService fullSearchService;
 
-    public SearchRestController(FullSearchService fullSearchService) {
+    public SearchRestController(final FullSearchService fullSearchService) {
         this.fullSearchService = fullSearchService;
     }
 
     @GetMapping
-    public ResponseEntity<SearchDto> read(@PathVariable String searchQuery) {
+    public ResponseEntity<SearchDto> list(@PathVariable String searchQuery) {
         return ResponseEntity.ok(fullSearchService.search(searchQuery));
     }
 }

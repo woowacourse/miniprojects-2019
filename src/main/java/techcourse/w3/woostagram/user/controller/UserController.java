@@ -25,7 +25,7 @@ public class UserController {
     private final UserService userService;
     private final UserRateLimiter userRateLimiter;
 
-    public UserController(UserService userService, UserRateLimiter userRateLimiter) {
+    public UserController(final UserService userService, final UserRateLimiter userRateLimiter) {
         this.userService = userService;
         this.userRateLimiter = userRateLimiter;
     }

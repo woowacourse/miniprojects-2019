@@ -15,7 +15,7 @@ public class ArticleController {
     private ArticleService articleService;
     private final UserRateLimiter userRateLimiter;
 
-    public ArticleController(ArticleService articleService, UserRateLimiter userRateLimiter) {
+    public ArticleController(final ArticleService articleService, final UserRateLimiter userRateLimiter) {
         this.articleService = articleService;
         this.userRateLimiter = userRateLimiter;
     }

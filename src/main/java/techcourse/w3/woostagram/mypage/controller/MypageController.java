@@ -12,7 +12,7 @@ import techcourse.w3.woostagram.mypage.service.MypageService;
 public class MypageController {
     private final MypageService mypageService;
 
-    public MypageController(MypageService mypageService) {
+    public MypageController(final MypageService mypageService) {
         this.mypageService = mypageService;
     }
 

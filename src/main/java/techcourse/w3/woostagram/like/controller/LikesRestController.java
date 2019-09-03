@@ -25,18 +25,18 @@ public class LikesRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserInfoDto>> readLikedUsers(@PathVariable Long articleId) {
+    public ResponseEntity<List<UserInfoDto>> listLikedUsers(@PathVariable Long articleId) {
         return ResponseEntity.ok(likesService.findLikedUserByArticleId(articleId));
+    }
+
+    @GetMapping("/num")
+    public ResponseEntity<Integer> listNumberOfLiked(@PathVariable Long articleId) {
+        return ResponseEntity.ok(likesService.findLikedUserByArticleId(articleId).size());
     }
 
     @DeleteMapping
     public ResponseEntity delete(@PathVariable Long articleId, @LoggedInUser String email) {
         likesService.delete(articleId, email);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/num")
-    public ResponseEntity<Integer> readNumberOfLiked(@PathVariable Long articleId) {
-        return ResponseEntity.ok(likesService.findLikedUserByArticleId(articleId).size());
     }
 }

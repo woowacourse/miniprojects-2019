@@ -18,12 +18,12 @@ public class FollowRestController {
     }
 
     @GetMapping("/followers")
-    public ResponseEntity<List<UserInfoDto>> readFollowers(@PathVariable Long targetId) {
+    public ResponseEntity<List<UserInfoDto>> listFollowers(@PathVariable Long targetId) {
         return ResponseEntity.ok(followService.findAllByTo(targetId));
     }
 
     @GetMapping("/followings")
-    public ResponseEntity<List<UserInfoDto>> readFollowing(@PathVariable Long targetId) {
+    public ResponseEntity<List<UserInfoDto>> listFollowing(@PathVariable Long targetId) {
         return ResponseEntity.ok(followService.findAllByFrom(targetId));
     }
 
@@ -40,12 +40,12 @@ public class FollowRestController {
     }
 
     @GetMapping("/followers/num")
-    public ResponseEntity<Integer> readNumberOfFollowers(@PathVariable Long targetId) {
+    public ResponseEntity<Integer> listNumberOfFollowers(@PathVariable Long targetId) {
         return ResponseEntity.ok(followService.findAllByTo(targetId).size());
     }
 
     @GetMapping("/followings/num")
-    public ResponseEntity<Integer> readNumberOfFollowing(@PathVariable Long targetId) {
+    public ResponseEntity<Integer> listNumberOfFollowing(@PathVariable Long targetId) {
         return ResponseEntity.ok(followService.findAllByFrom(targetId).size());
     }
 }

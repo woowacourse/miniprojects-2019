@@ -26,7 +26,8 @@ public class ArticleService {
     private final UserService userService;
     private final HashTagService hashTagService;
 
-    public ArticleService(final ArticleRepository articleRepository, final UserService userService, final StorageService storageService, final HashTagService hashTagService) {
+    public ArticleService(final ArticleRepository articleRepository, final UserService userService,
+                          final StorageService storageService, final HashTagService hashTagService) {
         this.articleRepository = articleRepository;
         this.userService = userService;
         this.storageService = storageService;

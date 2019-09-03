@@ -15,15 +15,14 @@ import java.util.List;
 @RequestMapping("/api/articles/{articleId}/comments")
 public class CommentRestController {
     private final CommentService commentService;
-    private final UserRateLimiter userRateLimiter;
 
-    public CommentRestController(CommentService commentService, UserRateLimiter userRateLimiter) {
+    public CommentRestController(final CommentService commentService) {
         this.commentService = commentService;
-        this.userRateLimiter = userRateLimiter;
     }
 
     @PostMapping
-    public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @PathVariable Long articleId, @LoggedInUser String email) {
+    public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @PathVariable Long articleId,
+                                             @LoggedInUser String email) {
         return new ResponseEntity<>(commentService.save(commentDto, email, articleId), HttpStatus.CREATED);
     }
 

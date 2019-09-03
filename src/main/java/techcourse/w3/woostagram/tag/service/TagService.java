@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class TagService {
     private final TagRepository tagRepository;
 
-    public TagService(TagRepository tagRepository) {
+    public TagService(final TagRepository tagRepository) {
         this.tagRepository = tagRepository;
     }
 
