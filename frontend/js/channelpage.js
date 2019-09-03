@@ -132,8 +132,7 @@ const channelService = (function () {
             .then(res => {
                 if (res.status == 400) {
                     res.json().then(err => alert(err.message))
-                }
-                if (res.status !== 201) {
+                } else if (res.status !== 201) {
                     alert('실패했습니다. 다시 시도해주세요.')
                 } else {
                     alert('구독되었습니다.')
@@ -215,6 +214,8 @@ const channelService = (function () {
                                 .classList.remove('d-none')
                         }
                     })
+
+                loadVideoCards(json.id)
             })
             return
         }
