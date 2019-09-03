@@ -14,6 +14,11 @@ const wootubeCtx = {
         calculateDate: function (responseDate) {
             const localResponseDate = moment.utc(responseDate).local()
             return localResponseDate.fromNow();
+        },
+        unescapeHtml: (escaped) => {
+            const elm = document.createElement('div')
+            elm.innerHTML = escaped
+            return elm.childNodes.length == 0 ? '' : elm.childNodes[0].nodeValue
         }
     },
     constants : {

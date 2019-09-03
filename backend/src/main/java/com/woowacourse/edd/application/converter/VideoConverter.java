@@ -2,6 +2,7 @@ package com.woowacourse.edd.application.converter;
 
 import com.nhncorp.lucy.security.xss.XssPreventer;
 import com.woowacourse.edd.application.dto.VideoSaveRequestDto;
+import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import com.woowacourse.edd.application.response.VideoPreviewResponse;
 import com.woowacourse.edd.application.response.VideoResponse;
 import com.woowacourse.edd.application.response.VideoUpdateResponse;
@@ -28,5 +29,12 @@ public class VideoConverter {
 
     public static VideoUpdateResponse toUpdateResponse(Video video) {
         return new VideoUpdateResponse(video.getId());
+    }
+
+    public static VideoUpdateRequestDto escapeUpdateRequestDto(VideoUpdateRequestDto updateRequestDto) {
+        return new VideoUpdateRequestDto(
+            XssPreventer.escape(updateRequestDto.getYoutubeId()),
+            XssPreventer.escape(updateRequestDto.getTitle()),
+            XssPreventer.escape(updateRequestDto.getContents()));
     }
 }

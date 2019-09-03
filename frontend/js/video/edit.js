@@ -15,13 +15,13 @@ const editVideo = function(json) {
 }
 
 const insertValuesIntoTemplate = function(json) {
-    const youtubeId = document.getElementById('youtube-id');
-    const title = document.getElementById('title');
-    const contents = document.getElementById('contents');
+    const youtubeId = document.getElementById('youtube-id')
+    const title = document.getElementById('title')
+    const contents = document.getElementById('contents')
 
-    youtubeId.value = json.youtubeId;
-    title.value = json.title;
-    contents.value = json.contents;
+    youtubeId.value = json.youtubeId
+    title.value = wootubeCtx.util.unescapeHtml(json.title)
+    contents.value = wootubeCtx.util.unescapeHtml(json.contents)
 }
 
 editView();

@@ -134,7 +134,7 @@ const commentApp = (function() {
                 return false;
             }
             const contents = document.querySelector(`li[data-id="${commentId}"] .comment-contents`)
-            contents.innerText = json.contents;
+            contents.innerText = wootubeCtx.util.unescapeHtml(json.contents);
         }
 
         const refreshCommentCount = function() {

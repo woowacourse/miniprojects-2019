@@ -18,4 +18,8 @@ public class CommentConverter {
 
         return new CommentResponse(comment.getId(), comment.getContents(), comment.getAuthor(), date);
     }
+
+    public static CommentRequestDto escapeUpdateRequestDto(CommentRequestDto updateRequestDto) {
+        return new CommentRequestDto(XssPreventer.escape(updateRequestDto.getContents()));
+    }
 }

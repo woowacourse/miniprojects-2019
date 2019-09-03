@@ -2,6 +2,7 @@ package com.woowacourse.edd.application.converter;
 
 import com.nhncorp.lucy.security.xss.XssPreventer;
 import com.woowacourse.edd.application.dto.UserSaveRequestDto;
+import com.woowacourse.edd.application.dto.UserUpdateRequestDto;
 import com.woowacourse.edd.application.response.LoginUserResponse;
 import com.woowacourse.edd.application.response.SessionUser;
 import com.woowacourse.edd.application.response.UserResponse;
@@ -23,5 +24,9 @@ public class UserConverter {
 
     public static LoginUserResponse toLoginUserResponse(User user) {
         return new LoginUserResponse(user.getId(), user.getName());
+    }
+
+    public static UserUpdateRequestDto escapeUpdateRequestDto(UserUpdateRequestDto updateRequestDto) {
+        return new UserUpdateRequestDto(XssPreventer.escape(updateRequestDto.getName()), XssPreventer.escape(updateRequestDto.getEmail()));
     }
 }

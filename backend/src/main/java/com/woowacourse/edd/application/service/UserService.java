@@ -29,7 +29,7 @@ public class UserService {
     }
 
     public UserResponse update(Long id, Long loggedInId, UserUpdateRequestDto userUpdateRequestDto) {
-        User user = userInternalService.update(id, loggedInId, userUpdateRequestDto);
+        User user = userInternalService.update(id, loggedInId, UserConverter.escapeUpdateRequestDto(userUpdateRequestDto));
         return UserConverter.toResponse(user);
     }
 

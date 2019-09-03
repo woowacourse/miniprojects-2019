@@ -44,7 +44,7 @@ public class CommentService {
     }
 
     public CommentResponse update(Long commentId, Long userId, Long videoId, CommentRequestDto commentRequestDto) {
-        Comment comment = commentInternalService.update(commentId, userId, videoId, commentRequestDto);
+        Comment comment = commentInternalService.update(commentId, userId, videoId, CommentConverter.escapeUpdateRequestDto(commentRequestDto));
         return CommentConverter.toResponse(comment);
     }
 
