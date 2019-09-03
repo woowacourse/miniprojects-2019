@@ -170,9 +170,9 @@ public class VideoControllerTests extends BasicControllerTests {
         Long id = Long.valueOf(urls[urls.length - 1]);
         String youtubeId = "updateYoutubeId";
         String title = "updateTitle";
-        String contetns = "updateContents";
+        String contents = "updateContents";
 
-        VideoUpdateRequestDto videoUpdateRequestDto = new VideoUpdateRequestDto(youtubeId, title, contetns);
+        VideoUpdateRequestDto videoUpdateRequestDto = new VideoUpdateRequestDto(youtubeId, title, contents);
 
         updateVideo(id, videoUpdateRequestDto, jsessionid)
             .expectStatus().isOk()
@@ -287,11 +287,5 @@ public class VideoControllerTests extends BasicControllerTests {
         return executeDelete(VIDEOS_URI + "/" + id)
             .cookie(COOKIE_JSESSIONID, jsessionid)
             .exchange();
-    }
-
-    private WebTestClient.BodyContentSpec saveNextVideo(VideoSaveRequestDto video, String sid) {
-        return saveVideo(video, sid)
-            .expectStatus().isCreated()
-            .expectBody();
     }
 }

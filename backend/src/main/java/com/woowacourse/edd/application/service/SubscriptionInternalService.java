@@ -4,10 +4,12 @@ import com.woowacourse.edd.domain.Subscription;
 import com.woowacourse.edd.domain.User;
 import com.woowacourse.edd.exceptions.DuplicateSubscriptionException;
 import com.woowacourse.edd.exceptions.SelfSubscriptionException;
+import com.woowacourse.edd.exceptions.UserNotFoundException;
 import com.woowacourse.edd.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -22,16 +24,25 @@ public class SubscriptionInternalService {
         this.subscriptionRepository = subscriptionRepository;
     }
 
-    public Subscription save(Long subscribedId, Long userId) {
-        checkSelfSubscription(subscribedId, userId);
+    public Subscription save(Long subscribedId, Long subscriberId) {
+        checkSelfSubscription(subscribedId, subscriberId);
+        List<Long> userIds = Arrays.asList(subscribedId, subscriberId);
+        List<User> users = userInternalService.findByIds(userIds);
 
-        User subscribed = userInternalService.findById(subscribedId);
-        User subscriber = userInternalService.findById(userId);
+        User subscribed = findById(users, subscribedId);
+        User subscriber = findById(users, subscriberId);
 
         checkDuplicateSubscription(subscribed, subscriber);
 
         Subscription subscription = new Subscription(subscriber, subscribed);
         return subscriptionRepository.save(subscription);
+    }
+
+    private User findById(List<User> users, Long id) {
+        return users.stream()
+            .filter(user -> user.getId() == id)
+            .findAny()
+            .orElseThrow(UserNotFoundException::new);
     }
 
     private void checkDuplicateSubscription(User subscribed, User subscriber) {

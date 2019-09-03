@@ -13,9 +13,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -36,14 +39,16 @@ public class SubscriptionInternalServiceTests {
 
     @BeforeEach
     void setUp() {
-        subscriber = new User("conas", "conas@gmail.com", "p@ssW0rd");
-        subscribed = new User("JM", "jm@gmail.com", "p@ssW0rd");
+        subscriber = spy(new User("conas", "conas@gmail.com", "p@ssW0rd"));
+        subscribed = spy(new User("JM", "jm@gmail.com", "p@ssW0rd"));
     }
 
     @Test
     void save() {
-        when(userInternalService.findById(1L)).thenReturn(subscriber);
-        when(userInternalService.findById(2L)).thenReturn(subscribed);
+        when(subscribed.getId()).thenReturn(1L);
+        when(subscriber.getId()).thenReturn(2L);
+
+        when(userInternalService.findByIds(any())).thenReturn(Arrays.asList(subscribed, subscriber));
         when(subscriptionRepository.save(any())).thenReturn(new Subscription(subscriber, subscribed));
 
         Subscription subscription = subscriptionInternalService.save(2L, 1L);

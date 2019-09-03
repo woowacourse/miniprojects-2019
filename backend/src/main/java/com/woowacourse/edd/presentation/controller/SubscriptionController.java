@@ -30,29 +30,29 @@ public class SubscriptionController {
         this.subscriptionService = subscriptionService;
     }
 
-    @PostMapping("/{subscribedId}/subscribe")
-    public ResponseEntity subscribe(@PathVariable Long subscribedId, HttpSession session) {
+    @PostMapping("/{subscribedUserId}/subscribe")
+    public ResponseEntity subscribe(@PathVariable Long subscribedUserId, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        subscriptionService.subscribe(subscribedId, sessionUser.getId());
+        subscriptionService.subscribe(subscribedUserId, sessionUser.getId());
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{subscribedId}/count-subscribers")
-    public ResponseEntity countSubscribers(@PathVariable Long subscribedId) {
-        SubscriptionCountResponse subscriptionCountResponse = subscriptionService.countSubscribers(subscribedId);
+    @GetMapping("/{subscribedUserId}/count-subscribers")
+    public ResponseEntity countSubscribers(@PathVariable Long subscribedUserId) {
+        SubscriptionCountResponse subscriptionCountResponse = subscriptionService.countSubscribers(subscribedUserId);
         return ResponseEntity.ok(subscriptionCountResponse);
     }
 
-    @GetMapping("/{id}/subscribed")
-    public ResponseEntity<List<SubscriptionResponse>> showSubsrcriptions(@PathVariable Long id) {
-        List<SubscriptionResponse> subscriptions = subscriptionService.findSubscriptions(id);
+    @GetMapping("/{userId}/subscribed")
+    public ResponseEntity<List<SubscriptionResponse>> showSubscriptions(@PathVariable Long userId) {
+        List<SubscriptionResponse> subscriptions = subscriptionService.findSubscriptions(userId);
         return ResponseEntity.ok(subscriptions);
     }
 
-    @DeleteMapping("/{subscribedId}/subscribe")
-    public ResponseEntity cancelSubscription(@PathVariable Long subscribedId, HttpSession session) {
+    @DeleteMapping("/{subscribedUserId}/subscribe")
+    public ResponseEntity cancelSubscription(@PathVariable Long subscribedUserId, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        subscriptionService.cancelSubscription(subscribedId, sessionUser.getId());
+        subscriptionService.cancelSubscription(subscribedUserId, sessionUser.getId());
         return ResponseEntity.noContent().build();
     }
 }

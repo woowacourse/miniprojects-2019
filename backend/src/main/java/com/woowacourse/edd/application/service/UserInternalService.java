@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 class UserInternalService {
@@ -70,5 +72,9 @@ class UserInternalService {
         if (id != loggedInId) {
             throw new UnauthorizedAccessException();
         }
+    }
+
+    public List<User> findByIds(List<Long> userIds) {
+        return userRepository.findByIdIn(userIds);
     }
 }
