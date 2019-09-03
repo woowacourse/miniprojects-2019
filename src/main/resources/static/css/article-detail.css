@@ -35,11 +35,13 @@
     margin-top: 8px;
     flex: 9;
     display:flex;
+    position:relative;
 }
 
 .profile-text{
     max-width:80%;
     margin-left:10px;
+    padding-right:20px;
 }
 
 .profile img{
@@ -163,6 +165,8 @@ i {
 
 .comment-delete{
     cursor:pointer;
+    position:absolute;
+    right:20px;
 }
 
 span {
