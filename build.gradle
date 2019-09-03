@@ -35,10 +35,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
     implementation 'com.amazonaws:aws-java-sdk-s3'
-    implementation 'org.springframework.security.oauth:spring-security-oauth2:+'
-    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:+'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:+'
-    implementation 'com.fasterxml.jackson.core:jackson-core:+'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
