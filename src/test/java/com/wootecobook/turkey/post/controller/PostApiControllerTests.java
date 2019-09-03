@@ -81,7 +81,6 @@ class PostApiControllerTests extends BaseControllerTests {
         //given
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("files", testFile, MediaType.parseMediaType("image/jpeg"));
-        bodyBuilder.part("files", testFile, MediaType.parseMediaType("image/jpeg"));
         bodyBuilder.part("contents", "hello");
 
         //when
@@ -104,7 +103,7 @@ class PostApiControllerTests extends BaseControllerTests {
 
         //then
         assertThat(postResponse.getContents()).isEqualTo(new Contents("hello"));
-        assertThat(postResponse.getFiles().size()).isEqualTo(2);
+        assertThat(postResponse.getFiles().size()).isEqualTo(1);
     }
 
     @Test

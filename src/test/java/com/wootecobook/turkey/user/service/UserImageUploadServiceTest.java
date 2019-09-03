@@ -19,14 +19,12 @@ public class UserImageUploadServiceTest {
     private static final String COVER_DIRECTORY_NAME = "cover";
 
     private final UserImageUploadService userImageUploadService;
-    private final String bucket;
 
     private MockMultipartFile mockMultipartFile;
     private User owner;
 
     @Autowired
-    UserImageUploadServiceTest(String bucket, UserService userService, UploadFileService uploadFileService) {
-        this.bucket = bucket;
+    UserImageUploadServiceTest(UserService userService, UploadFileService uploadFileService) {
         userImageUploadService = new UserImageUploadService(userService, uploadFileService);
     }
 
@@ -46,7 +44,7 @@ public class UserImageUploadServiceTest {
                 .type(ImageType.PROFILE)
                 .build();
 
-        String storageUrl = String.format("%s/%s/%s/", "http://localhost:8001", bucket, PROFILE_DIRECTORY_NAME);
+        String storageUrl = String.format("/%s/", PROFILE_DIRECTORY_NAME);
 
         //when
         FileFeature savedFileFeature = userImageUploadService.uploadImage(testUploadImage, owner.getId(), 1L);
@@ -54,7 +52,7 @@ public class UserImageUploadServiceTest {
         //then
         assertThat(savedFileFeature.getOriginalName()).isEqualTo(mockMultipartFile.getOriginalFilename());
         assertThat(savedFileFeature.getSize()).isEqualTo(mockMultipartFile.getSize());
-        assertThat(savedFileFeature.getPath()).matches("^" + storageUrl + ".*$");
+        assertThat(savedFileFeature.getPath()).matches("^.*" + storageUrl + ".*$");
     }
 
     @Test
@@ -65,7 +63,7 @@ public class UserImageUploadServiceTest {
                 .type(ImageType.COVER)
                 .build();
 
-        String storageUrl = String.format("%s/%s/%s/", "http://localhost:8001", bucket, COVER_DIRECTORY_NAME);
+        String storageUrl = String.format("/%s/", COVER_DIRECTORY_NAME);
 
         //when
         FileFeature savedFileFeature = userImageUploadService.uploadImage(testUploadImage, owner.getId(), 1L);
@@ -73,6 +71,6 @@ public class UserImageUploadServiceTest {
         //then
         assertThat(savedFileFeature.getOriginalName()).isEqualTo(mockMultipartFile.getOriginalFilename());
         assertThat(savedFileFeature.getSize()).isEqualTo(mockMultipartFile.getSize());
-        assertThat(savedFileFeature.getPath()).matches("^" + storageUrl + ".*$");
+        assertThat(savedFileFeature.getPath()).matches("^.*" + storageUrl + ".*$");
     }
 }
