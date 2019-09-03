@@ -22,7 +22,7 @@ const wootubeCtx = {
         }
     },
     constants: {
-        videoPageSize: 6,
+        videoPageSize: 12,
         videoChannelPageSize: 18
     }
 }
