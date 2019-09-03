@@ -5,7 +5,6 @@ import com.woowacourse.dsgram.domain.FileInfo;
 import com.woowacourse.dsgram.domain.LikeRelation;
 import com.woowacourse.dsgram.domain.User;
 import com.woowacourse.dsgram.domain.repository.ArticleRepository;
-import com.woowacourse.dsgram.domain.repository.CommentRepository;
 import com.woowacourse.dsgram.domain.repository.LikeRelationRepository;
 import com.woowacourse.dsgram.service.assembler.ArticleAssembler;
 import com.woowacourse.dsgram.service.assembler.UserAssembler;
@@ -15,6 +14,7 @@ import com.woowacourse.dsgram.service.dto.article.ArticleRequest;
 import com.woowacourse.dsgram.service.dto.user.LoggedInUser;
 import com.woowacourse.dsgram.service.dto.user.UserInfo;
 import com.woowacourse.dsgram.service.strategy.ArticleFileNamingStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,19 +26,22 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Service
+@Transactional
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    private final CommentRepository commentRepository;
     private final LikeRelationRepository likeRelationRepository;
+
+    @Autowired
+    private CommentService commentService;
+
     private final HashTagService hashTagService;
     private final FileService fileService;
     private final UserService userService;
     private final FollowService followService;
 
-    public ArticleService(ArticleRepository articleRepository, CommentRepository commentRepository, LikeRelationRepository likeRelationRepository, HashTagService hashTagService
+    public ArticleService(ArticleRepository articleRepository, LikeRelationRepository likeRelationRepository, HashTagService hashTagService
             , FileService fileService, UserService userService, FollowService followService) {
         this.articleRepository = articleRepository;
-        this.commentRepository = commentRepository;
         this.likeRelationRepository = likeRelationRepository;
         this.hashTagService = hashTagService;
         this.fileService = fileService;
@@ -46,7 +49,6 @@ public class ArticleService {
         this.followService = followService;
     }
 
-    @Transactional
     public long createAndFindId(ArticleRequest articleRequest, LoggedInUser loggedInUser) {
         return create(articleRequest, loggedInUser).getId();
     }
@@ -72,7 +74,6 @@ public class ArticleService {
                 .orElseThrow(() -> new EntityNotFoundException(articleId + "번 게시글을 조회하지 못했습니다."));
     }
 
-    @Transactional
     public void update(long articleId, ArticleEditRequest articleEditRequest, LoggedInUser loggedInUser) {
         Article article = findById(articleId);
         Article updatedArticle = article.update(articleEditRequest.getContents(), loggedInUser.getId());
@@ -80,17 +81,18 @@ public class ArticleService {
         hashTagService.update(updatedArticle);
     }
 
-    @Transactional
     public void delete(long articleId, LoggedInUser loggedInUser) {
         Article article = findById(articleId);
         article.checkAccessibleAuthor(loggedInUser.getId());
         articleRepository.delete(article);
     }
 
+    @Transactional(readOnly = true)
     public byte[] findFileById(long articleId) {
         return fileService.readFileByFileInfo(findById(articleId).getFileInfo());
     }
 
+    @Transactional(readOnly = true)
     public Page<ArticleInfo> findArticlesByAuthorNickName(int page, String nickName, long viewerId) {
         userService.findByNickName(nickName);
         return articleRepository
@@ -98,6 +100,7 @@ public class ArticleService {
                 .map(article -> findArticleInfo(article.getId(), viewerId));
     }
 
+    @Transactional(readOnly = true)
     public ArticleInfo findArticleInfo(long articleId, long viewerId) {
         long countOfComments = getCountOfComments(articleId);
         long countOfLikes = getCountOfLikes(articleId);
@@ -115,9 +118,10 @@ public class ArticleService {
     }
 
     private long getCountOfComments(long articleId) {
-        return commentRepository.countByArticleId(articleId);
+        return commentService.countByArticleId(articleId);
     }
 
+    @Transactional(readOnly = true)
     public Page<ArticleInfo> getArticlesByFollowings(long viewerId, int page) {
         User user = userService.findUserById(viewerId);
         List<User> followings = followService.findFollowings(user)
@@ -130,7 +134,6 @@ public class ArticleService {
         );
     }
 
-    @Transactional
     public long like(long articleId, long userId) {
         if (likeRelationRepository.existsByArticleIdAndUserId(articleId, userId)) {
             likeRelationRepository.deleteByArticleIdAndUserId(articleId, userId);

@@ -43,7 +43,7 @@ const TEMPLATE_APP = (() => {
                                                 <img class="thumb-img img-circle thumb-img-user-${articleInfo.userId}" src="/images/default/default_profile.png"
                                                       alt="">
                                                 <div class="info">
-                                                    <a href="" class="title no-pdd-vertical text-bold inline-block font-size-15">
+                                                    <a href="/users/${articleInfo.nickName}" class="title no-pdd-vertical text-bold inline-block font-size-15">
                                                         ${articleInfo.nickName}</a>
                                                 </div>
                                             </li>
@@ -82,18 +82,13 @@ const TEMPLATE_APP = (() => {
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#">
+                                            <a href="/articles/${articleInfo.articleId}">
                                                 <i class="ti-comment font-size-22"></i>
                                             </a>
                                         </li>
-                                        <li data-article=id="${articleInfo.articleId})" class="copyUrl" style="cursor:pointer;">
-                                            <i class="ti-export font-size-22"></i>
-                                        </li>
-
-                                        <li class="float-right">
-                                            <a href="" class="pdd-right-0">
-                                                <i class="fa fa-bookmark font-size-25"></i>
-                                            </a>
+                                        <li>
+                                            <i class="ti-export font-size-22 copy-url" data-article-id="${articleInfo.articleId}" style="cursor:pointer;"
+                                            data-container="body" data-toggle="popover" data-placement="top" data-content="Link Copied!"></i>
                                         </li>
                                     </ul>
                                     <div class="feedback-status-container pdd-horizon-15">

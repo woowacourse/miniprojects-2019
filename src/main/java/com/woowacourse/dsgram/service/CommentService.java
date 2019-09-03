@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CommentService {
     private static final int BLANK_CONTENTS = 0;
+
     private CommentRepository commentRepository;
     private UserService userService;
     private ArticleService articleService;
@@ -67,5 +68,9 @@ public class CommentService {
     @Transactional(readOnly = true)
     public Page<Comment> get(Long articleId, Pageable pageable) {
         return commentRepository.findByArticleId(articleId, pageable);
+    }
+
+    public long countByArticleId(long articleId) {
+        return commentRepository.countByArticleId(articleId);
     }
 }
