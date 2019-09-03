@@ -49,7 +49,7 @@ document.querySelector('#btn-leave').addEventListener('click', () => {
             if (res.status === 204) {
                 alert('탈퇴되었습니다')
                 window.location.href = '/'
-                return;
+                return
             }
             return res.json()
         })
@@ -68,7 +68,7 @@ document.querySelector('#btn-leave').addEventListener('click', () => {
         if (res.status === 204) {
             alert('탈퇴되었습니다')
             window.location.href = '/'
-            return;
+            return
         }
         return res.json()
     })
@@ -84,7 +84,7 @@ const changeUpdateState = function (flags) {
     const emailElm = document.querySelector('#user-email')
     const nameInput = document.querySelector('#update-name')
     const emailInput = document.querySelector('#update-email')
-    const alertElm = document.querySelector('.alert.alert-danger');
+    const alertElm = document.querySelector('.alert.alert-danger')
 
     if (!flags) {
         nameInput.value = nameElm.innerText
@@ -170,19 +170,29 @@ const channelService = (function () {
                 if (res.status === 404) {
                     alert('존재하지 않는 사용자입니다')
                     window.location.href = '/';
-                    return;
+                    return
                 }
-                return res.json();
+                return res.json()
             })
             .then(json => {
                 setUserInfo(json.name, json.email)
-    
-                if (id && Number(id) === json.id) {
-                    document.querySelector('#btn-update').classList.remove('d-none')
-                    document.querySelector('#btn-leave').classList.remove('d-none')
-                }
-            });
-            return;
+
+                api.retrieveLoginInfo()
+                    .then(res => {
+                        if (res.status === 200) {
+                            return res.json()
+                        }
+                    })
+                    .then(json => {
+                        if (json && id === json.id) {
+                            document.querySelector('#btn-update')
+                                .classList.remove('d-none')
+                            document.querySelector('#btn-leave')
+                                .classList.remove('d-none')
+                        }
+                    })
+            })
+            return
         }
     
         api.retrieveLoginInfo()
