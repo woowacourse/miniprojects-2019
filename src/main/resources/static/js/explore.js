@@ -1,8 +1,9 @@
-const Index = (() => {
+const Explore = (() => {
 
     const pageSize = 10;
-
-    const IndexController = function () {
+    let customUrl;
+    const IndexController = function (url) {
+        customUrl = url
         const indexService = new IndexService();
         const articleList = document.querySelector('.article-card-con');
         const loadInit = () => {
@@ -67,7 +68,7 @@ const Index = (() => {
 
 
     const IndexService = function () {
-        const indexRequest = new Request("/api/main");
+        const indexRequest = new Request(customUrl);
         const commentRequest = new Request("/api/articles/");
         const userRequest = new Request("/api/users");
         const like = new Like();
@@ -219,8 +220,8 @@ const Index = (() => {
         }
     };
 
-    const init = () => {
-        const indexController = new IndexController();
+    const init = (url) => {
+        const indexController = new IndexController(url);
         indexController.init();
     };
 
@@ -230,4 +231,3 @@ const Index = (() => {
 
 })();
 
-Index.init();

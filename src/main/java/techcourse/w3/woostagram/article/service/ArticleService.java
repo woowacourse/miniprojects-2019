@@ -10,6 +10,7 @@ import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.common.exception.UnAuthorizedException;
 import techcourse.w3.woostagram.common.service.StorageService;
+import techcourse.w3.woostagram.explore.dto.MypageArticleDto;
 import techcourse.w3.woostagram.tag.service.HashTagService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.service.UserService;
@@ -74,5 +75,10 @@ public class ArticleService {
         if (!article.isAuthor(user.getId())) {
             throw new UnAuthorizedException();
         }
+    }
+
+
+    public Page<Article> findRecommendedArticle(List<User> followUser, Pageable pageable) {
+        return articleRepository.findByUserNotIn(followUser, pageable);
     }
 }

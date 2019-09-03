@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findByUserIn(List<User> Users, Pageable pageable);
+    Page<Article> findByUserNotIn(List<User> Users, Pageable pageable);
 }

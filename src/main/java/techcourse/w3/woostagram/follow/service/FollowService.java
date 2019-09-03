@@ -72,5 +72,4 @@ public class FollowService {
         User targetUser = userService.findById(targetId);
         return followRepository.findByFromAndTo(user, targetUser);
     }
-
 }
