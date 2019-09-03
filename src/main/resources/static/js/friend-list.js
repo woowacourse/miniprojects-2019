@@ -6,7 +6,7 @@
     const addFriend = (scrollbar, friend) => {
         const li = `<li>
                         <a href="/posts?author=${friend.id}">
-                            <img src="${friend.profile}" />
+                            <img class="search-profile" src="${friend.profile}" />
                             <span>${friend.name}</span>
                         </a>
                     </li>`;
