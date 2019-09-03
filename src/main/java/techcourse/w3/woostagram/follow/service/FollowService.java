@@ -21,7 +21,8 @@ public class FollowService {
     private final UserService userService;
     private final AlarmService alarmService;
 
-    public FollowService(final UserService userService, final FollowRepository followRepository, AlarmService alarmService) {
+    public FollowService(final UserService userService, final FollowRepository followRepository,
+                         final AlarmService alarmService) {
         this.userService = userService;
         this.followRepository = followRepository;
         this.alarmService = alarmService;
@@ -72,5 +73,4 @@ public class FollowService {
         User targetUser = userService.findById(targetId);
         return followRepository.findByFromAndTo(user, targetUser);
     }
-
 }

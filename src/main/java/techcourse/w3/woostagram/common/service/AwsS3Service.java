@@ -29,7 +29,7 @@ public class AwsS3Service implements StorageService {
     private final ImageResizeService imageResizeService;
 
     @Autowired
-    public AwsS3Service(AwsS3Properties awsS3Properties, AmazonS3 s3, ImageResizeService imageResizeService) {
+    public AwsS3Service(final AwsS3Properties awsS3Properties, final AmazonS3 s3, final ImageResizeService imageResizeService) {
         this.awsS3Properties = awsS3Properties;
         this.s3 = s3;
         this.imageResizeService = imageResizeService;

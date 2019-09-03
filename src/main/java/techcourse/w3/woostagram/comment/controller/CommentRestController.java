@@ -17,13 +17,14 @@ public class CommentRestController {
     private final CommentService commentService;
     private final UserRateLimiter userRateLimiter;
 
-    public CommentRestController(CommentService commentService, UserRateLimiter userRateLimiter) {
+    public CommentRestController(final CommentService commentService, final UserRateLimiter userRateLimiter) {
         this.commentService = commentService;
         this.userRateLimiter = userRateLimiter;
     }
 
     @PostMapping
-    public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @LoggedInUser String email, @PathVariable Long articleId) {
+    public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @LoggedInUser String email,
+                                             @PathVariable Long articleId) {
         if (!userRateLimiter.get(email).tryAcquire()) {
             throw new RequestTooFastException();
         }

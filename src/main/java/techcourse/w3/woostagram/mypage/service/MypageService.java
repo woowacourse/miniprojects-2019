@@ -11,7 +11,7 @@ public class MypageService {
     private final UserService userService;
     private final FollowService followService;
 
-    public MypageService(UserService userService, FollowService followService) {
+    public MypageService(final UserService userService, final FollowService followService) {
         this.userService = userService;
         this.followService = followService;
     }

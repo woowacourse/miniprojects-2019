@@ -30,7 +30,9 @@ public class ArticleSearchService {
     private final FollowService followService;
     private final HashTagService hashTagService;
 
-    public ArticleSearchService(ArticleService articleService, CommentService commentService, UserService userService, LikesService likesService, FollowService followService, HashTagService hashTagService) {
+    public ArticleSearchService(final ArticleService articleService, final CommentService commentService,
+                                final UserService userService, final LikesService likesService,
+                                final FollowService followService, final HashTagService hashTagService) {
         this.articleService = articleService;
         this.commentService = commentService;
         this.userService = userService;

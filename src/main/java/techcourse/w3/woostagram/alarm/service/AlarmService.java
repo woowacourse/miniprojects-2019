@@ -15,7 +15,7 @@ public class AlarmService {
     private final Gson gson = new Gson();
 
     @Autowired
-    public AlarmService(SimpMessagingTemplate simpMessagingTemplate) {
+    public AlarmService(final SimpMessagingTemplate simpMessagingTemplate) {
         this.template = simpMessagingTemplate;
     }
 

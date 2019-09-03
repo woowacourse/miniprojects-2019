@@ -8,10 +8,9 @@ import java.util.List;
 
 @Service
 public class UserSearchService implements SearchService<UserInfoDto> {
-
     private final UserService userService;
 
-    public UserSearchService(UserService userService) {
+    public UserSearchService(final UserService userService) {
         this.userService = userService;
     }
 

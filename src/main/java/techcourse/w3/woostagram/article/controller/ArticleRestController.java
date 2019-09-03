@@ -16,7 +16,7 @@ public class ArticleRestController {
     }
 
     @GetMapping("/{articleId}")
-    public ResponseEntity<ArticleDto> read(@PathVariable Long articleId) {
+    public ResponseEntity<ArticleDto> list(@PathVariable Long articleId) {
         return ResponseEntity.ok(articleService.findById(articleId));
     }
 

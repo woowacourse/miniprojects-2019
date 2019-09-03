@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class HashTagSearchService implements SearchService {
+public class HashTagSearchService implements SearchService<TagDto> {
     private final HashTagService hashTagService;
 
     public HashTagSearchService(final HashTagService hashTagService) {
