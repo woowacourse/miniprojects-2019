@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
 import techcourse.w3.woostagram.explore.dto.ArticleSearchDto;
 import techcourse.w3.woostagram.explore.dto.MypageArticleDto;
-import techcourse.w3.woostagram.explore.service.ArticleSearchService;
+import techcourse.w3.woostagram.explore.service.ExploreService;
 
 @RestController
 @RequestMapping("/api")
-public class ArticleSearchController {
-    private final ArticleSearchService articleSearchService;
+public class ExploreRestController {
+    private final ExploreService articleSearchService;
 
-    public ArticleSearchController(ArticleSearchService articleSearchService) {
+    public ExploreRestController(ExploreService articleSearchService) {
         this.articleSearchService = articleSearchService;
     }
 
@@ -39,5 +39,10 @@ public class ArticleSearchController {
     @GetMapping("/mypage/users/{userName}")
     public ResponseEntity<Page<MypageArticleDto>> readUser(Pageable pageable, @PathVariable String userName) {
         return ResponseEntity.ok(articleSearchService.findByUser(userName, pageable));
+    }
+
+    @GetMapping("/recommended")
+    public ResponseEntity<Page<ArticleSearchDto>> readRecommended(Pageable pageable, @LoggedInUser String email) {
+        return ResponseEntity.ok(articleSearchService.findRecommendedArticle(email, pageable));
     }
 }

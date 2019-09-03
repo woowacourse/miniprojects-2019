@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ArticleSearchControllerTest extends AbstractControllerTests {
+class ArticleSearchRestControllerTest extends AbstractControllerTests {
 
     @Test
     void readIndex_correctPageable_isOk() {

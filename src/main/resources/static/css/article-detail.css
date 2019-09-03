@@ -35,11 +35,13 @@
     margin-top: 8px;
     flex: 9;
     display:flex;
+    position:relative;
 }
 
 .profile-text{
     max-width:80%;
     margin-left:10px;
+    padding-right:20px;
 }
 
 .profile img{
@@ -93,21 +95,25 @@
     background-position:center;
     background-size:50px;
     height:auto;
-    min-width:350px;
+    min-width:450px;
     max-width:100%;
     min-height:450px;
     display:flex;
+    position:relative;
     justify-content: center;
+    align-items: center;
     margin-right:335px;
     overflow: hidden;
 }
-.img-vertical{
-    max-width: 100%;
+.img-parallel{
+    position:absolute;
+    width: 100%;
     height: auto;
 }
 
-.img-parallel{
-    max-height: 100%;
+.img-vertical{
+    position:absolute;
+    height: 100%;
     width: auto;
 }
 .text-con{
@@ -159,6 +165,8 @@ i {
 
 .comment-delete{
     cursor:pointer;
+    position:absolute;
+    right:20px;
 }
 
 span {

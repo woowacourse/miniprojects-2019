@@ -49,6 +49,8 @@ class Alert {
 
     active = () => {
         document.body.insertAdjacentHTML('beforeend', getAlertTemplate(this.message));
+        let el = document.querySelector( ':focus' );
+        if( el ) el.blur();
         setTimeout(() => {
             document.querySelector(".alert-con").remove();
         }, 2000)
