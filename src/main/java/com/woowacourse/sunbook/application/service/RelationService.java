@@ -5,7 +5,7 @@ import com.woowacourse.sunbook.domain.relation.Relation;
 import com.woowacourse.sunbook.domain.relation.RelationRepository;
 import com.woowacourse.sunbook.domain.relation.Relationship;
 import com.woowacourse.sunbook.domain.user.User;
-import com.woowacourse.sunbook.domain.validation.exception.RelationException;
+import com.woowacourse.sunbook.domain.relation.exception.RelationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

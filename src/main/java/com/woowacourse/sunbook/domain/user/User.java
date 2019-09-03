@@ -1,6 +1,7 @@
 package com.woowacourse.sunbook.domain.user;
 
 import com.woowacourse.sunbook.domain.BaseEntity;
+import com.woowacourse.sunbook.domain.user.exception.MismatchUserException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,6 +49,6 @@ public class User extends BaseEntity {
             return;
         }
 
-        throw new IllegalArgumentException();
+        throw new MismatchUserException();
     }
 }

@@ -77,4 +77,10 @@ class UserApiControllerTest extends TestTemplate {
                 .jsonPath("$..userName.firstName").value(hasItem(changeName))
                 ;
     }
+
+    @Test
+    void 특정_사용자_조회() {
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/users/1", Void.class, HttpStatus.OK, loginSessionId(userRequestDto)))
+                .jsonPath("$..id").isEqualTo(1);
+    }
 }

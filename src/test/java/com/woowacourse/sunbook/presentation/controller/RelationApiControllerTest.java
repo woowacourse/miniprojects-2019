@@ -21,7 +21,7 @@ class RelationApiControllerTest extends TestTemplate {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.POST, "/api/friends/2", Relationship.NONE, HttpStatus.OK, sessionId))
                 .consumeWith(signOut -> {
-                    webTestClient.method(HttpMethod.GET).uri("/signout")
+                    webTestClient.method(HttpMethod.DELETE).uri("/signout")
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .exchange()
                             .expectBody()
@@ -42,7 +42,7 @@ class RelationApiControllerTest extends TestTemplate {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.POST, "/api/friends/2", Relationship.NONE, HttpStatus.OK, sessionId))
                 .consumeWith(signOut -> {
-                    webTestClient.method(HttpMethod.GET).uri("/signout")
+                    webTestClient.method(HttpMethod.DELETE).uri("/signout")
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .exchange()
                             .expectBody()
@@ -59,7 +59,7 @@ class RelationApiControllerTest extends TestTemplate {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.POST, "/api/friends/2", Relationship.NONE, HttpStatus.OK, sessionId))
                 .consumeWith(signOut -> {
-                    webTestClient.method(HttpMethod.GET).uri("/signout")
+                    webTestClient.method(HttpMethod.DELETE).uri("/signout")
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .exchange()
                             .expectBody()
@@ -80,7 +80,7 @@ class RelationApiControllerTest extends TestTemplate {
         String sessionId = loginSessionId(userRequestDto);
         respondApi(loginAndRequest(HttpMethod.POST, "/api/friends/2", Relationship.NONE, HttpStatus.OK, sessionId))
                 .consumeWith(signOut -> {
-                    webTestClient.method(HttpMethod.GET).uri("/signout")
+                    webTestClient.method(HttpMethod.DELETE).uri("/signout")
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .exchange()
                             .expectBody()

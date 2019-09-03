@@ -53,9 +53,9 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto update(final UserResponseDto loginUser, final UserUpdateRequestDto userUpdateRequestDto) {
+    public UserResponseDto update(final UserResponseDto userResponseDto, final UserUpdateRequestDto userUpdateRequestDto) {
         User user = userRepository.findByUserEmailAndUserPassword(
-                loginUser.getUserEmail(),
+                userResponseDto.getUserEmail(),
                 userUpdateRequestDto.getUserPassword()
         ).orElseThrow(LoginException::new);
 

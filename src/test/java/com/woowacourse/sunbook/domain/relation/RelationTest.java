@@ -1,10 +1,10 @@
 package com.woowacourse.sunbook.domain.relation;
 
+import com.woowacourse.sunbook.domain.relation.exception.RelationException;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserEmail;
 import com.woowacourse.sunbook.domain.user.UserName;
 import com.woowacourse.sunbook.domain.user.UserPassword;
-import com.woowacourse.sunbook.domain.validation.exception.RelationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

@@ -7,7 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 public class ReactionArticleApiControllerTest extends TestTemplate {
-    ReactionDto reactionDto = new ReactionDto(0L, false);
+    private ReactionDto reactionDto = new ReactionDto(0L, false);
 
     @Test
     void 좋아요_정상_동작() {

@@ -28,8 +28,13 @@ import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 @ExtendWith(SpringExtension.class)
 public class MockStorage {
+
+    @Mock
+    protected List<User> users;
 
     @Mock
     protected ArticleFeature articleFeature;

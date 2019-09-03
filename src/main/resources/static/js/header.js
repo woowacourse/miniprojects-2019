@@ -11,9 +11,15 @@ const HeaderApp = (() => {
             friendListBtn.addEventListener('click', headerService.showFriendList);
         };
 
+        const signout = () => {
+            const signoutBtn = document.getElementById('signout-btn');
+            signoutBtn.addEventListener('click', headerService.signout);
+        };
+
         const init = () => {
             renderHeader();
             showFriendList();
+            signout();
         };
 
         return {
@@ -49,10 +55,18 @@ const HeaderApp = (() => {
                 });
         };
 
+        const signout = () => {
+            headerApi.signout()
+                .then(() => {
+                    location.href="/";
+                });
+        };
+
         return {
             renderLoginUser: renderLoginUser,
             showFriendList: showFriendList,
             loginUser: loginUser,
+            signout: signout,
         };
     };
 
@@ -64,8 +78,13 @@ const HeaderApp = (() => {
                 });
         };
 
+        const signout = () => {
+            return Api.delete('/signout')
+        };
+
         return {
             getLoginUser: getLoginUser,
+            signout: signout,
         };
     };
 

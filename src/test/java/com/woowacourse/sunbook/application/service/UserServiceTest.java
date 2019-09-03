@@ -7,19 +7,16 @@ import com.woowacourse.sunbook.application.exception.LoginException;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserEmail;
 import com.woowacourse.sunbook.domain.user.UserPassword;
+import com.woowacourse.sunbook.domain.user.exception.MismatchUserException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class UserServiceTest extends MockStorage {
 
@@ -78,12 +75,34 @@ class UserServiceTest extends MockStorage {
 
     @Test
     void 사용자_이름으로_조회() {
-        List<User> users = Arrays.asList(user, author);
         given(userRepository.findAllByUserNameLike(any(String.class))).willReturn(users);
         given(modelMapper.map(user, UserResponseDto.class)).willReturn(mock(UserResponseDto.class));
 
         injectUserService.findByUserName("TestName");
 
         verify(userRepository).findAllByUserNameLike(any(String.class));
+    }
+
+    @Test
+    void 사용자_아이디로_조회() {
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+
+        assertDoesNotThrow(() -> injectUserService.findUser(1L));
+    }
+
+    @Test
+    void 사용자가_일치하지_않는_경우_수정() {
+        given(userResponseDto.getUserEmail()).willReturn(userEmail);
+        given(userUpdateRequestDto.getUserPassword()).willReturn(userPassword);
+        given(userRepository.findByUserEmailAndUserPassword(any(UserEmail.class), any(UserPassword.class))).willReturn(Optional.of(user));
+        given(userUpdateRequestDto.getUserEmail()).willReturn(userEmail);
+        given(userUpdateRequestDto.getChangePassword()).willReturn(userChangePassword);
+
+        doThrow(MismatchUserException.class).when(user).updateEmail(any(User.class), any(UserEmail.class));
+
+        assertThrows(MismatchUserException.class, () -> {
+            injectUserService.update(userResponseDto, userUpdateRequestDto);
+        });
+
     }
 }

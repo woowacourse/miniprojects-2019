@@ -33,10 +33,6 @@ public class ReactionComment extends BaseEntity {
         this.hasGood = false;
     }
 
-    public void toggleGood() {
-        this.hasGood = !(this.hasGood);
-    }
-
     public void addGood() {
         if (this.hasGood) {
             throw new IllegalReactionException();

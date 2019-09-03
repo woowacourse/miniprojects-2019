@@ -23,16 +23,4 @@ public enum OpenRange {
                 .orElseThrow(IllegalArgumentException::new)
                 ;
     }
-
-    public boolean isAll() {
-        return this == ALL;
-    }
-
-    public boolean isOnlyFriend() {
-        return this == ONLY_FRIEND;
-    }
-
-    public boolean isNone() {
-        return this == NONE;
-    }
 }

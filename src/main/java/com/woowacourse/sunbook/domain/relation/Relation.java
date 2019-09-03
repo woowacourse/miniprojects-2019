@@ -2,7 +2,7 @@ package com.woowacourse.sunbook.domain.relation;
 
 import com.woowacourse.sunbook.domain.BaseEntity;
 import com.woowacourse.sunbook.domain.user.User;
-import com.woowacourse.sunbook.domain.validation.exception.RelationException;
+import com.woowacourse.sunbook.domain.relation.exception.RelationException;
 import lombok.*;
 
 import javax.persistence.*;
