@@ -1,6 +1,5 @@
 package com.wootecobook.turkey.user.service;
 
-import com.wootecobook.turkey.config.AwsMockConfig;
 import com.wootecobook.turkey.file.domain.FileFeature;
 import com.wootecobook.turkey.file.service.UploadFileService;
 import com.wootecobook.turkey.user.domain.User;
@@ -9,13 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 
-import static com.wootecobook.turkey.config.AwsMockConfig.S3MOCK_ENDPOINT;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@Import(AwsMockConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserImageUploadServiceTest {
 
@@ -50,7 +46,7 @@ public class UserImageUploadServiceTest {
                 .type(ImageType.PROFILE)
                 .build();
 
-        String storageUrl = String.format("%s/%s/%s/", S3MOCK_ENDPOINT, bucket, PROFILE_DIRECTORY_NAME);
+        String storageUrl = String.format("%s/%s/%s/", "http://localhost:8001", bucket, PROFILE_DIRECTORY_NAME);
 
         //when
         FileFeature savedFileFeature = userImageUploadService.uploadImage(testUploadImage, owner.getId(), 1L);
@@ -69,7 +65,7 @@ public class UserImageUploadServiceTest {
                 .type(ImageType.COVER)
                 .build();
 
-        String storageUrl = String.format("%s/%s/%s/", S3MOCK_ENDPOINT, bucket, COVER_DIRECTORY_NAME);
+        String storageUrl = String.format("%s/%s/%s/", "http://localhost:8001", bucket, COVER_DIRECTORY_NAME);
 
         //when
         FileFeature savedFileFeature = userImageUploadService.uploadImage(testUploadImage, owner.getId(), 1L);

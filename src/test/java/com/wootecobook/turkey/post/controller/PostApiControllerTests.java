@@ -2,7 +2,6 @@ package com.wootecobook.turkey.post.controller;
 
 import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
-import com.wootecobook.turkey.config.AwsMockConfig;
 import com.wootecobook.turkey.good.service.dto.GoodResponse;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -28,7 +26,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
-@Import(AwsMockConfig.class)
 class PostApiControllerTests extends BaseControllerTests {
 
     public static final String POST_URL = "/api/posts";
@@ -50,6 +47,7 @@ class PostApiControllerTests extends BaseControllerTests {
             fieldWithPath("createdAt").description("글 작성 일자"),
             fieldWithPath("updatedAt").description("글 수정 일자"),
             fieldWithPath("totalComment").description("글에 달린 댓글의 총 갯수"),
+            subsectionWithPath("taggedUsers").description("<<User>>"),
             subsectionWithPath("files").description("글과 함께 업로드 된 사진 또는 동영상 정보"),
             subsectionWithPath("author").description("작성자 정보"),
             subsectionWithPath("receiver").optional().description("글 받는 사람 정보"),
