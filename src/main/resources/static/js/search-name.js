@@ -11,7 +11,7 @@
         const element =
         `<li>
             <a href="/posts?author=${result.id}" class="pointer dropdown-item">
-                <img src="${result.profile}" />
+                <img class="search-profile" src="${result.profile}" />
                 <span class="">${result.name}</span>
             </a>
         </li>`;
