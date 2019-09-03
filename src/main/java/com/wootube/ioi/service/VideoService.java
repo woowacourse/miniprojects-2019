@@ -1,6 +1,5 @@
 package com.wootube.ioi.service;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -46,7 +45,7 @@ public class VideoService {
         this.subscriptionService = subscriptionService;
     }
 
-    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) throws IOException {
+    public VideoResponseDto create(MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) {
         S3UploadFileFactory s3UploadFileFactory = new S3UploadFileFactory(uploadFile, fileConverter, fileUploader).invoke();
 
         User writer = userService.findByIdAndIsActiveTrue(writerId);
@@ -74,7 +73,7 @@ public class VideoService {
     }
 
     @Transactional
-    public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) throws IOException {
+    public void update(Long id, MultipartFile uploadFile, VideoRequestDto videoRequestDto, Long writerId) {
         Video video = findById(id);
         matchWriter(writerId, id);
 
