@@ -2,7 +2,7 @@ const handleSignUpEvent = function () {
     const nameElm = document.querySelector('input[type=name]')
     const emailElm = document.querySelector('input[type=email]')
     const passwordElm = document.querySelector('input[type=password]')
-    const passwordComElm = document.querySelector('input[name=password_confirm]')
+    const passwordComElm = document.querySelector('input[name=password-confirm]')
 
     const body = JSON.stringify({
         name : nameElm.value,

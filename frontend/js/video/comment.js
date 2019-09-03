@@ -2,7 +2,7 @@ const commentCtx = {
     state: {
         currentCommentId: null,
         currentUserId: null,
-    },
+    }
 }
 
 const commentApp = (function() {
@@ -106,7 +106,7 @@ const commentApp = (function() {
         }
 
         const prepareEdit = function(event) {
-            const { target } = event
+            const {target} = event
             if(target.classList.contains('btn-update-comment') ||
                 target.closest('.btn-update-comment')) {
                 const itemContainer = event.target.closest('li')
@@ -143,7 +143,7 @@ const commentApp = (function() {
         }
 
         const deleteComment = function(event) {
-            const { target } = event;
+            const {target} = event;
             if(target.classList.contains('btn-delete-comment') ||
                 target.closest('.btn-delete-comment')) {
                 const itemContainer = target.closest('li')
