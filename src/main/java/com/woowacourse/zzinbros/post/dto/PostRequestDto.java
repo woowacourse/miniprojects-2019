@@ -1,13 +1,13 @@
 package com.woowacourse.zzinbros.post.dto;
 
+import com.woowacourse.zzinbros.post.domain.DisplayType;
 import com.woowacourse.zzinbros.post.domain.Post;
 import com.woowacourse.zzinbros.user.domain.User;
-
-import java.util.Objects;
 
 public class PostRequestDto {
     private String contents;
     private long sharedPostId;
+    private int displayStrategy;
 
     public PostRequestDto() {
     }
@@ -28,24 +28,19 @@ public class PostRequestDto {
         this.sharedPostId = sharedPostId;
     }
 
+    public int getDisplayStrategy() {
+        return displayStrategy;
+    }
+
+    public void setDisplayStrategy(int displayStrategy) {
+        this.displayStrategy = displayStrategy;
+    }
+
     public Post toEntity(User user) {
-        return new Post(contents, user);
+        return new Post(contents, user, DisplayType.valueOf(displayStrategy));
     }
 
     public Post toEntity(User user, Post sharedPost) {
-        return new Post(contents, user, sharedPost);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PostRequestDto that = (PostRequestDto) o;
-        return Objects.equals(contents, that.contents);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(contents);
+        return new Post(contents, user, sharedPost, DisplayType.valueOf(displayStrategy));
     }
 }

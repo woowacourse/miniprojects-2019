@@ -1,5 +1,6 @@
 package com.woowacourse.zzinbros.post.domain.repository;
 
+import com.woowacourse.zzinbros.post.domain.DisplayType;
 import com.woowacourse.zzinbros.post.domain.Post;
 import com.woowacourse.zzinbros.user.domain.User;
 import org.springframework.data.domain.Sort;
@@ -11,4 +12,8 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByAuthor(User user, Sort sort);
+
+    List<Post> findAllByDisplayType(DisplayType displayType, Sort sort);
+
+    List<Post> findAllByDisplayTypeAndAuthor(DisplayType displayType, User author, Sort sort);
 }

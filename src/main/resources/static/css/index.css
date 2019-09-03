@@ -294,3 +294,7 @@ header ul.nav-left li {
     max-height: 200px;
     overflow-x: hidden;
 }
+
+.noti-profile {
+    max-width: 30px;
+}

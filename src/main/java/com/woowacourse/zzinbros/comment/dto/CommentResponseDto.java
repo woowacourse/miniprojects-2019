@@ -1,8 +1,9 @@
 package com.woowacourse.zzinbros.comment.dto;
 
 import com.woowacourse.zzinbros.comment.domain.Comment;
+import com.woowacourse.zzinbros.common.EscapedCharacters;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 public class CommentResponseDto {
@@ -11,14 +12,14 @@ public class CommentResponseDto {
     private String authorName;
     private String contents;
     private String errorMessage;
-    private LocalDateTime createdDateTime;
-    private LocalDateTime updatedDateTime;
+    private OffsetDateTime createdDateTime;
+    private OffsetDateTime updatedDateTime;
     private String profile;
 
     public CommentResponseDto() {
     }
 
-    public CommentResponseDto(final Comment comment) {
+    public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
         this.authorId = comment.getAuthor().getId();
         this.authorName = comment.getAuthor().getName();
@@ -28,7 +29,7 @@ public class CommentResponseDto {
         this.profile = comment.getAuthor().getProfile().getUrl();
     }
 
-    public CommentResponseDto(final Exception exception) {
+    public CommentResponseDto(Exception exception) {
         this.errorMessage = exception.getClass().getSimpleName() +
                 Optional.ofNullable(exception.getMessage())
                         .map(msg -> ": " + msg).orElse("");
@@ -38,7 +39,7 @@ public class CommentResponseDto {
         return commentId;
     }
 
-    public void setCommentId(final Long commentId) {
+    public void setCommentId(Long commentId) {
         this.commentId = commentId;
     }
 
@@ -46,23 +47,23 @@ public class CommentResponseDto {
         return authorId;
     }
 
-    public void setAuthorId(final Long authorId) {
+    public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
 
     public String getAuthorName() {
-        return authorName;
+        return EscapedCharacters.of(authorName);
     }
 
-    public void setAuthorName(final String authorName) {
+    public void setAuthorName(String authorName) {
         this.authorName = authorName;
     }
 
     public String getContents() {
-        return contents;
+        return EscapedCharacters.of(contents);
     }
 
-    public void setContents(final String contents) {
+    public void setContents(String contents) {
         this.contents = contents;
     }
 
@@ -70,23 +71,23 @@ public class CommentResponseDto {
         return errorMessage;
     }
 
-    public void setErrorMessage(final String errorMessage) {
+    public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
-    public LocalDateTime getCreatedDateTime() {
+    public OffsetDateTime getCreatedDateTime() {
         return createdDateTime;
     }
 
-    public void setCreatedDateTime(final LocalDateTime createdDateTime) {
+    public void setCreatedDateTime(OffsetDateTime createdDateTime) {
         this.createdDateTime = createdDateTime;
     }
 
-    public LocalDateTime getUpdatedDateTime() {
+    public OffsetDateTime getUpdatedDateTime() {
         return updatedDateTime;
     }
 
-    public void setUpdatedDateTime(final LocalDateTime updatedDateTime) {
+    public void setUpdatedDateTime(OffsetDateTime updatedDateTime) {
         this.updatedDateTime = updatedDateTime;
     }
 

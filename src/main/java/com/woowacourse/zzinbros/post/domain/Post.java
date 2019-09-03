@@ -5,16 +5,18 @@ import com.woowacourse.zzinbros.mediafile.domain.MediaFile;
 import com.woowacourse.zzinbros.post.exception.UnAuthorizedException;
 import com.woowacourse.zzinbros.user.domain.User;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@DynamicInsert
+@DynamicUpdate
 public class Post extends BaseEntity {
+    private static final int INIT_COUNT_OF_LIKE = 0;
+    private static final int INIT_COUNT_OF_SHARED = 0;
+
     @Lob
     private String contents;
 
@@ -38,22 +40,27 @@ public class Post extends BaseEntity {
     @ColumnDefault("0")
     private Integer countOfShared;
 
+    @Enumerated(EnumType.STRING)
+    private DisplayType displayType;
+
     public Post() {
     }
 
-    public Post(String contents, User author) {
-        this.contents = contents;
-        this.author = author;
-        this.countOfLike = 0;
-        this.countOfShared = 0;
-    }
-
-    public Post(String contents, User author, Post sharedPost) {
+    public Post(String contents, User author, Post sharedPost, DisplayType displayType) {
         this.contents = contents;
         this.author = author;
         this.sharedPost = sharedPost;
-        this.countOfLike = 0;
-        this.countOfShared = 0;
+        this.countOfLike = INIT_COUNT_OF_LIKE;
+        this.countOfShared = INIT_COUNT_OF_SHARED;
+        this.displayType = displayType;
+    }
+
+    public Post(String contents, User author, DisplayType displayType) {
+        this.contents = contents;
+        this.author = author;
+        this.countOfLike = INIT_COUNT_OF_LIKE;
+        this.countOfShared = INIT_COUNT_OF_SHARED;
+        this.displayType = displayType;
     }
 
     public Post update(Post post) {
@@ -92,14 +99,6 @@ public class Post extends BaseEntity {
         return contents;
     }
 
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public LocalDateTime getUpdatedDateTime() {
-        return updatedDateTime;
-    }
-
     public User getAuthor() {
         return author;
     }
@@ -110,7 +109,7 @@ public class Post extends BaseEntity {
 
     public int getCountOfLike() {
         if (countOfLike == null) {
-            return 0;
+            return INIT_COUNT_OF_LIKE;
         }
         return countOfLike;
     }
@@ -121,5 +120,9 @@ public class Post extends BaseEntity {
 
     public Integer getCountOfShared() {
         return countOfShared;
+    }
+
+    public DisplayType getDisplayType() {
+        return displayType;
     }
 }
