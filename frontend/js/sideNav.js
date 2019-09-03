@@ -78,7 +78,7 @@ const addSideNavi = function (sideNaviElement) {
 
 const addLoginArea = function(response) {
     addSubscribe(response.id)
-    changeLibraryUrl()
+    changeLibraryUrl(response.name)
 }
 
 const addSubscribe = function (id) {
@@ -95,7 +95,7 @@ const addSubscribe = function (id) {
 const addSubscribeTemplates = function (data) {
     const addSubscribeTemplate = function (data) {
         const subscribeTemplate =
-            `<li class="nav-item">
+            `<li class="nav-item subscription">
                 <a class="" href="/video-channel.html?id=${data.id}">
                     <span class="icon-holder">
                         <img class="profile-img img-fluid" src="./images/default/eastjun_profile.jpg" alt="">
@@ -108,15 +108,19 @@ const addSubscribeTemplates = function (data) {
         subscribeNextElem.insertAdjacentHTML('beforebegin', subscribeTemplate)
     }
     
+
+    document.querySelectorAll('.subscription').forEach(elem => elem.parentNode.removeChild(elem))
     for (let i = 0; i < data.length; i++) {
         addSubscribeTemplate(data[i])
     }
 }
 
-const changeLibraryUrl = function () {
+const changeLibraryUrl = function (name) {
     const libraryElem = document.querySelector('#navi-library')
     const libAElem = libraryElem.querySelector('a')
     libAElem.setAttribute('href', `/video-channel.html`)
+    const titleElem = libAElem.querySelector('.title')
+    titleElem.innerHTML = name
 }
 
 addSideNavi(document.querySelector('.side-nav-inner'))

@@ -4,13 +4,15 @@ const channelCtx = {
     }
 }
 
-const loadVideoCards = function (userId) {
-    api.requestMyChannelVideos(userId)
-        .then(response => response.json())
-        .then(json => addChannelVideoCardTemplates(json, 'dateVideoCard'))
+if (!wootubeCtx.util.getUrlParams('id')) {
+    api.retrieveLoginInfo()
+        .then(res => {
+            if (res.status !== 200) {
+                alert('로그인이 필요합니다.')
+                window.location.href = '/login.html'
+            }
+        })
 }
-const userId = wootubeCtx.util.getUrlParams('id')
-loadVideoCards(userId)
 
 document.querySelector('#btn-update').addEventListener('click', () => {
     channelCtx.flags.isInUpdate = changeUpdateState(channelCtx.flags.isInUpdate)
@@ -21,23 +23,23 @@ document.querySelector('#btn-submit').addEventListener('click', () => {
     const emailInput = document.querySelector('#update-email')
 
     api.retrieveLoginInfo()
-    .then(res => res.json())
-    .then(json => api.updateUser(json.id, JSON.stringify({
-        name: nameInput.value,
-        email: emailInput.value,
-    })))
-    .then(res => {
-        if (res.status === 200) {
-            window.location.reload()
-            return
-        }
-        res.json()
-        .then(json => {
-            const alertElm = document.querySelector('.alert.alert-danger')
-            alertElm.innerText = json.message
-            alertElm.classList.remove('d-none')
+        .then(res => res.json())
+        .then(json => api.updateUser(json.id, JSON.stringify({
+            name: nameInput.value,
+            email: emailInput.value,
+        })))
+        .then(res => {
+            if (res.status === 200) {
+                window.location.reload()
+                return
+            }
+            res.json()
+                .then(json => {
+                    const alertElm = document.querySelector('.alert.alert-danger')
+                    alertElm.innerText = json.message
+                    alertElm.classList.remove('d-none')
+                })
         })
-    })
 })
 
 document.querySelector('#btn-leave').addEventListener('click', () => {
@@ -62,21 +64,21 @@ document.querySelector('#btn-leave').addEventListener('click', () => {
     }
     
     api.retrieveLoginInfo()
-    .then(res => res.json())
-    .then(json => api.deleteUser(json.id))
-    .then(res => {
-        if (res.status === 204) {
-            alert('탈퇴되었습니다')
-            window.location.href = '/'
-            return
-        }
-        return res.json()
-    })
-    .then(json => {
-        const alertElm = document.querySelector('.alert.alert-danger')
-        alertElm.innerText = json.message
-        alertElm.classList.remove('d-none')
-    })
+        .then(res => res.json())
+        .then(json => api.deleteUser(json.id))
+        .then(res => {
+            if (res.status === 204) {
+                alert('탈퇴되었습니다')
+                window.location.href = '/'
+                return
+            }
+            return res.json()
+        })
+        .then(json => {
+            const alertElm = document.querySelector('.alert.alert-danger')
+            alertElm.innerText = json.message
+            alertElm.classList.remove('d-none')
+        })
 })
 
 const changeUpdateState = function (flags) {
@@ -114,29 +116,51 @@ const changeUpdateState = function (flags) {
 const channelService = (function () {
     const id = wootubeCtx.util.getUrlParams('id')
 
+    const loadVideoCards = function (userId) {
+        api.requestMyChannelVideos(userId)
+            .then(response => response.json())
+            .then(json => addChannelVideoCardTemplates(json, 'dateVideoCard'))
+    }
+
     const subscribe = function() {
-        api.subscribe(userId)
-        .then(res => {
-            if (res.status == 400) {
-                alert("이미 구독했습니다!")
-            }
-            if (res.status !== 201) {
-                alert('실패했습니다. 다시 시도해주세요.')
-            } else {
-                alert('구독되었습니다.')
-            }
-        })
+        if (!id) {
+            alert('자기 자신은 구독할 수 없습니다.')
+            return
+        }
+
+        api.subscribe(id)
+            .then(res => {
+                if (res.status == 400) {
+                    res.json().then(err => alert(err.message))
+                }
+                if (res.status !== 201) {
+                    alert('실패했습니다. 다시 시도해주세요.')
+                } else {
+                    alert('구독되었습니다.')
+                    api.retrieveLoginInfo()
+                        .then(res => res.json())
+                        .then(json => addSubscribe(json.id))
+                }
+            })
     }
     
     const cancelSubscribe = function() {
-        api.cancelSubscribe(userId)
-        .then(res => {
-            if (res.status !== 204) {
-                alert('실패했습니다. 다시 시도해주세요.')
-            } else {
-                alert('구독을 취소하였습니다.')
-            }
-        })
+        if (!id) {
+            alert('자기 자신은 구독을 취소할 수 없습니다.')
+            return
+        }
+
+        api.cancelSubscribe(id)
+            .then(res => {
+                if (res.status !== 204) {
+                    alert('실패했습니다. 다시 시도해주세요.')
+                } else {
+                    alert('구독을 취소하였습니다.')
+                    api.retrieveLoginInfo()
+                        .then(res => res.json())
+                        .then(json => addSubscribe(json.id))
+                }
+            })
     }
     
     const setSubscribeBtns = function() {
