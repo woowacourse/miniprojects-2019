@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -47,7 +48,7 @@ class ArticleApiControllerTest extends AbstractControllerTest {
     @Test
     @DisplayName("게시글 1개 조회")
     void findArticle() {
-        webTestClient.get().uri(COMMON_REQUEST_URL, 1)
+        webTestClient.get().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", cookie)
                 .exchange()
                 .expectStatus().isOk()
@@ -186,6 +187,17 @@ class ArticleApiControllerTest extends AbstractControllerTest {
         moveToArticle(count, anotherCookie, true);
     }
 
+    @Test
+    void like() {
+        clickLikeButton(cookie)
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(document("like/post/likeOrDislike",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
     private void moveToArticle(long count, String cookie, boolean likeState) {
         webTestClient.get().uri(COMMON_REQUEST_URL, articleId)
                 .header("Cookie", cookie)
@@ -199,13 +211,17 @@ class ArticleApiControllerTest extends AbstractControllerTest {
     }
 
     private long likeOrDisLike(long count, String cookie) {
-        webTestClient.post().uri(COMMON_REQUEST_URL + "/like", articleId)
-                .header("Cookie", cookie)
-                .exchange()
+        clickLikeButton(cookie)
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath("$")
                 .isEqualTo(count);
         return count;
+    }
+
+    private WebTestClient.ResponseSpec clickLikeButton(String cookie) {
+        return webTestClient.post().uri(COMMON_REQUEST_URL + "/like", articleId)
+                .header("Cookie", cookie)
+                .exchange();
     }
 }

@@ -15,10 +15,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 import static org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
@@ -117,7 +115,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void 회원정보_수정페이지_접근() {
-        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID - 1)
+        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID)
                 .header("Cookie", myCookie)
                 .exchange()
                 .expectStatus().isOk();
@@ -149,7 +147,7 @@ class UserApiControllerTest extends AbstractControllerTest {
                 createMultipartBodyBuilder("whale kim", "i'm Whale!", "whales", "dolphins", "https://github.com/ep1stas1s");
 
         webTestClient.put()
-                .uri("/api/users/{userId}", LAST_USER_ID - 1)
+                .uri("/api/users/{userId}", LAST_USER_ID)
                 .header("Cookie", myCookie)
                 .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
                 .exchange()
@@ -237,7 +235,7 @@ class UserApiControllerTest extends AbstractControllerTest {
                 .jsonPath("$")
                 .value(id -> articleId[0] = Long.parseLong(id.toString()));
 
-        webTestClient.delete().uri("/api/users/{userId}", LAST_USER_ID - 1)
+        webTestClient.delete().uri("/api/users/{userId}", LAST_USER_ID)
                 .header("Cookie", myCookie)
                 .exchange()
                 .expectStatus().isOk()
