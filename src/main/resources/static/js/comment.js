@@ -46,17 +46,15 @@ const CommentApp = (function() {
             </li>`
     };
 
-    const showPassedCommentBtn = `<span class="passed-comment-pointer pointer text-link-color margin-20">이전 댓글 보기</span>`;
-
     const CommentController = function() {
         const commentService = new CommentService();
         const commentsItems = document.getElementsByClassName('comment-items');
 
         const initComments = function() {
             const posts = document.getElementsByClassName('post');
-
             for (let post of posts) {
                 let postId = post.dataset.postId;
+                const postCount = post.querySelector(".comment-count");
 
                 Api.get(`/posts/${postId}/comments`)
                     .then(res => res.json())
@@ -65,6 +63,7 @@ const CommentApp = (function() {
                         for (let comment of fetchedComments) {
                             commentItems.insertAdjacentHTML('beforeend', commentTemplate(comment));
                         }
+                        postCount.innerText = fetchedComments.length;
                         updateTimeStrings();
                     })
             }
@@ -115,6 +114,8 @@ const CommentApp = (function() {
                 .then(res => res.json())
                 .then(createdComment => {
                     const comments = event.target.closest(".comment").querySelector(".comment-items");
+                    const commentCount = parentPost.querySelector(".comment-count");
+                    commentCount.innerText = parseInt(commentCount.innerText) + 1;
                     comments.insertAdjacentHTML('beforeend', commentTemplate(createdComment));
                     commentTextArea.value = "";
                     updateTimeStrings();
@@ -126,7 +127,7 @@ const CommentApp = (function() {
             if (clicked && clicked.classList.contains('comment-edit-btn')) {
                 const commentInfo = clicked.closest('.info');
                 const commentInputArea = clicked.closest('.comment-item').querySelector('.comment-input');
-                const commentInput = commentInputArea.querySelector('input')
+                const commentInput = commentInputArea.querySelector('input');
 
                 commentInput.value = commentInfo.querySelector('.comment-contents').innerHTML;
                 commentInfo.setAttribute('style', 'display: none');
@@ -167,14 +168,15 @@ const CommentApp = (function() {
                        commentContents.innerText = updatedComment.contents;
                        cancelEditModeBy(event.target);
                    }).catch(function(error) {
-                    alert("해당 댓글은 수정할 수 없습니다!")
+                    alert("해당 댓글은 수정할 수 없습니다!");
                     cancelEditModeBy(event.target);
                 })
             }
         };
 
         const deleteComment = function(event) {
-            const postId = event.target.closest('.post').dataset.postId;
+            const parentPost = event.target.closest('.post');
+            const postId = parentPost.dataset.postId;
             const commentItem = event.target.closest('.comment-item');
             const commentId = commentItem.dataset.commentId;
 
@@ -184,6 +186,8 @@ const CommentApp = (function() {
                     .then(res => {
                         if (res.ok) {
                             commentItem.remove();
+                            const commentCount = parentPost.querySelector(".comment-count");
+                            commentCount.innerText = parseInt(commentCount.innerText) - 1;
                         }
                     })
             }
