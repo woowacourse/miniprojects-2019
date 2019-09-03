@@ -7,6 +7,10 @@ header ul.nav-left li {
     height: 43px;
 }
 
+img {
+    max-width: 500px;
+}
+
 .header {
     background-color: #303030;
     border-bottom: 1px solid #303030;
