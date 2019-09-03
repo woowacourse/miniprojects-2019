@@ -101,12 +101,14 @@
     margin-right:335px;
     overflow: hidden;
 }
-.img-parallel{
-    width:100%;
+.img-vertical{
+    max-width: 100%;
+    height: auto;
 }
 
-.img-vertical{
-    height:100%;
+.img-parallel{
+    max-height: 100%;
+    width: auto;
 }
 .text-con{
     position:absolute;
