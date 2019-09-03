@@ -1,0 +1,51 @@
+= Follow
+
+== Follow & UnFollow
+
+=== Example request
+
+include::{snippets}/follow/get/follow/http-request.adoc[]
+
+==== Request body
+
+include::{snippets}/follow/get/follow/request-body.adoc[]
+
+==== Example response
+
+include::{snippets}/follow/get/follow/http-response.adoc[]
+
+== Get follower list
+
+=== Example request
+
+include::{snippets}/follow/get/followers/http-request.adoc[]
+
+==== Request body
+
+include::{snippets}/follow/get/followers/request-body.adoc[]
+
+=== Example response
+
+include::{snippets}/follow/get/followers/http-response.adoc[]
+
+==== Response body
+
+include::{snippets}/follow/get/followers/response-body.adoc[]
+
+== Get follwering list
+
+=== Example request
+
+include::{snippets}/follow/get/following/http-request.adoc[]
+
+==== Request body
+
+include::{snippets}/follow/get/following/request-body.adoc[]
+
+=== Example response
+
+include::{snippets}/follow/get/following/http-response.adoc[]
+
+==== Response body
+
+include::{snippets}/follow/get/following/response-body.adoc[]
