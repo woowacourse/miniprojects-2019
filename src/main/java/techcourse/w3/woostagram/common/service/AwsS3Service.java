@@ -11,7 +11,6 @@ import techcourse.w3.woostagram.article.exception.FileSaveFailException;
 import techcourse.w3.woostagram.article.exception.InvalidExtensionException;
 import techcourse.w3.woostagram.common.exception.EmptyFileException;
 import techcourse.w3.woostagram.common.support.AwsS3Properties;
-import techcourse.w3.woostagram.common.support.ImageResizeUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,13 +23,16 @@ import java.util.UUID;
 public class AwsS3Service implements StorageService {
     private static final List<String> VALID_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
     private static final String PATH_DELIMITER = ".";
+
     private final AmazonS3 s3;
     private final AwsS3Properties awsS3Properties;
+    private final ImageResizeService imageResizeService;
 
     @Autowired
-    public AwsS3Service(AwsS3Properties awsS3Properties, AmazonS3 s3) {
+    public AwsS3Service(AwsS3Properties awsS3Properties, AmazonS3 s3, ImageResizeService imageResizeService) {
         this.awsS3Properties = awsS3Properties;
         this.s3 = s3;
+        this.imageResizeService = imageResizeService;
     }
 
     @Override
@@ -40,11 +42,9 @@ public class AwsS3Service implements StorageService {
         String fileName = String.join(PATH_DELIMITER, UUID.randomUUID().toString(), fileExtension);
         File file = new File(fileName);
         File resizedFile = new File(fileName + "_resized");
-        try {
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
+        try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(multipartFile.getBytes());
-            ImageResizeUtils.resizeImage(fileExtension, file, resizedFile);
+            imageResizeService.resizeImage(fileExtension, file, resizedFile);
             s3.putObject(awsS3Properties.getBucket(), fileName, resizedFile);
         } catch (AmazonServiceException | IOException e) {
             e.printStackTrace();

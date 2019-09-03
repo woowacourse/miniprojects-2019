@@ -12,6 +12,7 @@ import techcourse.w3.woostagram.user.domain.User;
 @Service
 public class AlarmService {
     private final SimpMessagingTemplate template;
+    private final Gson gson = new Gson();
 
     @Autowired
     public AlarmService(SimpMessagingTemplate simpMessagingTemplate) {
@@ -19,7 +20,6 @@ public class AlarmService {
     }
 
     public void pushLikes(User user, Article target) {
-        Gson gson = new Gson();
         String message = gson.toJson(LikesAlarmDto.builder()
                 .message(user.getUserContents().getUserName() + " likes your article!")
                 .articleId(target.getId()));
@@ -27,7 +27,6 @@ public class AlarmService {
     }
 
     public void pushFollows(User follower, User target) {
-        Gson gson = new Gson();
         String message = gson.toJson(FollowsAlarmDto.builder()
                 .message(follower.getUserContents().getUserName() + " follows you!")
                 .targetName(follower.getUserContents().getUserName()));
