@@ -3,7 +3,6 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
@@ -19,9 +18,9 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionValue).
                 body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-        when().
+                when().
                 post(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments").
-        then().
+                then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_COMMENT_RESPONSE.getContents())).
@@ -37,9 +36,9 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", secondUserSession).
                 body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-        when().
+                when().
                 post(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments").
-        then().
+                then().
                 statusCode(201).
                 body("id", is(not(empty()))).
                 body("contents", equalTo(SAVE_COMMENT_RESPONSE.getContents())).
@@ -55,9 +54,9 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionValue).
                 body(CommentRequestDto.of(SAVE_COMMENT_RESPONSE.getContents())).
-        when().
+                when().
                 post(basicPath() + "/api/videos/" + NOT_EXIST_VIDEO_ID + "/comments").
-        then().
+                then().
                 statusCode(302);
     }
 
@@ -70,9 +69,9 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionValue).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT).
-        then().
+                then().
                 statusCode(204);
     }
 
@@ -85,9 +84,9 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", sessionValue).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
-        then().
+                then().
                 statusCode(400);
     }
 
@@ -100,9 +99,9 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
                 cookie("JSESSIONID", secondUserSession).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
-        when().
+                when().
                 put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT).
-        then().
+                then().
                 statusCode(400);
     }
 
@@ -113,9 +112,9 @@ public class CommentApiControllerTest extends CommonControllerTest {
 
         given().
                 cookie("JSESSIONID", sessionId).
-        when().
+                when().
                 delete(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT).
-        then().
+                then().
                 statusCode(204);
     }
 
@@ -126,9 +125,9 @@ public class CommentApiControllerTest extends CommonControllerTest {
 
         given().
                 cookie("JSESSIONID", sessionId).
-        when().
+                when().
                 delete(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
-        then().
+                then().
                 statusCode(400);
     }
 
@@ -139,18 +138,18 @@ public class CommentApiControllerTest extends CommonControllerTest {
 
         given().
                 cookie("JSESSIONID", secondUserSession).
-        when().
+                when().
                 delete(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT).
-        then().
+                then().
                 statusCode(400);
     }
 
     @Test
     void sortCommentByUpdateTime() {
         given().
-        when().
+                when().
                 get(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/sort/updatetime").
-        then().
+                then().
                 statusCode(200).
                 body("", is(not(empty())));
     }
