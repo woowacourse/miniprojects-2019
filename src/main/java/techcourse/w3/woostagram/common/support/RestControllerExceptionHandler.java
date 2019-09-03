@@ -15,13 +15,13 @@ public class RestControllerExceptionHandler {
 
     @ExceptionHandler(WoostagramException.class)
     @Order(1)
-    public ResponseEntity handleWoostagramExeception(Exception e) {
+    public ResponseEntity handleWoostagramException(Exception e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @Order(2)
-    public ResponseEntity handleUnexpectedException(Exception e) {
+    public ResponseEntity handleUnexpectedException() {
         return ResponseEntity.badRequest().body(EXCEPTION_MESSAGE);
     }
 }

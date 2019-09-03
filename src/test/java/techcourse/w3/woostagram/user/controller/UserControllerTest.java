@@ -16,8 +16,6 @@ class UserControllerTest extends AbstractControllerTests {
     private static final String NAME = "name";
     private static final String USER_NAME = "userName";
     private static final String CONTENTS = "contents";
-    private static final String ORIGINAL_IMG_FILE = "originalImageFile";
-    private static final String IMAGE_FILE = "imageFile";
 
     @Override
     @BeforeEach
@@ -112,8 +110,6 @@ class UserControllerTest extends AbstractControllerTests {
         params.put(NAME, "a");
         params.put(USER_NAME, "b");
         params.put(CONTENTS, "c");
-        params.put(ORIGINAL_IMG_FILE, "d");
-        params.put(IMAGE_FILE, "e");
 
         assertThat(putFormRequest("/users", params)
                 .getStatus()
@@ -126,8 +122,6 @@ class UserControllerTest extends AbstractControllerTests {
         params.put(NAME, "");
         params.put(USER_NAME, "");
         params.put(CONTENTS, "");
-        params.put(ORIGINAL_IMG_FILE, "");
-        params.put(IMAGE_FILE, "");
 
         assertThat(putFormRequest("/users", params)
                 .getStatus()
