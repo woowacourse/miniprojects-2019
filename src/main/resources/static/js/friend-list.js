@@ -45,7 +45,7 @@
 
     const addFriendRequest = (element, request) => {
         const li = `<li value=${request.id}>
-                        <img src="${request.profile}" />
+                        <img class="search-profile" src="${request.profile}" />
                         <span>${request.name}</span>
                         <button class="friend-request-add">추가</button>
                         <button class="friend-request-reject">거절</button>
