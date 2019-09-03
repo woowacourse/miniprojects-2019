@@ -23,10 +23,7 @@ public class CommentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @LoggedInUser String email, @PathVariable Long articleId) {
-        if (!userRateLimiter.get(email).tryAcquire()) {
-            throw new RequestTooFastException();
-        }
+    public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @PathVariable Long articleId, @LoggedInUser String email) {
         return new ResponseEntity<>(commentService.save(commentDto, email, articleId), HttpStatus.CREATED);
     }
 
