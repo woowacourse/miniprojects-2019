@@ -20,6 +20,7 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import static com.wootecobook.turkey.post.service.exception.NotFriendException.NOT_FRIEND_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -49,6 +50,7 @@ class PostApiControllerTests extends BaseControllerTests {
             fieldWithPath("createdAt").description("글 작성 일자"),
             fieldWithPath("updatedAt").description("글 수정 일자"),
             fieldWithPath("totalComment").description("글에 달린 댓글의 총 갯수"),
+            subsectionWithPath("taggedUsers").description("태그된 유저 목록 <<User>> 참고"),
             subsectionWithPath("files").description("글과 함께 업로드 된 사진 또는 동영상 정보"),
             subsectionWithPath("author").description("작성자 정보"),
             subsectionWithPath("receiver").optional().description("글 받는 사람 정보"),
@@ -135,6 +137,53 @@ class PostApiControllerTests extends BaseControllerTests {
         //then
         assertThat(postResponse.getContents()).isEqualTo(new Contents("hello"));
         assertThat(postResponse.getFiles().size()).isEqualTo(0);
+    }
+
+    @Test
+    void 친구_태그한_경우_글_생성_테스트() {
+        // given
+        String contents = "contents";
+        makeFriend(authorJSessionId, otherJSessionId, otherId);
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("contents", contents);
+        bodyBuilder.part("taggedUsers",  otherId);
+
+        // when
+        PostResponse postResponse = webTestClient.post().uri(POST_URL)
+                .cookie(JSESSIONID, authorJSessionId)
+                .syncBody(bodyBuilder.build())
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(PostResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        // then
+        assertThat(postResponse.getContents()).isEqualTo(new Contents(contents));
+        assertThat(postResponse.getTaggedUsers()).hasSize(1);
+        assertThat(postResponse.getTaggedUsers()).anyMatch(taggedUser -> taggedUser.getId().equals(otherId));
+    }
+
+    @Test
+    void 친구가_아닌_유저를_태그한_경우_글_생성_에러() {
+        // given
+        String contents = "contents";
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("contents", contents);
+        bodyBuilder.part("taggedUsers",  otherId);
+
+        // when
+        ErrorMessage errorMessage = webTestClient.post().uri(POST_URL)
+                .cookie(JSESSIONID, authorJSessionId)
+                .syncBody(bodyBuilder.build())
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        // then
+        assertThat(errorMessage.getMessage()).isEqualTo(NOT_FRIEND_MESSAGE);
     }
 
     @Test
