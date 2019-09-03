@@ -1,6 +1,6 @@
 = User
 
-== Sign up
+== 1. Sign up
 
 === Example request
 
@@ -18,8 +18,7 @@ include::{snippets}/users/post/signUp/request-fields.adoc[]
 
 include::{snippets}/users/post/signUp/http-response.adoc[]
 
-
-== Update user Information
+== 2. Update user Information
 
 === Example request
 
@@ -33,8 +32,7 @@ include::{snippets}/users/put/update/request-body.adoc[]
 
 include::{snippets}/users/put/update/http-response.adoc[]
 
-
-== Withdrawal user
+== 3. Withdrawal user
 
 === CURL
 

@@ -1,6 +1,6 @@
 = Article
 
-== Find articles per page
+== 1. Find articles per page
 
 === Example request
 
@@ -14,9 +14,7 @@ include::{snippets}/articles/get/articlesPerPage/http-response.adoc[]
 
 include::{snippets}/articles/get/articlesPerPage/response-body.adoc[]
 
-
-
-== Find one article
+== 2. Find one article
 
 === Example request
 
@@ -30,9 +28,7 @@ include::{snippets}/articles/get/oneArticle/http-response.adoc[]
 
 include::{snippets}/articles/get/oneArticle/response-body.adoc[]
 
-
-
-== Write article
+== 3. Write article
 
 === Example request
 
@@ -46,9 +42,7 @@ include::{snippets}/articles/post/write/request-body.adoc[]
 Article ID
 include::{snippets}/articles/post/write/http-response.adoc[]
 
-
-
-== Update article contents
+== 4. Update article contents
 
 === Example request
 
@@ -62,9 +56,7 @@ include::{snippets}/articles/put/updateArticle/request-body.adoc[]
 
 include::{snippets}/articles/put/updateArticle/http-response.adoc[]
 
-
-
-== Delete article
+== 5. Delete article
 
 === CURL
 

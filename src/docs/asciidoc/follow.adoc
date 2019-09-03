@@ -1,20 +1,20 @@
 = Follow
 
-== Follow & UnFollow
+== 1. Follow & UnFollow
 
 === Example request
 
-include::{snippets}/follow/get/follow/http-request.adoc[]
+include::{snippets}/follow/post/followAndUnfollow/http-request.adoc[]
 
 ==== Request body
 
-include::{snippets}/follow/get/follow/request-body.adoc[]
+include::{snippets}/follow/post/followAndUnfollow/request-body.adoc[]
 
 ==== Example response
 
-include::{snippets}/follow/get/follow/http-response.adoc[]
+include::{snippets}/follow/post/followAndUnfollow/http-response.adoc[]
 
-== Get follower list
+== 2. Get follower list
 
 === Example request
 
@@ -32,7 +32,7 @@ include::{snippets}/follow/get/followers/http-response.adoc[]
 
 include::{snippets}/follow/get/followers/response-body.adoc[]
 
-== Get follwering list
+== 3. Get follwering list
 
 === Example request
 

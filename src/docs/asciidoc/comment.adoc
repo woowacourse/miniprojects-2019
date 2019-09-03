@@ -1,6 +1,6 @@
 = Comment
 
-== Find all comments 
+== 1. Find all comments
 
 === CURL
 
@@ -14,7 +14,7 @@ include::{snippets}/comments/get/comments/http-request.adoc[]
 
 include::{snippets}/comments/get/comments/response-body.adoc[]
 
-== Write comment
+== 2. Write comment
 
 === Example request
 
@@ -32,7 +32,7 @@ include::{snippets}/comments/post/write/http-response.adoc[]
 
 include::{snippets}/comments/post/write/response-body.adoc[]
 
-== Update comment
+== 3. Update comment
 
 === Example request
 
@@ -50,7 +50,7 @@ include::{snippets}/comments/put/update/http-response.adoc[]
 
 include::{snippets}/comments/put/update/response-body.adoc[]
 
-== Delete comment
+== 4. Delete comment
 
 === CURL
 
