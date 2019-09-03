@@ -3,7 +3,6 @@ package com.wootube.ioi.web.controller;
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
@@ -71,7 +70,7 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 cookie("JSESSIONID", sessionValue).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
         when().
-                put(basicPath() + "/api/videos/"+ USER_A_VIDEO_ID +"/comments/" + USER_A_VIDEO_USER_A_COMMENT).
+                put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT).
         then().
                 statusCode(204);
     }
@@ -86,7 +85,7 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 cookie("JSESSIONID", sessionValue).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
         when().
-                put(basicPath() + "/api/videos/"+ USER_A_VIDEO_ID +"/comments/" + NOT_EXIST_COMMENT_ID).
+                put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + NOT_EXIST_COMMENT_ID).
         then().
                 statusCode(400);
     }
@@ -101,7 +100,7 @@ public class CommentApiControllerTest extends CommonControllerTest {
                 cookie("JSESSIONID", secondUserSession).
                 body(CommentRequestDto.of(UPDATE_COMMENT_RESPONSE.getContents())).
         when().
-                put(basicPath() + "/api/videos/"+ USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT).
+                put(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT).
         then().
                 statusCode(400);
     }
