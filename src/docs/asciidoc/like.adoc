@@ -2,6 +2,10 @@
 
 == Like & Dislike
 
+=== CURL
+
+include::{snippets}/like/post/likeOrDislike/curl-request.adoc[]
+
 === Example request
 
 include::{snippets}/like/post/likeOrDislike/http-request.adoc[]
