@@ -3,6 +3,7 @@ package com.woowacourse.zzazanstagram.model.article.service;
 import com.woowacourse.zzazanstagram.model.article.domain.Article;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Contents;
 import com.woowacourse.zzazanstagram.model.article.domain.vo.Image;
+import com.woowacourse.zzazanstagram.model.article.dto.ArticleMyPageResponse;
 import com.woowacourse.zzazanstagram.model.article.dto.ArticleRequest;
 import com.woowacourse.zzazanstagram.model.article.dto.ArticleResponse;
 import com.woowacourse.zzazanstagram.model.comment.domain.Comment;
@@ -21,7 +22,7 @@ public class ArticleAssembler {
         return new Article(image, contents, author);
     }
 
-    public static ArticleResponse toDto(Article article) {
+    public static ArticleResponse toDto(Article article, Member loginMember) {
         List<Comment> comments = article.getComments();
         List<CommentResponse> commentResponses = comments.stream()
                 .map(CommentAssembler::toDto)
@@ -36,6 +37,18 @@ public class ArticleAssembler {
                 .createdDate(article.getCreatedDate())
                 .lastModifiedDate(article.getLastModifiedDate())
                 .commentResponses(commentResponses)
+                .ddabongCount(article.countClickedDdabong())
+                .isDdabongClicked(article.isDdabongClicked(loginMember))
                 .build();
+    }
+
+    public static List<ArticleResponse> toDtos(List<Article> articles, Member loginMember) {
+        return articles.stream()
+                .map(article -> ArticleAssembler.toDto(article, loginMember))
+                .collect(Collectors.toList());
+    }
+
+    public static ArticleMyPageResponse toMyPageDto(Article article) {
+        return new ArticleMyPageResponse(article.getId(), article.getImageValue(), article.countClickedDdabong(), article.getCommentsCount());
     }
 }

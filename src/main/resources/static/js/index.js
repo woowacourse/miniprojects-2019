@@ -1,165 +1,203 @@
 const INDEX_PAGE = (function () {
-    const Api = function () {
-        const request = {
-            get(path) {
-                return axios.get(`${path}`);
-            },
-            post(path, data) {
-                return axios.post(`${path}`, data);
-            },
-            put(path, data) {
-                return axios.put(`${path}`, data);
-            },
-            delete(path) {
-                return axios.delete(`${path}`);
-            }
-        };
-
-        return {
-            request: request
-        };
-    };
+    const request = new Api().request;
 
     const IndexPageController = function () {
-        const searchService = new SearchService();
+        const defaultArticlePaginationSize = 5;
+
+        const articleService = new ArticleService();
         const commentService = new CommentService();
         const ddabongService = new DdabongService();
-
-        const toggleSearchInput = function () {
-            document.querySelector('.search-toggle').addEventListener('click', searchService.toggleSearchInput);
-        };
-
-        const showSearchedList = function () {
-            document.querySelector(".search-input input").addEventListener('keyup', searchService.showSearchedList);
-        };
 
         const addComment = function () {
             document.querySelectorAll('.btn-add-comment')
                 .forEach(el => el.addEventListener('click', commentService.addComment));
         };
+
         const toggleHeart = function () {
-            document.querySelectorAll('.fa-heart-o').forEach((el) => {
-                el.addEventListener('click', ddabongService.toggleHeart);
-            })
+            document.querySelectorAll('.fa-heart-o')
+                .forEach(el => el.addEventListener('click', ddabongService.toggleHeart));
+        };
+
+        const deleteArticle = function () {
+            document.querySelectorAll('.delete-article')
+                .forEach(el => el.addEventListener('click', articleService.deleteArticle));
+        };
+
+        const fetchDdabongMembers = function () {
+            document.querySelectorAll('.ddabong-members')
+                .forEach(el => el.addEventListener('click', ddabongService.fetchDdabongMembers));
+        };
+
+        const fetchArticles = function () {
+            articleService.fetchArticlePages(Number.MAX_SAFE_INTEGER, defaultArticlePaginationSize);
+        };
+
+        const getScrollTop = function () {
+            return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        };
+
+        const getDocumentHeight = function () {
+            const body = document.body;
+            const html = document.documentElement;
+
+            return Math.max(
+                body.scrollHeight, body.offsetHeight,
+                html.clientHeight, html.scrollHeight, html.offsetHeight
+            );
         };
 
         const init = function () {
-            toggleSearchInput();
-            showSearchedList();
+            fetchArticles();
             addComment();
             toggleHeart();
+            deleteArticle();
+            fetchDdabongMembers();
+        };
+
+        const onscroll = function () {
+            if (getScrollTop() === getDocumentHeight() - window.innerHeight) {
+                const articleCards = document.querySelectorAll('.article-card');
+
+                const minId = Array.from(articleCards).map(function (card) {
+                    return parseInt(card.id, 10);
+                }).reduce(function (previous, current) {
+                    return previous > current ? current : previous;
+                });
+
+                articleService.fetchArticlePages(minId, defaultArticlePaginationSize);
+            }
         };
 
         return {
             init: init,
+            onscroll: onscroll,
         };
     };
 
-    const SearchService = function () {
-        const toggleSearchInput = function (event) {
-            event.preventDefault();
-            document.querySelector('.search-box').classList.toggle('active')
-            document.querySelector(".search-input").classList.toggle("active")
-            document.querySelector(".search-input input").focus()
-        };
+    const ArticleService = function () {
+        const defaultCommentPreviewSize = 2;
+        const commentService = new CommentService();
+        const ddabongService = new DdabongService();
+        const indexArticles = document.querySelector("#index-articles");
+        const articleCardTemplate = new ArticleCardTemplate();
 
-        const showSearchedList = function (event) {
-            if (event.target.value.length > 0) {
-                document.querySelector(".advanced-search").classList.add("active")
-            } else {
-                document.querySelector(".advanced-search").classList.remove("active")
+        function addEventsToArticles() {
+            document.querySelectorAll('.btn-add-comment')
+                .forEach(el => el.addEventListener('click', commentService.addComment));
+
+            document.querySelectorAll('.ddabong-area')
+                .forEach(el => el.addEventListener('click', ddabongService.toggleHeart));
+
+            document.querySelectorAll('.delete-article')
+                .forEach(el => el.addEventListener('click', deleteArticle));
+
+            document.querySelectorAll('.ddabong-members')
+                .forEach(el => el.addEventListener('click', ddabongService.fetchDdabongMembers));
+        }
+
+        const fetchArticlePages = function (lastArticleId, size) {
+            function createNewNode(tagName, innerHTML) {
+                const node = document.createElement(tagName);
+                node.innerHTML = innerHTML;
+                return node;
             }
-        };
 
-        return {
-            toggleSearchInput: toggleSearchInput,
-            showSearchedList: showSearchedList,
-        }
-    };
+            function appendCommentsOnArticleCard(json) {
+                const commentResponses = json.commentResponses;
+                const commentSize = Object.keys(commentResponses).length;
+                const commentList = document.querySelector(`#comment-list-${json.id}`);
 
-    const CommentService = function () {
-        const request = new Api().request;
+                function appendComments(commentList, size) {
+                    for (let i = 0; i < size; i++) {
+                        commentList.insertAdjacentHTML('afterbegin', articleCardTemplate.comment(commentResponses[i]));
+                    }
+                }
 
-        const getCommentTemplate = function (nickName, commentContents) {
-            return `<li>
-                              <p class="inline-block text-bold  no-mrg-btm mrg-left-15">
-                                  ${nickName}
-                              </p>
-                              <p class="inline-block no-mrg-btm mrg-left-5">${commentContents}</p>
-                        </li>`;
-        }
+                if (commentSize > defaultCommentPreviewSize) {
+                    const commentPreviewMessage = document.querySelector(`#comment-preview-message-${json.id}`);
+                    const commentPreviewMessageNode = createNewNode('li', articleCardTemplate.commentPreviewMessage(commentSize, json.id));
+                    commentPreviewMessage.appendChild(commentPreviewMessageNode);
 
-        const addComment = function (event) {
-            const message = event.target.closest("div");
-            const articleId = message.id.split("-")[2];
+                    appendComments(commentList, defaultCommentPreviewSize);
+                    return;
+                }
 
-            const inputValue = message.querySelector("input").value;
-            const commentList = message.parentElement.querySelector("#comment-list");
-
-            if (inputValue.length < 1 || inputValue.length > 100) {
-                alert('댓글은 1글자 이상 100글자 이하로 입력해 주세요');
-                return;
+                appendComments(commentList, commentSize);
             }
 
             request
-                .post('/' + articleId + '/comments/new', {contents: inputValue})
-                .then(res => {
-                    console.log(res);
-                    const nickName = res.data.commenterNickName;
-                    const commentContents = res.data.commentContents;
+                .get('/api/articles', {
+                    lastArticleId: lastArticleId,
+                    size: size,
+                })
+                .then(response => response.data)
+                .then(data => {
+                    data.forEach(function (json) {
+                        const articleNode = createNewNode('span', articleCardTemplate.articleCard(json));
+                        indexArticles.appendChild(articleNode);
 
-                    const comment = getCommentTemplate(nickName, commentContents);
-                    commentList.insertAdjacentHTML('beforeend', comment);
-                    document.getElementById('comment-input').value = '';
-                }).catch(err => {
-                alert(err.response.data);
-            });
+                        if (json.ddabongClicked) {
+                            const ddabongHeart = document.querySelector(`#ddabong-${json.id}`);
+                            ddabongService.activeDdabong(ddabongHeart);
+                        }
 
+                        const ddabongMessage = document.querySelector(`#ddabong-message-${json.id}`);
+                        ddabongMessage.innerText = json.ddabongCount;
+
+                        appendCommentsOnArticleCard(json);
+
+                        addEventsToArticles();
+                    })
+                })
         };
 
-        return {
-            addComment: addComment,
-        }
-    };
-
-    const DdabongService = function () {
-        const request = new Api().request;
-
-        const toggleHeart = function (event) {
+        const deleteArticle = function (event) {
             event.preventDefault();
             const message = event.target.closest("div");
-            const articleId = message.id;
-            const childNodes = message.childNodes;
-            const ddabongCountTag = childNodes[7].childNodes[3].childNodes[3];
+            const articleId = message.parentElement.id;
 
             request
-                .get('/articles/' + articleId + '/ddabongs')
+                .delete(`/articles/${articleId}`)
                 .then(response => {
-                    console.log(response);
-                    ddabongCountTag.innerText = response.data.count;
-
-                    if (response.data.clicked === true) {
-                        event.target.classList.remove('fa-heart-o');
-                        event.target.classList.add('fa-heart', 'activated-heart');
-                    } else {
-                        event.target.classList.remove('fa-heart', 'activated-heart');
-                        event.target.classList.add('fa-heart-o');
+                    if (response.data === "SUCCESS") {
+                        const childNode = message.parentNode;
+                        const parentNode = childNode.parentNode;
+                        parentNode.removeChild(childNode);
+                        alert("게시글이 삭제되었습니다.");
+                    }
+                })
+                .catch(error => {
+                    const errRes = error.response;
+                    if (error.response.status === 401) {
+                        alert(errRes.data.msg);
                     }
                 });
         };
+
         return {
-            toggleHeart: toggleHeart,
+            fetchArticlePages: fetchArticlePages,
+            deleteArticle: deleteArticle,
         }
     };
 
+    const indexPageController = new IndexPageController();
+
     const init = function () {
-        const indexPageController = new IndexPageController();
         indexPageController.init();
+    };
+
+    const onscroll = function () {
+        indexPageController.onscroll();
     };
 
     return {
         init: init,
+        onscroll: onscroll,
     }
 })();
 
 INDEX_PAGE.init();
+
+window.onscroll = function () {
+    INDEX_PAGE.onscroll();
+};

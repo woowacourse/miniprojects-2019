@@ -2,19 +2,20 @@ package com.woowacourse.zzazanstagram.web.controller.member;
 
 import com.woowacourse.zzazanstagram.model.member.dto.MemberSignUpRequest;
 import com.woowacourse.zzazanstagram.model.member.service.MemberService;
-import com.woowacourse.zzazanstagram.web.SessionKeys;
+import com.woowacourse.zzazanstagram.web.message.ApiResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Objects;
 
 @Controller
 public class MemberController {
-    private MemberService memberService;
+    private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
@@ -25,21 +26,13 @@ public class MemberController {
         return "signup";
     }
 
-    @GetMapping("/members/{nickname}")
-    public String myPage(@PathVariable("nickname") String nickName, Model model) {
-        model.addAttribute("member", memberService.findByNickName(nickName));
-        return "mypage";
-    }
-
     @PostMapping("/members")
-    public String saveMember(@Valid MemberSignUpRequest memberSignupRequest) {
-        memberService.save(memberSignupRequest);
-        return "redirect:/login";
-    }
+    public ResponseEntity<ApiResponse> saveMember(@Valid MemberSignUpRequest memberSignupRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage()), HttpStatus.BAD_REQUEST);
+        }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession httpSession) {
-        httpSession.removeAttribute(SessionKeys.MEMBER);
-        return "redirect:/login";
+        memberService.save(memberSignupRequest);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "회원가입 성공!"), HttpStatus.OK);
     }
 }

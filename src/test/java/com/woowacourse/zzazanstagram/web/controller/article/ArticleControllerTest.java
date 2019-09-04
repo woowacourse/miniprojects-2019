@@ -1,32 +1,33 @@
 package com.woowacourse.zzazanstagram.web.controller.article;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.woowacourse.zzazanstagram.config.S3MockConfig;
 import com.woowacourse.zzazanstagram.model.RequestTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static com.woowacourse.zzazanstagram.model.article.ArticleConstant.CONTENTS;
-import static com.woowacourse.zzazanstagram.model.article.ArticleConstant.HASHTAG;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(S3MockConfig.class)
 class ArticleControllerTest extends RequestTemplate {
-    private ByteArrayResource file;
+    private Resource file;
+
+    @Autowired
+    AmazonS3 amazonS3;
+
+    @Autowired
+    ResourceLoader resourceLoader;
 
     @BeforeEach
     public void setUp2() {
-        file = new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
-            @Override
-            public String getFilename() {
-                return "test_file.jpg";
-            }
-        };
+        file = resourceLoader.getResource("classpath:test.jpg");
     }
 
     @Test
@@ -39,8 +40,8 @@ class ArticleControllerTest extends RequestTemplate {
     @Test
     void 게시글_등록이_되는지_테스트() {
         createArticle()
-                .expectStatus().is3xxRedirection()
-                .expectHeader().valueMatches("Location", "http://[\\w\\d\\.]+:[0-9]+/");
+                .expectStatus().isOk();
+        // TODO : jsonPath 검사하기
     }
 
     @Test
@@ -49,14 +50,33 @@ class ArticleControllerTest extends RequestTemplate {
     }
 
     @Test
-    void 게시글_조회가_잘되는지_테스트() {
+    void 게시글_삭제_성공_테스트() {
+        deleteHeaderWithLogin("/articles/3")
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void 게시글_삭제_권한없음_테스트() {
+        deleteHeaderWithLogin("/articles/4", "abc@gmail.com", "aa1231!!")
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+
+    @Test
+    void 특정_해시태그가_달린_게시글_조회_테스트() {
         createArticle();
 
-        showArticles().expectBody()
-                .consumeWith(res -> {
-                    String body = new String(res.getResponseBody());
-                    assertThat(body.contains(CONTENTS)).isTrue();
-                });
+        getHeaderWithLogin("/tags/닉")
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void 해시태그에_대한_게시글이_존재하지_않는_경우_예외처리() {
+        getHeaderWithLogin("/tags/없는해시태그")
+                .exchange()
+                .expectStatus().is4xxClientError();
     }
 
     private WebTestClient.ResponseSpec showArticles() {
@@ -66,7 +86,7 @@ class ArticleControllerTest extends RequestTemplate {
     }
 
     private WebTestClient.ResponseSpec createArticle() {
-        return postHeaderWithLogin("/articles")
+        return postHeaderWithLogin("/api/articles")
                 .syncBody(createArticleBody().build())
                 .exchange();
     }
@@ -75,7 +95,6 @@ class ArticleControllerTest extends RequestTemplate {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("file", file, MediaType.parseMediaType("image/jpeg"));
         bodyBuilder.part("contents", CONTENTS);
-        bodyBuilder.part("hashTag", HASHTAG);
 
         return bodyBuilder;
     }

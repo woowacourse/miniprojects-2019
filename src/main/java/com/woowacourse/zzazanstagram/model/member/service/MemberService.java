@@ -8,7 +8,12 @@ import com.woowacourse.zzazanstagram.model.member.dto.MemberSignUpRequest;
 import com.woowacourse.zzazanstagram.model.member.exception.MemberNotFoundException;
 import com.woowacourse.zzazanstagram.model.member.exception.MemberSaveException;
 import com.woowacourse.zzazanstagram.model.member.repository.MemberRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MemberService {
@@ -24,16 +29,17 @@ public class MemberService {
     }
 
     public void save(MemberSignUpRequest memberSignupRequest) {
-        if (checkEnrolledEmailOrNickName(memberSignupRequest)) {
+        if (isEnrolledNickNameOrEmail(memberSignupRequest)) {
             throw new MemberSaveException("이미 존재하는 이메일 또는 닉네임 입니다.");
         }
         Member member = MemberAssembler.toEntity(memberSignupRequest);
         memberRepository.save(member);
     }
 
-    private boolean checkEnrolledEmailOrNickName(MemberSignUpRequest memberSignupRequest) {
-        NickName nickName = NickName.of(memberSignupRequest.getNickName());
+    private boolean isEnrolledNickNameOrEmail(MemberSignUpRequest memberSignupRequest) {
         Email email = Email.of(memberSignupRequest.getEmail());
+        NickName nickName = NickName.of(memberSignupRequest.getNickName());
+
         return memberRepository.existsByNickNameOrEmail(nickName, email);
     }
 
@@ -41,8 +47,26 @@ public class MemberService {
         return memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("잘못된 접근입니다."));
     }
 
-    public MemberResponse findByNickName(String nickName) {
-        Member member = memberRepository.findByNickName(NickName.of(nickName)).orElseThrow(() -> new MemberNotFoundException("잘못된 접근입니다."));
-        return MemberAssembler.assemble(member);
+    public MemberResponse findMemberResponseByNickName(String nickName) {
+        Member member = findByNickName(nickName);
+        return MemberAssembler.toDto(member);
+    }
+
+    public Member findByNickName(String nickName) {
+        return memberRepository.findByNickName(NickName.of(nickName)).orElseThrow(() -> new MemberNotFoundException("잘못된 접근입니다."));
+    }
+
+    public List<Member> findAllByIds(List<Long> ids) {
+        return memberRepository.findByIdIn(ids);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemberResponse> findMemberResponsesByNickName(String keyword, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        List<Member> members = memberRepository.findByNickNameContaining(keyword, pageRequest);
+
+        return members.stream()
+                .map(MemberAssembler::toDto)
+                .collect(Collectors.toList());
     }
 }
