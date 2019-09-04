@@ -7,6 +7,10 @@ header {
     left: 0;
 }
 
+.like-icon {
+    color: royalblue;
+}
+
 .subscribe-btn {
     background-color: #CC0000;
     border: none;
@@ -28,8 +32,14 @@ header {
 
 .video-owner-img {
     width: 50px;
+    height: 50px;
     left: 50%;
     margin-left: 50%;
+}
+
+.thumbnail_img_size {
+    width: 100%;
+    height: 100%;
 }
 
 .auto-play-div {
@@ -45,6 +55,11 @@ header {
 
 .comment-writer-img {
     width: 5%;
+    float: left;
+}
+
+.reply-writer-img {
+    width: 4%;
     float: left;
 }
 
@@ -176,7 +191,7 @@ ul {
     border-right: none;
     border-bottom: 1px solid #dddddd;
     height: 30px;
-    width: 90%;
+    width: 93%;
 }
 
 .comment-input:focus {
@@ -208,7 +223,7 @@ ul {
     color: white;
 }
 
-.comment-more-box {
+.comment-more-box, .reply-more-box {
     background: none;
     border-radius: 1px;
     color: #777777;
@@ -224,4 +239,71 @@ ul {
 .span-form {
     width: auto;
     word-break:break-all
+}
+
+.comment-more-button, .reply-more-button {
+    background: none;
+    border: none;
+    color: gray;
+    font-size: 1.0em;
+    transform: rotate(90deg);
+}
+
+.comment-sort-button {
+    background: none;
+    border: none;
+    color: gray;
+    font-size: 1.0em;
+}
+
+.list-group-item {
+    border: none;
+    background: none;
+}
+
+.comment-dropdown-menu, .reply-dropdown-menu {
+    width: 85px;
+    min-width: 0px;
+}
+
+.comment-sort-bropdown {
+    width: 110px;
+}
+
+.reply-list-open-button, .reply-list-close-button {
+    background: none;
+    border: none;
+    color: gray;
+    position: relative;
+    left: 35px;
+}
+
+.like-icon {
+    color: royalblue;
+}
+
+.comment-update-btn.disabled, .reply-save-btn.disabled, .reply-update-btn.disabled {
+    background: lightgray;
+    color: white;
+    border-radius: 5%;
+}
+
+.comment-update-btn, .reply-save-btn, .reply-update-btn {
+    background: #065fd4;
+    color: white;
+    border-radius: 5%;
+
+}
+
+.comment-update-cancel-btn, .reply-cancel-btn, .reply-update-cancel-btn {
+    background: none;
+    border-radius: 5%;
+}
+
+.fa-thumbs-up {
+    font-size: 18px;
+}
+
+.reply {
+    max-width: 95%;
 }

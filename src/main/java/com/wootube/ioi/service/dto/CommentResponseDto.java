@@ -1,6 +1,5 @@
 package com.wootube.ioi.service.dto;
 
-import com.wootube.ioi.domain.model.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,15 +12,27 @@ public class CommentResponseDto {
     private Long id;
     private String contents;
     private LocalDateTime updateTime;
-    private User writer;
+    private String writerName;
+    private String writerProfileImageUrl;
+    private Long like;
+    private boolean likedUser = false;
 
-    public static CommentResponseDto of(Long id, String contents, LocalDateTime updateTime, User writer) {
+    public static CommentResponseDto of(Long id, String contents, LocalDateTime updateTime, String writerName, String writerProfileImageUrl) {
         CommentResponseDto commentResponseDto = new CommentResponseDto();
         commentResponseDto.id = id;
         commentResponseDto.contents = contents;
         commentResponseDto.updateTime = updateTime;
-        commentResponseDto.writer = writer;
-
+        commentResponseDto.writerName = writerName;
+        commentResponseDto.writerProfileImageUrl = writerProfileImageUrl;
+        commentResponseDto.like = 0L;
         return commentResponseDto;
+    }
+
+    public void setLike(Long like) {
+        this.like = like;
+    }
+
+    public void setLikedUser(boolean likedUser) {
+        this.likedUser = likedUser;
     }
 }

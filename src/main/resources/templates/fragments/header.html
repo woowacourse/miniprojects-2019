@@ -3,8 +3,8 @@
 <header class="header navbar shadow-sm" id="header" th:fragment="headerFragment">
     <div class="header-container">
         <ul class="nav-left mrg-left-0 padding-8">
-            <li>
-                <a class="side-nav-toggle" href="javascript:void(0);">
+            <li id="side-nav-toggle-list" class="display-none">
+                <a class="side-nav-toggle">
                     <i class="material-icons">menu</i>
                 </a>
             </li>
@@ -22,12 +22,12 @@
                 </a>
             </li>
             <li>
-                <a class="pointer">
+                <a class="pointer" onclick="readyMessage()">
                     <i class="material-icons">apps</i>
                 </a>
             </li>
             <li>
-                <a class="pointer">
+                <a class="pointer" onclick="readyMessage()">
                     <i class="material-icons">notifications</i>
                 </a>
             </li>
@@ -39,7 +39,7 @@
                            data-toggle="dropdown">
                             <img alt="Brown"
                                  class="profile-img img-fluid"
-                                 src="/images/default/eastjun_profile.jpg">
+                                 th:src="${session.user.profileImageUrl}">
                             <div class="user-info text-white">
                                 <span class="name pdd-right-5"
                                       th:text="${session.user.name}"></span>
@@ -70,5 +70,11 @@
             </li>
         </ul>
     </div>
+
+    <script>
+        function readyMessage() {
+            alert('준비중입니다.');
+        }
+    </script>
 </header>
 </html>

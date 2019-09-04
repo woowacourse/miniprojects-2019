@@ -1,15 +1,13 @@
 package com.wootube.ioi.web.session;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.wootube.ioi.domain.model.User;
 import org.modelmapper.ModelMapper;
-
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class UserSessionManager extends SessionManagerGenerator {
-
     private final ModelMapper modelMapper;
 
     public UserSessionManager(HttpServletRequest request, ModelMapper modelMapper) {

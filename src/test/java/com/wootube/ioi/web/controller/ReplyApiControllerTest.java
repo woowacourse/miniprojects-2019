@@ -2,11 +2,15 @@ package com.wootube.ioi.web.controller;
 
 import com.wootube.ioi.service.dto.CommentRequestDto;
 import com.wootube.ioi.service.dto.ReplyRequestDto;
+import com.wootube.ioi.service.dto.ReplyResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class ReplyApiControllerTest extends CommonControllerTest {
@@ -96,6 +100,27 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 statusCode(400);
     }
 
+    @Test
+    @DisplayName("답글을 최신순으로 정렬한다.")
+    void sortReplyByUpdateTime() {
+        String sessionValue = login(USER_A_LOGIN_REQUEST_DTO);
+        getSavedReplyId(USER_A_VIDEO_ID, USER_A_VIDEO_USER_A_COMMENT, sessionValue);
+        getSavedReplyId(USER_A_VIDEO_ID, USER_A_VIDEO_USER_A_COMMENT, sessionValue);
+
+        List<ReplyResponseDto> replies =
+                given().
+                        when().
+                        get(basicPath() + "/api/videos/" + USER_A_VIDEO_ID + "/comments/" + USER_A_VIDEO_USER_A_COMMENT + "/replies/sort/updatetime").
+                        then().
+                        statusCode(200).
+                        extract().
+                        response().
+                        jsonPath().
+                        getList(".", ReplyResponseDto.class);
+
+        assertThat(replies.size()).isEqualTo(2);
+    }
+
     int getSavedReplyId(Long videoId, Long commentId, String sessionId) {
         return given().
                 contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).
@@ -107,5 +132,4 @@ public class ReplyApiControllerTest extends CommonControllerTest {
                 jsonPath().
                 get("id");
     }
-
 }

@@ -1,6 +1,11 @@
 const commentButton = (function () {
     const CommentController = function () {
         const commentService = new CommentService();
+        const commentArea = document.querySelector('#comment-area');
+
+        const getComment = function () {
+            document.addEventListener("DOMContentLoaded", commentService.sortCommentByUpdateTime);
+        };
 
         const saveComment = function () {
             const commentAddButton = document.querySelector('#comment-save-button');
@@ -8,29 +13,48 @@ const commentButton = (function () {
         };
 
         const updateComment = function () {
-            const commentArea = document.querySelector('#comment-area');
             commentArea.addEventListener('click', commentService.update);
         };
 
         const deleteComment = function () {
-            const commentArea = document.querySelector('#comment-area');
             commentArea.addEventListener('click', commentService.delete);
-        }
+        };
 
         const commentToggle = function () {
             document.querySelector("#comment-cancel-button").addEventListener("click", commentService.toggleCommentCancel);
             document.querySelector("#comment-input-text").addEventListener("click", commentService.toggleCommentWrite);
             document.querySelector("#comment-input-text").addEventListener("keyup", commentService.toggleCommentSaveButton);
-            document.querySelector("#comment-area").addEventListener("mouseover", commentService.toggleCommentMoreButton);
+            commentArea.addEventListener("click", commentService.toggleCommentEditButton);
+        };
 
-            document.querySelector("#comment-area").addEventListener("click", commentService.toggleCommentEditButton);
+        const sortCommentByUpdateTime = function () {
+            const commentAddButton = document.querySelector('#sort-comment-update-time');
+            commentAddButton.addEventListener('click', commentService.sortCommentByUpdateTime);
+        };
+
+        const sortCommentByLikeCount = function () {
+            const commentAddButton = document.querySelector('#sort-comment-like');
+            commentAddButton.addEventListener('click', commentService.sortCommentByLikeCount);
+        };
+
+        const increaseLike = function () {
+            commentArea.addEventListener('click', commentService.increaseLike);
+        }
+
+        const decreaseLike = function () {
+            commentArea.addEventListener('click', commentService.decreaseLike);
         }
 
         const init = function () {
             saveComment();
             updateComment();
-            commentToggle();
             deleteComment();
+            commentToggle();
+            sortCommentByUpdateTime();
+            sortCommentByLikeCount();
+            getComment();
+            increaseLike();
+            decreaseLike();
         };
 
         return {
@@ -55,7 +79,7 @@ const commentButton = (function () {
         }
 
         function toggleCommentSaveButton(event) {
-            if (event.target.className === "comment-input" && event.target.value !== "") {
+            if (event.target.classList.contains("comment-input") && event.target.value !== "") {
                 document.querySelector("#comment-save-button").classList.remove("disabled")
                 return;
             }
@@ -70,47 +94,98 @@ const commentButton = (function () {
 
         const toggleCommentEditButton = (event) => {
             let target = event.target;
-            if (target.tagName === "I") {
+            if (target.tagName === "I" || target.tagName === "SPAN") {
                 target = target.parentElement;
             }
-            if (target.classList.contains("comment-update-cancel-btn")) {
-                const commentButtonDiv = target.parentElement;
-                commentButtonDiv.classList.toggle("display-none");
-                commentButtonDiv.previousElementSibling.classList.toggle("display-none");
-                commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
-            }
-            if (target.classList.contains("comment-edit-button")) {
-                const commentButtonDiv = target.parentElement;
-                commentButtonDiv.parentElement.classList.toggle("display-none");
-                commentButtonDiv.parentElement.previousElementSibling.classList.toggle("display-none");
-                commentButtonDiv.parentElement.nextElementSibling.classList.toggle("display-none");
+            if (target.classList.contains("comment-update-cancel-btn") || target.classList.contains("comment-edit-button")) {
+                const commentList = target.closest("li");
+                commentList.querySelector(".reply-area").classList.toggle("display-none");
+                commentList.querySelector(".comment-update-area").classList.toggle("display-none");
+                commentList.querySelector(".comment-block").classList.toggle("display-none");
+                commentList.querySelector(".comment-writer-img").classList.toggle("display-none");
             }
         }
 
-        const saveComment = (event) => {
-            const inputComment = event.target.parentElement.parentElement.querySelector("INPUT");
+        const sortCommentByUpdateTime = () => {
+            const requestUri = `/api/videos/${videoId}/comments/sort/updatetime`;
 
-            fetch('/api/videos/' + videoId + '/comments', {
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                method: 'POST',
-                body: JSON.stringify({
-                    contents: inputComment.value
-                })
-            }).then(response => {
-                if (response.status === 201) {
-                    return response.json();
+            const callback = (response) => {
+                const commentListDiv = document.querySelector("#comment-area");
+                commentListDiv.innerHTML = "";
+
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        let count = 0;
+                        for (const comment of data) {
+                            appendComment(comment);
+                            markCommentLike(commentListDiv, comment);
+                            count++;
+                        }
+                        commentCount.innerText = count;
+                    });
+                    return;
                 }
                 throw response;
-            }).then(comment => {
-                appendComment(comment);
-                let currentCommentCount = parseInt(commentCount.innerText)
-                commentCount.innerText = String(currentCommentCount + 1);
-                inputComment.value = "";
-            }).catch(error => {
-                error.text().then(json => alert(json))
-            });
+            };
+            const handleError = (error) => {
+                alert(error);
+            };
+            AjaxRequest.GET(requestUri, callback, handleError);
+        }
+
+        const sortCommentByLikeCount = () => {
+            const requestUri = `/api/videos/${videoId}/comments/sort/likecount`;
+            const callback = (response) => {
+                const commentListDiv = document.querySelector("#comment-area");
+                commentListDiv.innerHTML = "";
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        let count = 0;
+                        for (const comment of data) {
+                            appendComment(comment);
+                            markCommentLike(commentListDiv, comment);
+                            count++;
+                        }
+                        commentCount.innerText = count;
+                    });
+                    return;
+                }
+                throw response;
+            };
+            const handleError = (error) => {
+                alert(error);
+            };
+            AjaxRequest.GET(requestUri, callback, handleError);
+        }
+
+        const saveComment = (event) => {
+            if (event.target.classList.contains("disabled")) {
+                return;
+            }
+
+            const inputComment = event.target.parentElement.parentElement.querySelector(".comment-input");
+            const requestUri = `/api/videos/${videoId}/comments`;
+            const requestBody = {
+                contents: inputComment.value
+            };
+            const callback = (response) => {
+                if (response.status === 201) {
+                    response.json().then(comment => {
+                        appendComment(comment);
+                        const currentCommentCount = parseInt(commentCount.innerText)
+                        commentCount.innerText = String(currentCommentCount + 1);
+                        inputComment.value = "";
+                    });
+                    return;
+                }
+                throw response;
+            };
+            const handleError = (error) => {
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
+            };
+
+            AjaxRequest.POST(requestUri, requestBody, callback, handleError);
         };
 
         const updateComment = (event) => {
@@ -124,39 +199,38 @@ const commentButton = (function () {
                 return;
             }
 
-            const commentId = target.closest("li").dataset.commentid;
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
+            const contents = commentList.querySelector(".comment-input").value;
 
-            const contents = target.parentElement.querySelector("INPUT").value;
-
-            fetch('/api/videos/' + videoId + '/comments/' + commentId, {
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                method: 'PUT',
-                body: JSON.stringify({
-                    contents: contents
-                })
-            }).then(response => {
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}`;
+            const requestBody = {
+                contents: contents
+            };
+            const callback = (response) => {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
-                    target.parentElement.previousElementSibling.querySelector(".comment-contents").innerText = contents;
-
-                    const commentButtonDiv = event.target.parentElement;
-                    commentButtonDiv.classList.toggle("display-none");
-                    commentButtonDiv.previousElementSibling.classList.toggle("display-none");
-                    commentButtonDiv.previousElementSibling.previousElementSibling.classList.toggle("display-none");
-                } else {
-                    throw response;
+                    commentList.querySelector(".comment-contents").innerText = contents;
+                    commentList.querySelector(".comment-update-area").classList.toggle("display-none");
+                    commentList.querySelector(".reply-area").classList.toggle("display-none");
+                    commentList.querySelector(".comment-block").classList.toggle("display-none");
+                    commentList.querySelector(".comment-writer-img").classList.toggle("display-none");
+                    return;
                 }
-            }).catch(error => {
-                error.text().then(json => alert(json))
-            });
+                throw response;
+            };
+            const handleError = (error) => {
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
+            };
+
+            AjaxRequest.PUT(requestUri, requestBody, callback, handleError);
         }
 
         const deleteComment = (event) => {
             let target = event.target;
 
-            if (target.tagName === "I") {
+            if (target.tagName === "I" || target.tagName === "SPAN") {
                 target = target.parentElement;
             }
 
@@ -164,79 +238,127 @@ const commentButton = (function () {
                 return;
             }
 
-            const commentId = target.closest("li").dataset.commentid;
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
 
-            fetch('/api/videos/' + videoId + '/comments/' + commentId, {
-                method: 'DELETE'
-            }).then(response => {
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}`;
+            const callback = (response) => {
                 if (response.status === 204) {
                     toggleCommentMoreButton(event);
-                    target.closest("li").remove();
+                    commentList.remove();
                     let currentCommentCount = parseInt(commentCount.innerText)
                     commentCount.innerText = String(currentCommentCount - 1);
-                } else {
-                    throw response;
+
+                    return;
                 }
-            }).catch(error => {
-                error.text().then(json => alert(json))
-            });
+                throw response;
+            };
+            const handleError = (error) => {
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
+            };
+
+            AjaxRequest.DELETE(requestUri, callback, handleError);
         }
 
         const appendComment = (comment) => {
             const writtenTime = calculateWrittenTime(comment.updateTime);
-
-            const commentTemplate = `<li class="comment mrg-btm-30" data-commentid="${comment.id}">
-                <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg" alt="">
-                <div class="comment-block">
-                    <div class="font-size-13">
-                        <span class="user-name">${comment.writer.name}</span>
-                        <span class="update-date">${writtenTime}</span>
-                    </div>
-                    <div class="comment-more-box">
-                        <button class="comment-more-buttons comment-edit-button">
-                            <i class="ti-pencil"> 수정</i>
-                        </button>
-                        <button class="comment-more-buttons comment-delete-button">
-                            <i class="ti-trash"> 삭제</i>
-                        </button>
-                    </div>
-                    <span class="comment-contents font-size-15">${comment.contents}</span>
-                    <div>
-                        <button class="like-btn">
-                            <i class="ti-thumb-up"></i>
-                        </button>
-                        <span>3.5천</span>
-                        <button class="reply-toggle-btn">답글</button>
-                    </div>
-                </div>
-                <div class="comment-update-area display-none mrg-btm-50">
-                    <div>
-                        <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
-                             alt="">
-                        <input class="comment-input" type="text" value="${comment.contents}">
-                    </div>
-                    <button class="btn comment-btn comment-update-cancel-btn">취소</button>
-                    <button class="btn comment-btn edit comment-update-btn">수정</button>
-                </div>
-                <div class="mrg-top-5 reply-area">
-                    <div class="reply-edit display-none">
-                        <div class="mrg-btm-10">
-                            <img class="img-circle width-50 comment-writer-img" src="/images/default/eastjun_big.jpg"
-                                 alt="">
-                            <input class="comment-input" type="text" placeholder="공개 답글 추가...">
-                        </div>
-                        <button class="btn comment-btn edit reply-save-btn disabled">답글</button>
-                        <button class="btn comment-btn reply-cancel-btn">취소</button>
-                    </div>
-                    <ul class="reply-list">
-
-                    </ul>
-                </div>
-            </li>`;
-
             const commentList = document.querySelector("#comment-area");
-            commentList.insertAdjacentHTML("beforeend", commentTemplate);
+            commentList.insertAdjacentHTML("afterbegin", Templates.commentTemplate(comment, writtenTime));
         };
+
+        const markCommentLike = (commentListDiv, comment) => {
+            const commentId = comment.id;
+            const commentList = commentListDiv.querySelector("li");
+
+            if (!commentList.dataset.commentid === commentId) {
+                return;
+            }
+
+            if (comment.likedUser) {
+                commentList.querySelector(".comment-like-btn").classList.add("display-none");
+                commentList.querySelector(".comment-dislike-btn").classList.remove("display-none");
+            }
+
+            if (!comment.likedUser) {
+                commentList.querySelector(".comment-like-btn").classList.remove("display-none");
+                commentList.querySelector(".comment-dislike-btn").classList.add("display-none");
+            }
+
+        }
+
+        const increaseLike = (event) => {
+            let target = event.target;
+
+            if (target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if (!target.classList.contains("comment-like-btn")) {
+                return;
+            }
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/likes`;
+
+            const requestBody = {};
+
+            const callback = (response) => {
+                if (response.status === 201) {
+                    response.json().then(data => {
+                        const commentLikeCountDiv = commentList.querySelector(".comment-like-count");
+                        commentLikeCountDiv.innerText = data.count;
+                        commentList.querySelector(".comment-like-btn").classList.add("display-none");
+                        commentList.querySelector(".comment-dislike-btn").classList.remove("display-none");
+                    })
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
+            };
+
+            AjaxRequest.POST(requestUri, requestBody, callback, handleError);
+        }
+
+        const decreaseLike = (event) => {
+            let target = event.target;
+
+            if (target.tagName === "I") {
+                target = target.parentElement;
+            }
+
+            if (!target.classList.contains("comment-dislike-btn")) {
+                return;
+            }
+
+            const commentList = target.closest("li");
+            const commentId = commentList.dataset.commentid;
+            const requestUri = `/api/videos/${videoId}/comments/${commentId}/likes`;
+
+            const callback = (response) => {
+                if (response.status === 201) {
+                    response.json().then(data => {
+                        const commentLikeCountDiv = commentList.querySelector(".comment-like-count");
+                        commentLikeCountDiv.innerText = data.count;
+                        commentList.querySelector(".comment-dislike-btn").classList.add("display-none");
+                        commentList.querySelector(".comment-like-btn").classList.remove("display-none");
+                    })
+                    return;
+                }
+                throw response;
+            };
+
+            const handleError = (error) => {
+                const errorJson = JSON.parse(error);
+                alert(errorJson.message);
+            };
+
+            AjaxRequest.DELETE(requestUri, callback, handleError);
+        }
 
         return {
             save: saveComment,
@@ -245,8 +367,11 @@ const commentButton = (function () {
             toggleCommentCancel: toggleCommentCancel,
             toggleCommentWrite: toggleCommentWrite,
             toggleCommentSaveButton: toggleCommentSaveButton,
-            toggleCommentMoreButton: toggleCommentMoreButton,
-            toggleCommentEditButton: toggleCommentEditButton
+            toggleCommentEditButton: toggleCommentEditButton,
+            sortCommentByUpdateTime: sortCommentByUpdateTime,
+            sortCommentByLikeCount: sortCommentByLikeCount,
+            increaseLike: increaseLike,
+            decreaseLike: decreaseLike
         }
     };
 
