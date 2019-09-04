@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @EqualsAndHashCode(of = {"id"})
-public class Article {
-    public static final String REGEX = "#([0-9a-zA-Z가-힣_]{2,30})";
+public class Article extends BaseEntity {
+    private static final String REGEX = "#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]+)";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,7 +56,7 @@ public class Article {
     }
 
     private boolean notEqualAuthorId(long id) {
-        return this.author.notEqualId(id);
+        return this.author.isNotSameUser(id);
     }
 
     public Set<String> getKeyword() {

@@ -1,3 +1,4 @@
+<html xmlns:th="http://www.thymeleaf.org">
 <header id="header" class="header navbar">
     <div class="header-container max-width-lg mx-auto">
         <ul class="nav-left mrg-left-0 padding-15">
@@ -19,7 +20,7 @@
                 <input class="form-control mrg-top-0" type="text" placeholder="Search...">
                 <div class="advanced-search">
                     <div class="search-wrapper">
-                        <div class="pdd-vertical-10">
+                        <div class="pdd-btm-10">
                             <ul id="search-result" class="list-unstyled list-info">
                             </ul>
                         </div>
@@ -28,19 +29,18 @@
             </li>
         </ul>
         <ul class="nav-right padding-15">
-
             <li class="">
                 <a class="pointer">
                     <i class="ti-eye"></i>
                 </a>
             </li>
             <li>
-                <a class="pointer">
-                    <i class="ti-heart"></i>
+                <a class="pointer" href="/articles/writing">
+                    <i class="ti-pencil-alt" accesskey="w"></i>
                 </a>
             </li>
             <li>
-                <a class="pointer">
+                <a th:href="@{/users/{nickName}(nickName=${session.sessionUser.nickName})}">
                     <i class="ti-user"></i>
                 </a>
             </li>
@@ -49,6 +49,13 @@
                     <i class="ti-lock"></i>
                 </a>
             </li>
+            <li>
+                <a class="pointer" href="" accesskey="d" id="dm-list"
+                   data-target="#dm-modal" data-toggle="modal">
+                    <i class="ti-email"></i>
+                </a>
+            </li>
         </ul>
     </div>
 </header>
+</html>

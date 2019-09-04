@@ -4,6 +4,7 @@ package com.woowacourse.dsgram.web.controller;
 import com.woowacourse.dsgram.service.dto.user.AuthUserRequest;
 import com.woowacourse.dsgram.service.dto.user.SignUpUserRequest;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
@@ -13,6 +14,10 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 import static org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 class UserApiControllerTest extends AbstractControllerTest {
@@ -29,6 +34,24 @@ class UserApiControllerTest extends AbstractControllerTest {
 
         signUpUserRequest = createSignUpUser();
         anotherCookie = getCookieAfterSignUpAndLogin(signUpUserRequest);
+    }
+
+    @Test
+    @DisplayName("회원가입")
+    void signUp() {
+        SignUpUserRequest newUser = new SignUpUserRequest("whale", "whale Kim", "dophin", "whale@gmail.com");
+        getResponseAfterSignUp(newUser)
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(document("users/post/signUp",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("nickName").description("가입할 회원의 닉네임(중복 불가)"),
+                                fieldWithPath("userName").description("가입할 회원의 이름"),
+                                fieldWithPath("password").description("가입할 회원의 비밀번호"),
+                                fieldWithPath("email").description("가입할 회원의 이메일(중복 불가)")
+                        )));
     }
 
     @Test
@@ -92,7 +115,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void 회원정보_수정페이지_접근() {
-        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID - 1)
+        webTestClient.get().uri(COMMON_REQUEST_URL, LAST_USER_ID)
                 .header("Cookie", myCookie)
                 .exchange()
                 .expectStatus().isOk();
@@ -121,14 +144,19 @@ class UserApiControllerTest extends AbstractControllerTest {
     @Test
     void 회원정보_수정() {
         MultipartBodyBuilder multipartBodyBuilder =
-                createMultipartBodyBuilder("포비", "intro", "포비", "dsdsds", "");
+                createMultipartBodyBuilder("whale kim", "i'm Whale!", "whales", "dolphins", "https://github.com/ep1stas1s");
 
         webTestClient.put()
-                .uri("/api/users/{userId}", LAST_USER_ID - 1)
+                .uri("/api/users/{userId}", LAST_USER_ID)
                 .header("Cookie", myCookie)
                 .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(document("users/put/update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 
     @Test
@@ -181,7 +209,6 @@ class UserApiControllerTest extends AbstractControllerTest {
                 createMultipartBodyBuilder("김포비", "반란군", "1234", "slipp.net",
                         "intro");
 
-        System.out.println("지금 몇번인데: " + LAST_USER_ID);
         ResponseSpec response = webTestClient.put().uri("/api/users/{userId}", LAST_USER_ID - 1)
                 .header("Cookie", anotherCookie)
                 .body(BodyInserters.fromObject(multipartBodyBuilder.build()))
@@ -201,22 +228,24 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     @Test
     void user_탈퇴() {
-        long[] userId = new long[1];
         long[] articleId = new long[1];
 
-        requestWithBodyBuilder(createMultipartBodyBuilder(), HttpMethod.POST, "/api/articles", myCookie)
+        requestWithBodyBuilder(createMultipartBodyBuilder("contents"), HttpMethod.POST, "/api/articles", myCookie)
                 .expectBody()
-                .jsonPath("$.id")
-                .value(id -> articleId[0] = Long.parseLong(id.toString()))
-                .jsonPath("$.author.id")
-                .value(id -> userId[0] = Long.parseLong(id.toString()));
+                .jsonPath("$")
+                .value(id -> articleId[0] = Long.parseLong(id.toString()));
 
-        webTestClient.delete().uri("/api/users/{userId}", userId[0])
+        webTestClient.delete().uri("/api/users/{userId}", LAST_USER_ID)
                 .header("Cookie", myCookie)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(document("users/delete/withdrawal",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
-        webTestClient.get().uri("/articles/{articleId}", articleId[0])
+        webTestClient.get().uri("/api/articles/{articleId}", articleId[0])
                 .header("Cookie", anotherCookie)
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -225,8 +254,7 @@ class UserApiControllerTest extends AbstractControllerTest {
 
     private MultipartBodyBuilder createMultipartBodyBuilder(String userName,
                                                             String intro, String nickName,
-                                                            String password, String website
-    ) {
+                                                            String password, String website) {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("file", new ByteArrayResource(new byte[]{1, 2, 3, 4}) {
             @Override

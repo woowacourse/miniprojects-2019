@@ -4,6 +4,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <th:block layout:fragment="head">
     <title>woostagram</title>
+    <link rel="stylesheet" href="/css/card.css">
 </th:block>
 <th:block layout:fragment="content">
     <div>
@@ -12,16 +13,15 @@
                 <div class="container-fluid max-width-lg mx-auto">
                     <div class="row">
                         <div class="col-lg-7 mx-auto">
-                            <button type="button" id="write-article-button" class="btn btn-outline-primary"
-                                    accesskey="w">피드 작성
-                            </button>
-                            <div id="cards" th:each="article : ${articles}" class="card widget-feed no-pdd mrg-btm-70">
-                                <th:block th:include="fragments/card"></th:block>
+                            <div class="widget-feed no-pdd mrg-btm-70" id="cards">
+
                             </div>
+                            <div id="end"></div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -72,6 +72,10 @@
                             <td>Alt + S</td>
                             <td>Focus Search bar</td>
                         </tr>
+                        <tr>
+                            <td>Alt + D</td>
+                            <td>Show DM List</td>
+                        </tr>
                         </tbody>
                     </table>
 
@@ -82,22 +86,83 @@
             </div>
         </div>
     </div>
-    <script src="/js/article.js"></script>
-    <script src="/js/fetchApi.js"></script>
-    <script src="/js/fileLoadApi.js"></script>
-    <script src="/js/card.js"></script>
+
+    <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="liker-list" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-head">
+                    <h5 class="modal-title text-center text-bold" id="likes"></h5>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="liker-info">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="dm-modal" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-head-dm">
+                    <h5 class="modal-title text-center text-bold">DM 목록</h5>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="dm-info">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script th:inline="javascript">
-        // TODO 무한 스크롤로 변경 시 이동
-        const articles = [[${articles}]];
+        const showDmModal = function () {
+            /*<![CDATA[*/
+            const nickName = /*[[${session.sessionUser.nickName}]]*/;
+            /*]]>*/
+            const connector = FETCH_APP.FetchApi();
+            const ifSucceed = response => {
+                response.json().then((res) => {
+                    printModal(res);
+                })
+            };
 
-        for (let i = 0; i < articles.length; i++) {
-            const articleId = articles[i].id;
-            const articleFileName = articles[i].fileInfo.fileName;
+            connector.fetchTemplateWithoutBody(`/api/followings/${nickName}`, connector.GET, ifSucceed);
 
-            const fileLoader = FILE_LOAD_APP.FileLoadService();
+            const printModal = res => {
+                const modalBody = document.getElementById('dm-info');
+                modalBody.innerHTML = "";
+                console.log('res', res);
+                let dmList = '';
+                for (let i = 0; i < res.length; i++) {
+                    dmList = dmList + `<div class="content">
+                                                        <div onclick="location.href='/chat/${res[i].id}'" class="pointer">
+                                                            <div style="float: left; width: 13%;">
+                                                                <img class="img-circle height-40px width-40px" src="/images/default/default_profile.png">
+                                                            </div>
+                                                            <div>
+                                                                <div id="nickName-${i}" class="text-bold" style="font-size: medium">${res[i].nickName}</div>
+                                                                <div id="userName-${i}" style="font-size: small"> ${res[i].userName}</div>
+                                                            </div>
+                                                        </div>
+                                                   </div>`
+                }
+                modalBody.insertAdjacentHTML('beforeend', dmList);
+            };
+        };
 
-            fileLoader.loadMediaFile(fileLoader, articleFileName, articleId);
-        }
+        document.getElementById('dm-list').addEventListener('click', showDmModal);
     </script>
+
+</th:block>
+
+<th:block layout:fragment="addScript">
+    <script src="/js/index.js"></script>
 </th:block>
 </html>

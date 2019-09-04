@@ -1,17 +1,20 @@
 package com.woowacourse.dsgram.service.dto;
 
-import com.woowacourse.dsgram.domain.HashTag;
+import com.woowacourse.dsgram.domain.HashTagSearchResult;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@NoArgsConstructor
+@ToString
 public class HashTagResponse {
-    private List<HashTag> hashTags;
+    private List<HashTagSearchResult> hashTags;
 
-    public HashTagResponse(List<HashTag> hashTags) {
+    public HashTagResponse(List<HashTagSearchResult> hashTags) {
         this.hashTags = hashTags;
     }
 }

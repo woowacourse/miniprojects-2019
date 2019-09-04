@@ -5,16 +5,23 @@ import com.woowacourse.dsgram.domain.repository.FileInfoRepository;
 import com.woowacourse.dsgram.service.exception.FileUploadException;
 import com.woowacourse.dsgram.service.exception.NotFoundFileException;
 import com.woowacourse.dsgram.service.strategy.FileNamingStrategy;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 @Service
+@Transactional
 public class FileService {
+    private static final List<String> EXTENSIONS_IMAGE = Arrays.asList("bmp", "gif", "jpg", "png", "jpeg");
+    private static final List<String> EXTENSIONS_VIDEO = Arrays.asList("mp4", "avi", "mov", "mpg", "wmv", "mpeg");
 
     private final FileInfoRepository fileInfoRepository;
 
@@ -23,7 +30,10 @@ public class FileService {
     }
 
     public FileInfo save(MultipartFile multiFile, FileNamingStrategy strategy) {
-        String fileName = strategy.makeUniquePrefix(multiFile.getOriginalFilename());
+        String fileName = multiFile.getOriginalFilename();
+        validateFileExtension(fileName);
+
+        fileName = strategy.makeUniquePrefix(fileName);
         String filePath = strategy.makePath();
 
         makeDirectory(filePath);
@@ -31,7 +41,6 @@ public class FileService {
 
         return fileInfoRepository.save(new FileInfo(fileName, filePath));
     }
-
 
     private void makeDirectory(String filePath) {
         File directory = new File(filePath);
@@ -49,6 +58,7 @@ public class FileService {
         }
     }
 
+    @Transactional(readOnly = true)
     public byte[] readFileByFileInfo(FileInfo fileInfo) {
         File file = new File(fileInfo.getFilePath() + "/" + fileInfo.getFileName());
         try {
@@ -57,5 +67,13 @@ public class FileService {
         } catch (IOException e) {
             throw new NotFoundFileException("파일을 찾지 못했습니다.", e);
         }
+    }
+
+    private void validateFileExtension(String fileName) {
+        fileName = FilenameUtils.getExtension(fileName.toLowerCase());
+        if (EXTENSIONS_IMAGE.contains(fileName) || EXTENSIONS_VIDEO.contains(fileName)) {
+            return;
+        }
+        throw new FileUploadException("유효하지않은 파일 형식입니다.");
     }
 }

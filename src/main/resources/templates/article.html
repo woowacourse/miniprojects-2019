@@ -6,6 +6,7 @@
     <title>woostagram</title>
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/card.css">
 </th:block>
 
 <th:block layout:fragment="content">
@@ -15,11 +16,8 @@
                 <div class="container-fluid max-width-lg mx-auto">
                     <div class="row">
                         <div class="col-lg-7 mx-auto">
-                            <button type="button" id="write-article-button" class="btn btn-outline-primary">
-                                피드 작성
-                            </button>
-                            <div id="cards" class="card widget-feed no-pdd mrg-btm-70">
-                                <th:block th:include="fragments/card"></th:block>
+                            <div id="cards">
+                                <!-- insert card-->
                             </div>
                         </div>
                     </div>
@@ -27,16 +25,59 @@
             </div>
         </div>
     </div>
-    <script src="/js/article.js"></script>
+
+    <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="liker-list" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-head">
+                    <h5 class="modal-title text-center text-bold" id="likes"></h5>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="liker-info">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
     <script src="/js/fetchApi.js"></script>
+    <script src="/js/article.js"></script>
     <script src="/js/fileLoadApi.js"></script>
     <script src="/js/card.js"></script>
+    <script src="/js/template.js"></script>
+    <script src="/js/comment.js"></script>
     <script th:inline="javascript">
-        const fileLoad = function () {
+        (function () {
+            const cards = document.getElementById('cards');
+            const articleId = [[${articleId}]];
+            const connector = FETCH_APP.FetchApi();
             const fileLoader = FILE_LOAD_APP.FileLoadService();
-            fileLoader.loadMediaFile(fileLoader, [[${article.fileInfo.fileName}]], [[${article.id}]]);
-        };
-        window.addEventListener('DOMContentLoaded', fileLoad);
+            const template = TEMPLATE_APP.TemplateService();
+
+            connector.fetchTemplateWithoutBody(`/api/articles/${articleId}`, connector.GET,
+                (response) => {
+                    response.json().then(articleInfo => {
+                        cards.insertAdjacentHTML('beforeend', template.card(articleInfo));
+                        COMMENT_APP.commentsCount(articleInfo.articleId);
+                        fileLoader.loadMediaFile(fileLoader, articleInfo.articleFileName, articleInfo.articleId)
+                        fileLoader.loadProfileImageFile(fileLoader, articleInfo.userId, 'thumb-img-user-');
+                        const ifSucceed = (response) => {
+                            response.json().then(data => {
+                                let target = document.getElementById(`like-state-${articleInfo.articleId}`);
+                                const present = document.getElementById(`count-like-${articleInfo.articleId}`);
+                                present.innerText = data.countOfLikes;
+                                target.setAttribute('class', `${!data.likeState ? 'fa fa-heart-o' : 'fa fa-heart'} activated-heart font-size-25`);
+                            })
+                        };
+                        connector.fetchTemplateWithoutBody(`/api/articles/${articleInfo.articleId}/like/status`, connector.GET, ifSucceed);
+                    });
+                });
+        })();
+
     </script>
 </th:block>
 </html>

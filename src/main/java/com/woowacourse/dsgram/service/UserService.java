@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
     private final FileService fileService;
@@ -43,20 +45,25 @@ public class UserService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public UserDto findUserInfoById(long userId, LoggedInUser loggedInUser) {
         User user = findUserById(userId);
         user.checkEmail(loggedInUser.getEmail());
         return UserAssembler.toDto(user);
     }
 
+    @Transactional(readOnly = true)
     public User findUserById(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(NotFoundUserException::new);
     }
 
-    @Transactional
     public LoggedInUser update(long userId, EditUserRequest editUserRequest, LoggedInUser loggedInUser) {
-        // TODO: 2019-08-22 정리해보기^^;
         User user = findUserById(userId);
         checkDuplicatedNickName(editUserRequest, user);
         Optional<MultipartFile> maybeFile = editUserRequest.getFile();
@@ -86,7 +93,6 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    @Transactional
     public LoggedInUser oauth(String code) {
         String accessToken = githubClient.getToken(code);
         String email = githubClient.getUserEmail(accessToken);
@@ -103,18 +109,23 @@ public class UserService {
     }
 
     public void deleteUserById(long id, LoggedInUser loggedInUser) {
-        // TODO: 2019-08-20 OAUTH revoke?
         User user = findByEmail(loggedInUser.getEmail())
                 .orElseThrow(NotFoundUserException::new);
-        if (user.isNotSameId(id)) {
+        if (user.isNotSameUser(id)) {
             throw new InvalidUserException("회원정보가 일치하지 않습니다.");
         }
         userRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public byte[] findProfileImageById(long userId) {
         User user = findUserById(userId);
         FileInfo fileInfo = user.getFileInfo();
         return fileService.readFileByFileInfo(fileInfo);
+    }
+
+    @Transactional(readOnly = true)
+    public User findByNickName(String nickName) {
+        return userRepository.findByNickName(nickName).orElseThrow(NotFoundUserException::new);
     }
 }

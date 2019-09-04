@@ -1,0 +1,17 @@
+.show-comment {
+    cursor: pointer;
+    color: darkgray;
+}
+
+.delete-comment {
+    cursor: pointer;
+}
+
+.cards {
+    background-color: transparent;
+    border: none
+}
+
+.comment-item {
+    border-bottom: none;
+}

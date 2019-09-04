@@ -1,7 +1,7 @@
 const USER_APP = (() => {
     'use strict';
 
-    const UserController = function () {
+    const UserController = function() {
         const userService = new UserService();
 
         const signUp = () => {
@@ -48,7 +48,7 @@ const USER_APP = (() => {
         }
     };
 
-    const UserService = function () {
+    const UserService = function() {
         const connector = FETCH_APP.FetchApi();
         const header = {
             'Content-Type': 'application/json; charset=UTF-8',
@@ -100,7 +100,7 @@ const USER_APP = (() => {
             formData.append("webSite", webSite.value);
             formData.append("password", password.value);
 
-            const ifSucceed = () => window.location.href = '/';
+            const ifSucceed = () => window.location.href = `/users/${nickName.value}`;
 
             connector.fetchTemplate(`/api/users/${userId.value}`,
                 connector.PUT,
@@ -109,7 +109,7 @@ const USER_APP = (() => {
                 ifSucceed);
         };
 
-        const deleteUser = function (event) {
+        const deleteUser = event => {
             event.preventDefault();
             connector.fetchTemplateWithoutBody(`/api/users/${userId.value}`,
                 connector.DELETE,
@@ -150,7 +150,15 @@ const USER_APP = (() => {
             const connector = FETCH_APP.FetchApi();
 
             const getImage = response => {
+                function checkEmptyImage(buffer) {
+                    return buffer.byteLength === 0;
+                }
+
                 response.arrayBuffer().then(buffer => {
+                    if (checkEmptyImage(buffer)) {
+                        return;
+                    }
+
                     const bytes = new Uint8Array(buffer);
                     let binary = '';
                     bytes.forEach(b => binary += String.fromCharCode(b));

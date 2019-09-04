@@ -1,9 +1,6 @@
 package com.woowacourse.dsgram.domain;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -22,6 +19,7 @@ public class FileInfo {
     @Column(nullable = false)
     private String filePath;
 
+    @Builder
     public FileInfo(String fileName, String filePath) {
         this.fileName = fileName;
         this.filePath = filePath;

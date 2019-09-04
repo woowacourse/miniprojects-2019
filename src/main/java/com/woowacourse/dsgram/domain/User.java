@@ -12,9 +12,9 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @EqualsAndHashCode(of = {"id"})
-public class User {
+public class User extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Email
@@ -40,7 +40,7 @@ public class User {
     @Lob
     private String intro;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "FILEINFO_ID")
     private FileInfo fileInfo;
 
@@ -91,12 +91,12 @@ public class User {
         return this.nickName.equals(nickName);
     }
 
-    public boolean notEqualId(long id) {
+    public boolean isNotSameUser(long id) {
         return this.id != id;
     }
 
-    public boolean isNotSameId(long id) {
-        return this.id != id;
+    public boolean isSameUser(User other) {
+        return this.id == other.id;
     }
 
     @Override

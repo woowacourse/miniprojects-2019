@@ -1,9 +1,9 @@
-HEADER_APP = (() => {
-    const HeaderController = function () {
+const HEADER_APP = (() => {
+    const HeaderController = function() {
         const headerService = new HeaderService();
 
         const search = () => {
-            const searchInput = document.querySelector(".search-input input");
+            const searchInput = document.querySelector('.search-input input');
             searchInput ? searchInput.addEventListener('keyup', headerService.searchHashTag) : undefined;
         };
 
@@ -26,65 +26,72 @@ HEADER_APP = (() => {
         }
     };
 
-    const HeaderService = function () {
+    const HeaderService = function() {
         const connector = FETCH_APP.FetchApi();
+        const template = TEMPLATE_APP.TemplateService();
+
+        const cachingResult = new Map();
 
         const searchHashTag = event => {
-            const searchResult = document.querySelector("#search-result");
+            const searchResult = document.getElementById('search-result');
 
-            const getSearchResult = response => {
-                response.json()
-                    .then(data => {
-                        removeChildElements();
-                        data["hashTags"].forEach(hashTag => {
-                            const searchResultTemplate =
-                                `<li class="search-result-item">
-                                    <a href="" class="text-dark">${hashTag.keyword}</a>
-                                </li>`;
-                            searchResult.insertAdjacentHTML('afterbegin', searchResultTemplate);
-                        });
+            const query = event.target.value
+                .replace(new RegExp('#', 'gi'), ''); // user 검색과 분기 처리
 
-                        toggleSearchList();
-                    });
-
+            const showSuggestions = data => {
                 const removeChildElements = () => {
-                    searchResult.innerHTML = "";
+                    searchResult.innerHTML = '';
+                };
+
+                const insertResultElements = data => {
+                    data['hashTags'].forEach(hashTag => {
+                        // const a = searchResultTemplate;
+                        searchResult.insertAdjacentHTML('beforeend', template.searchResult(hashTag));
+                    });
                 };
 
                 const toggleSearchList = () => {
-                    const advancedSearch = document.querySelector(".advanced-search");
+                    const advancedSearch = document.querySelector('.advanced-search');
                     if (query.length > 0 && searchResult.childElementCount > 0) {
                         advancedSearch.classList.add('active');
                         return;
                     }
-                    advancedSearch.classList.remove("active")
+                    advancedSearch.classList.remove('active');
                 };
+
+                removeChildElements();
+                insertResultElements(data);
+                toggleSearchList();
             };
 
-            const query = event.target.value
-                .replace(new RegExp('#', "gi"), ''); // TODO 사람 검색과 분기 처리!!
+            const getSearchResult = response => {
+                response.json()
+                    .then(data => {
+                        showSuggestions(data);
+                        cachingResult.set(query, data);
+                    });
+            };
 
-            connector.fetchTemplateWithoutBody('/api/hashTag?query=' + query, connector.GET, getSearchResult)
+            if (cachingResult.has(query)) {
+                showSuggestions(cachingResult.get(query));
+                return;
+            }
+            connector.fetchTemplateWithoutBody(`/api/hashTags?query=${query}`, connector.GET, getSearchResult);
         };
 
         const toggleSearchInput = event => {
             event.preventDefault();
             document.querySelector('.search-box').classList.toggle('active');
             document.querySelector('.search-input').classList.toggle('active');
-            document.querySelector('.search-input input').focus()
+            document.querySelector('.search-input input').focus();
         };
 
         const applyHashTag = () => {
             const contents = Array.from(document.getElementsByClassName('contents'));
-            const regex = new RegExp('#([0-9a-zA-Z가-힣_]{2,30})', 'g');
+            const regex = new RegExp('#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]+)', 'g');
 
             contents.forEach(content => {
-                const contentsHtml = content.innerHTML;
-
-                let tag = contentsHtml.match(regex);
-                tag.forEach(tag => {
-                    content.innerHTML = content.innerHTML.replace(tag, `<a href="${tag}">${tag}</a>`)
-                });
+                content.innerHTML = content.innerHTML.replace(regex, '<a href="/tags/$1">#$1</a>')
             });
         };
 
@@ -102,6 +109,7 @@ HEADER_APP = (() => {
 
     return {
         init: init,
+        HeaderService: HeaderService
     }
 })();
 

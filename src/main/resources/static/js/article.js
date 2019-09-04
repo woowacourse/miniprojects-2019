@@ -1,17 +1,13 @@
 const ARTICLE_APP = (() => {
     'use strict';
 
-    const ArticleController = function () {
+    const ArticleController = function() {
         const articleService = new ArticleService();
+
 
         const saveArticle = () => {
             const articleSaveButton = document.getElementById('save-button');
             articleSaveButton ? articleSaveButton.addEventListener('click', articleService.save) : undefined;
-        };
-
-        const writeArticle = () => {
-            const writeArticleButton = document.getElementById('write-article-button');
-            writeArticleButton ? writeArticleButton.addEventListener('click', articleService.writeArticle) : undefined;
         };
 
         const showThumbnail = () => {
@@ -21,7 +17,6 @@ const ARTICLE_APP = (() => {
 
         const init = () => {
             saveArticle();
-            writeArticle();
             showThumbnail();
         };
 
@@ -30,7 +25,10 @@ const ARTICLE_APP = (() => {
         }
     };
 
-    const ArticleService = function () {
+    const ArticleService = function() {
+        const connector = FETCH_APP.FetchApi();
+
+
         const save = () => {
             const file = document.getElementById('file').value;
 
@@ -42,15 +40,10 @@ const ARTICLE_APP = (() => {
             const postForm = document.getElementById('save-form');
             const formData = new FormData(postForm);
 
-            const connector = FETCH_APP.FetchApi();
             const redirectToArticlePage = response => {
-                response.json().then(article => window.location.href = `/articles/${article.id}`);
+                response.json().then(articleId => window.location.href = `/articles/${articleId}`);
             };
             connector.fetchTemplate('/api/articles', connector.POST, {}, formData, redirectToArticlePage);
-        };
-
-        const writeArticle = () => {
-            location.href = "/articles/writing";
         };
 
         // TODO User꺼랑 합치기!!
@@ -64,24 +57,53 @@ const ARTICLE_APP = (() => {
             reader.readAsDataURL(file);
         };
 
-        // TODO 슬로스의 유작... 여기로 옮겨지다. (사용되지 않고 있음)
-        const copyUrl = articleId => {
-            const copiedUrl = window.location.host + `/articles/${articleId}`;
-            const copyTarget = document.createElement('textarea');
+        const fileLoader = FILE_LOAD_APP.FileLoadService();
+        const template = TEMPLATE_APP.TemplateService();
+        const headerService = HEADER_APP.HeaderService();
 
-            document.body.appendChild(copyTarget);
-            copyTarget.value = copiedUrl;
-            copyTarget.select();
-            document.execCommand('copy');
-            document.body.removeChild(copyTarget);
+        const cards = document.getElementById('cards');
+        const articleCount = document.getElementById('article-count');
 
-            alert(`링크가 복사되었습니다. ${copiedUrl}`);
+        const handleArticleInfo = articleInfo => {
+            cards.insertAdjacentHTML('beforeend', template.card(articleInfo));
+            COMMENT_APP.commentsCount(articleInfo.articleId);
+            fileLoader.loadMediaFile(fileLoader, articleInfo.articleFileName, articleInfo.articleId);
+            fileLoader.loadProfileImageFile(fileLoader, articleInfo.userId, "thumb-img-user-");
+
+            const ifSucceed = (response) => {
+                response.json().then(data => {
+                    let target = document.getElementById(`like-state-${articleInfo.articleId}`);
+                    const present = document.getElementById(`count-like-${articleInfo.articleId}`);
+                    present.innerText = data.countOfLikes;
+                    target.setAttribute('class', `${!data.likeState ? 'fa fa-heart-o' : 'fa fa-heart'} activated-heart font-size-25`);
+                })
+            };
+            connector.fetchTemplateWithoutBody(`/api/articles/${articleInfo.articleId}/like/status`, connector.GET, ifSucceed);
+        };
+
+        const handleResponse = data => {
+            if (articleCount != null) {
+                articleCount.innerText = data.totalElements;
+            }
+            data.content.forEach(handleArticleInfo);
+            headerService.applyHashTag();
+        };
+
+        // TODO search-result.js와 중복!!
+        const loadArticlesFrom = (url) => {
+            return (page) => {
+                const addArticle = response => {
+                    response.json()
+                        .then(handleResponse);
+                }
+                connector.fetchTemplateWithoutBody(`${url}?page=${page}`, connector.GET, addArticle);
+            };
         };
 
         return {
             save: save,
-            writeArticle: writeArticle,
-            changeImageJustOnFront: changeImageJustOnFront
+            changeImageJustOnFront: changeImageJustOnFront,
+            loadArticlesFrom: loadArticlesFrom,
         }
     };
 
@@ -91,7 +113,8 @@ const ARTICLE_APP = (() => {
     };
 
     return {
-        init: init
+        init: init,
+        ArticleService: ArticleService
     }
 })();
 
