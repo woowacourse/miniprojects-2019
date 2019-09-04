@@ -1,0 +1,37 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format-sql: true
+  datasource:
+    initialization-mode: always
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
+
+cloud:
+  aws:
+    s3:
+      bucket: woowa-rescue9
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+
+logging:
+  level:
+    root: INFO

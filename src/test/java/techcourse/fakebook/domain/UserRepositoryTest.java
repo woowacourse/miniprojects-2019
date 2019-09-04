@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import techcourse.fakebook.domain.friendship.Friendship;
 import techcourse.fakebook.domain.friendship.FriendshipRepository;
 import techcourse.fakebook.domain.user.User;
+import techcourse.fakebook.domain.user.UserProfileImage;
 import techcourse.fakebook.domain.user.UserRepository;
 
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// TODO: 이 어노테이션을 하면 왜 userRepository 를 찾을 수 있는 건지 아직 이해가 안된다
 @DataJpaTest
 class UserRepositoryTest {
     @Autowired
@@ -114,7 +114,7 @@ class UserRepositoryTest {
                 anyString,
                 anyString,
                 anyString,
-                anyString,
+                new UserProfileImage("a", "src/test/resources/static/images/user/profile/default.png"),
                 anyString,
                 anyString
         );

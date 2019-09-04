@@ -96,7 +96,7 @@ header ul.nav-right li, header ul.nav-left li {
     height: 24px
 }
 
-.friend-btn, .message-btn, .notification-btn {
+.friend-btn, .message-btn, .notification-btn, .more-btn {
     background-image: url('/images/default/icons.png');
     background-repeat: no-repeat;
     height: 24px;
@@ -116,6 +116,11 @@ header ul.nav-right li, header ul.nav-left li {
 .notification-btn {
     background-size: 283px 396px;
     background-position: -175px -329px
+}
+
+.more-btn {
+    background-size: 283px 396px;
+    background-position: -225px -329px
 }
 
 .friend-icon, .introduction-icon {
@@ -313,6 +318,20 @@ header ul.nav-right li, header ul.nav-left li {
     height: 16px;
     background-position: -16px -1505px;
     background-size: 37px 1608px
+}
+
+.icons.messenger {
+    width: 16px;
+    height: 16px;
+    background-image: url('/images/default/message.png');
+    background-size: 16px
+}
+
+.icons.edit-profile {
+    width: 16px;
+    height: 16px;
+    background-image: url('/images/default/pencil.png');
+    background-size: 16px
 }
 
 .left-group-title{
@@ -574,7 +593,7 @@ header ul.nav-right li, header ul.nav-left li {
     height: 144px
 }
 
-#add-friend {
+#add-friend, #remove-friend, #edit-profile, #messenger {
     border-color: #8b8b8b;
     border-style: solid;
     border-width: thin;
@@ -583,7 +602,7 @@ header ul.nav-right li, header ul.nav-left li {
     cursor: pointer;
     float: right;
     vertical-align: middle;
-    width: 100px;
+    width: 110px;
     height: 26px
 }
 
@@ -592,16 +611,6 @@ header ul.nav-right li, header ul.nav-left li {
 }
 
 #remove-friend {
-    border-color: #8b8b8b;
-    border-style: solid;
-    border-width: thin;
-    border-radius: 2px;
-    background: #f3f3f3;
-    cursor: pointer;
-    float: right;
-    vertical-align: middle;
-    width: 100px;
-    height: 26px;
     display: none;
 }
 
@@ -609,17 +618,26 @@ header ul.nav-right li, header ul.nav-left li {
     display: block;
 }
 
+#edit-profile {
+    width: 105px;
+}
+
+#messenger {
+    width: 80px;
+    margin-right: 8px;
+}
+
 .friend {
     display: inline-block;
     text-align: center;
-    position: relative
+    position: relative;
+    padding: 1px;
 }
 
 .friend > img {
     border: 1px;
     width: 88px;
-    height: 88px;
-    margin-bottom: 5px
+    height: 88px
 }
 
 .friend-name {
@@ -638,6 +656,10 @@ header ul.nav-right li, header ul.nav-left li {
 .liked > span {
     font-weight: bold;
     color: #0f9aee
+}
+
+.notification {
+  background-color: #35c1bb
 }
 
 footer {
@@ -788,4 +810,59 @@ hr {
 
 body {
     overflow-y: scroll
+}
+
+.modal-dialog h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.modal-dialog h3 {
+    font-size: 20px;
+    margin: 20px 0;
+}
+
+.modal-header {
+    border-bottom: #d4deee 1px solid;
+}
+
+.modal-dialog input {
+    display: block;
+    width: 99%;
+    border: #d4deee 1px solid;
+    border-radius: 5px;
+    margin: 5px 0;
+    padding: 8px;
+}
+
+#edit-profile-modal #profile-image {
+    width: 200px;
+    border-radius: 100%;
+    margin: 8px 0;
+}
+
+#edit-profile-button, #attachment-button {
+    background-color: #42b29f;
+    border-color: #42b29f;
+    color: #fff;
+}
+
+.count-of-comment-like {
+    position: absolute;
+    top: 15px;
+    left: 485px;
+    width: 40px;
+    height: 25px;
+    padding: 4px 4px 2px 2px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.hover-underline:hover {
+    text-decoration: underline;
+}
+
+.count-of-comment-like.liked {
+    color: #0f9aee;
 }

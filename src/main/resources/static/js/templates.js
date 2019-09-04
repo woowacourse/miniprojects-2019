@@ -1,54 +1,53 @@
 const templates = (() => {
   class Templates {
     escapeHtml(string) {
-      return string.replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+      return string.replace(/</gi, "&lt;").replace(/>/gi, "&gt;").replace(/\n/gi, "<br>")
     }
 
     articleTemplate(input) {
-      const ARTICLE_TEMPLATE_HTML_A =
-        `<div id="article-${input.id}" class="card widget-feed padding-15">
-          <div class="feed-header">
-            <ul class="list-unstyled list-info">
-              <li>
-                <img class="thumb-img img-circle" src="/images/profile/${input.user.coverUrl}" alt="${input.user.name}">
-                <div class="info">
-                  <a href="/users/${input.user.id}" class="title no-pdd-vertical text-semibold inline-block">${input.user.name}</a>
-                  <span>님이 게시물을 작성하였습니다.</span>
-                  <span class="sub-title">${input.date}</span>
-                  <a class="pointer absolute top-0 right-0" data-toggle="dropdown" aria-expanded="false">
-                    <span class="btn-icon text-dark">
-                      <i class="ti-more font-size-16"></i>
-                    </span>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <a href="javascript:App.editArticle(${input.id})" class="pointer">
-                        <i class="ti-pencil pdd-right-10 text-dark"></i>
-                        <span>게시글 수정</span>
-                      </a>
-                      <a href="javascript:App.removeArticle(${input.id})" class="pointer">
-                        <i class="ti-trash pdd-right-10 text-dark"></i>
-                        <span>게시글 삭제</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div id="article-${input.id}-content" class="feed-body no-pdd">
-            <p>
-              <span> ${this.escapeHtml(input.content)} </span> 
-            </p>`
-      const ARTICLE_TEMPLATE_HTML_B =
-          `</div>
+      return `<div id="article-${input.id}" class="card widget-feed padding-15">
+        <div class="feed-header">
+          <ul class="list-unstyled list-info">
+            <li>
+              <img class="thumb-img img-circle" src="${input.user.profileImage.path}" alt="${input.user.name}">
+              <div class="info">
+                <a href="/users/${input.user.id}" class="title no-pdd-vertical text-semibold inline-block">${input.user.name}</a>
+                <span>님이 게시물을 작성하였습니다.</span>
+                <span class="sub-title">${input.date}</span>
+                <a id="article-dropdown-menu-${input.id}" class="pointer absolute top-0 right-0" data-toggle="dropdown" aria-expanded="false">
+                  <span class="btn-icon text-dark">
+                    <i class="ti-more font-size-16"></i>
+                  </span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="javascript:App.editArticle(${input.id})" class="pointer">
+                      <i class="ti-pencil pdd-right-10 text-dark"></i>
+                      <span>게시글 수정</span>
+                    </a>
+                    <a href="javascript:App.removeArticle(${input.id})" class="pointer">
+                      <i class="ti-trash pdd-right-10 text-dark"></i>
+                      <span>게시글 삭제</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div id="article-${input.id}-content" class="feed-body no-pdd">` +
+          input.images.map(image => `<img class="vertical-align" src="${image.path}">`).reduce((a, b) => a + b, "") +
+          `<p>
+            <span> ${this.escapeHtml(input.content)} </span> 
+          </p>
+        </div>
           <ul class="feed-action pdd-btm-5 border bottom">
             <li>
               <i class="fa fa-thumbs-o-up text-info font-size-16 mrg-left-5"></i>
-              <span id="count-of-like-${input.id}" class="font-size-14 lh-2-1"> 0</span>
+              <span id="count-of-like-${input.id}" class="font-size-14 lh-2-1">${input.countOfLike}</span>
             </li>
             <li class="float-right mrg-right-15">
-              <span class="font-size-13">댓글 <span id="count-of-comment-${input.id}">0</span>개</span>
+              <span class="font-size-13">댓글 <span id="count-of-comment-${input.id}">${input.countOfComment}</span>개</span>
             </li>
           </ul>
           <ul class="feed-action border bottom d-flex">
@@ -74,29 +73,57 @@ const templates = (() => {
             </div>
           </div>
         </div>`
-
-      let result = ARTICLE_TEMPLATE_HTML_A
-      input.images.forEach(image => {
-        result += `<img class="vertical-align" src="/${image.path}">`
-      })
-      return result + ARTICLE_TEMPLATE_HTML_B
     }
 
     commentTemplate(input) {
-        return `<li class="comment-item">
-          <img class="thumb-img img-circle" src="/images/profile/${input.user.coverUrl}" alt="${input.user.name}">
+        return `<li id="comment-item-${input.id}" class="comment-item">
+          <img class="thumb-img img-circle" src="${input.user.profileImage.path}" alt="${input.user.name}">
           <div class="info">
             <div class="bg-lightgray border-radius-18 padding-10 max-width-100">
               <a href="/users/${input.user.id}" class="title text-bold inline-block text-link-color">${input.user.name}</a>
               <span> ${this.escapeHtml(input.content)}</span>
             </div>
             <div class="font-size-12 pdd-left-10 pdd-top-5">
-              <span class="pointer text-link-color">좋아요</span>
-              <span> · </span>
-              <span>${input.date}</span>
-            </div>
+            <span class="pointer text-link-color hover-underline" onclick="App.likeComment(${input.id})">좋아요</span>
+            <span> · </span>
+            <span>${input.date}</span>
+            <span id="comment-remove-button-${input.id}">
+                <span> · </span>
+                <span class="pointer text-link-color hover-underline" onclick="App.removeComment(${input.id})">삭제</span>
+              </span>
           </div>
-        </li>`
+        </div>
+      </li>`
+    }
+
+    commentLikeTemplate(input) {
+      return `<div id="comment-like-${input.id}" class="count-of-comment-like">
+        <i class="fa fa-thumbs-o-up text-info font-size-16 mrg-left-5"></i>
+        <span id="count-of-comment-like-${input.id}"></span></div>`
+    }
+
+    friendTemplate(input) {
+      return `<div class="friend">
+          <img src="${input.profileImage}" alt="${input.name}">
+          <a href="/users/${input.id}"><span class="friend-name">${input.name}</span></a>
+        </div>`
+    }
+
+    yourMessage(name, imageSrc, read, msg) {
+      return `<div class="yours msg">
+                        <div class="your-profile">
+                            <span class="your-profile-image" style="background-image: url('${imageSrc}');"></span>
+                            <span class="your-profile-name">${name}</span>
+                        </div>
+                        <div class="your-message">${msg}</div>
+                    </div>`;
+    }
+
+    myMessage(read, msg) {
+      return `<div class="mine msg">
+                        <div class="my-message">${msg}</div>
+                        <div class="read">${read}</div>
+                    </div>`;
     }
   }
 

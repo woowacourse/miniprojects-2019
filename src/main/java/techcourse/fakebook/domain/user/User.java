@@ -1,48 +1,81 @@
 package techcourse.fakebook.domain.user;
 
 import techcourse.fakebook.domain.BaseEntity;
+import techcourse.fakebook.exception.InvalidUserPasswordException;
+import techcourse.fakebook.utils.validator.FullName;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Objects;
 
 @Entity
 public class User extends BaseEntity {
+    public static final String USER_PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~!@#$%^&*()])[A-Za-z\\d~!@#$%^&*()]{8,}";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Email
     @Column(unique = true)
     private String email;
 
     @Column(nullable = false)
     private String encryptedPassword;
 
+    @FullName
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private String gender;
 
-    @Column(nullable = false)
-    private String coverUrl;
+    @Embedded
+    private UserProfileImage profileImage;
 
     @Column(nullable = false)
     private String birth;
 
-    @Column(nullable = false)
     private String introduction;
+
 
     private User() {
     }
 
-    public User(String email, String encryptedPassword, String name, String gender, String coverUrl, String birth, String introduction) {
+    public User(String email, String encryptedPassword, String name, String gender, UserProfileImage profileImage, String birth, String introduction) {
         this.email = email;
         this.encryptedPassword = encryptedPassword;
         this.name = name;
         this.gender = gender;
-        this.coverUrl = coverUrl;
+        this.profileImage = profileImage;
         this.birth = birth;
         this.introduction = introduction;
+    }
+
+    public static void validatePassword(String password) {
+        if (!password.matches(USER_PASSWORD_REGEX)) {
+            throw new InvalidUserPasswordException();
+        }
+    }
+
+    public void updateModifiableFields(String name, String encryptedPassword, String introduction, UserProfileImage profileImage) {
+        this.name = name;
+        this.encryptedPassword = encryptedPassword;
+        this.introduction = introduction;
+        this.profileImage = profileImage;
+    }
+
+    public void updateModifiableFields(UserProfileImage coverUrl, String introduction) {
+        this.profileImage = coverUrl;
+        this.introduction = introduction;
+    }
+
+    public boolean isSameWith(Long id) {
+        return this.id.equals(id);
+    }
+
+    public boolean checkEncryptedPassword(String encryptedPassword) {
+        return this.encryptedPassword.equals(encryptedPassword);
     }
 
     public Long getId() {
@@ -65,8 +98,8 @@ public class User extends BaseEntity {
         return gender;
     }
 
-    public String getCoverUrl() {
-        return coverUrl;
+    public UserProfileImage getProfileImage() {
+        return profileImage;
     }
 
     public String getBirth() {
@@ -75,19 +108,6 @@ public class User extends BaseEntity {
 
     public String getIntroduction() {
         return introduction;
-    }
-
-    public void updateModifiableFields(String coverUrl, String introduction) {
-        this.coverUrl = coverUrl;
-        this.introduction = introduction;
-    }
-
-    public boolean isSameWith(Long id) {
-        return this.id.equals(id);
-    }
-
-    public boolean checkEncryptedPassword(String encryptedPassword) {
-        return this.encryptedPassword.equals(encryptedPassword);
     }
 
     @Override
@@ -111,7 +131,7 @@ public class User extends BaseEntity {
                 ", encryptedPassword='" + encryptedPassword + '\'' +
                 ", name='" + name + '\'' +
                 ", gender='" + gender + '\'' +
-                ", coverUrl='" + coverUrl + '\'' +
+                ", profileImage='" + profileImage + '\'' +
                 ", birth='" + birth + '\'' +
                 ", introduction='" + introduction + '\'' +
                 '}';

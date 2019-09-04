@@ -1,4 +1,11 @@
 spring:
+  profiles:
+    active: local
+
+---
+
+spring:
+  profiles: local
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -22,7 +29,16 @@ spring:
   freemarker:
     cache: false
 
+cloud:
+  aws:
+    s3:
+      bucket: woowa-rescue9
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 logging:
   level:
     root: INFO
+    techcource: DEBUG
