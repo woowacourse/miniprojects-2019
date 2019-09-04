@@ -1,34 +1,29 @@
+moment.locale('ko')
+
 const wootubeCtx = {
     util: {
-        getUrlParams: function () {
-            const params = {};
-            window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (str, key, value) { params[key] = value; });
-            return params;
+        getUrlParams: function (name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
         },
         calculateDate: function (responseDate) {
-            const localResponseDate = moment.utc(responseDate,'YYYYMMDDHH').local().format('YYYYMMDDHH')
-            const videoDate = new Date(localResponseDate.substr(0, 4), localResponseDate.substr(4, 2), localResponseDate.substr(6, 2), localResponseDate.substr(8, 2))
-            const currentDate = new Date()
-            const yearDifference = currentDate.getFullYear() - videoDate.getFullYear()
-            const monthDifference = currentDate.getMonth() + 1 - videoDate.getMonth()
-            const dayDifference = currentDate.getDate() - videoDate.getDate()
-            const hourDifference = currentDate.getHours() - videoDate.getHours()
-            if (yearDifference != 0) {
-                return yearDifference + '년전'
-            } else if (monthDifference != 0) {
-                return monthDifference + '달전'
-            } else if (dayDifference != 0) {
-                return dayDifference + '일전'
-            } else if (hourDifference != 0) {
-                return hourDifference + '시간전'
-            } else {
-                return '방금전'
-            }
+            const localResponseDate = moment.utc(responseDate).local()
+            return localResponseDate.fromNow();
+        },
+        unescapeHtml: (escaped) => {
+            const elm = document.createElement('div')
+            elm.innerHTML = escaped
+            return elm.childNodes.length == 0 ? '' : elm.childNodes[0].nodeValue
         }
     },
-    constants : {
-        videoPageSize : 6,
-        videoChannelPageSize : 18
+    constants: {
+        videoPageSize: 12,
+        videoChannelPageSize: 18
     }
 }
 
@@ -44,7 +39,6 @@ const Api = function () {
         return fetch(url, {
             method: method,
             headers: defaultHeader,
-            body: body
             body: body,
             credentials: 'include'
         })
@@ -57,13 +51,17 @@ const Api = function () {
             credentials: 'include'
         })
     }
-    
+
     const requestVideos = (page, size, sort) => {
-        return requestWithoutBody(`${baseUrl}/v1/videos?page=${page}&size=${size}&sort=${sort},DESC`,'GET')
+        return requestWithoutBody(`${baseUrl}/v1/videos?page=${page}&size=${size}&sort=${sort},DESC`, 'GET')
+    }
+
+    const requestMyChannelVideos = (userId) => {
+        return requestWithoutBody(`${baseUrl}/v1/videos/creators/${userId}`, 'GET')
     }
 
     const requestVideo = (videoId) => {
-        return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}`,'GET')
+        return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}`, 'GET')
     }
 
     const saveVideo = (dataBody) => {
@@ -82,8 +80,56 @@ const Api = function () {
         return request(`${baseUrl}/v1/login`, 'POST', dataBody)
     }
 
+    const postLogout = () => {
+        return request(`${baseUrl}/v1/logout`, 'POST')
+    }
+
     const signup = (dataBody) => {
         return request(`${baseUrl}/v1/users`, 'POST', dataBody)
+    }
+
+    const saveComment = (dataBody, videoId) => {
+        return request(`${baseUrl}/v1/videos/${videoId}/comments`, 'POST', dataBody)
+    }
+
+    const editComment = (dataBody, videoId, commentId) => {
+        return request(`${baseUrl}/v1/videos/${videoId}/comments/${commentId}`, 'PUT', dataBody)
+    }
+
+    const deleteComment = (videoId, commentId) => {
+        return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}/comments/${commentId}`, 'DELETE')
+    }
+
+    const retrieveComments = (videoId) => {
+        return requestWithoutBody(`${baseUrl}/v1/videos/${videoId}/comments`, 'GET')
+    }
+
+    const requestUser = (id) => {
+        return request(`${baseUrl}/v1/users/${id}`, 'GET');
+    }
+
+    const updateUser = (id, body) => {
+        return request(`${baseUrl}/v1/users/${id}`, 'PUT', body)
+    }
+
+    const deleteUser = (id) => {
+        return requestWithoutBody(`${baseUrl}/v1/users/${id}`, 'DELETE')
+    }
+
+    const retrieveLoginInfo = () => {
+        return requestWithoutBody(`${baseUrl}/v1/login/users`, 'GET')
+    }
+
+    const requestSubscribed = (userId) => {
+        return requestWithoutBody(`${baseUrl}/v1/users/${userId}/subscribed`, 'GET')
+    }
+
+    const subscribe = (channelId) => {
+        return requestWithoutBody(`${baseUrl}/v1/users/${channelId}/subscribe`, 'POST')
+    }
+
+    const cancelSubscribe = (channelId) => {
+        return requestWithoutBody(`${baseUrl}/v1/users/${channelId}/subscribe`, 'DELETE')
     }
 
     return {
@@ -93,8 +139,21 @@ const Api = function () {
         updateVideo,
         deleteVideo,
         postLogin,
-        signup
+        postLogout,
+        signup,
+        saveComment,
+        editComment,
+        deleteComment,
+        retrieveComments,
+        requestUser,
+        updateUser,
+        retrieveLoginInfo,
+        deleteUser,
+        requestMyChannelVideos,
+        requestSubscribed,
+        subscribe,
+        cancelSubscribe
     }
-
 }
+
 const api = new Api()

@@ -10,14 +10,16 @@ public class VideoResponse {
     private final String contents;
     private final String createDate;
     private final CreatorResponse creator;
+    private final int viewCount;
 
-    public VideoResponse(Long id, String youtubeId, String title, String contents, String createDate, CreatorResponse creator) {
+    public VideoResponse(Long id, String youtubeId, String title, String contents, String createDate, CreatorResponse creator, int viewCount) {
         this.id = id;
         this.youtubeId = youtubeId;
         this.title = title;
         this.contents = contents;
         this.createDate = createDate;
         this.creator = creator;
+        this.viewCount = viewCount;
     }
 
     public Long getId() {
@@ -42,6 +44,10 @@ public class VideoResponse {
 
     public CreatorResponse getCreator() {
         return creator;
+    }
+
+    public int getViewCount() {
+        return viewCount;
     }
 
     @Override

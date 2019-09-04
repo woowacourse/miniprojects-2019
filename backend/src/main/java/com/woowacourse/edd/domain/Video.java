@@ -3,7 +3,9 @@ package com.woowacourse.edd.domain;
 import com.woowacourse.edd.exceptions.InvalidContentsException;
 import com.woowacourse.edd.exceptions.InvalidTitleException;
 import com.woowacourse.edd.exceptions.InvalidYoutubeIdException;
+import com.woowacourse.edd.exceptions.UnauthorizedAccessException;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +20,13 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Where(clause = "is_deleted = 'false'")
 public class Video {
+
+    public static final int TITLE_LENGTH_MAX = 80;
+    public static final int CONTENTS_LENGTH_MAX = 255;
+    public static final int YOUTUBEID_LENGTH_MAX = 255;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +35,7 @@ public class Video {
     @Column(nullable = false)
     private String youtubeId;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = TITLE_LENGTH_MAX)
     private String title;
 
     @Lob
@@ -42,6 +50,12 @@ public class Video {
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
+    @Column(nullable = false)
+    private int viewCount;
+
+    @Column(nullable = false, name = "is_deleted")
+    private boolean isDeleted;
+
     public Video() {
     }
 
@@ -53,6 +67,8 @@ public class Video {
         this.title = title.trim();
         this.contents = contents.trim();
         this.creator = creator;
+        this.viewCount = 0;
+        this.isDeleted = false;
     }
 
     private void checkContents(String contents) {
@@ -73,13 +89,33 @@ public class Video {
         }
     }
 
-    public void update(String youtubeId, String title, String contents) {
+    public void update(String youtubeId, String title, String contents, Long loginedUserId) {
         checkYoutubeId(youtubeId);
         checkTitle(title);
         checkContents(contents);
+        checkCreator(loginedUserId);
         this.youtubeId = youtubeId;
         this.title = title;
         this.contents = contents;
+    }
+
+    private void checkCreator(Long loginedUserId) {
+        if (creator.isNotMatch(loginedUserId)) {
+            throw new UnauthorizedAccessException();
+        }
+    }
+
+    public void delete(Long loginedUserId) {
+        checkCreator(loginedUserId);
+        this.isDeleted = true;
+    }
+
+    public void increaseViewCount() {
+        viewCount++;
+    }
+
+    public boolean isNotMatch(Long videoId) {
+        return id != videoId;
     }
 
     public Long getId() {
@@ -104,6 +140,10 @@ public class Video {
 
     public User getCreator() {
         return creator;
+    }
+
+    public int getViewCount() {
+        return viewCount;
     }
 
     @Override

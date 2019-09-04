@@ -1,14 +1,15 @@
 package com.woowacourse.edd.presentation.controller;
 
 import com.woowacourse.edd.application.dto.LoginRequestDto;
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+
+import java.util.stream.IntStream;
 
 import static com.woowacourse.edd.presentation.controller.LoginController.LOGIN_URL;
 import static com.woowacourse.edd.presentation.controller.UserController.USER_URL;
@@ -32,17 +33,33 @@ public class BasicControllerTests {
         return getLoginCookie(new LoginRequestDto(DEFAULT_LOGIN_EMAIL, DEFAULT_LOGIN_PASSWORD));
     }
 
-    protected void assertFailBadRequest(StatusAssertions statusAssertions, String errorMessage) {
-        WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
-            .isBadRequest()
+    protected void assertFailBadRequest(WebTestClient.ResponseSpec responseSpec, String errorMessage) {
+        WebTestClient.BodyContentSpec bodyContentSpec = responseSpec
+            .expectStatus().isBadRequest()
             .expectBody();
 
         checkErrorResponse(bodyContentSpec, errorMessage);
     }
 
-    protected void assertFailNotFound(StatusAssertions statusAssertions, String errorMessage) {
-        WebTestClient.BodyContentSpec bodyContentSpec = statusAssertions
-            .isNotFound()
+    protected void assertFailNotFound(WebTestClient.ResponseSpec responseSpecs, String errorMessage) {
+        WebTestClient.BodyContentSpec bodyContentSpec = responseSpecs
+            .expectStatus().isNotFound()
+            .expectBody();
+
+        checkErrorResponse(bodyContentSpec, errorMessage);
+    }
+
+    protected void assertFailForbidden(WebTestClient.ResponseSpec responseSpec, String errorMessage) {
+        WebTestClient.BodyContentSpec bodyContentSpec = responseSpec
+            .expectStatus().isForbidden()
+            .expectBody();
+
+        checkErrorResponse(bodyContentSpec, errorMessage);
+    }
+
+    protected void assertFailUnauthorized(WebTestClient.ResponseSpec responseSpec, String errorMessage) {
+        WebTestClient.BodyContentSpec bodyContentSpec = responseSpec
+            .expectStatus().isUnauthorized()
             .expectBody();
 
         checkErrorResponse(bodyContentSpec, errorMessage);
@@ -69,30 +86,34 @@ public class BasicControllerTests {
         return webTestClient.delete().uri(uri);
     }
 
-    protected EntityExchangeResult<byte[]> signUp(UserRequestDto userSaveRequestDto) {
+    protected EntityExchangeResult<byte[]> signUp(UserSaveRequestDto userSaveRequestDto) {
         return webTestClient.post()
             .uri(USER_URL)
-            .body(Mono.just(userSaveRequestDto), UserRequestDto.class)
+            .body(Mono.just(userSaveRequestDto), UserSaveRequestDto.class)
             .exchange()
-            .expectStatus()
-            .isCreated()
-            .expectHeader().valueMatches("Location", USER_URL + "/\\d")
+            .expectStatus().isCreated()
+            .expectHeader().valueMatches("Location", USER_URL + "/\\d+")
             .expectBody()
             .returnResult();
     }
 
-    protected StatusAssertions requestLogin(LoginRequestDto loginRequestDto) {
+    protected WebTestClient.ResponseSpec requestLogin(LoginRequestDto loginRequestDto) {
         return executePost(LOGIN_URL).body(Mono.just(loginRequestDto), LoginRequestDto.class)
-            .exchange()
-            .expectStatus();
+            .exchange();
     }
 
     protected String getLoginCookie(LoginRequestDto loginRequestDto) {
-        return requestLogin(loginRequestDto).isOk()
+        return requestLogin(loginRequestDto).expectStatus().isOk()
             .expectBody()
             .returnResult()
             .getResponseCookies()
             .getFirst(COOKIE_JSESSIONID)
             .getValue();
+    }
+
+    protected String getOverSizeString(int overSizeCount) {
+        StringBuilder sb = new StringBuilder(overSizeCount);
+        IntStream.range(0, overSizeCount).forEach(i -> sb.append("A"));
+        return sb.toString();
     }
 }

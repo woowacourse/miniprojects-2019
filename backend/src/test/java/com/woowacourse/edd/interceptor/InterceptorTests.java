@@ -1,11 +1,11 @@
 package com.woowacourse.edd.interceptor;
 
 import com.woowacourse.edd.application.dto.LoginRequestDto;
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserSaveRequestDto;
 import com.woowacourse.edd.presentation.controller.BasicControllerTests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.web.reactive.server.StatusAssertions;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static com.woowacourse.edd.exceptions.InvalidAccessException.INVALID_ACCESS_MESSAGE;
@@ -25,21 +25,19 @@ public class InterceptorTests extends BasicControllerTests {
 
     @Test
     void post_user() {
-        UserRequestDto signUpUserDto = new UserRequestDto("conas91", "conas91@gmail.com", "p@ssW0rd");
-        StatusAssertions statusAssertions = executePost(USER_URL).cookie(COOKIE_JSESSIONID, sessionId)
-            .body(Mono.just(signUpUserDto), UserRequestDto.class)
-            .exchange()
-            .expectStatus();
-        assertFailBadRequest(statusAssertions, INVALID_ACCESS_MESSAGE);
+        UserSaveRequestDto signUpUserDto = new UserSaveRequestDto("conas91", "conas91@gmail.com", "p@ssW0rd", "p@ssW0rd");
+        WebTestClient.ResponseSpec responseSpec = executePost(USER_URL).cookie(COOKIE_JSESSIONID, sessionId)
+            .body(Mono.just(signUpUserDto), UserSaveRequestDto.class)
+            .exchange();
+        assertFailBadRequest(responseSpec, INVALID_ACCESS_MESSAGE);
     }
 
     @Test
     void post_login() {
         LoginRequestDto loginRequestDto = new LoginRequestDto("kangmin789@naver.com", "P@ssW0rd");
-        StatusAssertions statusAssertions = executePost(LOGIN_URL).cookie(COOKIE_JSESSIONID, sessionId)
+        WebTestClient.ResponseSpec responseSpec = executePost(LOGIN_URL).cookie(COOKIE_JSESSIONID, sessionId)
             .body(Mono.just(loginRequestDto), LoginRequestDto.class)
-            .exchange()
-            .expectStatus();
-        assertFailBadRequest(statusAssertions, INVALID_ACCESS_MESSAGE);
+            .exchange();
+        assertFailBadRequest(responseSpec, INVALID_ACCESS_MESSAGE);
     }
 }

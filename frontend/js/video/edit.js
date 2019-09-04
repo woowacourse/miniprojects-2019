@@ -1,6 +1,5 @@
 const editView = function() {
-    params = wootubeCtx.util.getUrlParams();
-    const videoId = params.id;
+    const videoId = wootubeCtx.util.getUrlParams('id');
     api.requestVideo(videoId)
     .then(response => response.json())
     .then(json => editVideo(json));
@@ -16,13 +15,13 @@ const editVideo = function(json) {
 }
 
 const insertValuesIntoTemplate = function(json) {
-    const youtubeId = document.getElementById('youtube-id');
-    const title = document.getElementById('title');
-    const contents = document.getElementById('contents');
+    const youtubeId = document.getElementById('youtube-id')
+    const title = document.getElementById('title')
+    const contents = document.getElementById('contents')
 
-    youtubeId.value = json.youtubeId;
-    title.value = json.title;
-    contents.value = json.contents;
+    youtubeId.value = json.youtubeId
+    title.value = wootubeCtx.util.unescapeHtml(json.title)
+    contents.value = wootubeCtx.util.unescapeHtml(json.contents)
 }
 
 editView();
@@ -53,7 +52,7 @@ const videoApp = (function () {
             body.contents = document.getElementById('contents').value;
             const dataBody = JSON.stringify(body);
         
-            api.updateVideo(dataBody, wootubeCtx.util.getUrlParams().id)
+            api.updateVideo(dataBody, wootubeCtx.util.getUrlParams('id'))
             .then(response => response.json())
             .then(data => updateVidoe(data))
         }

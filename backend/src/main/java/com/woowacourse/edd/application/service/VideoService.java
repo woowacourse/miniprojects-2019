@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class VideoService {
@@ -42,12 +45,23 @@ public class VideoService {
         return VideoConverter.toResponse(video);
     }
 
-    public VideoUpdateResponse update(Long id, VideoUpdateRequestDto requestDto) {
-        Video video = videoInternalService.update(id, requestDto);
+    public VideoUpdateResponse update(Long id, VideoUpdateRequestDto requestDto, Long loginedUserId) {
+        Video video = videoInternalService.update(id, VideoConverter.escapeUpdateRequestDto(requestDto), loginedUserId);
         return VideoConverter.toUpdateResponse(video);
     }
 
-    public void delete(Long id) {
-        videoInternalService.delete(id);
+    public VideoResponse findWithIncreaseViewCount(Long videoId) {
+        videoInternalService.updateViewCount(videoId);
+        return VideoConverter.toResponse(videoInternalService.findById(videoId));
+    }
+
+    public void delete(Long id, Long logindedUserId) {
+        videoInternalService.delete(id, logindedUserId);
+    }
+
+    public List<VideoPreviewResponse> findByCreatorId(Long creatorId) {
+        return videoInternalService.findByCreatorId(creatorId).stream()
+            .map(VideoConverter::toPreviewResponse)
+            .collect(Collectors.toList());
     }
 }

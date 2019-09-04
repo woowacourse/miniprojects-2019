@@ -18,4 +18,5 @@ spring:
     username: root
     password: p@ssW0rd
 
+log.file-location: /var/log/app
 logging.level.org.springframework.boot.autoconfigure: INFO

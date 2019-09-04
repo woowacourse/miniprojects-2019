@@ -1,6 +1,5 @@
 package com.woowacourse.edd.application.service;
 
-import com.woowacourse.edd.application.converter.VideoConverter;
 import com.woowacourse.edd.application.dto.VideoUpdateRequestDto;
 import com.woowacourse.edd.domain.Video;
 import com.woowacourse.edd.exceptions.VideoNotFoundException;
@@ -11,12 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 class VideoInternalService {
 
     private final VideoRepository videoRepository;
-    private final VideoConverter videoConverter = new VideoConverter();
 
     @Autowired
     public VideoInternalService(VideoRepository videoRepository) {
@@ -38,14 +38,22 @@ class VideoInternalService {
             .orElseThrow(VideoNotFoundException::new);
     }
 
-    public Video update(Long id, VideoUpdateRequestDto requestDto) {
+    public void updateViewCount(Long videoId) {
+        findById(videoId).increaseViewCount();
+    }
+
+    public Video update(Long id, VideoUpdateRequestDto requestDto, Long loginedUserId) {
         Video video = findById(id);
-        video.update(requestDto.getYoutubeId(), requestDto.getTitle(), requestDto.getContents());
+        video.update(requestDto.getYoutubeId(), requestDto.getTitle(), requestDto.getContents(), loginedUserId);
         return video;
     }
 
-    public void delete(Long id) {
-        findById(id);
-        videoRepository.deleteById(id);
+    public void delete(Long id, Long loginedUserId) {
+        Video video = findById(id);
+        video.delete(loginedUserId);
+    }
+
+    public List<Video> findByCreatorId(Long creatorId) {
+        return videoRepository.findAllByCreator_Id(creatorId);
     }
 }

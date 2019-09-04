@@ -1,27 +1,45 @@
 package com.woowacourse.edd.application.service;
 
-import com.woowacourse.edd.application.dto.UserRequestDto;
+import com.woowacourse.edd.application.dto.UserUpdateRequestDto;
 import com.woowacourse.edd.domain.User;
+import com.woowacourse.edd.exceptions.DuplicateEmailSignUpException;
 import com.woowacourse.edd.exceptions.UnauthorizedAccessException;
 import com.woowacourse.edd.exceptions.UserNotFoundException;
 import com.woowacourse.edd.repository.UserRepository;
+import com.woowacourse.edd.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
 class UserInternalService {
 
     private final UserRepository userRepository;
+    private final VideoRepository videoRepository;
 
     @Autowired
-    public UserInternalService(UserRepository userRepository) {
+    public UserInternalService(UserRepository userRepository, VideoRepository videoRepository) {
         this.userRepository = userRepository;
+        this.videoRepository = videoRepository;
     }
 
     public User save(User user) {
-        return userRepository.save(user);
+        checkEmailDuplication(user);
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateEmailSignUpException();
+        }
+    }
+
+    private void checkEmailDuplication(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new DuplicateEmailSignUpException();
+        }
     }
 
     @Transactional(readOnly = true)
@@ -30,10 +48,10 @@ class UserInternalService {
             .orElseThrow(UserNotFoundException::new);
     }
 
-    public User update(Long id, Long loggedInId, UserRequestDto userRequestDto) {
+    public User update(Long id, Long loggedInId, UserUpdateRequestDto userUpdateRequestDto) {
         checkAuthorization(id, loggedInId);
         User user = findById(id);
-        user.update(userRequestDto.getName(), userRequestDto.getEmail(), userRequestDto.getPassword());
+        user.update(userUpdateRequestDto.getName(), userUpdateRequestDto.getEmail());
         return user;
     }
 
@@ -41,6 +59,8 @@ class UserInternalService {
         checkAuthorization(id, loggedInId);
         User user = findById(id);
         user.delete();
+
+        videoRepository.findAllByCreator(user).forEach(video -> video.delete(user.getId()));
     }
 
     public User findByEmail(String email) {
@@ -52,5 +72,9 @@ class UserInternalService {
         if (id != loggedInId) {
             throw new UnauthorizedAccessException();
         }
+    }
+
+    public List<User> findByIds(List<Long> userIds) {
+        return userRepository.findByIdIn(userIds);
     }
 }

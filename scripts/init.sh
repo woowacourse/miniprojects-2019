@@ -12,4 +12,4 @@ fi
 
 cd miniprojects-2019
 
-sudo docker-compose up -d
+sudo docker-compose up -d --build
