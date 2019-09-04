@@ -4,37 +4,31 @@ const notification = (() => {
   const WEB_SOCKET_URI = "/websocket"
   const MESSAGE_BROKER_URI = "/api/notification"
   const REFRESH_INTERVAL = 600
-  const NOTIFICATION_INTERVAL = .75
-  const SAME_NOTIFICATION_INTERVAL = 3
-  const MESSAGE_TYPE = {
-    CHAT: "CHAT",
-    FRIEND_REQUEST: "FRIEND_REQUEST",
-    COMMENT: "COMMENT",
-    LIKE: "LIKE"
-  }
+  const NOTIFICATION_INTERVAL = .56789
+  const SAME_NOTIFICATION_INTERVAL = 2.5
 
   class NotificationService {
     constructor() {
       this.notificationQueue = []
+      this.isNotifying = null
       this.lastNotifiedTime = {}
-      setInterval(() => this.notify(), NOTIFICATION_INTERVAL * 1000)
       setInterval(() => this.collectGarbage(), REFRESH_INTERVAL * 1000)
     }
 
     dispatch(message) {
-      const srcUserName = `${message.srcUser.name}  님`
+      const srcUserName = message.srcUser.name + " 님"
       switch(message.type) {
-        case MESSAGE_TYPE.CHAT:
-          this.pushToQueue(`${message.srcUser.name}  : ${message.content}`)
+        case "CHAT":
+          this.pushToQueue(message.srcUser.name + " : " + message.content)
           break
-        case MESSAGE_TYPE.FRIEND_REQUEST:
-          this.filterMessage(message.type, `${srcUserName}과 친구가 되었습니다.`, message.srcUser.id)
+        case "FRIEND_REQUEST":
+          this.checkInterval(message.type, srcUserName + "과 친구가 되었습니다.", message.srcUser.id)
           break
-        case MESSAGE_TYPE.COMMENT:
-          this.pushToQueue(`${srcUserName}께서 '${message.srcSummary}' 글에 댓글을 남겼습니다 : ${message.content}`)
+        case "COMMENT":
+          this.pushToQueue(srcUserName + "이 '" + message.srcSummary + "' 글에 댓글을 남겼습니다 : " + message.content)
           break
-        case MESSAGE_TYPE.LIKE:
-          this.filterMessage(message.type, `${srcUserName}께서 '${message.srcSummary}' 글에 좋아요를 눌렀습니다.`, message.srcUser.id)
+        case "LIKE":
+          this.checkInterval(message.type, srcUserName + "이 '" + message.srcSummary + "' 글에 좋아요를 눌렀습니다.", message.srcUser.id)
           break
         default:
       }
@@ -42,21 +36,23 @@ const notification = (() => {
 
     pushToQueue(notificationMessage) {
       this.notificationQueue.push(notificationMessage)
-    }
-
-    notify() {
-      if (this.notificationQueue.length > 0) {
-        document.body.insertAdjacentHTML(
-          "beforeend",
-          `<p class="notification chat" data-close="self" role="alert">${this.notificationQueue.shift()}</p>`
-        )
+      if (this.notificationQueue.length === 1) {
+        this.isNotifying = setInterval(() => this.notify(), NOTIFICATION_INTERVAL * 1000)
       }
     }
 
-    filterMessage(messageType, notificationMessage, srcUserId) {
-      if (typeof this.lastNotifiedTime[srcUserId] === "undefined"
-        || this.lastNotifiedTime[srcUserId].type != messageType
-        || new Date() - this.lastNotifiedTime[srcUserId].time > SAME_NOTIFICATION_INTERVAL * 1000) {
+    notify() {
+      document.body.insertAdjacentHTML(
+        "beforeend",
+        '<p class="notification chat" data-close="self" role="alert">' + this.notificationQueue.shift() + "</p>"
+      )
+      if (this.notificationQueue.length === 0) {
+        clearInterval(this.isNotifying)
+      }
+    }
+
+    checkInterval(messageType, notificationMessage, srcUserId) {
+      if (!this.lastNotifiedTime[srcUserId] || (new Date() - this.lastNotifiedTime[srcUserId].time > SAME_NOTIFICATION_INTERVAL * 1000)) {
         this.pushToQueue(notificationMessage)
         this.lastNotifiedTime[srcUserId] = {
           "type": messageType,
@@ -86,7 +82,7 @@ const notification = (() => {
     }
 
     async requestNewChannelAddress() {
-      return (await axios.get(`http://${window.location.host}${MESSAGE_BROKER_URI}`)).data.address
+      return (await axios.get("http://" + window.location.host + MESSAGE_BROKER_URI)).data.address
     }
 
     connect(channelAddress) {
@@ -94,7 +90,7 @@ const notification = (() => {
       this.stompClient.debug = () => {}
       this.stompClient.connect(
         {},
-        frame => this.stompClient.subscribe(`${MESSAGE_BROKER_URI}/${channelAddress}`, message => this.notificationService.dispatch(JSON.parse(message.body)))
+        frame => this.stompClient.subscribe(MESSAGE_BROKER_URI + "/" + channelAddress, message => this.notificationService.dispatch(JSON.parse(message.body)))
       )
     }
 

@@ -1,6 +1,6 @@
-import templates from "./templates.js";
+"use strict";
 
-window.App = (() => {
+const App = (() => {
   const BASE_URL = "http://" + window.location.host
 
   class Api {
@@ -39,7 +39,6 @@ window.App = (() => {
       const DAY = 24 * HOUR
       const WEEK = 7 * DAY
 
-      dateString = dateString + "Z"
       const date = new Date(dateString)
       const difference = (new Date()).getTime() - date.getTime()
       if (difference < 10 * MINUTE) {
@@ -137,18 +136,9 @@ window.App = (() => {
             "countOfLike": article.countOfLike
           })
         )
-        this.checkAuthor(article)
         this.checkLike(article.articleResponse.id)
         App.showComments(article.articleResponse.id)
       })
-    }
-
-    async checkAuthor(article) {
-      const url = document.getElementById("user-profile").getAttribute("href")
-      const userId = url.toString().replace("/users/", "")
-      if (article.articleResponse.userOutline.id != userId) {
-        document.getElementById("article-dropdown-menu-" + article.articleResponse.id).style.display = "none"
-      }
     }
 
     async checkLike(articleId) {
@@ -255,17 +245,8 @@ window.App = (() => {
             "user": comment.userOutline
           })
         )
-        this.checkAuthor(comment)
         this.checkLike(comment.id)
       })
-    }
-
-    async checkAuthor(comment) {
-      const url = document.getElementById("user-profile").getAttribute("href")
-      const userId = url.toString().replace("/users/", "")
-      if (comment.userOutline.id != userId) {
-        document.getElementById("comment-remove-button-" + comment.id).style.display = "none"
-      }
     }
 
     async checkLike(commentId) {
@@ -313,10 +294,9 @@ window.App = (() => {
 
     async remove(id) {
       try {
-        const articleId = document.getElementById("comment-item-" + id).parentNode.getAttribute("id").substring(9)
         await axios.delete(BASE_URL + "/api/comments/" + id)
-        document.getElementById("comment-item-" + id).remove()
-        document.getElementById("count-of-comment-" + articleId).innerText = (await axios.get(BASE_URL + "/api/articles/" + articleId + "/comments/count")).data
+        document.getElementById("comments-" + id).remove()
+        document.getElementById("count-of-comment-" + id).innerText = (await axios.get(BASE_URL + "/api/articles/" + id + "/comments/count")).data
       } catch (e) {
       }
     }
@@ -565,7 +545,3 @@ window.App = (() => {
   const api = new Api()
   return new Controller(new ArticleService(api), new CommentService(api), new FriendService(), new SearchService(), new UserService(api), new ProfileService(api))
 })()
-const userId = window.location.pathname.replace("/users/", "")
-window.App.showNewsfeed()
-window.App.showFriends(userId)
-window.App.showArticles(userId)

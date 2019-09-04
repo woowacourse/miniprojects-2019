@@ -2,15 +2,17 @@
 <!DOCTYPE configuration>
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>%d{HH:mm:ss.SSS} [%-5level] [%thread] [%logger{36}] [%M] - %m%n</Pattern>
-        </encoder>
+        </layout>
     </appender>
 
-    <logger name="techcourse.fakebook" level="INFO" additivity="false">
+    <!-- 자바 패키지별 log level을 설정한다. -->
+    <logger name="techcourse" level="DEBUG">
         <appender-ref ref="STDOUT"/>
     </logger>
 
+    <!-- 기본 log level을 설정한다. -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
