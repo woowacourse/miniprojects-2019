@@ -7,7 +7,7 @@
                 <h4>게시글 수정</h4>
             </div>
             <div class="modal-body">
-                <textarea id="article-update-contents"
+                <textarea id="article-update-contents" data-update-article-id=""
                           class="resize-none form-control border bottom resize-none"></textarea>
             </div>
             <div class="modal-footer no-border">
@@ -54,73 +54,7 @@
                 <hr>
                 <div class="vertical-align">
                     <div class="table-cell top">
-                        <ul class="list-unstyled list-info">
-                            <li class="friend">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="d-flex">
-                                        <div class="pdd-right-10 pdd-btm-10">
-                                            <img class="friend-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
-                                        </div>
-                                        <div>
-                                            <div class="d-flex flex-row">
-                                                <div>
-                                                    <span class="text-bold font-size-15">EastJun</span>
-                                                </div>
-                                            </div>
-                                            <div class="ml-auto">
-                                                <button type="button" class="btn btn-outline-danger btn-sm">
-                                                    거절
-                                                </button>
-                                                <button type="button" class="btn btn-outline-success btn-sm">
-                                                    수락
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="friend">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="d-flex">
-                                        <div class="pdd-right-10 pdd-btm-10">
-                                            <img class="friend-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
-                                        </div>
-                                        <div>
-                                            <div class="d-flex flex-row">
-                                                <div>
-                                                    <span class="text-bold font-size-15">EastJun</span>
-                                                </div>
-                                            </div>
-                                            <div class="ml-auto">
-                                                <button type="button" class="btn btn-outline-primary btn-sm">
-                                                    친구 요청
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="friend">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="d-flex">
-                                        <div class="pdd-right-10 pdd-btm-10">
-                                            <img class="friend-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
-                                        </div>
-                                        <div>
-                                            <div class="d-flex flex-row">
-                                                <div>
-                                                    <span class="text-bold font-size-15">EastJun</span>
-                                                </div>
-                                            </div>
-                                            <div class="ml-auto">
-                                                <button type="button" class="btn btn-outline-warning btn-sm">
-                                                    친구 삭제
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
+                        <ul class="list-unstyled list-info" id="friend-list-form">
                         </ul>
                     </div>
                 </div>

@@ -11,14 +11,19 @@ import com.woowacourse.sunbook.domain.user.UserChangePassword;
 import com.woowacourse.sunbook.domain.user.UserPassword;
 import com.woowacourse.sunbook.domain.user.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
+    @Autowired
     public UserService(final UserRepository userRepository, final ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
@@ -38,10 +43,19 @@ public class UserService {
         }
     }
 
+    public List<UserResponseDto> findByUserName(final String userName) {
+        List<User> users = userRepository.findAllByUserNameLike(userName);
+
+        return users.stream()
+                .map(user -> modelMapper.map(user, UserResponseDto.class))
+                .collect(Collectors.toList())
+                ;
+    }
+
     @Transactional
-    public UserResponseDto update(final UserResponseDto loginUser, final UserUpdateRequestDto userUpdateRequestDto) {
+    public UserResponseDto update(final UserResponseDto userResponseDto, final UserUpdateRequestDto userUpdateRequestDto) {
         User user = userRepository.findByUserEmailAndUserPassword(
-                loginUser.getUserEmail(),
+                userResponseDto.getUserEmail(),
                 userUpdateRequestDto.getUserPassword()
         ).orElseThrow(LoginException::new);
 
@@ -53,6 +67,10 @@ public class UserService {
         user.updatePassword(user, userChangePassword.updatedPassword(loginUserPassword));
 
         return modelMapper.map(user, UserResponseDto.class);
+    }
+
+    public UserResponseDto findUser(final Long id) {
+        return modelMapper.map(findById(id), UserResponseDto.class);
     }
 
     protected User findById(final Long id) {

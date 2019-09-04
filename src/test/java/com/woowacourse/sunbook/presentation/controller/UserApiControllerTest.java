@@ -16,13 +16,14 @@ import static org.hamcrest.Matchers.hasItem;
 class UserApiControllerTest extends TestTemplate {
     private static final Long ID = 1L;
     private static final String USER_EMAIL = "ddu0422@naver.com";
-    private static final String USER_NAME = "mir";
+    private static final String USER_FIRST_NAME = "mir";
+    private static final String USER_LAST_NAME = "lee";
     private static final String USER_PASSWORD = "asdf1234!A";
     private static final String NEW_USER_EMAIL = "ddu0422@gmail.com";
 
     private UserEmail userEmail = new UserEmail(USER_EMAIL);
     private UserEmail newUserEmail = new UserEmail(NEW_USER_EMAIL);
-    private UserName userName = new UserName(USER_NAME);
+    private UserName userName = new UserName(USER_FIRST_NAME, USER_LAST_NAME);
     private UserPassword userPassword = new UserPassword(USER_PASSWORD);
 
     private UserRequestDto userSignInRequestDto = new UserRequestDto(newUserEmail, userName, userPassword);
@@ -33,7 +34,7 @@ class UserApiControllerTest extends TestTemplate {
         respondApi(loginAndRequest(HttpMethod.GET, "/api/users", Void.class, HttpStatus.OK, loginSessionId(userRequestDto)))
                 .jsonPath("$..id").value(hasItem(ID.intValue()))
                 .jsonPath("$..userEmail.email").value(hasItem(USER_EMAIL))
-                .jsonPath("$..userName.name").value(hasItem(USER_NAME))
+                .jsonPath("$..userName.firstName").value(hasItem(USER_FIRST_NAME))
                 ;
     }
 
@@ -41,7 +42,7 @@ class UserApiControllerTest extends TestTemplate {
     void 회원가입_성공() {
         respondApi(request(HttpMethod.POST, "/api/users/signup", userSignInRequestDto, HttpStatus.OK))
                 .jsonPath("$..email").isEqualTo(NEW_USER_EMAIL)
-                .jsonPath("$..name").isEqualTo(USER_NAME)
+                .jsonPath("$..userName.firstName").isEqualTo(USER_FIRST_NAME)
                 ;
     }
 
@@ -60,20 +61,26 @@ class UserApiControllerTest extends TestTemplate {
 
         UserRequestDto userRequestDto = new UserRequestDto(
                 new UserEmail("eara12sa@naver.com"),
-                new UserName("abc"),
+                new UserName("abc", USER_LAST_NAME),
                 new UserPassword("asdf1234!A")
         );
 
         UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto(
                 new UserEmail(changeEmail),
-                new UserName(changeName),
+                new UserName(changeName, USER_LAST_NAME),
                 new UserPassword(USER_PASSWORD),
                 new UserChangePassword(changePassword));
 
         respondApi(loginAndRequest(HttpMethod.PUT, "/api/users", userUpdateRequestDto, HttpStatus.OK, loginSessionId(userRequestDto)))
                 .jsonPath("$..id").value(hasItem(2))
                 .jsonPath("$..userEmail.email").value(hasItem(changeEmail))
-                .jsonPath("$..userName.name").value(hasItem(changeName))
+                .jsonPath("$..userName.firstName").value(hasItem(changeName))
                 ;
+    }
+
+    @Test
+    void 특정_사용자_조회() {
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/users/1", Void.class, HttpStatus.OK, loginSessionId(userRequestDto)))
+                .jsonPath("$..id").isEqualTo(1);
     }
 }

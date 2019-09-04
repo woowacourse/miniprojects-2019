@@ -5,57 +5,8 @@
 </head>
 <body>
 <div id="wootecobook-app">
-    <header id="header" class="header navbar">
-        <div class="header-container max-width-lg mx-auto">
-            <ul class="nav-left mrg-left-0">
-                <li>
-                    <a href="/newsfeed">
-                        <div class="logo" style="background-image: url('/images/default/icons.png')"></div>
-                    </a>
-                </li>
-                <li class="search-container">
-                <span class="search">
-                    <form action="" method="get">
-                        <input type="text" class="searchbox" placeholder="검색">
-                        <button type="submit" class="search-btn">
-                            <i class="ti-search"></i>
-                        </button>
-                    </form>
-                </span>
-                </li>
-            </ul>
-            <ul class="nav-right">
-                <li class="user-profile">
-                    <a href="/users">
-                        <img class="profile-img img-fluid" src="/images/default/eastjun_profile.jpg" alt="">
-                        <div class="user-info mrg-left-5">
-                            <span class="name pdd-right-5 text-white text-bold" id="login-user-name">eastjun</span>
-                        </div>
-                    </a>
-                </li>
-                <li class="">
-                    <a class="pointer" href="/newsfeed">
-                        <span class="text-white text-bold font-size-12">홈</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="pointer">
-                        <span class="text-white text-bold font-size-12">만들기</span>
-                    </a>
-                </li>
-                <li>
-                    <div class="friend-btn pointer mrg-vertical-10 mrg-horizon-5" id="friend-list-btn"></div>
-                </li>
-                <li>
-                    <div class="message-btn pointer mrg-vertical-10 mrg-horizon-5"></div>
-                </li>
-                <li>
-                    <div class="notification-btn pointer mrg-vertical-10 mrg-horizon-5"></div>
-                </li>
-
-            </ul>
-        </div>
-    </header>
+    <th:block th:include="fragments/common-header" />
+    <div id="loader" class="loader" style="display: none; top: 50%; left: 50%; position: absolute; z-index: 10;"></div>
     <div id="main-content" class="container-fluid max-width-lg mx-auto mrg-top-70">
         <div class="row">
             <div id="left-profile-container" class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
@@ -120,6 +71,13 @@
                                     <span class="icon-name font-size-13 text-bold"> 기분/활동</span>
                                 </a>
                             </li>
+                            <li>
+                                <select id="article-range" class="selectpicker" data-width="fit">
+                                    <option>모두 공개</option>
+                                    <option>친구 공개</option>
+                                    <option>비공개</option>
+                                </select>
+                            </li>
                         </ul>
                         <ul class="composor-tools pdd-top-15">
                             <li class="mrg-btm-5">
@@ -135,7 +93,7 @@
                         </ul>
                     </div>
                 </div>
-                <div id="article-list"></div>
+                <div id="article-list" data-target="newsfeed"></div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pdd-right-0">
                 <div class="card">
@@ -187,5 +145,6 @@
 <script src="/js/reaction.js"></script>
 <script src="/js/article.js"></script>
 <script src="/js/comment.js"></script>
+<script src="/js/friends.js"></script>
 </body>
 </html>

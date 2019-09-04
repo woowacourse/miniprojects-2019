@@ -4,7 +4,6 @@ import com.woowacourse.sunbook.application.dto.user.UserRequestDto;
 import com.woowacourse.sunbook.application.dto.user.UserResponseDto;
 import com.woowacourse.sunbook.application.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +28,6 @@ public class LoginApiController {
         UserResponseDto loginUser = loginService.login(userRequestDto);
         httpSession.setAttribute("loginUser", loginUser);
 
-        return new ResponseEntity<>(loginUser, HttpStatus.OK);
+        return ResponseEntity.ok().body(loginUser);
     }
 }

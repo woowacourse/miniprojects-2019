@@ -33,7 +33,21 @@ public class ReactionArticle extends BaseEntity {
         this.hasGood = false;
     }
 
-    public void toggleGood() {
-        this.hasGood = !(this.hasGood);
+    public void addGood() {
+        if (this.hasGood) {
+            throw new IllegalReactionException();
+        }
+
+        this.hasGood = true;
+    }
+
+    public void removeGood() {
+        if (this.hasGood) {
+            this.hasGood = false;
+
+            return;
+        }
+
+        throw new IllegalReactionException();
     }
 }

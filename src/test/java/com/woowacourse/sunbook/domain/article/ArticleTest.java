@@ -1,5 +1,7 @@
 package com.woowacourse.sunbook.domain.article;
 
+import com.woowacourse.sunbook.domain.Content;
+import com.woowacourse.sunbook.domain.fileurl.FileUrl;
 import com.woowacourse.sunbook.domain.user.User;
 import com.woowacourse.sunbook.domain.user.UserEmail;
 import com.woowacourse.sunbook.domain.user.UserName;
@@ -29,44 +31,57 @@ class ArticleTest {
 
     private User user;
 
+    private static final Content contents = new Content(CONTENTS);
+    private static final FileUrl imageUrl = new FileUrl(IMAGE_URL);
+    private static final FileUrl videoUrl = new FileUrl(VIDEO_URL);
+    private static final Content emptyContents = new Content(EMPTY);
+    private static final FileUrl emptyUrl = new FileUrl(EMPTY);
+
     @BeforeEach
     void setUp() {
-        user = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르"));
+        user = new User(new UserEmail("ddu0422@naver.com"), new UserPassword("asdf1234!A"), new UserName("미르", "lee"));
     }
 
     static Stream<Arguments> articleParameters() {
         return Stream.of(
-                Arguments.of(CONTENTS, IMAGE_URL, VIDEO_URL),
-                Arguments.of(EMPTY, IMAGE_URL, VIDEO_URL),
-                Arguments.of(CONTENTS, EMPTY, VIDEO_URL),
-                Arguments.of(CONTENTS, IMAGE_URL, EMPTY),
-                Arguments.of(CONTENTS, EMPTY, EMPTY),
-                Arguments.of(EMPTY, IMAGE_URL, EMPTY),
-                Arguments.of(EMPTY, EMPTY, VIDEO_URL)
+                Arguments.of(contents, imageUrl, videoUrl),
+                Arguments.of(emptyContents, imageUrl, videoUrl),
+                Arguments.of(contents, emptyUrl, videoUrl),
+                Arguments.of(contents, imageUrl, emptyUrl),
+                Arguments.of(contents, emptyUrl, emptyUrl),
+                Arguments.of(emptyContents, imageUrl, emptyUrl),
+                Arguments.of(emptyContents, emptyUrl, videoUrl)
         );
     }
 
     @ParameterizedTest
     @MethodSource("articleParameters")
-    void 게시글_정상_생성_테스트_통합(String contents, String imageUrl, String videoUrl) {
-        assertDoesNotThrow(() -> new Article(new ArticleFeature(contents, imageUrl, videoUrl), user));
+    void 게시글_정상_생성_테스트_통합(Content contents, FileUrl imageUrl, FileUrl videoUrl) {
+        assertDoesNotThrow(() -> new Article(new ArticleFeature(contents, imageUrl, videoUrl),
+                user, OpenRange.ALL));
     }
 
     @Test
     void 게시글_생성_오류_아무것도_없음() {
-        assertThrows(IllegalArgumentException.class, () -> new Article(new ArticleFeature(EMPTY, EMPTY, EMPTY), user));
+        assertThrows(IllegalArgumentException.class,
+                () -> new Article(new ArticleFeature(emptyContents, emptyUrl, emptyUrl), user, OpenRange.ALL));
     }
 
     @Test
     void 게시글_정상_수정() {
-        Article article = new Article(new ArticleFeature(CONTENTS, IMAGE_URL, VIDEO_URL), user);
-        ArticleFeature updatedArticleFeature = new ArticleFeature(UPDATE_CONTENTS, UPDATE_IMAGE_URL, UPDATE_VIDEO_URL);
+        Article article = new Article(new ArticleFeature(contents, imageUrl, videoUrl), user, OpenRange.ALL);
+        ArticleFeature updatedArticleFeature = new ArticleFeature(
+                new Content(UPDATE_CONTENTS),
+                new FileUrl(UPDATE_IMAGE_URL),
+                new FileUrl(UPDATE_VIDEO_URL)
+        );
         assertDoesNotThrow(() -> article.update(updatedArticleFeature));
     }
 
     @Test
     void 게시글_유저_확인() {
-        assertThat(new Article(new ArticleFeature(CONTENTS, IMAGE_URL, VIDEO_URL), user).getAuthor()).isEqualTo(user);
+        assertThat(new Article(new ArticleFeature(contents, imageUrl, videoUrl), user, OpenRange.ALL)
+                .getAuthor()).isEqualTo(user);
     }
 
     @Test
@@ -74,8 +89,8 @@ class ArticleTest {
         User author = mock(User.class);
         given(author.getId()).willReturn(1L);
 
-        ArticleFeature articleFeature = new ArticleFeature(CONTENTS, IMAGE_URL, VIDEO_URL);
-        Article article = new Article(articleFeature, author);
+        ArticleFeature articleFeature = new ArticleFeature(contents, imageUrl, videoUrl);
+        Article article = new Article(articleFeature, author, OpenRange.ALL);
 
         assertTrue(article.isSameUser(author));
     }

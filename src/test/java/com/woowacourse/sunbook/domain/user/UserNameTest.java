@@ -9,17 +9,17 @@ class UserNameTest {
 
     @Test
     void 생성() {
-        UserName userName = new UserName("에이든");
-        assertEquals(userName, new UserName("에이든"));
+        UserName userName = new UserName("에이든", "lee");
+        assertEquals(userName, new UserName("에이든", "lee"));
     }
 
     @Test
     void 이름_유효성_실패() {
-        assertThrows(InvalidValueException.class, () -> new UserName("bmo@@bmo"));
+        assertThrows(InvalidValueException.class, () -> new UserName("bmo@@bmo", "lee"));
     }
 
     @Test
     void 이름_유효성_성공() {
-        assertDoesNotThrow(() -> new UserName("aiden"));
+        assertDoesNotThrow(() -> new UserName("aiden", "lee"));
     }
 }

@@ -1,6 +1,7 @@
 package com.woowacourse.sunbook.application.service;
 
 import com.woowacourse.sunbook.application.dto.reaction.ReactionDto;
+import com.woowacourse.sunbook.application.exception.NotFoundReactionException;
 import com.woowacourse.sunbook.domain.article.Article;
 import com.woowacourse.sunbook.domain.reaction.ReactionArticle;
 import com.woowacourse.sunbook.domain.reaction.ReactionArticleRepository;
@@ -12,9 +13,9 @@ import javax.transaction.Transactional;
 
 @Service
 public class ReactionArticleService {
-    private ReactionArticleRepository reactionArticleRepository;
-    private ArticleService articleService;
-    private UserService userService;
+    private final ReactionArticleRepository reactionArticleRepository;
+    private final ArticleService articleService;
+    private final UserService userService;
 
     @Autowired
     public ReactionArticleService(final ReactionArticleRepository reactionArticleRepository,
@@ -25,32 +26,53 @@ public class ReactionArticleService {
         this.userService = userService;
     }
 
-    @Transactional
-    public ReactionDto clickGood(final Long articleId, final Long userId) {
+    public ReactionDto showCount(final Long userId, final Long articleId) {
         User author = userService.findById(userId);
         Article article = articleService.findById(articleId);
 
-        if (!reactionArticleRepository.existsByAuthorAndArticle(author, article)) {
-            reactionArticleRepository.save(new ReactionArticle(author, article));
-        }
+        return new ReactionDto(getCount(article),
+                isClickedGoodInArticleByLoginUser(author, article));
+    }
+
+    private boolean isClickedGoodInArticleByLoginUser(final User loginUser, final Article article) {
+        return reactionArticleRepository
+                .findByAuthorAndArticle(loginUser, article)
+                .map(ReactionArticle::getHasGood)
+                .orElse(false)
+                ;
+    }
+
+    @Transactional
+    public ReactionDto save(final Long userId, final Long articleId) {
+        User author = userService.findById(userId);
+        Article article = articleService.findById(articleId);
 
         ReactionArticle reactionArticle = reactionArticleRepository
-                .findByAuthorAndArticle(author, article);
-        reactionArticle.toggleGood();
+                .findByAuthorAndArticle(author, article)
+                .orElseGet(() ->
+                        reactionArticleRepository.save(new ReactionArticle(author, article)));
+        reactionArticle.addGood();
 
         return new ReactionDto(getCount(article), reactionArticle.getHasGood());
     }
 
-    public ReactionDto showCount(final Long articleId) {
+    @Transactional
+    public ReactionDto remove(final Long userId, final Long articleId) {
+        User author = userService.findById(userId);
         Article article = articleService.findById(articleId);
-        Long countOfGood = getCount(article);
 
-        return new ReactionDto(countOfGood);
+        ReactionArticle reactionArticle = reactionArticleRepository
+                .findByAuthorAndArticle(author, article)
+                .orElseThrow(NotFoundReactionException::new);
+        reactionArticle.removeGood();
+
+        return new ReactionDto(getCount(article), reactionArticle.getHasGood());
     }
 
     private Long getCount(final Article article) {
-        return reactionArticleRepository.findAllByArticle(article).stream()
-                .filter(reactionArticle -> reactionArticle.getHasGood())
+        return reactionArticleRepository.findAllByArticle(article)
+                .stream()
+                .filter(ReactionArticle::getHasGood)
                 .count()
                 ;
     }
