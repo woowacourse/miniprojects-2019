@@ -10,6 +10,8 @@ import techcourse.w3.woostagram.article.dto.ArticleDto;
 import techcourse.w3.woostagram.article.exception.ArticleNotFoundException;
 import techcourse.w3.woostagram.common.exception.UnAuthorizedException;
 import techcourse.w3.woostagram.common.service.StorageService;
+import techcourse.w3.woostagram.explore.dto.MypageArticleDto;
+import techcourse.w3.woostagram.tag.service.HashTagService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.service.UserService;
 
@@ -22,11 +24,14 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final StorageService storageService;
     private final UserService userService;
+    private final HashTagService hashTagService;
 
-    public ArticleService(final ArticleRepository articleRepository, final UserService userService, final StorageService storageService) {
+    public ArticleService(final ArticleRepository articleRepository, final UserService userService,
+                          final StorageService storageService, final HashTagService hashTagService) {
         this.articleRepository = articleRepository;
         this.userService = userService;
         this.storageService = storageService;
+        this.hashTagService = hashTagService;
     }
 
     @Transactional
@@ -34,7 +39,7 @@ public class ArticleService {
         User user = userService.findUserByEmail(email);
         String fileUrl = storageService.saveMultipartFile(articleDto.getImageFile());
         Article article = articleDto.toEntity(fileUrl, user);
-        articleRepository.save(article);
+        hashTagService.save(articleRepository.save(article), article.getContents());
         return article.getId();
     }
 
@@ -61,8 +66,8 @@ public class ArticleService {
         return articleRepository.findById(articleId).orElseThrow(ArticleNotFoundException::new);
     }
 
-    public Page<Article> findPageByUsers(List<User> followingUsers, Pageable pageable) {
-        return articleRepository.findByUserIn(followingUsers, pageable);
+    public Page<Article> findPageByUsers(List<User> users, Pageable pageable) {
+        return articleRepository.findByUserIn(users, pageable);
     }
 
     private void validateUser(Article article, String email) {
@@ -71,5 +76,10 @@ public class ArticleService {
         if (!article.isAuthor(user.getId())) {
             throw new UnAuthorizedException();
         }
+    }
+
+
+    public Page<Article> findRecommendedArticle(List<User> followUser, Pageable pageable) {
+        return articleRepository.findByUserNotIn(followUser, pageable);
     }
 }

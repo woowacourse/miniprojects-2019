@@ -1,20 +1,23 @@
 package techcourse.w3.woostagram.article.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import techcourse.w3.woostagram.article.dto.ArticleDto;
+import techcourse.w3.woostagram.article.exception.RequestTooFastException;
 import techcourse.w3.woostagram.article.service.ArticleService;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
+import techcourse.w3.woostagram.common.support.UserRateLimiter;
 
 @Controller
 @RequestMapping("/articles")
 public class ArticleController {
     private ArticleService articleService;
+    private final UserRateLimiter userRateLimiter;
 
-    public ArticleController(ArticleService articleService) {
+    public ArticleController(final ArticleService articleService, final UserRateLimiter userRateLimiter) {
         this.articleService = articleService;
+        this.userRateLimiter = userRateLimiter;
     }
 
     @GetMapping("/form")
@@ -29,19 +32,13 @@ public class ArticleController {
 
     @GetMapping("/{articleId}")
     public String show(@PathVariable Long articleId, Model model) {
-        model.addAttribute("articleId", articleId);
+        model.addAttribute("article", articleService.findArticleById(articleId));
         return "article-detail";
     }
 
     @DeleteMapping("/{articleId}")
     public String delete(@PathVariable Long articleId, @LoggedInUser String email) {
         articleService.deleteById(articleId, email);
-        return "redirect:/";
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleRuntimeException() {
         return "redirect:/";
     }
 }

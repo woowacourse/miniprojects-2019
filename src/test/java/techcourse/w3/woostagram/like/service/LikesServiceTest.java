@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import techcourse.w3.woostagram.alarm.service.AlarmService;
 import techcourse.w3.woostagram.article.domain.Article;
 import techcourse.w3.woostagram.article.service.ArticleService;
 import techcourse.w3.woostagram.like.domain.Likes;
@@ -24,12 +25,18 @@ import static org.mockito.Mockito.*;
 class LikesServiceTest {
     @InjectMocks
     private LikesService likesService;
+
     @Mock
     private LikesRepository likesRepository;
+
     @Mock
     private UserService userService;
+
     @Mock
     private ArticleService articleService;
+
+    @Mock
+    private AlarmService alarmService;
 
     private User user;
     private Article article;
@@ -37,7 +44,7 @@ class LikesServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = User.builder().id(1l).email("a@naver.com").userContents(UserContents.builder().build()).build();
+        user = User.builder().id(1L).email("a@naver.com").userContents(UserContents.builder().userName("user").build()).build();
         article = Article.builder().user(user).build();
         likes = Likes.builder().article(article).user(user).build();
     }
@@ -49,6 +56,7 @@ class LikesServiceTest {
         when(likesRepository.save(likes)).thenReturn(likes);
 
         likesService.save(user.getEmail(), article.getId());
+
         verify(userService, times(1)).findUserByEmail(user.getEmail());
         verify(articleService, times(1)).findArticleById(article.getId());
         verify(likesRepository, times(1)).save(likes);
@@ -58,6 +66,7 @@ class LikesServiceTest {
     void findLikedUserByArticleId_correct_ok() {
         when(articleService.findArticleById(article.getId())).thenReturn(article);
         when(likesRepository.findAllByArticle(article)).thenReturn(Arrays.asList(likes, likes));
+
         assertThat(likesService.findLikedUserByArticleId(article.getId())).isEqualTo(Arrays.asList(
                 UserInfoDto.from(likes.getUser()),
                 UserInfoDto.from(likes.getUser())
@@ -71,6 +80,7 @@ class LikesServiceTest {
         when(likesRepository.findByArticleAndUser_Id(article, user.getId())).thenReturn(likes);
 
         likesService.delete(article.getId(), user.getEmail());
+
         verify(userService, times(1)).findUserByEmail(user.getEmail());
         verify(articleService, times(1)).findArticleById(article.getId());
         verify(likesRepository, times(1)).findByArticleAndUser_Id(article, user.getId());

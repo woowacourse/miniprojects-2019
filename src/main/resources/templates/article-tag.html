@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ko">
+<head>
+    <th:block th:replace="fragments/common-head :: common-head"></th:block>
+    <link rel="stylesheet" href="/css/mypage.css">
+    <meta charset="UTF-8">
+    <title>Tag Articles</title>
+</head>
+<body>
+<th:block th:replace="fragments/header :: index-header"></th:block>
+
+<div class="page-container mrg-top-120">
+    <div class="main-content">
+        <div class="container-fluid max-width-60 mx-auto">
+            <div>
+                <div class="profile">
+                    <div class="widget-feed mypage-contents">
+                        <ul class="feed-action pdd-horizon-15 pdd-top-5">
+                            <li><h2 th:text="'#' + ${tagName}"></h2></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-info center-tabs">
+                    <ul class="nav nav-tabs no-border" role="tablist">
+                        <li class="nav-item">
+                            <a href="#tab-centered-1" class="nav-link active" role="tab" data-toggle="tab">게시물</a>
+                        </li>
+                    </ul>
+
+                    <div class="article-card">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    const tagName = [[${tagName}]];
+</script>
+<th:block th:replace="fragments/common-js :: common-js"></th:block>
+<script src="/js/tag.js"></script>
+</body>
+</html>

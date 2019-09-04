@@ -1,121 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ko">
 <head>
     <th:block th:replace="fragments/common-head :: common-head"></th:block>
+    <link rel="stylesheet" href="/css/mypage.css">
 </head>
 <body>
-<header id="header" class="haeader navbar">
-    <div class="header-container max-width-lg mx-auto">
-        <ul class="nav-left mrg-left-0 padding-15">
-            <li>
-                <img class="logo desktop-view" src="/images/logo/instgram_logo.png">
-                <div class="width-40px mobile-view overflow-hidden">
-                    <img class="logo" src="/images/logo/instgram_logo.png">
-                </div>
-            </li>
-        </ul>
-    </div>
-</header>
+<div>
+    <th:block th:replace="fragments/header :: index-header"></th:block>
 
-
-<div class="container-fluid max-width-lg mx-auto mrg-btm-30 padding-30" style="margin-top: 100px">
-    <div class="row">
-        <div class="col-md-7 mx-auto">
-            <div class="card">
-                <div class="card-heading pdd-btm-5 border bottom">
-                    <h4 class="card-title d-inline-block">profile</h4>
-                    <a href="/users/mypage-edit/form"
-                       class="float-right pointer btn btn-default btn-icon btn-rounded no-border-line no-mrg relative bottom-5">
-                        <i class="ti-pencil text-dark font-size-16 pdd-horizontal-5"></i>
-                    </a>
-                </div>
-                <div class="card-block">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p class="mrg-top-10 text-dark"><b>Name</b></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="mrg-top-10" th:text="${userInfo.userContentsDto.name}">해리</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p class="mrg-top-10 text-dark"><b>UserName</b></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="mrg-top-10" th:text="${userInfo.userContentsDto.userName}">Brown</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p class="mrg-top-10 text-dark"><b>Contents</b></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="mrg-top-10" th:text="${userInfo.userContentsDto.contents}">!@_@!</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p class="mrg-top-10 text-dark"><b>Email</b></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="mrg-top-10" th:text="${userInfo.email}">gracefulBrown@woowahan.com</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p class="mrg-top-10 text-dark"><b>Avatar</b></p>
-                        </div>
-                        <div class="col-md-6">
-                            <div>
-                                <button class="modal-btn" width="117">
-                                    <img id="profile-image" width="117" alt="프로필 사진 바꾸기">
-                                </button>
+    <div class="page-container mrg-top-120">
+        <div class="main-content">
+            <div class="container-fluid max-width-60 mx-auto">
+                <div>
+                    <div class="profile">
+                        <div class="profile-area">
+                            <div id="profile-image-btn" class="img-circle">
+                                <img id="profile-image" class="user-img" alt="프로필 사진 바꾸기"
+                                     th:src="${userPageInfo.userInfoDto.profile}">
                             </div>
                             <form id="image-form" enctype="multipart/form-data" method="post" role="presentation">
                                 <input class="d-none" name="imageFile" multiple id="img-upload" type="file"
                                        accept="image/jpeg, image/png, image/jpg">
-                                <input type="hidden" name="originalImageFile" id="original-image"
-                                       th:value="${userInfo.profile}">
                             </form>
                         </div>
-                    </div>
-                    <hr>
 
-                    <form id="deleteForm" th:method="delete" action="/users">
-                        <button type="submit" id="deleteButton" class="btn btn-default no-border-line">
-                            <i class="ti-trash font-size-16"></i>
-                        </button>
-                    </form>
+                        <div class="widget-feed mypage-contents">
+                            <ul class="feed-action pdd-horizon-15 pdd-top-5">
+                                <li><h2 class="user-name" th:text="${userPageInfo.userInfoDto.userContentsDto.userName}"></h2></li>
+                                <li th:if="${userPageInfo.mine}">
+                                    <a class="user-modal-btn">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li th:unless="${userPageInfo.mine}">
+                                    <button class="btn-danger following" th:text="${userPageInfo.following} ? '팔로우 취소': '팔로우'">팔로우</button>
+                                </li>
+                            </ul>
+                            <ul class="user-activity feed-action pdd-horizon-15 pdd-top-5">
+                                <li>
+                                    <span>게시물</span>
+                                    <span class="article-num"></span>
+                                </li>
+                                <li>
+                                    <span>팔로워</span>
+                                    <span class="followers"></span>
+                                </li>
+                                <li>
+                                    <span>팔로우</span>
+                                    <span class="followings"></span>
+                                </li>
+                            </ul>
+                            <div class="user-contents">
+                                <h4 class="user-name" th:text="${userPageInfo.userInfoDto.userContentsDto.name}"></h4>
+                                <br>
+                                <span th:text="${userPageInfo.userInfoDto.userContentsDto.contents}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-info center-tabs">
+                        <ul class="nav nav-tabs no-border" role="tablist">
+                            <li class="nav-item">
+                                <a href="#tab-centered-1" class="nav-link active" role="tab" data-toggle="tab">게시물</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#tab-centered-2" class="nav-link" role="tab" data-toggle="tab">태그됨</a>
+                            </li>
+                        </ul>
+
+                        <div class="article-card">
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"
-        integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="/js/template.js"></script>
-<script src="/js/modal.js"></script>
-<script src="/js/util.js"></script>
-<script src="/js/user.js"></script>
 <script th:inline="javascript">
-    const profileUrl = [[ ${userInfo.profile} ]];
+    const mypageUserEmail = [[${userPageInfo.userInfoDto.email}]];
+    const loggedinUserEmail = [[${session.loggedInUser.email}]];
+    const mine = [[${userPageInfo.mine}]];
+    const following = [[${userPageInfo.following}]];
+    const targetId = [[${userPageInfo.userInfoDto.id}]];
 </script>
+<th:block th:replace="fragments/common-js :: common-js"></th:block>
 <script src="/js/mypage.js"></script>
-</body>
+<script src="/js/user.js"></script>
 
+</body>
 </html>

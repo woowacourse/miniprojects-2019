@@ -2,17 +2,18 @@ package techcourse.w3.woostagram.user.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import techcourse.w3.woostagram.common.service.StorageService;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserRepository;
+import techcourse.w3.woostagram.user.dto.UserCreateDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
-import techcourse.w3.woostagram.user.dto.UserProfileImageDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
-import techcourse.w3.woostagram.user.exception.LoginException;
-import techcourse.w3.woostagram.user.exception.UserCreateException;
-import techcourse.w3.woostagram.user.exception.UserNotFoundException;
+import techcourse.w3.woostagram.user.exception.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -24,23 +25,48 @@ public class UserService {
         this.storageService = storageService;
     }
 
-    public UserInfoDto save(UserDto userDto) {
+    public UserInfoDto save(UserCreateDto userDto) {
+        checkDuplicatedEmail(userDto.getEmail());
+        checkDuplicatedUserName(userDto.getUserName());
+
         try {
             return UserInfoDto.from(userRepository.save(userDto.toEntity()));
         } catch (Exception error) {
-            throw new UserCreateException();
+            throw new UserCreateException(error.getMessage());
         }
     }
 
-    public String authUser(UserDto userDto) {
+    private void checkDuplicatedEmail(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new UserCreateException("이미 존재하는 아이디입니다.");
+        }
+    }
+
+    private void checkDuplicatedUserName(String userName) {
+        if (userRepository.findByUserContents_UserName(userName).isPresent()) {
+            throw new UserCreateException("이미 존재하는 사용자 이름입니다.");
+        }
+    }
+
+    public UserInfoDto authUser(UserDto userDto) {
         return userRepository.findByEmailAndPassword(userDto.getEmail(), userDto.getPassword())
-                .orElseThrow(LoginException::new).getEmail();
+                .map(UserInfoDto::from)
+                .orElseThrow(LoginException::new);
     }
 
     @Transactional
     public void update(UserUpdateDto userUpdateDto, String email) {
         User user = findUserByEmail(email);
+        if (!user.isSameUserName(userUpdateDto.getUserName())) {
+            checkDuplicatedUpdatedUserName(userUpdateDto.getUserName());
+        }
         user.updateContents(userUpdateDto.toEntity());
+    }
+
+    private void checkDuplicatedUpdatedUserName(String userName) {
+        if (userRepository.findByUserContents_UserName(userName).isPresent()) {
+            throw new UserUpdateException("이미 존재하는 사용자 이름입니다.");
+        }
     }
 
     public void deleteByEmail(String email) {
@@ -49,6 +75,14 @@ public class UserService {
 
     public UserInfoDto findByEmail(String email) {
         return UserInfoDto.from(findUserByEmail(email));
+    }
+
+    public UserInfoDto findByUserName(String userName) {
+        return UserInfoDto.from(findUserByUserName(userName));
+    }
+
+    public User findUserByUserName(String userName) {
+        return userRepository.findByUserContents_UserName(userName).orElseThrow(UserNotFoundException::new);
     }
 
     public User findUserByEmail(String email) {
@@ -60,26 +94,38 @@ public class UserService {
     }
 
     @Transactional
-    public String uploadProfileImage(UserProfileImageDto userProfileImageDto, String email) {
-        User user = findUserByEmail(email);
-        String fileUrl = user.getProfile();
-        deleteFile(fileUrl);
-        if (!userProfileImageDto.getImageFile().isEmpty()) {
-            fileUrl = storageService.saveMultipartFile(userProfileImageDto.getImageFile());
-            user.updateProfile(fileUrl);
+    public String uploadProfileImage(MultipartFile profileImage, String email) {
+        if (profileImage.isEmpty()) {
+            throw new UserProfileException();
         }
+        User user = findUserByEmail(email);
+        deleteUserProfileImage(user);
+        return uploadFile(profileImage, user);
+    }
+
+    private String uploadFile(MultipartFile profileImage, User user) {
+        String fileUrl = storageService.saveMultipartFile(profileImage);
+        user.updateProfile(fileUrl);
+
         return fileUrl;
     }
 
-    public void deleteProfileImage(String email) {
+    @Transactional
+    public String deleteProfileImage(String email) {
         User user = findUserByEmail(email);
-        deleteFile(user.getProfile());
-        user.updateProfile(null);
+        deleteUserProfileImage(user);
+        return user.makeProfileDefault();
     }
 
-    private void deleteFile(String fileUrl) {
-        if (!StringUtils.isEmpty(fileUrl)) {
-            storageService.deleteFile(fileUrl);
+    private void deleteUserProfileImage(User user) {
+        if (!user.hasDefaultImage()) {
+            storageService.deleteFile(user.getProfile());
         }
+    }
+
+    public List<UserInfoDto> findByUsernameContaining(String query) {
+        return userRepository.findTop10ByUserContents_UserNameContainingIgnoreCaseOrderByUserContents_UserName(query).stream()
+                .map(UserInfoDto::from)
+                .collect(Collectors.toList());
     }
 }

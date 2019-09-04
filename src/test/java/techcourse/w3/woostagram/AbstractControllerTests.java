@@ -1,11 +1,12 @@
 package techcourse.w3.woostagram;
 
 import org.apache.logging.log4j.util.Strings;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
@@ -17,12 +18,14 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @AutoConfigureWebTestClient
 @TestPropertySource("classpath:application_test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AbstractControllerTests {
+
+    @LocalServerPort
+    private int port;
+
     @Autowired
     private WebTestClient webTestClient;
     private String cookie;
@@ -36,7 +39,8 @@ public class AbstractControllerTests {
 
     protected EntityExchangeResult<byte[]> postMultipartRequest(String uri, MultiValueMap params) {
         return webTestClient.post().uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
+                .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .syncBody(params)
                 .exchange()
                 .expectBody()
@@ -46,7 +50,8 @@ public class AbstractControllerTests {
     protected <T> T getRequest(String uri, Class<T> bodyType) {
         return webTestClient.get()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
+                .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .exchange()
                 .expectBody(bodyType)
                 .returnResult()
@@ -56,7 +61,7 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> getRequest(String uri) {
         return webTestClient.get()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .exchange()
                 .expectBody()
                 .returnResult();
@@ -65,7 +70,7 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> postJsonRequest(String uri, Map<String, String> params) {
         return webTestClient.post()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .body(Mono.just(params), Map.class)
                 .exchange()
                 .expectBody()
@@ -75,7 +80,8 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> postFormRequest(String uri, Map<String, String> params) {
         return webTestClient.post()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
+                .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(mapBy(params))
                 .exchange()
@@ -86,7 +92,8 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> deleteRequest(String uri) {
         return webTestClient.delete()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
+                .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .exchange()
                 .expectBody()
                 .returnResult();
@@ -95,7 +102,8 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> putFormRequest(String uri, Map<String, String> params) {
         return webTestClient.put()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
+                .header(HttpHeaders.REFERER, "localhost:" + port + uri)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(mapBy(params))
                 .exchange()
@@ -106,7 +114,7 @@ public class AbstractControllerTests {
     protected EntityExchangeResult<byte[]> putJsonRequest(String uri, Map<String, String> params) {
         return webTestClient.put()
                 .uri(uri)
-                .header("Cookie", cookie)
+                .header(HttpHeaders.COOKIE, cookie)
                 .body(Mono.just(params), Map.class)
                 .exchange()
                 .expectBody()
@@ -130,12 +138,6 @@ public class AbstractControllerTests {
             body.with(entry.getKey(), entry.getValue());
         }
         return body;
-    }
-
-    protected void assertTest(String body, String... args) {
-        for (String arg : args) {
-            assertThat(body.contains(arg)).isTrue();
-        }
     }
 
     protected void clearCookie() {

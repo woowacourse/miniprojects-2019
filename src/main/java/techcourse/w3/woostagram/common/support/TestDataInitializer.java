@@ -13,6 +13,10 @@ import techcourse.w3.woostagram.follow.domain.Follow;
 import techcourse.w3.woostagram.follow.domain.FollowRepository;
 import techcourse.w3.woostagram.like.domain.Likes;
 import techcourse.w3.woostagram.like.domain.LikesRepository;
+import techcourse.w3.woostagram.tag.domain.HashTag;
+import techcourse.w3.woostagram.tag.domain.HashTagRepository;
+import techcourse.w3.woostagram.tag.domain.Tag;
+import techcourse.w3.woostagram.tag.domain.TagRepository;
 import techcourse.w3.woostagram.user.domain.User;
 import techcourse.w3.woostagram.user.domain.UserContents;
 import techcourse.w3.woostagram.user.domain.UserRepository;
@@ -39,19 +43,27 @@ public class TestDataInitializer implements ApplicationRunner {
     public static Likes basicLikes;
     public static Likes deleteLikes;
 
+    public static Tag basicTag;
+
+    public static HashTag basicHashTag;
+
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
     private final CommentRepository commentRepository;
     private final FollowRepository followRepository;
     private final LikesRepository likesRepository;
+    private final TagRepository tagRepository;
+    private final HashTagRepository hashTagRepository;
 
     @Autowired
-    public TestDataInitializer(UserRepository userRepository, ArticleRepository articleRepository, CommentRepository commentRepository, FollowRepository followRepository, LikesRepository likesRepository) {
+    public TestDataInitializer(UserRepository userRepository, ArticleRepository articleRepository, CommentRepository commentRepository, FollowRepository followRepository, LikesRepository likesRepository, TagRepository tagRepository, HashTagRepository hashTagRepository) {
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
         this.commentRepository = commentRepository;
         this.followRepository = followRepository;
         this.likesRepository = likesRepository;
+        this.tagRepository = tagRepository;
+        this.hashTagRepository = hashTagRepository;
     }
 
     @Override
@@ -74,6 +86,23 @@ public class TestDataInitializer implements ApplicationRunner {
 
         basicLikes = saveLikes(authorUser, basicArticle);
         deleteLikes = saveLikes(authorUser, updateArticle);
+
+        basicTag = saveTag("#우테코");
+
+        basicHashTag = saveHashTag(basicArticle, basicTag);
+    }
+
+    private HashTag saveHashTag(Article article, Tag tag) {
+        return hashTagRepository.save(HashTag.builder()
+                .article(article)
+                .tag(tag)
+                .build());
+    }
+
+    private Tag saveTag(String name) {
+        return tagRepository.save(Tag.builder()
+                .name(name)
+                .build());
     }
 
     private Likes saveLikes(User liker, Article article) {

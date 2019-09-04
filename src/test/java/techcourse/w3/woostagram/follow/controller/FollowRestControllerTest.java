@@ -1,6 +1,5 @@
 package techcourse.w3.woostagram.follow.controller;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import techcourse.w3.woostagram.AbstractControllerTests;
@@ -12,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static techcourse.w3.woostagram.common.support.TestDataInitializer.*;
 
 class FollowRestControllerTest extends AbstractControllerTests {
+
     @Override
     @BeforeEach
     protected void setUp() {

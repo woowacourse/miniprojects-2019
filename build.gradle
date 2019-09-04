@@ -57,10 +57,23 @@ dependencies {
 
     // Util
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 
     // aws
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
     implementation 'com.amazonaws:aws-java-sdk-s3'
+
+    // WebSocket
+    compile group: 'org.springframework', name: 'spring-websocket', version: '5.1.9.RELEASE'
+
+    // STOMP
+    compile group: 'org.springframework', name: 'spring-messaging', version: '5.1.9.RELEASE'
+    
+    // gson
+    implementation 'com.google.code.gson:gson:2.8.5'
+    
+    // guava
+    compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
 }
 
 test {

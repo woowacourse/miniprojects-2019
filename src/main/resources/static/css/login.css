@@ -78,8 +78,11 @@ z-index: 2;
 }
 
 .login-form input{
-    font-size:12px;
+    font-size:16px;
     height:36px;
+}
+.login-form input::placeholder{
+    color: #8f92a1;
 }
 .download-con{
     padding-top:10px;

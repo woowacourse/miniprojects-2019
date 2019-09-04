@@ -3,9 +3,11 @@ package techcourse.w3.woostagram.comment.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import techcourse.w3.woostagram.article.exception.RequestTooFastException;
 import techcourse.w3.woostagram.comment.dto.CommentDto;
 import techcourse.w3.woostagram.comment.service.CommentService;
 import techcourse.w3.woostagram.common.support.LoggedInUser;
+import techcourse.w3.woostagram.common.support.UserRateLimiter;
 
 import java.util.List;
 
@@ -14,12 +16,13 @@ import java.util.List;
 public class CommentRestController {
     private final CommentService commentService;
 
-    public CommentRestController(CommentService commentService) {
+    public CommentRestController(final CommentService commentService) {
         this.commentService = commentService;
     }
 
     @PostMapping
-    public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @LoggedInUser String email, @PathVariable Long articleId) {
+    public ResponseEntity<CommentDto> create(@RequestBody CommentDto commentDto, @PathVariable Long articleId,
+                                             @LoggedInUser String email) {
         return new ResponseEntity<>(commentService.save(commentDto, email, articleId), HttpStatus.CREATED);
     }
 
@@ -32,10 +35,5 @@ public class CommentRestController {
     public ResponseEntity<CommentDto> delete(@PathVariable Long commentId, @LoggedInUser String email) {
         commentService.deleteById(commentId, email);
         return ResponseEntity.ok().build();
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

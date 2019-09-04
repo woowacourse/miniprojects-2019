@@ -1,4 +1,4 @@
-const Article = (function () {
+const Article = (() => {
 
     const modalButton =
         `<button class="create-modify-btn" tabindex="0">수정하기</button>
@@ -9,8 +9,8 @@ const Article = (function () {
     const ArticleController = function () {
         const articleService = new ArticleService();
         const modalButton = () => {
-            const button = document.querySelector('.modal-btn');
-            button.addEventListener('click', articleService.modalActive);
+            const button = document.querySelectorAll('.modal-btn');
+            Array.from(button).map(x => x.addEventListener('click', articleService.modalActive));
         };
         const modifyFormButton = () => {
             const button = document.querySelector(".create-modify-btn");
@@ -28,7 +28,7 @@ const Article = (function () {
             articleService.loadContent();
         };
 
-        const init = function () {
+        const init = () => {
             modifyButton();
             modifyFormButton();
             initContent();
@@ -48,14 +48,22 @@ const Article = (function () {
                     loadImageProcess(data.imageUrl).then((img) => {
                             document.getElementById("pic").src = img.src;
                             imageResize(img)
+                            document.querySelector(".pic-con").style.backgroundImage = "none";
                         }
                     );
+
+                    document.querySelectorAll(".article-profile-img").forEach(
+                        (element) => {
+                            element.setAttribute('src', data.userInfoDto.profile);
+                        }
+                    );
+
                     document.querySelectorAll(".profile-name").forEach(
                         (element) => {
-                            element.innerText = data.userInfoDto.userContentsDto.userName;
+                            element.innerHTML = `<a href="/${data.userInfoDto.userContentsDto.userName}">${data.userInfoDto.userContentsDto.userName}</a>`;
                         }
                     );
-                    document.querySelector(".contents-para").innerText = data.contents;
+                    document.querySelector(".contents-para").innerHTML = hashTagAddLink(htmlToStringParse(data.contents));
                 });
 
 
@@ -135,6 +143,6 @@ const Article = (function () {
     return {
         init: init
     }
-}());
+})();
 
 Article.init();

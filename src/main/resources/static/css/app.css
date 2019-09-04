@@ -1189,7 +1189,12 @@ blockquote:before{font-family:themify;content:"\E67F";position:absolute;left:0;c
 .text-center{text-align:center!important}
 .text-left{text-align:left!important}
 .text-right{text-align:right!important}
-.img-circle{border-radius:50%!important}
+.img-circle{
+    border-radius:50%!important;
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+}
 
 .border{border:1px solid #e6ecf5}
 .border.top{border:0!important;border-top:1px solid #e6ecf5!important}
@@ -1518,6 +1523,7 @@ button.disabled,button:disabled{opacity:.5;cursor:not-allowed}
 .width-400 {width: 400px !important;}
 
 .max-width-80 {max-width: 80%; !important;}
+.max-width-60 {max-width: 60%; !important;}
 
 .min-width-480px {min-width: 480px !important;}
 .min-width-992px {min-width: 992px !important;}

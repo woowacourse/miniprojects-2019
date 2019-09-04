@@ -1,25 +1,25 @@
-const User = (function () {
-    const modalButton =
-        `<button class="create-modify-btn" tabindex="0">사진 선택</button>
-        <button class="contents-remove-btn delete-btn font-cap" type="button" tabindex="0">기본 사진</button>`;
-    const modal = new Modal(modalButton);
-    modal.init();
+const User = (() => {
+    const profileImageModalButton =
+        `<button id="select-image" class="create-modify-btn" tabindex="0">사진 선택</button>
+        <button id="select-default-image" class="contents-remove-btn delete-btn font-cap" type="button" tabindex="0">기본 사진</button>`;
+    const profileImageModal = new Modal(profileImageModalButton, 1);
+    profileImageModal.init();
 
     const UserController = function () {
         const userService = new UserService();
 
-        const modalButton = () => {
-            const button = document.querySelector('.modal-btn');
+        const profileImageModalButton = () => {
+            const button = document.querySelector('#profile-image-btn');
             button.addEventListener('click', userService.modalActive);
         };
 
         const imageButton = () => {
-            const button = document.querySelector('.create-modify-btn');
+            const button = document.querySelector('#select-image');
             button.addEventListener('click', userService.chooseImage);
         };
 
         const defaultImageButton = () => {
-            const button = document.querySelector('.contents-remove-btn');
+            const button = document.querySelector('#select-default-image');
             button.addEventListener('click', userService.defaultImage);
         };
 
@@ -28,8 +28,8 @@ const User = (function () {
             image.addEventListener('change', userService.uploadImageFile)
         };
 
-        const init = function () {
-            modalButton();
+        const init = () => {
+            profileImageModalButton();
             imageButton();
             defaultImageButton();
             imageUpload();
@@ -44,7 +44,9 @@ const User = (function () {
         const request = new Request("/api/users");
 
         const modalActive = () => {
-            modal.active()
+            if (loggedinUserEmail === mypageUserEmail) {
+                profileImageModal.active()
+            }
         };
 
         const imageResize = (img) => {
@@ -63,30 +65,22 @@ const User = (function () {
         };
 
         const defaultImage = () => {
-            // const image = document.querySelector('#original-image');
-            // const profileImage = image.value;
-            // const data ={'profileImage':profileImage};
             request.delete("/",
-                () => {
+                (status, data) => {
                     const profileImage = document.querySelector("#profile-image");
-                    profileImage.setAttribute("src", defaultProfileImage);
+                    profileImage.setAttribute("src", data);
                 });
         };
 
         const uploadImageFile = () => {
             const formData = new FormData();
-
             const imageFile = document.querySelector("#img-upload").files[0];
-            const originalImageFile = document.querySelector("#original-image").value;
             formData.append("imageFile", imageFile);
-            formData.append("originalImageFile", originalImageFile);
 
             request.post("/", formData,
                 (status, data) => {
                     const profileImage = document.querySelector("#profile-image");
                     profileImage.setAttribute("src", data);
-                    const originalImage = document.querySelector('#original-image');
-                    originalImage.setAttribute("value", data);
                 });
         };
 
@@ -107,6 +101,6 @@ const User = (function () {
     return {
         init: init
     }
-}());
+})();
 
 User.init();

@@ -16,8 +16,6 @@ class UserControllerTest extends AbstractControllerTests {
     private static final String NAME = "name";
     private static final String USER_NAME = "userName";
     private static final String CONTENTS = "contents";
-    private static final String ORIGINAL_IMG_FILE = "originalImageFile";
-    private static final String IMAGE_FILE = "imageFile";
 
     @Override
     @BeforeEach
@@ -59,6 +57,13 @@ class UserControllerTest extends AbstractControllerTests {
     }
 
     @Test
+    void logout_empty_isRedirect() {
+        assertThat(getRequest("/users/logout")
+                .getStatus()
+                .is3xxRedirection()).isTrue();
+    }
+
+    @Test
     void createForm_empty_isOk() {
         clearCookie();
         assertThat(getRequest("/users/signup/form")
@@ -92,13 +97,6 @@ class UserControllerTest extends AbstractControllerTests {
     }
 
     @Test
-    void show_correct_isOk() {
-        assertThat(getRequest("/users/mypage")
-                .getStatus()
-                .is2xxSuccessful()).isTrue();
-    }
-
-    @Test
     void updateForm_correct_isOk() {
         assertThat(getRequest("/users/mypage-edit/form")
                 .getStatus()
@@ -107,12 +105,11 @@ class UserControllerTest extends AbstractControllerTests {
 
     @Test
     void update_correct_isOk() {
+        loginRequest(TestDataInitializer.updateUser.getEmail(), TestDataInitializer.updateUser.getPassword());
         Map<String, String> params = new HashMap<>();
         params.put(NAME, "a");
         params.put(USER_NAME, "b");
         params.put(CONTENTS, "c");
-        params.put(ORIGINAL_IMG_FILE, "d");
-        params.put(IMAGE_FILE, "e");
 
         assertThat(putFormRequest("/users", params)
                 .getStatus()
@@ -125,8 +122,6 @@ class UserControllerTest extends AbstractControllerTests {
         params.put(NAME, "");
         params.put(USER_NAME, "");
         params.put(CONTENTS, "");
-        params.put(ORIGINAL_IMG_FILE, "");
-        params.put(IMAGE_FILE, "");
 
         assertThat(putFormRequest("/users", params)
                 .getStatus()
@@ -139,6 +134,7 @@ class UserControllerTest extends AbstractControllerTests {
         params.put(EMAIL, TestDataInitializer.deleteUser.getEmail());
         params.put(PASSWORD, TestDataInitializer.deleteUser.getPassword());
         postFormRequest("/users/signup", params);
+        clearCookie();
         loginRequest(TestDataInitializer.deleteUser.getEmail(), TestDataInitializer.deleteUser.getPassword());
 
         assertThat(deleteRequest("/users")

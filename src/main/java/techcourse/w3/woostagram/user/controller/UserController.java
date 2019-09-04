@@ -2,14 +2,20 @@ package techcourse.w3.woostagram.user.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import techcourse.w3.woostagram.common.support.LoggedInUser;
+import techcourse.w3.woostagram.common.support.UserRateLimiter;
+import techcourse.w3.woostagram.user.dto.UserCreateDto;
 import techcourse.w3.woostagram.user.dto.UserDto;
 import techcourse.w3.woostagram.user.dto.UserInfoDto;
 import techcourse.w3.woostagram.user.dto.UserUpdateDto;
+import techcourse.w3.woostagram.user.exception.UserCreateException;
+import techcourse.w3.woostagram.user.exception.UserUpdateException;
 import techcourse.w3.woostagram.user.service.UserService;
-import techcourse.w3.woostagram.common.support.LoggedInUser;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import static techcourse.w3.woostagram.common.support.UserEmailArgumentResolver.LOGGED_IN_USER_SESSION_KEY;
 
@@ -17,9 +23,11 @@ import static techcourse.w3.woostagram.common.support.UserEmailArgumentResolver.
 @RequestMapping("users")
 public class UserController {
     private final UserService userService;
+    private final UserRateLimiter userRateLimiter;
 
-    public UserController(UserService userService) {
+    public UserController(final UserService userService, final UserRateLimiter userRateLimiter) {
         this.userService = userService;
+        this.userRateLimiter = userRateLimiter;
     }
 
     @GetMapping("login/form")
@@ -29,9 +37,16 @@ public class UserController {
 
     @PostMapping("login")
     public String login(UserDto userDto, HttpSession httpSession) {
-        String email = userService.authUser(userDto);
-        httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, email);
+        httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, userService.authUser(userDto));
+        userRateLimiter.put(userDto.getEmail());
         return "redirect:/";
+    }
+
+    @GetMapping("logout")
+    public String logout(HttpSession session, @LoggedInUser String email) {
+        userRateLimiter.remove(email);
+        session.removeAttribute(LOGGED_IN_USER_SESSION_KEY);
+        return "redirect:/users/login/form";
     }
 
     @GetMapping("signup/form")
@@ -40,16 +55,12 @@ public class UserController {
     }
 
     @PostMapping("signup")
-    public String create(UserDto userDto) {
+    public String create(@Valid UserCreateDto userDto, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new UserCreateException(result.getFieldError().getDefaultMessage());
+        }
         userService.save(userDto);
         return "redirect:/users/login/form";
-    }
-
-    @GetMapping("mypage")
-    public String show(Model model, @LoggedInUser String email) {
-        UserInfoDto userInfoDto = userService.findByEmail(email);
-        model.addAttribute("userInfo", userInfoDto);
-        return "mypage";
     }
 
     @GetMapping("mypage-edit/form")
@@ -60,9 +71,14 @@ public class UserController {
     }
 
     @PutMapping
-    public String update(UserUpdateDto userUpdateDto, @LoggedInUser String email) {
+    public String update(@Valid UserUpdateDto userUpdateDto, BindingResult result, @LoggedInUser String email, HttpSession httpSession) {
+        if (result.hasErrors()) {
+            throw new UserUpdateException(result.getFieldError().getDefaultMessage());
+        }
         userService.update(userUpdateDto, email);
-        return "redirect:/users/mypage";
+        UserInfoDto userInfoDto = userService.findByEmail(email);
+        httpSession.setAttribute(LOGGED_IN_USER_SESSION_KEY, userService.findByEmail(email));
+        return "redirect:/" + userInfoDto.getUserContentsDto().getUserName();
     }
 
     @DeleteMapping

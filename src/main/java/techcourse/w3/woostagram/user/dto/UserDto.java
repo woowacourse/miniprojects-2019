@@ -2,7 +2,6 @@ package techcourse.w3.woostagram.user.dto;
 
 import lombok.*;
 import techcourse.w3.woostagram.user.domain.User;
-import techcourse.w3.woostagram.user.domain.UserContents;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
@@ -13,6 +12,8 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode
 @ToString
 public class UserDto {
+    private static final String DEFAULT_USER_NAME = "default";
+
     @Email(message = User.ERROR_EMAIL)
     private String email;
 
@@ -23,14 +24,5 @@ public class UserDto {
     public UserDto(String email, String password) {
         this.email = email;
         this.password = password;
-    }
-
-    public User toEntity() {
-        return User.builder()
-                .email(email)
-                .password(password)
-                .userContents(UserContents.builder()
-                        .userName(email).build())
-                .build();
     }
 }
