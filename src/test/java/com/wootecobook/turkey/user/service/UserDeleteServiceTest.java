@@ -7,9 +7,10 @@ import com.wootecobook.turkey.friend.service.FriendAskService;
 import com.wootecobook.turkey.friend.service.FriendService;
 import com.wootecobook.turkey.friend.service.dto.FriendAskCreate;
 import com.wootecobook.turkey.friend.service.dto.FriendCreate;
+import com.wootecobook.turkey.user.domain.IntroductionRepository;
+import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
-import com.wootecobook.turkey.user.service.dto.UserResponse;
 import com.wootecobook.turkey.user.service.exception.UserDeleteException;
 import com.wootecobook.turkey.user.service.exception.UserMismatchException;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,17 +39,19 @@ public class UserDeleteServiceTest {
     private UserService userService;
     private FriendAskService friendAskService;
     private FriendService friendService;
+    private IntroductionService introductionService;
 
     private Long senderId;
     private Long receiverId;
 
     @Autowired
     public UserDeleteServiceTest(UserRepository userRepository, FriendAskRepository friendAskRepository,
-                                 FriendRepository friendRepository) {
+                                 FriendRepository friendRepository, IntroductionRepository introductionRepository) {
         userService = new UserService(userRepository);
         friendAskService = new FriendAskService(friendAskRepository, userService);
         friendService = new FriendService(friendRepository, friendAskService, userService);
-        userDeleteService = new UserDeleteService(userService, friendAskService, friendService);
+        introductionService = new IntroductionService(introductionRepository, userService);
+        userDeleteService = new UserDeleteService(userService, friendAskService, friendService, introductionService);
     }
 
     @BeforeEach
@@ -65,11 +68,14 @@ public class UserDeleteServiceTest {
                 .password(VALID_PASSWORD)
                 .build();
 
-        UserResponse senderResponse = userService.save(senderRequest);
-        UserResponse receiverResponse = userService.save(receiverRequest);
+        User senderResponse = userService.save(senderRequest);
+        User receiverResponse = userService.save(receiverRequest);
 
         senderId = senderResponse.getId();
         receiverId = receiverResponse.getId();
+
+        introductionService.save(senderId);
+        introductionService.save(receiverId);
     }
 
     @Test
@@ -80,10 +86,12 @@ public class UserDeleteServiceTest {
                 .name(VALID_NAME)
                 .password(VALID_PASSWORD)
                 .build();
-        UserResponse userResponse = userService.save(userRequest);
+        User user = userService.save(userRequest);
+        introductionService.save(user.getId());
 
         //when & then
-        assertDoesNotThrow(() -> userDeleteService.delete(userResponse.getId(), userResponse.getId()));
+        assertDoesNotThrow(() -> userDeleteService.delete(user.getId(), user.getId()));
+        assertThrows(EntityNotFoundException.class, () -> introductionService.findByUserId(user.getId()));
     }
 
     @Test
@@ -101,10 +109,10 @@ public class UserDeleteServiceTest {
                 .password(VALID_PASSWORD)
                 .build();
 
-        UserResponse userResponse = userService.save(userRequest);
+        User user = userService.save(userRequest);
 
         //when & then
-        assertThrows(UserMismatchException.class, () -> userDeleteService.delete(null, userResponse.getId()));
+        assertThrows(UserMismatchException.class, () -> userDeleteService.delete(null, user.getId()));
     }
 
     @Test

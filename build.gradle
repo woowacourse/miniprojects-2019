@@ -1,5 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'org.asciidoctor.convert' version '1.5.7'
     id 'java'
 }
 
@@ -25,6 +26,7 @@ repositories {
 }
 
 ext {
+    snippetsDir = file('build/generated-snippets')
     set('springCloudVersion', "Greenwich.BUILD-SNAPSHOT")
 }
 
@@ -37,13 +39,17 @@ dependencies {
     implementation 'org.projectlombok:lombok'
     implementation 'com.h2database:h2'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.webjars:sockjs-client:1.1.2'
+    implementation 'org.webjars:stomp-websocket:2.3.3'
 
     runtimeOnly 'net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'
 
     annotationProcessor 'org.projectlombok:lombok'
-
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE'
+    testImplementation "org.springframework.restdocs:spring-restdocs-webtestclient:2.0.3.RELEASE"
     testImplementation 'io.findify:s3mock_2.12:0.2.5'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.mockito:mockito-junit-jupiter'
@@ -53,8 +59,6 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'junit'
     }
-
-
 }
 
 dependencyManagement {

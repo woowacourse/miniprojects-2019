@@ -16,7 +16,7 @@ public class UserApiControllerAdvice {
 
     @ExceptionHandler({SignUpException.class, UserDeleteException.class, UserMismatchException.class,
             EntityNotFoundException.class, NotLoginException.class})
-    private ResponseEntity<ErrorMessage> handleException(Exception exception) {
+    protected ResponseEntity<ErrorMessage> handleException(Exception exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
         return ResponseEntity.badRequest().body(errorMessage);
     }

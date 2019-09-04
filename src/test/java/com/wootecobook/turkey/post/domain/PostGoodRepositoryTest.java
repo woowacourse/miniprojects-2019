@@ -1,5 +1,7 @@
 package com.wootecobook.turkey.post.domain;
 
+import com.wootecobook.turkey.good.domain.post.PostGood;
+import com.wootecobook.turkey.good.domain.post.PostGoodRepository;
 import com.wootecobook.turkey.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

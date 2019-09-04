@@ -13,4 +13,7 @@ public class UserMismatchException extends RuntimeException {
         log.error(USER_MISMATCH_MESSAGE);
     }
 
+    public UserMismatchException(String message) {
+        super(message);
+    }
 }

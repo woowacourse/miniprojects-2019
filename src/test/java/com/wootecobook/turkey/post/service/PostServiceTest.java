@@ -4,6 +4,7 @@ import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.file.domain.FileFeature;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.service.UploadFileService;
+import com.wootecobook.turkey.good.service.PostGoodService;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostRepository;
@@ -40,16 +41,22 @@ public class PostServiceTest {
 
     @InjectMocks
     private PostService postService;
+
     @Mock
     private PostRepository postRepository;
+
     @Mock
     private PostGoodService postGoodService;
+
     @Mock
     private CommentRepository commentRepository;
+
     @Mock
     private UserService userService;
+
     @Mock
     private UploadFileService uploadFileService;
+
     private Contents defaultContents;
     private Post savedPost;
     private PostRequest postRequestWithoutFiles;
@@ -77,6 +84,7 @@ public class PostServiceTest {
                 .contents(defaultContents)
                 .author(author)
                 .uploadFiles(new ArrayList<>())
+                .taggedUsers(new ArrayList<>())
                 .id(savedPostId)
                 .build();
     }
@@ -137,7 +145,7 @@ public class PostServiceTest {
 //        IntStream.rangeClosed(1, 100).forEach(i ->
 //                postService.save(PostRequest.builder().contents("hello" + i).build(), author.getId()));
 //
-//        Page<PostResponse> pageResponse = postService.findPostResponses(PageRequest.of(pageNum, 10));
+//        Page<PostResponse> pageResponse = postService.findPostResponses(PageRequest.from(pageNum, 10));
 //
 //        assertThat(pageResponse.getTotalElements()).isEqualTo(100);
 //        assertThat(pageResponse.getTotalPages()).isEqualTo(10);
@@ -155,7 +163,7 @@ public class PostServiceTest {
     void post_수정_테스트() {
         //given
         when(postRepository.findById(savedPostId)).thenReturn(Optional.of(savedPost));
-        when(postGoodService.findBy(any(Post.class))).thenReturn(new ArrayList<>());
+        when(postGoodService.countBy(any(Post.class))).thenReturn(0);
         when(commentRepository.countByPost(any(Post.class))).thenReturn(0);
         //when
         PostResponse updateResult = postService.update(updatePostRequest, savedPostId, author.getId());

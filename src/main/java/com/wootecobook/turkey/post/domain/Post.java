@@ -8,10 +8,13 @@ import com.wootecobook.turkey.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -22,25 +25,39 @@ public class Post extends UpdatableEntity {
     private Contents contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_post_to_user"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "author_id", nullable = false, foreignKey = @ForeignKey(name = "fk_post_to_author_user"), updatable = false)
     private User author;
 
-    @OneToMany
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "receiver_id", foreignKey = @ForeignKey(name = "fk_post_to_receiver_user"), updatable = false)
+    private User receiver;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_tag", joinColumns = @JoinColumn(name = "post_no"), inverseJoinColumns = @JoinColumn(name = "tagged_user_no"))
+    private List<User> taggedUsers;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "post_file",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "file_id"))
     private List<UploadFile> uploadFiles = new ArrayList<>();
 
     @Builder
-    private Post(final Long id, final Contents contents, final User author, List<UploadFile> uploadFiles) {
+    private Post(final Long id, final User author, final User receiver,
+                 final Contents contents, final List<UploadFile> uploadFiles,
+                 final List<User> taggedUsers) {
         if (id == null) {
             validateAuthor(author);
         }
         validateContents(contents);
 
-        this.contents = contents;
         this.author = author;
+        this.receiver = receiver;
+        this.contents = contents;
         this.uploadFiles = uploadFiles;
+        this.taggedUsers = taggedUsers;
     }
 
     private void validateContents(final Contents contents) {
@@ -67,5 +84,9 @@ public class Post extends UpdatableEntity {
 
     public boolean isWrittenBy(final Long userId) {
         return author.matchId(userId);
+    }
+
+    public Optional<User> getReceiver() {
+        return Optional.ofNullable(receiver);
     }
 }

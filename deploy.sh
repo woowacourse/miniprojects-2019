@@ -9,7 +9,7 @@ git pull
 
 echo "> 프로젝트 Build 시작"
 
-./gradlew build
+./gradlew build -x test
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
@@ -27,4 +27,4 @@ fi
 
 echo "> 새 어플리케이션 배포"
 
-nohup java -jar build/libs/*.jar &
+nohup java -Duser.timezone=Asia/Seoul -jar build/libs/*.jar &

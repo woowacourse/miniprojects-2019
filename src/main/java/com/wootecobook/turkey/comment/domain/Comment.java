@@ -35,7 +35,8 @@ public class Comment extends UpdatableEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comment_to_user"), nullable = false)
-    private User user;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_comment_to_post"), nullable = false)
@@ -44,24 +45,25 @@ public class Comment extends UpdatableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_comment_to_comment"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment parent;
 
     @OneToMany(mappedBy = "parent")
     private List<Comment> children = new ArrayList<>();
 
     @Builder
-    public Comment(final String contents, final User user, final Post post, final Comment parent) {
+    public Comment(final String contents, final User author, final Post post, final Comment parent) {
         CommentValidator.validateContents(contents);
 
         this.contents = contents;
-        this.user = user;
+        this.author = author;
         this.post = post;
         this.parent = parent;
         this.deleted = false;
     }
 
     public boolean isWrittenBy(Long userId) {
-        if (this.user.getId().equals(userId)) {
+        if (this.author.getId().equals(userId)) {
             return true;
         }
         throw new NotCommentOwnerException();

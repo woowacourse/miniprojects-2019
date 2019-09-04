@@ -1,37 +1,51 @@
 const MY_PAGE_URL = (userId) => `/users/${userId}`
 
-const postTemplate = (post) => `
+const postEditDeleteDropdown = `
+<a class="pointer absolute top-0 right-0 view" data-toggle="dropdown" aria-expanded="false">
+    <span class="btn-icon text-dark">
+        <i class="ti-more font-size-16"></i>
+    </span>
+</a>
+<a class="toggle-post-update pointer absolute top-0 right-0 edit"  aria-expanded="false">
+    <i class="ti-close pdd-right-10 text-dark"></i>
+</a>
+<ul class="dropdown-menu view">
+    <li>
+        <a class="pointer toggle-post-update">
+            <i class="ti-pencil pdd-right-10 text-dark"></i>
+            <span class="">게시글 수정</span>
+        </a>
+    </li>
+    <li>
+        <a class="pointer post-delete">
+            <i class="ti-trash pdd-right-10 text-dark"></i>
+            <span class="">게시글 삭제</span>
+        </a>
+    </li>
+</ul>
+`
+
+const postTemplate = (post, loginUserId) => `
 <div class="card widget-feed padding-15" data-id="${post.id}">
     <div class="feed-header">
         <ul class="list-unstyled list-info">
             <li>
-                <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
+                <img class="thumb-img img-circle" src=${getProfileSrc(post.author.profile)} alt="">
                 <div class="info">
                     <a href="${MY_PAGE_URL(post.author.id)}" class="title no-pdd-vertical text-semibold inline-block">${post.author.name}</a>
-                    <span>님이 그룹에 링크를 공유했습니다.</span>
+                    ${
+                        (() => (post.receiver !== null) ? receiverFormat(post.receiver) : ""
+                        )()
+                    }    
+                    ${
+                        (() => (post.taggedUsers.length !== 0) ? taggedUsersFormat(post.taggedUsers) : ""
+                        )()
+                    }                   
                     <span class="sub-title">${dateFormat(post.updatedAt, isUpdated(post.createdAt, post.updatedAt))}</span>
-                    <a class="pointer absolute top-0 right-0 view" data-toggle="dropdown" aria-expanded="false">
-                        <span class="btn-icon text-dark">
-                            <i class="ti-more font-size-16"></i>
-                        </span>
-                    </a>
-                    <a class="toggle-post-update pointer absolute top-0 right-0 edit"  aria-expanded="false">
-                        <i class="ti-close pdd-right-10 text-dark"></i>
-                    </a>
-                    <ul class="dropdown-menu view">
-                        <li>
-                            <a class="pointer toggle-post-update">
-                                <i class="ti-pencil pdd-right-10 text-dark"></i>
-                                <span class="">게시글 수정</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="pointer post-delete">
-                                <i class="ti-trash pdd-right-10 text-dark"></i>
-                                <span class="">게시글 삭제</span>
-                            </a>
-                        </li>   
-                    </ul>
+                    ${
+                        (() => (post.author.id == loginUserId) ? postEditDeleteDropdown : ""
+                        )()
+                    }
                 </div>
             </li>
         </ul>
@@ -45,10 +59,11 @@ const postTemplate = (post) => `
         </div>
         <div class="edit edit-form">
             <textarea class="resize-none form-control border bottom resize-none edit">${post.contents.contents}</textarea>
+            <div class="files-preview"></div>
             <ul class="composor-tools pdd-top-15">
                 <div>
-                <li class="bg-lightgray border-radius-round mrg-right-5">
-                    <input multiple name="filename[]" style="display:none" type="file"/>
+                <li class="bg-lightgray border-radius-round mrg-right-5 file-attach">
+                    <input accept="video/*, image/*" multiple name="filename[]" style="display:none" type="file"/>
                     <div class="pdd-vertical-5 pdd-horizon-10 pointer file-attach">
                         <div class="inline-block icons photo-video"></div>
                         <span class="icon-name font-size-13 text-bold"> 사진/동영상</span>
@@ -85,12 +100,12 @@ const postTemplate = (post) => `
             <span  class="font-size-13">공유 0회</span>
         </li>
         <li class="float-right mrg-right-15">
-            <span class="font-size-13">댓글 ${post.totalComment}개</span>
+            댓글<span class="font-size-13 totalComment"> ${post.totalComment}</span>개
         </li>
     </ul>
     <ul class="feed-action border bottom d-flex">
         <li class="text-center flex-grow-1">
-            <button class="good btn btn-default no-border pdd-vertical-0 no-mrg width-100">
+            <button class="good btn btn-default no-border pdd-vertical-0 no-mrg width-100 ${post.goodResponse.gooded ? 'good-active':''}">
                 <i class="fa fa-thumbs-o-up font-size-16"></i>
                 <span class="font-size-13">좋아요</span>
             </button>
@@ -121,10 +136,14 @@ const postTemplate = (post) => `
 </div>
 `
 
-const textTemplate = (text) => `
-<span class="one-line">
-    ${text}
-</span>
+const friendTagTemplate = (friend) =>
+`
+<li class="friends-tag-list-item" data-id="${friend.relatedUserId}">
+    <div class="_740n">
+        <input type="checkbox">
+        <span>${friend.relatedUserName}</span>
+    </div>
+</li>
 `
 
 const isUpdated = (createdAt, updatedAt) => {
@@ -139,13 +158,28 @@ const dateFormatting = (date) => {
 
 const dateFormat = (date, updated) => {
     date = new Date(date)
-    const timeDiff = Math.floor((Date.now() - date) / (1000 * 60 * 24))
+    const timeDiff = Math.floor((Date.now() - date + 1000) / (1000 * 60 * 60))
 
     return timeDiff < 24 ? `${timeDiff}시간 전` : dateFormatting(date) +
         (updated ? '(edited)' : '')
 }
 
 const textFormat = contentStr => {
-    const result = contentStr.split('\n').map(content => textTemplate(content))
-    return result.join('')
+    const div = document.createElement('div');
+    div.innerText = contentStr
+    return div.outerHTML
+}
+
+const receiverFormat = (receiver) => `
+<i class="ti-angle-right"></i>
+<a href="${MY_PAGE_URL(receiver.id)}" class="title no-pdd-vertical text-semibold inline-block">${receiver.name}</a> 
+`
+
+const taggedUsersFormat = (taggedUsers) => {
+    let taggedUsersPages = []
+    for(let i = 0; i < taggedUsers.length; i++) {
+        taggedUsersPages.push(`<a href="${MY_PAGE_URL(taggedUsers[i].id)}" class="title no-pdd-vertical text-semibold inline-block">${taggedUsers[i].name}</a>`)
+    }
+
+    return "  - " + taggedUsersPages.join(",") + "님과 함께"
 }

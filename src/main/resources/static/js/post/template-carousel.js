@@ -4,7 +4,7 @@ const carouselTemplate = (post) => `
         ${convertNumToIndicatorTemplate(post.id, post.files.length)}
     </ol>
     <div class="carousel-inner">
-        ${convertFilesToItemTemplate(post.files)}
+        ${convertFilesToItemTemplate(post.files.map(file => file.fileFeature))}
     </div>
     <a class="carousel-control-prev" href="#postCarouselControls-${post.id}" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon carousel-icon-color" aria-hidden="true"></span>
@@ -38,6 +38,23 @@ const indicatorTemplate = (postId, index) => `
 
 const carouselItemTemplate = (file, isFirst) => `
 <div class="carousel-item ${isFirst ? "active" : ""}">
-    <img src="${file.fileFeature.path}" width="100%" class="d-block w-100" alt="${file.fileFeature.originalName}">
+    ${carouselFileTemplate(file)}
 </div>
 `
+
+const carouselFileTemplate = (file) => {
+    const div = document.createElement('div')
+    div.innerHTML = getFileTemplate(file.type, file.path)
+
+    const fileHtml = div.firstElementChild
+    fileHtml.classList.add('width-100')
+
+    if (file.type.startsWith('image')) {
+        fileHtml.classList.add('d-block', 'w-100')
+    }
+    if (file.type.startsWith('video')) {
+        fileHtml.classList.add('carousel-item-video')
+    }
+
+    return fileHtml.outerHTML;
+}

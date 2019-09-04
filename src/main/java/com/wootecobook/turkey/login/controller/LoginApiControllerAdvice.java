@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class LoginApiControllerAdvice {
 
     @ExceptionHandler({LoginFailException.class, NotLoginException.class})
-    private ResponseEntity<ErrorMessage> handleException(Exception exception) {
+    protected ResponseEntity<ErrorMessage> handleException(Exception exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
         return ResponseEntity.badRequest().body(errorMessage);
     }

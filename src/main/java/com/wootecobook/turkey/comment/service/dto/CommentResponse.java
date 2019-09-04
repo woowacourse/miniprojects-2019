@@ -2,6 +2,7 @@ package com.wootecobook.turkey.comment.service.dto;
 
 
 import com.wootecobook.turkey.comment.domain.Comment;
+import com.wootecobook.turkey.good.service.dto.GoodResponse;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,10 +23,10 @@ public class CommentResponse {
     private UserResponse userResponse;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private GoodResponse goodResponse;
 
     @Builder
-    public CommentResponse(final Long id, final Long parentId, final String contents, final int countOfChildren,
-                           final UserResponse userResponse, final LocalDateTime createdAt, final LocalDateTime updatedAt) {
+    private CommentResponse(final Long id, final Long parentId, final String contents, final int countOfChildren, final UserResponse userResponse, final LocalDateTime createdAt, final LocalDateTime updatedAt, final GoodResponse goodResponse) {
         this.id = id;
         this.parentId = parentId;
         this.contents = contents;
@@ -33,9 +34,14 @@ public class CommentResponse {
         this.userResponse = userResponse;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.goodResponse = goodResponse;
     }
 
-    public static CommentResponse from(Comment comment) {
+    public static CommentResponse from(final Comment comment) {
+        return from(comment, GoodResponse.init());
+    }
+
+    public static CommentResponse from(final Comment comment, final GoodResponse goodResponse) {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .contents(comment.getContents())
@@ -43,7 +49,8 @@ public class CommentResponse {
                 .countOfChildren(comment.getCountOfChildren())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
-                .userResponse(UserResponse.from(comment.getUser()))
+                .userResponse(UserResponse.from(comment.getAuthor()))
+                .goodResponse(goodResponse)
                 .build();
     }
 }

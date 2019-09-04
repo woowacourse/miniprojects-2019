@@ -11,6 +11,7 @@ const friendBarModule = (function () {
                     createUserDOM(data[i])
                 }
                 addFriendsAskButtonClickListener()
+                addChatStartButtonClickListener()
             })
     }
 
@@ -37,7 +38,7 @@ const friendBarModule = (function () {
         const btns = document.getElementsByClassName('FriendAsk')
         for (let i = 0; i < btns.length; i++) {
             btns[i].addEventListener('click', async function (event) {
-                const data = {"receiverId": event.target.parentNode.parentNode.getAttribute("data-id")}
+                const data = {"receiverId": event.target.closest('div.data-id').dataset.id}
                 const res = await api.POST("/api/friends/asks", data)
 
 	            if(res.status == 201) {
@@ -54,7 +55,7 @@ const friendBarModule = (function () {
 		const btns = document.getElementsByClassName('FriendRemove')
 		for(let i = 0; i < btns.length; i++) {
 			btns[i].addEventListener('click', async function(event) {
-                const friendId = event.target.parentNode.parentNode.getAttribute("data-id")
+                const friendId = event.target.closest('div.data-id').dataset.id
                 const res = await api.DELETE("/api/friends/" + friendId)
 
 	            if(res.status == 204) {
@@ -68,6 +69,33 @@ const friendBarModule = (function () {
 			})
 		}
 	}
+
+    function addChatStartButtonClickListener() {
+        const userList = document.getElementById('all-user-list')
+        userList.addEventListener('click',  startMessenger)
+    }
+
+    function startMessenger(event) {
+        const startMessengerButton = event.target.closest('button')
+        if (startMessengerButton != null && startMessengerButton.classList.contains('start-messenger')) {
+            const ids = [startMessengerButton.closest('div.btn-group').dataset.id];
+            const messengerRequest = {"userIds" : ids}
+            api.POST("/api/messenger", messengerRequest)
+                .then(response => {
+                    if (!response.ok) {
+
+                        throw response;
+                    }
+                    return response.json();
+                })
+                .then(messengerRoom => {
+                    window.location.href = '/messenger/' + messengerRoom.id;
+                })
+                .catch(errorResponse =>
+                    console.log(errorResponse)
+                )
+        }
+    }
 
     function preventDropdownHide() {
         $('div.btn-group.dropleft').on('click', function (event) {
@@ -92,7 +120,36 @@ const friendBarModule = (function () {
         init: async function () {
             await loadAllUser()
             await loadFriends()
-            preventDropdownHide()
+            //preventDropdownHide() //Todo: 메신저 버튼 클릭이 안먹히는 문제 해결 필요
         }
     }
 })()
+
+const friendBar = document.querySelector('.fbFriendSidebar')
+const friendBarToggleBtn = document.getElementById('friend-bar-btn')
+const FRIEND_BAR_SHOW_CLASS = 'show-friend-bar'
+const FRIEND_BAR_HIDE_CLASS = 'hide-friend-bar'
+
+friendBarToggleBtn.addEventListener('click', (event) => {
+    const friendBarClasses = friendBar.classList
+
+    if (friendBarClasses.contains(FRIEND_BAR_SHOW_CLASS)) {
+        friendBar.classList.add(FRIEND_BAR_HIDE_CLASS)
+        friendBar.classList.remove(FRIEND_BAR_SHOW_CLASS)
+    } else {
+        friendBar.classList.add(FRIEND_BAR_SHOW_CLASS)
+        friendBar.classList.remove(FRIEND_BAR_HIDE_CLASS)
+    }
+})
+
+window.addEventListener('resize', (event) => {
+    if (innerWidth < 1430 && friendBar.classList.contains(FRIEND_BAR_SHOW_CLASS)) {
+        friendBar.classList.add(FRIEND_BAR_HIDE_CLASS)
+        friendBar.classList.remove(FRIEND_BAR_SHOW_CLASS)
+    }
+
+    if (innerWidth > 1430 && friendBar.classList.contains(FRIEND_BAR_HIDE_CLASS)) {
+        friendBar.classList.add(FRIEND_BAR_SHOW_CLASS)
+        friendBar.classList.remove(FRIEND_BAR_HIDE_CLASS)
+    }
+})

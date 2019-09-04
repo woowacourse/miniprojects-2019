@@ -17,7 +17,7 @@ public class FriendApiControllerAdvice {
     @ExceptionHandler({EntityNotFoundException.class, NotLoginException.class,
             FriendAskFailException.class, MismatchedUserException.class,
             IllegalArgumentException.class, AlreadyFriendException.class})
-    private ResponseEntity<ErrorMessage> handleException(Exception exception) {
+    protected ResponseEntity<ErrorMessage> handleException(Exception exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
         return ResponseEntity.badRequest().body(errorMessage);
     }

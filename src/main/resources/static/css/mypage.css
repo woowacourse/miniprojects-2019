@@ -1,11 +1,34 @@
-/* feed-header */
-
 .mypage-header {
     height: 350px;
-    background-image: url('/images/default/default.jpg');
+    background-image: url('/images/default/chelsea.png');
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
     color: #fff;
+    z-index: 5;
+}
+
+.mypage-header .cover-modal-btn {
+    position: relative;
+    top: 10px;
+    left: 10px;
+    display: inline-block;
+    padding: 10px;
+    border: 1px solid #c9c9c9;
+    background-color: #000;
+    color: #fff;
+    box-shadow: 0 14px 28px rgba(255, 255, 255, 0.5), 0 10px 10px rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    cursor: pointer;
+}
+
+.mypage-header .cover-modal-btn i {
+    margin-right: 0.5rem;
+}
+
+.mypage-header .cover-modal-btn:hover {
+    opacity: 0.7;
+    transition: 0.5s opacity;
 }
 
 .background {
@@ -36,22 +59,50 @@
     height: 150px;
     border: 3px solid #fff;
     border-radius: 50%;
+    background-size: cover;
     left: 1rem;
     bottom: 10rem;
     color: #fff;
-    z-index: 1;
+    z-index: 10;
+}
+
+.mypage-header .profile:before {
+    content: '사진 업데이트';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 144px;
+    height: 144px;
+    border-radius: 50%;
+    opacity: 0;
+    background-color: #000;
+    z-index: 10;
+}
+
+.mypage-header .profile:hover:before {
+    opacity: 0.5;
+    transition: 0.5s opacity;
+}
+
+.mypage-header .profile input[type="file"] {
+    display: none;
 }
 
 /* feed-body */
 
 .mypage-body {
     display: flex;
-    justify-content: center;
     margin-top: 10px;
 }
 
 .mypage-body .left-side {
     width: 40vw;
+}
+
+body {
+    font-size: 14px;
+    color: #333;
+    letter-spacing: .2px;
 }
 
 /* 소개 카드 창 */
@@ -69,6 +120,7 @@
 
 .card-block {
     margin: 1rem;
+    padding: 0;
 }
 
 .card-block .card-contents {
@@ -81,5 +133,121 @@
 }
 
 .card-block .card-images .image {
-    width: 12vw;
+    width: 6vw;
+}
+
+.custom-modal {
+    width: 300px;
+    display: none;
+    position: fixed;
+    top: 10rem;
+    left: 40vw;
+    padding: 10px;
+    border: 1px solid #c9c9c9;
+    z-index: 1050;
+    background-color: #fff;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22), 0 10px 10px rgba(0, 0, 0, 0.24);
+}
+
+.custom-modal .modal-body {
+    color: #000;
+    border: 1px solid #a9a9a9;
+}
+
+.custom-modal .modal-body button {
+    width: 100%;
+    margin-top: 10px;
+    height: 50px;
+    border: 0;
+    background-color: #75C7FF;
+    color: #fff;
+    font-weight: bold;
+}
+
+.custom-modal .modal-body button:hover {
+    background-color: #4CB6FF;
+}
+
+/* 소개 내부 */
+.introduction-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -60px;
+    width: 24px;
+    height: 24px;
+    float: left;
+    background-size: 34px 332px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.education-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -242px;
+}
+
+.current-city-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -224px;
+}
+
+.hometown-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -260px;
+}
+
+.company-icon {
+    background-image: url(/images/default/icons4.png);
+    background-position: 0 -152px;
+}
+
+.card-contents > div {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    height: 30px;
+}
+
+.card-contents > div > i {
+    background-size: 34px 332px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    margin-right: 8px;
+    margin-top: 5px;
+}
+
+.update-introduction-input, .introduction-card {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.introduction-update-btn, .introduction-display-btn {
+    box-sizing: border-box;
+    width: 100%;
+    line-height: 26px;
+    padding: 0 10px;
+    background-color: #f5f6f7;
+    border-color: #ccd0d5;
+    color: #4b4f56;
+    border: 1px solid;
+    border-radius: 2px;
+    font-size: 12px;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    text-shadow: none;
+    vertical-align: middle;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.display-none {
+    display: none;
 }

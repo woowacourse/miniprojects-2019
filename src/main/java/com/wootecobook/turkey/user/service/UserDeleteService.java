@@ -14,13 +14,16 @@ public class UserDeleteService {
     private final UserService userService;
     private final FriendAskService friendAskService;
     private final FriendService friendService;
+    private final IntroductionService introductionService;
 
     public UserDeleteService(final UserService userService,
                              final FriendAskService friendAskService,
-                             final FriendService friendService) {
+                             final FriendService friendService,
+                             final IntroductionService introductionService) {
         this.userService = userService;
         this.friendAskService = friendAskService;
         this.friendService = friendService;
+        this.introductionService = introductionService;
     }
 
     public void delete(final Long userId, final Long sessionUserId) {
@@ -29,6 +32,7 @@ public class UserDeleteService {
             userService.delete(userId, sessionUserId);
             friendAskService.deleteBySenderIdOrReceiverId(userId);
             friendService.deleteByRelatedUserIdOrRelatingUserId(userId);
+            introductionService.delete(userId);
         } catch (Exception e) {
             throw new UserDeleteException();
         }

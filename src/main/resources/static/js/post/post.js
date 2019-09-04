@@ -3,49 +3,14 @@ const ENTER = 13
 
 const posts = document.getElementById('contents')
 
-const writeBtn = document.getElementById('write-btn')
-const writeArea = document.getElementById('write-area')
-
 let totalPage;
 let currentPageNumber = 1;
-writeBtn.addEventListener('click', (event) => {
-    const formData = new FormData();
 
-    const contents = writeArea.value
-    formData.append('contents', contents)
+const MAX_FILE_SIZE = 100 * 1024 * 1024
+let total_file_size = 0
 
-    const fileForm = event.target.closest('ul').querySelector('input[name="filename[]"]')
-    const files = fileForm.files
-
-    const len = files.length;
-    for (let i = 0; i < len; i++) {
-        formData.append('files', files[i]);
-    }
-
-    formDataApi.POST(POST_URL, formData)
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            }
-            throw res
-        })
-        .then(post => {
-            posts.prepend(createPostDOM(post))
-
-            const postWriteContainer = writeArea.closest('.card');
-            const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
-            filesPreviewContainer.innerHTML = ''
-            fileForm.value = ''
-            writeArea.value = ''
-        })
-        .catch(error => {
-            error.json().then(errorMessage =>
-                console.log(errorMessage.message))
-        })
-})
-
-const initLoad = async () => {
-    await api.GET(POST_URL)
+const initLoad = async (url) => {
+    await api.GET(url)
         .then(res => res.json())
         .then(postPage => {
             totalPage = postPage.totalPages;
@@ -54,6 +19,66 @@ const initLoad = async () => {
             })
         })
         .catch(error => console.error(error))
+
+    const writeBtn = document.getElementById('write-btn')
+    const writeArea = document.getElementById('write-area')
+    writeBtn.addEventListener('click', (event) => {
+        const formData = new FormData();
+
+        const contents = writeArea.value
+        formData.append('contents', contents)
+
+        const receiver = writeArea.dataset.id
+        if (receiver !== undefined && receiver !== localStorage.loginUserId) {
+            formData.append('receiver', receiver)
+        }
+
+        const fileForm = event.target.closest('ul').querySelector('input[name="filename[]"]')
+        const files = fileForm.files
+
+        formData.append('taggedUsers', friendTagService.tag())
+
+        const len = files.length;
+        for (let i = 0; i < len; i++) {
+            formData.append('files', files[i]);
+            total_file_size += files[i].size
+        }
+
+        if (total_file_size > MAX_FILE_SIZE) {
+            alert(`최대 파일 크기를 초과했습니다.\n현재 파일 크기 : ${total_file_size}bytes\n최대 파일 크기 : ${MAX_FILE_SIZE}bytes`)
+            total_file_size = 0
+            const files_preview_dom = document.getElementsByClassName("files-preview")[0]
+            while (files_preview_dom.hasChildNodes()) {
+                files_preview_dom.removeChild(files_preview_dom.firstChild);
+            }
+            const postWriteContainer = writeArea.closest('.card')
+            const filesPreviewContainer = postWriteContainer.querySelector('.files-preview')
+            filesPreviewContainer.innerHTML = ''
+            fileForm.value = ''
+            writeArea.value = ''
+        } else {
+            formDataApi.POST(POST_URL, formData)
+                .then(res => {
+                    if (res.status == 201) {
+                        return res.json();
+                    }
+                    throw res
+                })
+                .then(post => {
+                    posts.prepend(createPostDOM(post))
+
+                    const postWriteContainer = writeArea.closest('.card');
+                    const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
+                    filesPreviewContainer.innerHTML = ''
+                    fileForm.value = ''
+                    writeArea.value = ''
+                })
+                .catch(error => {
+                    error.json().then(errorMessage =>
+                        alert(errorMessage.message))
+                })
+        }
+    })
 }
 
 const infinityScroll = (event) => {
@@ -78,7 +103,7 @@ const infinityScroll = (event) => {
 
 const createPostDOM = (post) => {
     const div = document.createElement('div');
-    div.innerHTML = postTemplate(post)
+    div.innerHTML = postTemplate(post, localStorage.loginUserId)
     return div
 }
 
@@ -135,9 +160,9 @@ const postOperateButton = (function () {
         };
 
         const PostService = function () {
-            const toggleUpdate = function (event) {
+            const toggleUpdate = (event) => {
                 const buttonContainer = event.target.closest("a")
-                if (buttonContainer == null || !buttonContainer.hasClass) {
+                if (buttonContainer == null) {
                     return
                 }
                 if (buttonContainer.classList.contains('toggle-post-update')) {
@@ -146,7 +171,7 @@ const postOperateButton = (function () {
                 }
             };
 
-            const update = function (event) {
+            const update = (event) => {
                 const buttonContainer = event.target.closest("li")
 
                 if (buttonContainer == null) {
@@ -160,7 +185,7 @@ const postOperateButton = (function () {
                     const contents = updatePostContainer.querySelector("textArea").value;
 
                     const postRequest = {
-                        contents : contents
+                        contents: contents
                     }
 
                     api.PUT(getTargetPostUrl(postId), postRequest)
@@ -179,7 +204,7 @@ const postOperateButton = (function () {
                         .catch(errorResponse =>
                             errorResponse.json()
                                 .then(errorMessage =>
-                                    console.log(errorMessage.message)
+                                    alert(errorMessage.message)
                                 )
                         )
                 }
@@ -187,7 +212,7 @@ const postOperateButton = (function () {
 
             const remove = (event) => {
                 const buttonContainer = event.target.closest("a")
-                if (buttonContainer == null ) {
+                if (buttonContainer == null) {
                     return
                 }
                 if (buttonContainer.classList.contains('post-delete')) {
@@ -225,6 +250,8 @@ const postOperateButton = (function () {
                     const commentsContainer = postCard.querySelector('.comment-list')
                     const page = event.target.dataset.id
 
+                    commentsContainer.addEventListener('keyup', updateComment)
+
                     if (page == null) {
                         commentsContainer.innerHTML = commentFormTemplate
                         commentsContainer.querySelector('.add-comment').addEventListener('keyup', postComment)
@@ -242,7 +269,6 @@ const postOperateButton = (function () {
                                 } else {
                                     div.innerHTML = childCommentTemplate(comment)
                                 }
-                                div.addEventListener('keyup', updateComment)
                                 commentsContainer.appendChild(div)
                             })
 
@@ -268,8 +294,9 @@ const postOperateButton = (function () {
                     return
                 }
 
-                const postId = contentsArea.closest(".card").dataset.id
-                const commentsContainer = contentsArea.closest('.card').querySelector('.comment-list')
+                const postCard = contentsArea.closest(".card");
+                const postId = postCard.dataset.id
+                const commentsContainer = postCard.querySelector('.comment-list')
                 const parentComment = event.target.closest('.parent-comment');
                 const parentId = parentComment === null ? null : parentComment.dataset.id
 
@@ -292,6 +319,11 @@ const postOperateButton = (function () {
                             div.innerHTML = childCommentTemplate(comment)
                             parentComment.appendChild(div)
                         }
+
+                        const totalCountContainer = postCard.querySelector('.totalComment')
+                        const totalCount = parseInt(totalCountContainer.innerHTML) + 1
+                        totalCountContainer.innerHTML = totalCount
+
                     })
                     .catch(error => console.error(error))
             }
@@ -299,7 +331,7 @@ const postOperateButton = (function () {
             const toggleCommentUpdate = (event) => {
                 const buttonContainer = event.target.closest("a")
 
-                if (buttonContainer === null){
+                if (buttonContainer === null) {
                     return
                 }
 
@@ -343,14 +375,16 @@ const postOperateButton = (function () {
             const deleteComment = (event) => {
                 const commentDeleteBtn = event.target.closest('a');
 
-                if(commentDeleteBtn === null){
+                if (commentDeleteBtn === null) {
                     return
                 }
 
                 if (commentDeleteBtn.classList.contains('comment-delete')) {
                     const buttonContainer = event.target.closest("ul").closest("li")
-                    const postId = buttonContainer.closest('.card').dataset.id;
+                    const postCard = buttonContainer.closest('.card');
+                    const postId = postCard.dataset.id;
                     const commentId = buttonContainer.dataset.id;
+
                     api.DELETE(`/api/posts/${postId}/comments/${commentId}`)
                         .then(res => {
                             if (res.status !== 204) {
@@ -358,6 +392,10 @@ const postOperateButton = (function () {
                             }
                             const commentCard = buttonContainer.parentNode
                             commentCard.removeChild(buttonContainer);
+
+                            const totalCountContainer = postCard.querySelector('.totalComment')
+                            const totalCount = parseInt(totalCountContainer.innerHTML) - 1
+                            totalCountContainer.innerHTML = totalCount
                         })
                         .catch(error => console.error(error))
                 }
@@ -366,7 +404,7 @@ const postOperateButton = (function () {
             const toggleChildCommentForm = (event) => {
                 const commentsContainer = event.target.closest('li')
                 const commentItem = event.target.closest('.comment-item');
-                if(commentItem === null) return
+                if (commentItem === null) return
                 const form = commentItem.querySelector('.add-comment')
 
                 if (event.target.classList.contains('toggle-child') && form === null) {
@@ -442,7 +480,7 @@ const fileAttach = (function () {
     }
 
     const FileAttachService = function () {
-        const showFileAttachForm = function (event) {
+        const showFileAttachForm = (event) => {
             const fileAttachContainer = event.target.closest('li');
             if (fileAttachContainer && fileAttachContainer.classList.contains('file-attach')) {
                 const fileInput = fileAttachContainer.firstElementChild;
@@ -450,7 +488,7 @@ const fileAttach = (function () {
             }
         };
 
-        const previewFileAttach = function (event) {
+        const previewFileAttach = (event) => {
             const fileAttachContainer = event.target.closest('li');
             if (fileAttachContainer && fileAttachContainer.classList.contains('file-attach')) {
                 const postWriteContainer = fileAttachContainer.closest('.card');
@@ -458,16 +496,24 @@ const fileAttach = (function () {
                 filesPreviewContainer.innerHTML = ''
 
                 const files = fileAttachContainer.firstElementChild.files;
-                const filesSrc = [];
+                const fileInfos = [];
                 const len = files.length;
                 for (let i = 0; i < len; i++) {
-                    filesSrc.push(URL.createObjectURL(files[i]));
+                    const fileInfo = new FileInfo(files[i].type, URL.createObjectURL(files[i]))
+                    fileInfos.push(fileInfo);
                 }
 
-                const div = document.createElement('div');
-                div.innerHTML = previewTemplate(filesSrc)
-                filesPreviewContainer.innerHTML = div.innerHTML
+                try {
+                    filesPreviewContainer.innerHTML = previewTemplate(fileInfos)
+                } catch (err) {
+                    alert(err.message)
+                }
             }
+        }
+
+        const FileInfo = function (type, src) {
+            this.type = type
+            this.src = src
         }
 
         return {
@@ -486,6 +532,13 @@ const fileAttach = (function () {
     }
 })();
 
-postOperateButton.init();
-fileAttach.init();
-initLoad();
+$(document).ready(function () {
+    postOperateButton.init();
+    fileAttach.init();
+    console.log(location.pathname)
+    if (location.pathname === "/") {
+        initLoad(POST_URL);
+    } else {
+        initLoad(MYPAGE_POST_URI)
+    }
+})

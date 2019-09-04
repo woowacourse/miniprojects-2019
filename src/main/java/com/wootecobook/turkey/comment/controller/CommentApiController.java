@@ -4,9 +4,9 @@ import com.wootecobook.turkey.comment.service.CommentService;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
-import com.wootecobook.turkey.commons.GoodResponse;
 import com.wootecobook.turkey.commons.resolver.LoginUser;
 import com.wootecobook.turkey.commons.resolver.UserSession;
+import com.wootecobook.turkey.good.service.dto.GoodResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -29,17 +29,19 @@ public class CommentApiController {
 
     @GetMapping
     public ResponseEntity<Page<CommentResponse>> list(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
-                                                      @PathVariable Long postId) {
+                                                      @PathVariable Long postId,
+                                                      @LoginUser UserSession userSession) {
 
-        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByPostId(postId, pageable);
+        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByPostId(postId, pageable, userSession.getId());
         return ResponseEntity.ok(commentResponses);
     }
 
     @GetMapping("/{id}/children")
     public ResponseEntity<Page<CommentResponse>> childCommentList(@PageableDefault(size = 5, sort = "createdAt") Pageable pageable,
-                                                                  @PathVariable Long id) {
+                                                                  @PathVariable Long id,
+                                                                  @LoginUser UserSession userSession) {
 
-        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByParentId(id, pageable);
+        final Page<CommentResponse> commentResponses = commentService.findCommentResponsesByParentId(id, pageable, userSession.getId());
         return ResponseEntity.ok(commentResponses);
     }
 
@@ -72,9 +74,9 @@ public class CommentApiController {
         return ResponseEntity.noContent().location(uri).build();
     }
 
-    @GetMapping("/{id}/good")
-    public ResponseEntity<GoodResponse> good(@PathVariable Long id, @LoginUser UserSession userSession) {
-        GoodResponse goodResponse = commentService.good(id, userSession.getId());
+    @PostMapping("/{id}/good")
+    public ResponseEntity<GoodResponse> toggleGood(@PathVariable Long id, @LoginUser UserSession userSession) {
+        GoodResponse goodResponse = commentService.toggleGood(id, userSession.getId());
 
         return ResponseEntity.ok(goodResponse);
     }

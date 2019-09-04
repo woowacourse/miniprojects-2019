@@ -1,26 +1,28 @@
 package com.wootecobook.turkey.file.service;
 
+import com.wootecobook.turkey.commons.storage.StorageConnector;
 import com.wootecobook.turkey.file.domain.FileFeature;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.domain.UploadFileRepository;
 import com.wootecobook.turkey.user.domain.User;
-import com.wootecobook.turkey.utils.S3Connector;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class UploadFileService {
 
-    private final S3Connector s3Connector;
+    private final StorageConnector storageConnector;
     private final UploadFileRepository uploadFileRepository;
 
-    public UploadFileService(final S3Connector s3Connector, final UploadFileRepository fileFeatureRepository) {
-        this.s3Connector = s3Connector;
+    public UploadFileService(final StorageConnector s3Connector, final UploadFileRepository fileFeatureRepository) {
+        this.storageConnector = s3Connector;
         this.uploadFileRepository = fileFeatureRepository;
     }
 
@@ -34,20 +36,22 @@ public class UploadFileService {
                 .size(multipartFile.getSize())
                 .build();
 
-        UploadFile savedFileFeature = uploadFileRepository.save(new UploadFile(fileFeature, owner));
-        return savedFileFeature;
+        return uploadFileRepository.save(new UploadFile(fileFeature, owner));
     }
 
     private String getUploadPath(final MultipartFile multipartFile, final String directoryName) {
-        try {
-            String fileName = createUniqueFileName();
-            return s3Connector.upload(multipartFile, directoryName, fileName);
-        } catch (IOException e) {
-            throw new FailedSaveFileException(e.getMessage());
-        }
+        String fileName = createUniqueFileName();
+        return storageConnector.upload(multipartFile, directoryName, fileName);
     }
 
     private String createUniqueFileName() {
         return String.valueOf(UUID.randomUUID());
+    }
+
+    public List<FileFeature> findFileFeaturesByUserId(Long userId) {
+        return Collections.unmodifiableList(uploadFileRepository.findByOwnerId(userId)
+                .stream()
+                .map(UploadFile::getFileFeature)
+                .collect(Collectors.toList()));
     }
 }

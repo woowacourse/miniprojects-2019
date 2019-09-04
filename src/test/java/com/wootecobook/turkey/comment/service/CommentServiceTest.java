@@ -1,12 +1,12 @@
 package com.wootecobook.turkey.comment.service;
 
 import com.wootecobook.turkey.comment.domain.Comment;
-import com.wootecobook.turkey.comment.domain.CommentGood;
 import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.comment.service.exception.AlreadyDeleteException;
+import com.wootecobook.turkey.good.service.CommentGoodService;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.service.PostService;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -172,7 +171,7 @@ class CommentServiceTest {
         when(page.map(any())).thenReturn(page);
 
         // when
-        commentService.findCommentResponsesByPostId(POST_ID, pageable);
+        commentService.findCommentResponsesByPostId(POST_ID, pageable, user.getId());
 
         // then
         verify(commentRepository).findAllByPostIdAndParentIdIsNull(POST_ID, pageable);
@@ -188,7 +187,7 @@ class CommentServiceTest {
         when(page.map(any())).thenReturn(page);
 
         // when
-        commentService.findCommentResponsesByParentId(COMMENT_ID, pageable);
+        commentService.findCommentResponsesByParentId(COMMENT_ID, pageable, user.getId());
 
         // then
         verify(commentRepository).findAllByParentId(COMMENT_ID, pageable);
@@ -199,10 +198,10 @@ class CommentServiceTest {
         // given
         when(commentRepository.findById(COMMENT_ID)).thenReturn(Optional.ofNullable(comment));
         when(userService.findById(USER_ID)).thenReturn(user);
-        when(commentGoodService.toggleGood(any(Comment.class), any(User.class))).thenReturn(Arrays.asList(new CommentGood(user, comment)));
+        when(commentGoodService.toggleGood(any(Comment.class), any(User.class))).thenReturn(1);
 
         // when
-        commentService.good(USER_ID, COMMENT_ID);
+        commentService.toggleGood(USER_ID, COMMENT_ID);
 
         // then
         verify(commentGoodService).toggleGood(comment, user);

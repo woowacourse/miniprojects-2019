@@ -1,4 +1,4 @@
-$.fn.serializeObject = function() {
+const serializeObject = form => {
   let result = {}
   let extend = function(i, element) {
     let node = result[element.name]
@@ -12,6 +12,6 @@ $.fn.serializeObject = function() {
       result[element.name] = element.value
     }
   }
-  $.each(this.serializeArray(), extend)
+  $.each(form.serializeArray(), extend)
   return result
 }

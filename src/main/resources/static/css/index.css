@@ -269,7 +269,7 @@ header ul.nav-right li, header ul.nav-left li {
 }
 
 .text-link-color {
-    color: #385898 !important;
+    color: #385898;
 }
 
 .nav-right .user-profile .profile-img {
@@ -298,4 +298,13 @@ header ul.nav-right li, header ul.nav-left li {
 
 .one-line {
     display: block;
+}
+
+.preview-file {
+    padding-right: 2%;
+}
+
+.carousel-item-video {
+    padding-left: 15%;
+    padding-right: 15%;
 }
