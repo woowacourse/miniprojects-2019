@@ -1,18 +1,22 @@
 package com.woowacourse.zzinbros.post.domain;
 
 import com.woowacourse.zzinbros.common.domain.BaseEntity;
-import com.woowacourse.zzinbros.mediafile.MediaFile;
+import com.woowacourse.zzinbros.mediafile.domain.MediaFile;
 import com.woowacourse.zzinbros.post.exception.UnAuthorizedException;
 import com.woowacourse.zzinbros.user.domain.User;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.*;
 
 @Entity
+@DynamicUpdate
 public class Post extends BaseEntity {
+    private static final int INIT_COUNT_OF_LIKE = 0;
+    private static final int INIT_COUNT_OF_SHARED = 0;
+
     @Lob
     private String contents;
 
@@ -21,23 +25,42 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "author_id", foreignKey = @ForeignKey(name = "post_to_user"))
     private User author;
 
-    @OneToMany
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "media_file_id", foreignKey = @ForeignKey(name = "post_to_media_file"))
-    private List<MediaFile> mediaFiles = new ArrayList<>();
+    private MediaFile mediaFiles;
 
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private Set<PostLike> postLikes = new HashSet<>();
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "shared_post_id")
+    private Post sharedPost;
 
-    @Column
-    private int countOfLike;
+    @ColumnDefault("0")
+    private Integer countOfLike;
+
+    @ColumnDefault("0")
+    private Integer countOfShared;
+
+    @Enumerated(EnumType.STRING)
+    private DisplayType displayType;
 
     public Post() {
     }
 
-    public Post(String contents, User author) {
+    public Post(String contents, User author, Post sharedPost, DisplayType displayType) {
         this.contents = contents;
         this.author = author;
-        countOfLike = 0;
+        this.sharedPost = sharedPost;
+        this.countOfLike = INIT_COUNT_OF_LIKE;
+        this.countOfShared = INIT_COUNT_OF_SHARED;
+        this.displayType = displayType;
+    }
+
+    public Post(String contents, User author, DisplayType displayType) {
+        this.contents = contents;
+        this.author = author;
+        this.countOfLike = INIT_COUNT_OF_LIKE;
+        this.countOfShared = INIT_COUNT_OF_SHARED;
+        this.displayType = displayType;
     }
 
     public Post update(Post post) {
@@ -49,21 +72,23 @@ public class Post extends BaseEntity {
     }
 
     public boolean matchAuthor(User user) {
-        return this.author.equals(user);
+        return this.author.isAuthor(user);
     }
 
     public void addMediaFiles(MediaFile mediaFile) {
-        this.mediaFiles.add(mediaFile);
+        this.mediaFiles = mediaFile;
     }
 
-    public void addLike(PostLike postLike) {
-        postLikes.add(postLike);
+    public void addLike() {
         countOfLike++;
     }
 
-    public void removeLike(PostLike postLike) {
-        postLikes.remove(postLike);
+    public void removeLike() {
         countOfLike--;
+    }
+
+    public void share() {
+        this.countOfShared++;
     }
 
     public Long getId() {
@@ -74,44 +99,30 @@ public class Post extends BaseEntity {
         return contents;
     }
 
-    public LocalDateTime getCreateDateTime() {
-        return createdDateTime;
-    }
-
-    public LocalDateTime getUpdateDateTime() {
-        return updatedDateTime;
-    }
-
     public User getAuthor() {
         return author;
     }
 
-    public List<MediaFile> getMediaFiles() {
-        return new ArrayList<>(mediaFiles);
-    }
-
-    public void setMediaFiles(List<MediaFile> mediaFiles) {
-        this.mediaFiles = mediaFiles;
-    }
-
-    public Set<PostLike> getPostLikes() {
-        return Collections.unmodifiableSet(postLikes);
+    public MediaFile getMediaFiles() {
+        return mediaFiles;
     }
 
     public int getCountOfLike() {
+        if (countOfLike == null) {
+            return INIT_COUNT_OF_LIKE;
+        }
         return countOfLike;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Post post = (Post) o;
-        return Objects.equals(id, post.id);
+    public Post getSharedPost() {
+        return sharedPost;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public Integer getCountOfShared() {
+        return countOfShared;
+    }
+
+    public DisplayType getDisplayType() {
+        return displayType;
     }
 }

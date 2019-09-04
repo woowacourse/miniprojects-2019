@@ -1,19 +1,19 @@
 <div class="feed-header" xmlns:th="http://www.thymeleaf.org">
     <ul class="list-unstyled list-info">
         <li>
-            <img alt="" class="thumb-img img-circle" src="images/default/eastjun_profile.jpg">
+            <img alt="" class="thumb-img img-circle" th:src="${post.author.profile.url}">
             <div class="info">
-                <a class="title no-pdd-vertical text-semibold inline-block" href="" th:text="${post.author.name}">eastjun</a>
-                <span>님이 그룹에 링크를 공유했습니다.</span>
-                <span class="sub-title">15시간</span>
+                <a class="title no-pdd-vertical text-semibold inline-block"
+                   th:href="@{'/posts?author=' + ${post.author.id}}" th:text="${post.author.name}">eastjun</a>
+                <time class="sub-title" th:datetime="${post.createdDateTime}">몇 시간 전</time>
                 <a aria-expanded="false" class="pointer absolute top-0 right-0" data-toggle="dropdown">
                     <span class="btn-icon text-dark">
-                                            <i class="ti-more font-size-16"></i>
-                                        </span>
+                        <i class="ti-more font-size-16"></i>
+                    </span>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a class="pointer" data-target="#post-edit-modal" data-toggle="modal">
+                        <a class="pointer" data-toggle="modal" th:attr="data-target='#post-edit-modal' + ${post.id}">
                             <i class="ti-pencil pdd-right-10 text-dark"></i>
                             <span class="">게시글 수정</span>
                         </a>
@@ -33,9 +33,7 @@
 
 <script type="text/javascript">
     function onDeleteClick(id) {
-        const url = document.location.href;
-
-        fetch(url + "/posts/" + id, {
+        fetch("/posts/" + id, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
@@ -46,6 +44,10 @@
             .then(body => {
                 location.reload();
             })
-            .catch(error => console.log(error));
+            .catch(error => {
+                console.log(error)
+            });
     }
+
+
 </script>

@@ -1,6 +1,10 @@
 package com.woowacourse.zzinbros.user.service;
 
 import com.woowacourse.zzinbros.BaseTest;
+import com.woowacourse.zzinbros.mediafile.domain.MediaFile;
+import com.woowacourse.zzinbros.mediafile.domain.upload.UploadTo;
+import com.woowacourse.zzinbros.mediafile.domain.upload.UploadToLocal;
+import com.woowacourse.zzinbros.mediafile.service.MediaFileService;
 import com.woowacourse.zzinbros.user.domain.User;
 import com.woowacourse.zzinbros.user.domain.UserTest;
 import com.woowacourse.zzinbros.user.domain.repository.UserRepository;
@@ -17,12 +21,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import static com.woowacourse.zzinbros.common.domain.TestBaseMock.mockingId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -32,6 +41,9 @@ class UserServiceTest extends BaseTest {
 
     private static final long BASE_ID = 1L;
     private static final String MISMATCH_EMAIL = "error@test.com";
+
+    @Mock
+    MediaFileService mediaFileService;
 
     @Mock
     UserRepository userRepository;
@@ -45,6 +57,8 @@ class UserServiceTest extends BaseTest {
     private User notValidUser;
     private UserResponseDto validLoginUserDto;
     private UserResponseDto notValidLoginUserDto;
+    private UploadTo DEFAULT_PROFILE = new UploadToLocal(null, "down", "up");
+    private MediaFile mediaFile = new MediaFile("/images/some.png");
 
     @BeforeEach
     void setUp() {
@@ -56,47 +70,52 @@ class UserServiceTest extends BaseTest {
                 UserTest.BASE_NAME,
                 UserTest.BASE_EMAIL
         );
-        user = userRequestDto.toEntity();
+        user = userRequestDto.toEntity(mediaFile);
         notValidUser = new User(UserTest.BASE_NAME, MISMATCH_EMAIL, UserTest.BASE_PASSWORD);
-        validLoginUserDto = new UserResponseDto(BASE_ID, UserTest.BASE_NAME, UserTest.BASE_EMAIL);
-        notValidLoginUserDto = new UserResponseDto(BASE_ID, UserTest.BASE_NAME, MISMATCH_EMAIL);
+        validLoginUserDto = new UserResponseDto(BASE_ID, UserTest.BASE_NAME, UserTest.BASE_EMAIL, mediaFile.getUrl());
+        notValidLoginUserDto = new UserResponseDto(BASE_ID, UserTest.BASE_NAME, MISMATCH_EMAIL, mediaFile.getUrl());
     }
 
     @Test
     @DisplayName("정상 회원 가입 테스트")
     void addUser() {
-        given(userRepository.existsUserByEmail(user.getEmail())).willReturn(false);
+        given(userRepository.existsUserByEmailEmail(user.getEmail())).willReturn(false);
         given(userRepository.save(user)).willReturn(user);
+        given(mediaFileService.register(any())).willReturn(mediaFile);
 
-        User savedUser = userService.register(userRequestDto);
+        User savedUser = userService.register(userRequestDto, DEFAULT_PROFILE);
         verify(userRepository, times(1)).save(savedUser);
     }
 
     @Test
     @DisplayName("이미 이메일이 존재할 때 가입 실패")
     void failAddUserWhenUserExists() {
-        given(userRepository.existsUserByEmail(user.getEmail())).willReturn(true);
+        given(userRepository.existsUserByEmailEmail(user.getEmail())).willReturn(true);
         assertThatThrownBy(() ->
-                userService.register(userRequestDto)).isInstanceOf(EmailAlreadyExistsException.class);
+                userService.register(userRequestDto, DEFAULT_PROFILE)).isInstanceOf(EmailAlreadyExistsException.class);
     }
 
     @Test
     @DisplayName("회원 정보 수정 성공")
     void updateUser() {
         given(userRepository.findById(BASE_ID)).willReturn(Optional.ofNullable(user));
-        given(userRepository.findByEmail(validLoginUserDto.getEmail())).willReturn(Optional.ofNullable(user));
+        given(userRepository.findByEmailEmail(validLoginUserDto.getEmail())).willReturn(Optional.ofNullable(user));
+        given(mediaFileService.register(any())).willReturn(mediaFile);
 
-        User updatedUser = userService.modify(BASE_ID, userUpdateDto, validLoginUserDto);
-        assertThat(updatedUser).isEqualTo(user);
+        User updatedUser = userService.modify(BASE_ID, userUpdateDto, validLoginUserDto, DEFAULT_PROFILE);
+        assertThat(updatedUser.getEmail()).isEqualTo(userUpdateDto.getEmail());
+        assertThat(updatedUser.getName()).isEqualTo(userUpdateDto.getName());
     }
 
     @Test
     @DisplayName("다른 유저가 수정 시도할 때 에외 발생")
     void updateUserWhenNotValid() {
         given(userRepository.findById(BASE_ID)).willReturn(Optional.ofNullable(user));
-        given(userRepository.findByEmail(notValidLoginUserDto.getEmail())).willReturn(Optional.ofNullable(notValidUser));
+        given(userRepository.findByEmailEmail(notValidLoginUserDto.getEmail()))
+                .willReturn(Optional.ofNullable(notValidUser));
+        given(mediaFileService.register(any())).willReturn(mediaFile);
 
-        assertThatThrownBy(() -> userService.modify(BASE_ID, userUpdateDto, notValidLoginUserDto))
+        assertThatThrownBy(() -> userService.modify(BASE_ID, userUpdateDto, notValidLoginUserDto, DEFAULT_PROFILE))
                 .isInstanceOf(NotValidUserException.class);
     }
 
@@ -105,7 +124,7 @@ class UserServiceTest extends BaseTest {
     void updateUserWhenUserNotExist() {
         given(userRepository.findById(BASE_ID)).willReturn(Optional.ofNullable(null));
 
-        assertThatThrownBy(() -> userService.modify(BASE_ID, userUpdateDto, notValidLoginUserDto))
+        assertThatThrownBy(() -> userService.modify(BASE_ID, userUpdateDto, notValidLoginUserDto, DEFAULT_PROFILE))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
@@ -121,7 +140,7 @@ class UserServiceTest extends BaseTest {
     @DisplayName("회원 정보 ID로 삭제")
     void deleteUser() {
         given(userRepository.findById(BASE_ID)).willReturn(Optional.ofNullable(user));
-        given(userRepository.findByEmail(validLoginUserDto.getEmail())).willReturn(Optional.ofNullable(user));
+        given(userRepository.findByEmailEmail(validLoginUserDto.getEmail())).willReturn(Optional.ofNullable(user));
 
         userService.delete(BASE_ID, validLoginUserDto);
         verify(userRepository, times(1)).deleteById(BASE_ID);
@@ -138,17 +157,17 @@ class UserServiceTest extends BaseTest {
     @Test
     @DisplayName("로그인 성공")
     void loginSuccess() {
-        given(userRepository.findByEmail(userRequestDto.getEmail())).willReturn(Optional.ofNullable(user));
+        given(userRepository.findByEmailEmail(userRequestDto.getEmail())).willReturn(Optional.ofNullable(user));
 
-        UserResponseDto loginUserDto = userService.login(userRequestDto);
-        assertThat(loginUserDto.getEmail()).isEqualTo(userRequestDto.getEmail());
-        assertThat(loginUserDto.getName()).isEqualTo(userRequestDto.getName());
+        User user = userService.login(userRequestDto);
+        assertThat(user.getEmail()).isEqualTo(userRequestDto.getEmail());
+        assertThat(user.getName()).isEqualTo(userRequestDto.getName());
     }
 
     @Test
     @DisplayName("비밀번호가 다를 때 로그인 실패")
     void loginFail() {
-        given(userRepository.findByEmail(userRequestDto.getEmail())).willReturn(Optional.ofNullable(user));
+        given(userRepository.findByEmailEmail(userRequestDto.getEmail())).willReturn(Optional.ofNullable(user));
 
         UserRequestDto loginRequestDto
                 = new UserRequestDto(user.getName(), user.getEmail(), user.getPassword() + "a");
@@ -164,5 +183,17 @@ class UserServiceTest extends BaseTest {
         User actual = userService.findLoggedInUser(validLoginUserDto);
 
         assertThat(actual).isEqualTo(user);
+    }
+
+    @Test
+    @DisplayName("제한 수에 맞게 User 목록을 가입 순서로 반환한다")
+    void findRecentUsers() {
+        int limit = 5;
+        List<User> expected = Arrays.asList(mockingId(user, 1L), mockingId(user, 2L));
+        given(userRepository.findLatestUsers(PageRequest.of(0, limit)))
+                .willReturn(expected);
+
+        assertThat(userService.findRandomUsers(limit)).isEqualTo(expected);
+        verify(userRepository, times(1)).findLatestUsers(PageRequest.of(0, limit));
     }
 }

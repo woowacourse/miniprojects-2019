@@ -2,11 +2,12 @@
 
 <head>
     <th:block th:replace="common/head"></th:block>
+    <link href="/css/entrance.css" rel="stylesheet">
 </head>
 
 <body>
 <div id="wootecobook-app">
-    <header th:replace="layout/entrance/headline::entranceHeadline"></header>
+    <header th:replace="layout/entrance/headline"></header>
     <div class="container-fluid max-width-lg mx-auto mrg-top-70 cover-img bg" id="main-content">
         <div class="row">
             <div th:replace="layout/entrance/left-logo"></div>
@@ -15,6 +16,7 @@
     </div>
 </div>
 <th:block th:include="common/cdns"></th:block>
+<script src="/js/signup.js"></script>
 </body>
 
 </html>

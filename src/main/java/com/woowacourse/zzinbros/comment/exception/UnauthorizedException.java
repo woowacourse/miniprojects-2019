@@ -1,10 +1,11 @@
 package com.woowacourse.zzinbros.comment.exception;
 
-public class UnauthorizedException extends RuntimeException {
-    public UnauthorizedException() {
-    }
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-    public UnauthorizedException(final String message) {
-        super(message);
+@ResponseStatus(HttpStatus.UNAUTHORIZED)
+public class UnauthorizedException extends CommentException {
+    public UnauthorizedException() {
+        super();
     }
 }

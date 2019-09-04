@@ -6,7 +6,7 @@
 
 <body>
 <div id="wootecobook-app">
-    <header th:replace="layout/headline::headline"></header>
+    <header th:replace="layout/headline"></header>
     <div class="container-fluid max-width-lg mx-auto mrg-top-70" id="main-content">
         <div class="row">
             <div th:replace="layout/blank-left-profile"></div>
@@ -18,8 +18,9 @@
     </div>
 </div>
 <th:block th:include="common/cdns"></th:block>
-<script src="/js/fetch-api.js"></script>
-<script src="/js/mypage-edit.js"></script>
+<script src="/js/messager.js"></script>
+<script src="/js/user-delete.js"></script>
+<script src="/js/user-edit.js"></script>
 </body>
 
 </html>

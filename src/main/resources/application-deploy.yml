@@ -1,0 +1,20 @@
+spring:
+    config.name: deploy
+    jpa:
+        hibernate.ddl-auto: update
+        database: mysql
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    datasource:
+        url: jdbc:mysql://localhost:3306/wootecobook?serverTimezone=UTC
+        username: zzinbros
+        password: 1234
+logging:
+    level:
+        root: warn
+        sql: info
+        web: info
+        com.woowacourse.zzinbros: info
+    file.max-history: 30
+logback.access:
+    enabled: true
+    config: "classpath:logback-access-simple.xml"
